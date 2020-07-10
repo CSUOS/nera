@@ -54,6 +54,7 @@
     "collectCoverage": true,
     "collectCoverageFrom": [
       "**/*.{ts,js}",
+      "!page/**",
       "!**/node_modules/**",
       "!**/build/**",
       "!**/coverage/**",
@@ -78,7 +79,8 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/build/",
-      "/coverage/"
+      "/coverage/",
+      "/page"
     ]
   }
 }
