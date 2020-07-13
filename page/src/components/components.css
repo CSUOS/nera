@@ -68,3 +68,30 @@
 .lecture_component{
     padding: 10px;
 }
+
+/*assignment box*/
+.assignment_rootbox{
+    display: flex;
+    justify-content: space-between;
+}
+.assignment_box{
+    width: 100%;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    margin-right: 2%;
+    box-shadow: 1px 1px 3px grey;
+}
+.assignment_box:last-of-type{
+    margin-right:0;
+}
+.a_box_title{
+    font-weight: 600;
+}
+.a_box_contents_ul{
+    list-style:circle square;
+}
+.a_box_contents_ul>li{
+    display: flex;
+    align-items: center;
+}

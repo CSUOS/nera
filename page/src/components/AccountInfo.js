@@ -14,7 +14,7 @@ class AccountInfo extends Component {
                     <AccountCircleIcon style={{width:80, height:80}} xs={6}></AccountCircleIcon>
                     <Grid xs={6} container direction="column">
                         <Typography variant="h3">{this.props.name}</Typography>
-                        <Typography variant="h6">{this.props.status}</Typography>
+                        <Typography variant="h6">{this.props.kind} / {this.props.number} / {this.props.major}</Typography>
                     </Grid>
                 </Grid>
             </div>

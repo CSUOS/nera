@@ -72,7 +72,7 @@ function HideOnScroll(props) {
 }
 
 const Header =(props)=> {
-    const {drawerOpen, open, setOpen} = props;
+    const {drawerOpen, open, name, number} = props;
     const classes = useStyles();
 
     return(
@@ -95,7 +95,7 @@ const Header =(props)=> {
                 <MenuIcon />
                 </IconButton>
                 <div className="header">
-                    <div className="name_field"><p className="name">김정현</p><p>님, 환영합니다.</p></div>
+                    <div className="name_field"><p className="name">{name}</p><p>님, 환영합니다.</p></div>
                     <div className="menu_field">
                         <div className="header_menu">
                             <LockIcon/>

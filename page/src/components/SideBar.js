@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   
 const SideBar = (props) => {
     const classes = useStyles();
-    const {drawerClose} = props;
+    const {drawerClose, name, number} = props;
     const [down, setDown] = React.useState(true);
 
     const handleMenuDown = () => {
