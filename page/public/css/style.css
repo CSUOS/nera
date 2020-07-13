@@ -1,0 +1,17 @@
+#app>div{
+    display: flex;
+}
+.side_bar{
+    flex:2;
+}
+.right_side{
+    flex:10;
+}
+
+html, body, #root, #app, #app>div{
+    height: 100%;
+}
+
+a:hover{
+    color:rgb(60, 60, 60);
+}

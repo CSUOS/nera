@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { Login, Main, Problem } from '../pages';
+import "./App.css";
 
 class App extends Component {
 
     render() {
         return (
-            <div>
+            <div id="app">
               <Route exact path="/" component={Login}/>
-              <Route exact path="/main/:admin" component={Main}/>
+              <Switch>
+                <Route exact path="/main" component={Main}/>
+                <Route exact path="/main/:admin" component={Main}/>
+              </Switch>
               <Route path="/problem/:index" component={Problem}/>
             </div>
         );

@@ -1,0 +1,108 @@
+/* CSS 초기화 */
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video{ /*모든 태그 기본값으로 초기화*/
+margin:0;
+padding:0;
+border:0;
+font-size:100%;
+font: inherit;
+vertical-align:baseline;
+}
+
+body{/*body 태그의 폰트와 배경, 글자 행간 속성 설정*/
+font-family: Sans-serif,Helvetica;
+line-height:1;
+}
+
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{ /*HTML5 태그들이 정상 작동하도록*/
+display:block;
+}
+
+ol, ul, li{/*ul, li 목록 스타일 초기화*/
+list-style:none;
+}
+
+a{/*a 태그 초기화*/
+margin:0;
+padding:0;
+font-size:100%;
+text-decoration:none;
+vertical-align:baseline;
+color:rgb(0, 0, 0);
+background:transparent;
+}
+
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after, q:before, q:after {
+    content: '';
+    content: none;
+}
+
+img{/*간격을 없애기 위해*/
+vertical-align:top;
+}
+
+table{/*간격을 없애기 위해*/
+border-collapse:collapse;
+border-spacing:0;
+}
+
+input{/*input 태그 초기화*/
+margin:0;
+padding:0;
+vertical-align:top;
+appearance:none;
+border-radius:0; 
+font-family:Sans-serif,Helvetica;
+}
+
+button{
+    background-color: transparent;
+    border:1px solid #eaeaea;
+    border-radius: 1.7px;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  }
+  ::-moz-placeholder { /* Firefox 19+ */
+  }
+  :-ms-input-placeholder { /* IE 10+ */
+  }
+  :-moz-placeholder { /* Firefox 18- */
+  }
+
+  
+/* Box Model */
+
+*, *:before, *:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* h tag */
+h1,h2,h3,h4,h5{
+    line-height: 150%;
+    margin-bottom: 5px;
+}
+h1,h2,h3{
+    font-weight: 600;
+}
+h1{
+    font-size:2.5rem;
+}
+h2{
+    font-size:2rem;
+}
+h3{
+    font-size:1.6rem;
+}
+h4{
+    font-size:1.3rem;
+}
+h5{
+    font-size:1.1rem;
+}

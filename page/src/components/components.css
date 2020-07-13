@@ -1,0 +1,70 @@
+/* public */
+
+
+/* side_bar */
+
+.sideBar_header{
+    justify-content: space-between !important;
+    padding: 0px 8px 15px;
+}
+.NERA{
+    padding-left: 10px;
+}
+.NERA h1{
+    margin: 0!important;
+}
+.side_bar{
+    background-color: rgb(201, 201, 201);
+    height:100%;
+    padding: 30px;
+}
+
+/* Header */
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 10px;
+    width: 100%;
+    font-size: 1rem;
+}
+.header_menu{
+    display: flex;
+    margin-right: 15px;
+    align-items: center;
+}
+.header_menu>*{
+    padding-right: 5px;
+}
+.menu_field{
+    display: flex;
+}
+.name_field{
+    display: flex;
+    align-items: center;
+}
+.name_field .name{
+    font-weight: 600;
+}
+
+/* accountinfo */
+
+.account_info{
+    margin:10px;
+}
+
+/*lecture box*/
+.lecture_box{
+    margin:5px 0;
+}
+.lecture_title{
+    margin-left: 8px!important;
+    font-size: 1.5rem!important;
+    font-weight: 600!important;
+}
+.lecture_icon{
+    font-size: 2rem!important;
+}
+.lecture_component{
+    padding: 10px;
+}
