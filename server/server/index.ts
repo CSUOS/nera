@@ -4,8 +4,6 @@ import Logger from 'koa-logger';
 import Api, { route } from './api';
 import User from './v1/user';
 
-require('dotenv').config();
-
 const app = new Koa();
 const router = new Router();
 
