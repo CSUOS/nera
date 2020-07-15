@@ -13,6 +13,7 @@ router.get('/', (ctx: Koa.Context) => {
 
 router.use('/api', Api.routes());
 router.use('/v1/user', User.routes());
+
 app.use(Logger());
 app.use(router.routes());
 
