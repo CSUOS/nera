@@ -24,8 +24,8 @@ const AssignmentBox = (props)=>{
             <div className="a_box_title">Assignment #3</div>
             <div className="a_box_contents">
                 <ul className="a_box_contents_ul">
-                    <li><p>Part 1 (문제 풀이)</p><Checkbox/></li>
-                    <li><p>Part 1 (문제 풀이)</p><Checkbox/></li>
+                    <li><p>Part 1 (문제 풀이)</p><Checkbox disabled={true}/></li>
+                    <li><p>Part 1 (문제 풀이)</p><Checkbox disabled={true}/></li>
                 </ul>
             </div>
             <BorderLinearProgress variant="determinate" value={50} />
