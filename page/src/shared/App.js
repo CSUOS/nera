@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Login, Main, Problem } from '../pages';
+import { Login, Main, Problem, Lecture } from '../pages';
 import "./App.css";
 
 class App extends Component {
@@ -14,6 +14,7 @@ class App extends Component {
                 <Route exact path="/main/:admin" component={Main}/>
               </Switch>
               <Route path="/problem/:index" component={Problem}/>
+              <Route path="/lecture/:id" component={Lecture}/>
             </div>
         );
     }
