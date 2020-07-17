@@ -122,7 +122,7 @@ const Main = ({match}, props)=>{
               <Home
                 lecture={lecture} 
                 name={name} 
-                number={student_number} 
+                number={student_number}
                 type={type}
                 major={major}
               />

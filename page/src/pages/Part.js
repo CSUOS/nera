@@ -3,7 +3,7 @@ import {PartInfo, Problem} from "../components";
 import PropTypes from 'prop-types';
 import SampleImage from '../sample_problem_image.png';
 
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Button, Grid, Divider } from '@material-ui/core';
 
 class Part extends Component {
     problemInfo = [
@@ -40,7 +40,9 @@ class Part extends Component {
                 </Grid>
 
                 {this.problemInfo.map((prob, index)=>{
-                    return (<Problem number={prob.number} description={prob.description} image={prob.image}></Problem>);
+                    return (
+                        <Problem number={prob.number} description={prob.description} image={prob.image}></Problem>
+                    );
                 })}
                 
             </Grid>
