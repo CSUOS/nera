@@ -20,7 +20,7 @@ page 폴더가 현재 작업 디렉토리인 채로 `npm start`나 `yarn start` 
 
    Root.js는 src의 shared 디렉토리에 있는 App.js를 컴포넌트로 호출
 
-4. Login, Main, Problem.js => App.js
+4. Login, Main, Assignment, Part.js => App.js
 
    App.js는 각 페이지로 가는 라우트를 설정하는 컴포넌트
 
@@ -75,7 +75,8 @@ material 라이브러리의 커스터마이징은 *material.css*에서 관리
 | http://localhost:3000/                                       | 로그인      | 변경될 수 있음 |
 | http://localhost:3000/home                                   | 메인 페이지 |                |
 | http://localhost:3000/lecture/:lecture_number                | 과목 페이지 |                |
-| http://localhost:3000/lecture/:lecture_number/problem/:problem_number | 문제 페이지 |                |
+| http://localhost:3000/lecture/:lecture_number/assignment/:as_id | 과제 페이지 |                |
+| http://localhost:3000/lecture/:lecture_number/assignment/:as_id/pt_id | 과제의 세부 파트 페이지 |                |
 
 
 

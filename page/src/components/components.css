@@ -69,6 +69,20 @@
     padding: 10px;
 }
 
+/* PartBox */
+.part_box{
+    margin:5px 0;
+    padding: 15px;
+}
+.part_title{
+    margin-left: 8px!important;
+    font-size: 1.5rem!important;
+    font-weight: 600!important;
+}
+.part_component{
+    padding: 10px;
+}
+
 /*assignment box*/
 .assignment_rootbox{
     display: flex;
@@ -94,4 +108,25 @@
 .a_box_contents_ul>li{
     display: flex;
     align-items: center;
+}
+
+.problem_container {
+    width: "100%";
+    padding: 50px 0 50px 0;
+}
+
+.problem_description {
+    padding: 10px;
+}
+
+.problem_number {
+    margin: 0 15px 0 0;
+}
+
+.problem_image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: cover;
+    width: 30%;
 }

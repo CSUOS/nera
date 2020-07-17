@@ -1,6 +1,6 @@
 import React from 'react';
 import {SideBar, Header} from "../components";
-import {Home, Lecture, Problem} from "../pages";
+import {Home, Lecture, Assignment, Part} from "../pages";
 import "./pages.css";
 
 import clsx from 'clsx';
@@ -117,7 +117,7 @@ const Main = ({match}, props)=>{
               }, "margin-top-64", "contents_side")}
             >
               {
-              // Home / Lecture / Problem
+              // Home / Lecture / Assignment
               isNaN(Number(match.params.id))?
               <Home
                 lecture={lecture} 
@@ -127,15 +127,26 @@ const Main = ({match}, props)=>{
                 major={major}
               />
               :(
-                isNaN(Number(match.params.pb_id))?
+                isNaN(Number(match.params.as_id))?
                 <Lecture 
                   lecture={lecture}
                   number={match.params.id}
-                />:
-                <Problem
-                  number={match.params.pb_id}
                 />
-              )}
+                :(
+                  isNaN(Number(match.params.pt_id))?
+                  <Assignment
+                    title={"Assignment #" + Number(match.params.as_id)}
+                    lectureId={match.params.id}
+                    assignmentId={match.params.as_id}
+                  />                  
+                  :
+                  <Part
+                    title={"Assignment #" + Number(match.params.as_id) + "의 Part " + Number(match.params.pt_id)}
+                    lastSaveDate={new Date('2020-08-31T11:59:00')}
+                    totalCount={2}
+                    solvedCount={1}
+                  />
+              ))}
             </div>
         </div>
     )

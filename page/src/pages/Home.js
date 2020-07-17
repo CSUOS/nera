@@ -31,7 +31,7 @@ const Home = (props)=>{
                 <div className="lecture_rootbox">
                     {lecture_list.map((lect, index)=>{
                         let link = "/lecture/"+(index+1);
-                        return (<Link to={link}><LectureBox title={lect[0]} prof={lect[1]} link="#"/></Link>);
+                        return (<LectureBox title={lect[0]} prof={lect[1]} link={link}/>);
                     })}
                 </div>
             </div>

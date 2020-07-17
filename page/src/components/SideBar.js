@@ -77,7 +77,7 @@ const SideBar = (props) => {
 
                 <Collapse in={down} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        <Link to="/lecture/2/problem/1">
+                        <Link to="/lecture/2/assignment/1">
                             <ListItem button className={classes.nested}>
                                 <ListItemIcon>
                                 <StarBorder />
@@ -85,7 +85,7 @@ const SideBar = (props) => {
                                 <ListItemText primary="과제 #1" />
                             </ListItem>
                         </Link>
-                        <Link to="/lecture/2/problem/2">
+                        <Link to="/lecture/2/assignment/2">
                             <ListItem button className={classes.nested}>
                                 <ListItemIcon>
                                 <StarHalfIcon/>
@@ -93,7 +93,7 @@ const SideBar = (props) => {
                                 <ListItemText primary="과제 #2" />
                             </ListItem>
                         </Link>
-                        <Link to="/lecture/2/problem/3">
+                        <Link to="/lecture/2/assignment/3">
                             <ListItem button className={classes.nested}>
                                 <ListItemIcon>
                                 <StarHalfIcon/>

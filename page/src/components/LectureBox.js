@@ -6,27 +6,11 @@ import { ButtonBase } from '@material-ui/core';
 import BookIcon from '@material-ui/icons/Book';
 
 class LectureBox extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
-        const classes = {
-            root: {
-                width: "100%"
-            },
-            paper: {
-                width: "100%"
-            },
-            buttonBase: {
-                width: "100%"
-            }
-        };
-
         return (
-            <div style={classes.root} className="lecture_box">
-                <ButtonBase className="mainButton" style={classes.buttonBase} href={this.props.link}>
-                    <Paper style={classes.paper}>
+            <div style={{width:"100%"}} className="lecture_box">
+                <ButtonBase className="mainButton" style={{width:"100%"}} href={this.props.link}>
+                    <Paper style={{width:"100%"}}>
                         <Grid container spacing={24}>
                             <Grid container xs="10" className="lecture_component">
                                 <Grid container direction="row" spacing={0}>
