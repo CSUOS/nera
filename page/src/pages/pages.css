@@ -17,3 +17,19 @@ html, body, #root, #app, #app>div{
 a:hover{
     color:rgb(60, 60, 60);
 }
+
+.contents_side>div{
+    flex-wrap: nowrap;
+}
+.contents_con{
+    margin: 10px 0 25px;
+}
+.contents_title{
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.contents_title h6::before{
+    content: "";
+    border-left: 3px solid rgb(54, 54, 54);
+    margin-right: 10px;
+}

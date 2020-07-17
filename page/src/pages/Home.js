@@ -23,23 +23,24 @@ const Home = (props)=>{
                 number={props.number} 
                 type={props.type} 
                 major = {props.major}
-                />
-            <div className="menu_title">
-                나의 강의 목록
-            </div>
-            <div className="lecture_rootbox">
-                {lecture_list.map((lect, index)=>{
-                    return (<LectureBox title={lect[0]} prof={lect[1]} link="#"/>);
-                })}
+            />
+            <div className="contents_con">
+                <div className="contents_title"><h6>나의 강의 목록</h6></div>
+                <div className="lecture_rootbox">
+                    {lecture_list.map((lect, index)=>{
+                        return (<LectureBox title={lect[0]} prof={lect[1]} link="#"/>);
+                    })}
+                </div>
             </div>
             <BottomPopup link="#"></BottomPopup>
-            
-            <div className="a_subheader"><h6>최근 채점된 과제</h6></div>
-            <div className="assignment_rootbox">
-                <AssignmentBox/>
-                <AssignmentBox/>
-                <AssignmentBox/>
-            </div>
+            <Grid container direction="column" className="contents_con">    
+                <div className="contents_title"><h6>최근 채점된 과제</h6></div>
+                <div className="assignment_rootbox">
+                    <AssignmentBox/>
+                    <AssignmentBox/>
+                    <AssignmentBox/>
+                </div>
+            </Grid>
         </Grid>
     )
 }

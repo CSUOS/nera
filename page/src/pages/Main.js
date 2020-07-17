@@ -1,7 +1,7 @@
 import React from 'react';
 import {SideBar, Header} from "../components";
 import {Home, Lecture, Problem} from "../pages";
-import "./main.css"; import "./pages.css";
+import "./pages.css";
 
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
@@ -114,7 +114,7 @@ const Main = ({match}, props)=>{
             <div
                className={clsx(classes.content, {
                 [classes.contentShift]: open,
-              }, "margin-top-64")}
+              }, "margin-top-64", "contents_side")}
             >
               {
               // Home / Lecture / Problem
@@ -130,10 +130,10 @@ const Main = ({match}, props)=>{
                 isNaN(Number(match.params.pb_id))?
                 <Lecture 
                   lecture={lecture}
-                  number={0}
+                  number={match.params.id}
                 />:
                 <Problem
-                  index={match.params.pb_id}
+                  number={match.params.pb_id}
                 />
               )}
             </div>

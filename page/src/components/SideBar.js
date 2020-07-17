@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import "./components.css";
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -43,7 +44,7 @@ const SideBar = (props) => {
     return (
         <div className="side_bar">
             <div className={clsx(classes.drawerHeader,"sideBar_header")}>
-                <div className="NERA"><a href="#"><h1>NERA</h1></a></div>
+                <Link to="/home"><div className="NERA"><a href="#"><h1>NERA</h1></a></div></Link>
                 <IconButton onClick={drawerClose}>
                     <ChevronLeftIcon />
                 </IconButton>
@@ -55,43 +56,53 @@ const SideBar = (props) => {
                 <ListSubheader component="div" id="subheader">내 강의</ListSubheader>
             }
             >
-            <ListItem button>
-                <ListItemIcon>
-                <LibraryBooksIcon />
-                </ListItemIcon>
-                <ListItemText primary="이산수학" />
-            </ListItem>
+                <Link to="/lecture/1">
+                    <ListItem button>
+                        <ListItemIcon>
+                        <LibraryBooksIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="이산수학" />
+                    </ListItem>
+                </Link>
 
-            <ListItem button onClick={handleMenuDown}>
-                <ListItemIcon>
-                <LibraryBooksIcon />
-                </ListItemIcon>
-                <ListItemText primary="선형대수" />
-                {down ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
+                <Link to="/lecture/2">
+                    <ListItem button onClick={handleMenuDown}>
+                        <ListItemIcon>
+                        <LibraryBooksIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="선형대수" />
+                        {down ? <ExpandLess /> : <ExpandMore />}
+                    </ListItem>
+                </Link>
 
-            <Collapse in={down} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                    <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                        <StarBorder />
-                        </ListItemIcon>
-                        <ListItemText primary="과제 #1" />
-                    </ListItem>
-                    <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                        <StarHalfIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="과제 #2" />
-                    </ListItem>
-                    <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                        <StarIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="과제 #2" />
-                    </ListItem>
-                </List>
-            </Collapse>
+                <Collapse in={down} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                        <Link to="/lecture/2/problem/1">
+                            <ListItem button className={classes.nested}>
+                                <ListItemIcon>
+                                <StarBorder />
+                                </ListItemIcon>
+                                <ListItemText primary="과제 #1" />
+                            </ListItem>
+                        </Link>
+                        <Link to="/lecture/2/problem/2">
+                            <ListItem button className={classes.nested}>
+                                <ListItemIcon>
+                                <StarHalfIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="과제 #2" />
+                            </ListItem>
+                        </Link>
+                        <Link to="/lecture/2/problem/3">
+                            <ListItem button className={classes.nested}>
+                                <ListItemIcon>
+                                <StarHalfIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="과제 #3" />
+                            </ListItem>
+                        </Link>
+                    </List>
+                </Collapse>
 
             </List>
         </div>
