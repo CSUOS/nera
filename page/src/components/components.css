@@ -127,6 +127,7 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
+    width: auto;
+    max-width: 100%;
     object-fit: cover;
-    width: 30%;
 }
