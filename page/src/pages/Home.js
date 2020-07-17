@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import {LectureBox, AccountInfo, BottomPopup, AssignmentBox} from "../components";
 
 import { Grid } from '@material-ui/core';
@@ -11,9 +12,10 @@ const Home = (props)=>{
     let i=0;
     for(let lect of lecture){
         console.log(lect);
-        let title = lect[0]+" ("+lect[1]+")";
-        let professor = lect[2] + " 교수님";
+        const title = lect[0]+" ("+lect[1]+")";
+        const professor = lect[2] + " 교수님";
         lecture_list[i++] = [title,professor];
+        
     }
 
     return (
@@ -28,7 +30,8 @@ const Home = (props)=>{
                 <div className="contents_title"><h6>나의 강의 목록</h6></div>
                 <div className="lecture_rootbox">
                     {lecture_list.map((lect, index)=>{
-                        return (<LectureBox title={lect[0]} prof={lect[1]} link="#"/>);
+                        let link = "/lecture/"+(index+1);
+                        return (<Link to={link}><LectureBox title={lect[0]} prof={lect[1]} link="#"/></Link>);
                     })}
                 </div>
             </div>
