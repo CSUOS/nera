@@ -68,19 +68,21 @@ material 라이브러리의 커스터마이징은 *material.css*에서 관리
 
 
 
+## 페이지 정리
+
+| url                                                          | 페이지 유형 | 비고           |
+| ------------------------------------------------------------ | ----------- | -------------- |
+| http://localhost:3000/                                       | 로그인      | 변경될 수 있음 |
+| http://localhost:3000/home                                   | 메인 페이지 |                |
+| http://localhost:3000/lecture/:lecture_number                | 과목 페이지 |                |
+| http://localhost:3000/lecture/:lecture_number/problem/:problem_number | 문제 페이지 |                |
+
+
+
+
+
 ## 라이브러리
 
 Material-UI 사용
 
-### 색상
-
-```
-import { palette } from '@material-ui/system';
-```
-
-```
-<Box color="text.primary">
-<Box color="text.secondary">
-<Box color="text.disabled">
-```
 

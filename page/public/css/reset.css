@@ -10,7 +10,7 @@ vertical-align:baseline;
 }
 
 body{/*body 태그의 폰트와 배경, 글자 행간 속성 설정*/
-font-family: Sans-serif,Helvetica;
+font-family: Sans-serif, Helvetica;
 line-height:1;
 }
 
@@ -54,8 +54,7 @@ margin:0;
 padding:0;
 vertical-align:top;
 appearance:none;
-border-radius:0; 
-font-family:Sans-serif,Helvetica;
+border-radius:0;
 }
 
 button{

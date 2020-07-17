@@ -1,12 +1,15 @@
-import { Box, Button, Grid } from '@material-ui/core';
 import React from 'react';
-import {LectureBox, AccountInfo, BottomPopup, SideBar, Header, AssignmentBox} from "../components";
+import {SideBar, Header} from "../components";
+import {Home, Lecture, Problem} from "../pages";
 import "./main.css"; import "./pages.css";
-import Drawer from '@material-ui/core/Drawer';
 
-import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import Drawer from '@material-ui/core/Drawer';
+import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+
+
+// style definition
 
 const drawerWidth = 300;
 
@@ -56,20 +59,25 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
+
+// data
   
 const type_num = 1;
-const data = {
-  name:'우희은',
-  student_number: '2017920038',
-  age : '24',
-  type: type_num?'학생':'교수',
-  major : '컴퓨터과학부'
-}
+const name = '우희은';
+const student_number = '2017920038';
+const age = '24';
+const type = type_num?'학생':'교수';
+const major = '컴퓨터과학부';
+const lecture =[['이산수학','01', '김민호'],['선형대수','01', '김민호']];
+
+// main pages
 
 const Main = ({match}, props)=>{
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
-    
+    const user_type = match.params.admin;
+
+    // side_bar
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -85,8 +93,8 @@ const Main = ({match}, props)=>{
             <Header
               drawerOpen={handleDrawerOpen}
               open={open}
-              name={data.name}
-              number={data.student_number}
+              name={name}
+              number={student_number}
             />
             <Drawer
                 className={classes.drawer}
@@ -99,31 +107,35 @@ const Main = ({match}, props)=>{
             >
                 <SideBar
                   drawerClose={handleDrawerClose}
-                  name={data.name}
-                  number={data.student_number}
+                  name={name}
+                  number={student_number}
                 />
             </Drawer>
             <div
                className={clsx(classes.content, {
                 [classes.contentShift]: open,
               }, "margin-top-64")}
-            > 
-              <Grid container direction="column" spacing={24}>
-                  <AccountInfo name={data.name} number={data.student_number} kind={data.type} major = {data.major}></AccountInfo>
-                  <div className="menu_title">
-                    나의 강의 목록
-                  </div>
-                  <LectureBox title="이산수학 (01)" prof="정형구 교수님" link="#"/>
-                  <LectureBox title="선형대수 (01)" prof="정형구 교수님" link="#"/>
-                  <BottomPopup link="#"></BottomPopup>
-                  
-                  <div className="a_subheader"><h6>최근 채점된 과제</h6></div>
-                  <div className="assignment_rootbox">
-                    <AssignmentBox/>
-                    <AssignmentBox/>
-                    <AssignmentBox/>
-                  </div>
-              </Grid>
+            >
+              {
+              // Home / Lecture / Problem
+              isNaN(Number(match.params.id))?
+              <Home
+                lecture={lecture} 
+                name={name} 
+                number={student_number} 
+                type={type}
+                major={major}
+              />
+              :(
+                isNaN(Number(match.params.pb_id))?
+                <Lecture 
+                  lecture={lecture}
+                  number={0}
+                />:
+                <Problem
+                  index={match.params.pb_id}
+                />
+              )}
             </div>
         </div>
     )

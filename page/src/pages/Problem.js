@@ -1,9 +1,9 @@
 import React from 'react';
 
-const Problem = ({match})=>{
+const Problem = (props)=>{
     return (
         <div>
-            Problem #{match.params.index}
+            Problem #{props.index}
         </div>
     )
 }
