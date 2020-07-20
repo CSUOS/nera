@@ -11,7 +11,6 @@ const Home = (props)=>{
     let lecture_list=[];
     let i=0;
     for(let lect of lecture){
-        console.log(lect);
         const title = lect[0]+" ("+lect[1]+")";
         const professor = lect[2] + " 교수님";
         lecture_list[i++] = [title,professor];
@@ -26,16 +25,14 @@ const Home = (props)=>{
                 type={props.type} 
                 major = {props.major}
             />
-            <div className="contents_con">
-                <div className="contents_title"><h6>나의 강의 목록</h6></div>
-                <div className="lecture_rootbox">
-                    {lecture_list.map((lect, index)=>{
-                        let link = "/lecture/"+(index+1);
-                        return (<LectureBox title={lect[0]} prof={lect[1]} link={link}/>);
-                    })}
-                </div>
-            </div>
             <BottomPopup link="#"></BottomPopup>
+            <Grid container direction="column" className="contents_con">    
+                <div className="contents_title"><h6>제출 가능한 과제</h6></div>
+                <div className="assignment_rootbox">
+                    <AssignmentBox/>
+                    <AssignmentBox/>
+                </div>
+            </Grid>
             <Grid container direction="column" className="contents_con">    
                 <div className="contents_title"><h6>최근 채점된 과제</h6></div>
                 <div className="assignment_rootbox">

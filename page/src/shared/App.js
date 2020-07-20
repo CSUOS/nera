@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Login, Main } from '../pages';
+import { Login, Main, Admin } from '../pages';
 
 class App extends Component {
 
@@ -13,6 +13,7 @@ class App extends Component {
                 <Route exact path="/assignment/:as_id" component={Main}/>
                 <Route exact path="/assignment/:as_id/:pt_id" component={Main}/>
               </Switch>
+              <Route exact path="/admin/:admin" component={Main}/>
             </div>
         );
     }

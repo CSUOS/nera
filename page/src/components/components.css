@@ -53,22 +53,6 @@
     margin:10px;
 }
 
-/*lecture box*/
-.lecture_box{
-    margin:5px 0;
-}
-.lecture_title{
-    margin-left: 8px!important;
-    font-size: 1.5rem!important;
-    font-weight: 600!important;
-}
-.lecture_icon{
-    font-size: 2rem!important;
-}
-.lecture_component{
-    padding: 10px;
-}
-
 /* PartBox */
 .part_box{
     margin:5px 0;
@@ -86,10 +70,13 @@
 /*assignment box*/
 .assignment_rootbox{
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+    flex-wrap: wrap;
 }
 .assignment_box{
-    width: 100%;
+    flex: initial;
+    width: 30%;
+    height: 160px;
     padding: 15px;
     display: flex;
     flex-direction: column;

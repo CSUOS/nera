@@ -59,20 +59,47 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-
-// data
-  
-const type_num = 1;
-const name = '우희은';
-const student_number = '2017920038';
-const age = '24';
-const type = type_num?'학생':'교수';
-const major = '컴퓨터과학부';
-const lecture =[['이산수학','01', '김민호'],['선형대수','01', '김민호']];
-
 // main pages
 
 const Main = ({match}, props)=>{
+  
+    // data
+
+    const name = '우희은';
+    const student_number = '2017920038';
+    const type_num = 0; // 교수 : 0, 학생 : 1
+    const type = type_num?student_number:0; // 학생 / 교수
+    const major = '컴퓨터과학부';
+
+
+    // contents_container
+    let contents_type = 
+    isNaN(Number(match.params.as_id))?
+      <Home
+        lecture={lecture} 
+        name={name} 
+        number={student_number}
+        type={type}
+        major={major}
+      />
+      :(
+        isNaN(Number(match.params.pt_id))?
+          <Assignment
+            title={"Assignment #" + Number(match.params.as_id)}
+            lectureId={match.params.id}
+            assignmentId={match.params.as_id}
+          />                  
+          :
+          <Part
+            title={"Assignment #" + Number(match.params.as_id) + "의 Part " + Number(match.params.pt_id)}
+            lastSaveDate={new Date('2020-08-31T11:59:00')}
+            totalCount={2}
+            solvedCount={1}
+          />
+        );
+
+
+
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const user_type = match.params.admin;
@@ -116,31 +143,7 @@ const Main = ({match}, props)=>{
                 [classes.contentShift]: open,
               }, "margin-top-64", "contents_side")}
             >
-              {
-              // Home / Lecture / Assignment
-              isNaN(Number(match.params.as_id))?
-              <Home
-                lecture={lecture} 
-                name={name} 
-                number={student_number}
-                type={type}
-                major={major}
-              />
-              :(
-                isNaN(Number(match.params.pt_id))?
-                <Assignment
-                  title={"Assignment #" + Number(match.params.as_id)}
-                  lectureId={match.params.id}
-                  assignmentId={match.params.as_id}
-                />                  
-                :
-                <Part
-                  title={"Assignment #" + Number(match.params.as_id) + "의 Part " + Number(match.params.pt_id)}
-                  lastSaveDate={new Date('2020-08-31T11:59:00')}
-                  totalCount={2}
-                  solvedCount={1}
-                />
-              )}
+              {contents_type}
             </div>
         </div>
     )

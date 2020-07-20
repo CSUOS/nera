@@ -53,7 +53,7 @@ const SideBar = (props) => {
 
             <List
             subheader={
-                <ListSubheader component="div" id="subheader">내 강의</ListSubheader>
+                <ListSubheader component="div" id="subheader">내 과제</ListSubheader>
             }
             >
                 <Link to="/assignment/1">
