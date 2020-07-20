@@ -56,54 +56,30 @@ const SideBar = (props) => {
                 <ListSubheader component="div" id="subheader">내 강의</ListSubheader>
             }
             >
-                <Link to="/lecture/1">
-                    <ListItem button>
+                <Link to="/assignment/1">
+                    <ListItem button className={classes.nested}>
                         <ListItemIcon>
-                        <LibraryBooksIcon />
+                        <StarBorder />
                         </ListItemIcon>
-                        <ListItemText primary="이산수학" />
+                        <ListItemText primary="과제 #1" />
                     </ListItem>
                 </Link>
-
-                <Link to="/lecture/2">
-                    <ListItem button onClick={handleMenuDown}>
+                <Link to="/assignment/2">
+                    <ListItem button className={classes.nested}>
                         <ListItemIcon>
-                        <LibraryBooksIcon />
+                        <StarHalfIcon/>
                         </ListItemIcon>
-                        <ListItemText primary="선형대수" />
-                        {down ? <ExpandLess /> : <ExpandMore />}
+                        <ListItemText primary="과제 #2" />
                     </ListItem>
                 </Link>
-
-                <Collapse in={down} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        <Link to="/lecture/2/assignment/1">
-                            <ListItem button className={classes.nested}>
-                                <ListItemIcon>
-                                <StarBorder />
-                                </ListItemIcon>
-                                <ListItemText primary="과제 #1" />
-                            </ListItem>
-                        </Link>
-                        <Link to="/lecture/2/assignment/2">
-                            <ListItem button className={classes.nested}>
-                                <ListItemIcon>
-                                <StarHalfIcon/>
-                                </ListItemIcon>
-                                <ListItemText primary="과제 #2" />
-                            </ListItem>
-                        </Link>
-                        <Link to="/lecture/2/assignment/3">
-                            <ListItem button className={classes.nested}>
-                                <ListItemIcon>
-                                <StarHalfIcon/>
-                                </ListItemIcon>
-                                <ListItemText primary="과제 #3" />
-                            </ListItem>
-                        </Link>
-                    </List>
-                </Collapse>
-
+                <Link to="/assignment/3">
+                    <ListItem button className={classes.nested}>
+                        <ListItemIcon>
+                        <StarIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="과제 #3" />
+                    </ListItem>
+                </Link>
             </List>
         </div>
     );
