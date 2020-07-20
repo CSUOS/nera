@@ -8,7 +8,7 @@ class AccountInfo extends Component {
             <PageInfo className="account_info"
                 icon={AccountCircleIcon}
                 mainTitle={this.props.name}
-                subTitle={this.props.type + " / " + this.props.number + " / " + this.props.major} />
+                subTitle={(this.props.type == 0 ? "교수" : "학생") + " / " + this.props.number + " / " + this.props.major} />
         );
     }
 }

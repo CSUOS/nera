@@ -5,7 +5,7 @@ import {LectureBox, AccountInfo, BottomPopup, AssignmentBox} from "../components
 import { Grid } from '@material-ui/core';
 
 const Home = (props)=>{
-    const lecture= props.lecture;
+    /*const lecture= props.lecture;
 
     //lecture_box data
     let lecture_list=[];
@@ -15,7 +15,7 @@ const Home = (props)=>{
         const professor = lect[2] + " 교수님";
         lecture_list[i++] = [title,professor];
         
-    }
+    }*/
 
     return (
         <Grid container direction="column" spacing={24}>
