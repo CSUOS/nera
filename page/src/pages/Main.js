@@ -87,6 +87,7 @@ const Main = ({match}, props)=>{
             title={"Assignment #" + Number(match.params.as_id)}
             lectureId={match.params.id}
             assignmentId={match.params.as_id}
+            deadline={new Date('2020-08-31T11:59:00')}
           />                  
           :
           <Part
