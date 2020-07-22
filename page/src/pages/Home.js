@@ -1,21 +1,10 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {LectureBox, AccountInfo, BottomPopup, AssignmentBox} from "../components";
+import {AccountInfo, BottomPopup, AssignmentBox} from "../components";
 
 import { Grid } from '@material-ui/core';
 
 const Home = (props)=>{
-    const lecture= props.lecture;
-
-    //lecture_box data
-    let lecture_list=[];
-    let i=0;
-    for(let lect of lecture){
-        const title = lect[0]+" ("+lect[1]+")";
-        const professor = lect[2] + " 교수님";
-        lecture_list[i++] = [title,professor];
-        
-    }
 
     return (
         <Grid container direction="column" spacing={24}>

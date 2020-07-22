@@ -76,7 +76,6 @@ const Main = ({match}, props)=>{
     let contents_type = 
     isNaN(Number(match.params.as_id))?
       <Home
-        lecture={lecture} 
         name={name} 
         number={student_number}
         type={type}
