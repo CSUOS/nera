@@ -1,4 +1,4 @@
-import { Grid, TextField, Typography } from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
 import React, { Component } from 'react';
 
 class Problem extends Component {

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Paper, Typography, Checkbox } from "@material-ui/core";
 import { ButtonBase } from '@material-ui/core';
-import BookIcon from '@material-ui/icons/Book';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 const BorderLinearProgress = withStyles((theme) => ({

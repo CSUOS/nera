@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import {AccountInfo, BottomPopup, AssignmentBox} from "../components";
 
 import { Grid } from '@material-ui/core';

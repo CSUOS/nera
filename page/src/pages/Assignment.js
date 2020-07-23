@@ -1,6 +1,5 @@
 import React from 'react';
-import {AssignmentInfo, AssignmentBox, PartBox} from "../components";
-import AssignmentIcon from '@material-ui/icons/Assignment';
+import {AssignmentInfo, PartBox} from "../components";
 
 import { Grid } from '@material-ui/core';
 

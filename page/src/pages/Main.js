@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 const Main = ({match}, props)=>{
   
     // data
-
+    console.log(props);
     const name = '우희은';
     const student_number = '2017920038';
     const type_num = 0; // 교수 : 0, 학생 : 1

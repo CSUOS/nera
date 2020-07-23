@@ -3,7 +3,7 @@ import {PartInfo, Problem} from "../components";
 import PropTypes from 'prop-types';
 import SampleImage from '../sample_problem_image.png';
 
-import { Button, Grid, Divider } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 
 class Part extends Component {
     problemInfo = [
