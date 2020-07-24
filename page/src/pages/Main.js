@@ -64,7 +64,6 @@ const useStyles = makeStyles((theme) => ({
 const Main = ({match}, props)=>{
   
     // data
-    console.log(props);
     const name = '우희은';
     const student_number = '2017920038';
     const type_num = 0; // 교수 : 0, 학생 : 1
@@ -102,7 +101,6 @@ const Main = ({match}, props)=>{
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
-    const user_type = match.params.admin;
 
     // side_bar
     const handleDrawerOpen = () => {
@@ -136,6 +134,7 @@ const Main = ({match}, props)=>{
                   drawerClose={handleDrawerClose}
                   name={name}
                   number={student_number}
+                  type={type}
                 />
             </Drawer>
             <div

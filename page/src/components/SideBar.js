@@ -81,6 +81,13 @@ const SideBar = (props) => {
                     </ListItem>
                 </Link>
             </List>
+            
+            {props.type === 0 ?
+            <List
+            subheader={
+                <ListSubheader component="div" id="subheader">학생 목록 관리</ListSubheader>
+            }
+            ></List> : undefined}
         </div>
     );
 }

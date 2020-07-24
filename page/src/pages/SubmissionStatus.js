@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react';
+import React, { Component } from 'react';
 import { AssignmentInfo } from "../components";
 
-import Grid from '@material-ui/core/Grid';
-import { TableRow, IconButton, Table, TableHead, TableContainer, TablePagination } from '@material-ui/core';
+import { Grid, Paper } from '@material-ui/core';
+import { TableRow, TableBody, IconButton, Table, TableHead, TableContainer, TablePagination, TableCell } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 
 const submittedData = [
@@ -52,11 +52,21 @@ const notSubmittedData = [
 ];
 
 const SubmittedRow = (props) => {
+    const getLastSaveDate = () => {
+        let timeString = props.time.getFullYear() + "-" 
+                         + (props.time.getMonth()+1) + "-"
+                         + props.time.getDate() + " "
+                         + props.time.getHours() + ":"
+                         + props.time.getMinutes()
+
+        return timeString;
+    }
+
     return (
         <TableRow>
             <TableCell>{props.id}</TableCell>
             <TableCell>{props.name}</TableCell>
-            <TableCell>{props.time}</TableCell>
+            <TableCell>{getLastSaveDate()}</TableCell>
             <TableCell>{props.score}</TableCell>
             <TableCell>
                 <IconButton aria-label="채점 페이지로" size="small">
@@ -68,6 +78,9 @@ const SubmittedRow = (props) => {
 }
 
 const SubmittedTable = (props) => {
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -76,9 +89,6 @@ const SubmittedTable = (props) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-
-    [page, setPage] = React.useState(0);
-    [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     return (
         <Paper className="table_root">
@@ -124,6 +134,9 @@ const NotSubmittedRow = (props) => {
 }
 
 const NotSubmittedTable = (props) => {
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -132,9 +145,6 @@ const NotSubmittedTable = (props) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-
-    [page, setPage] = React.useState(0);
-    [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     return (
         <Paper className="table_root">
@@ -169,12 +179,9 @@ const NotSubmittedTable = (props) => {
 
 class SubmissionStatus extends Component {
     render() {
-        [page, setPage] = React.useState(0);
-        [rowsPerPage, setRowsPerPage] = React.useState(10);
-
         return (
             <Grid container direction="column" spacing={24}>
-                <AssignmentInfo title={this.props.title} deadline={this.props.deadline}/>
+                <AssignmentInfo title={this.props.title} deadline={this.props.deadline} />
 
                 <Grid container direction="column" className="contents_con">
                     <div className="contents_title"><h6>제출한 수강생</h6></div>
@@ -187,6 +194,11 @@ class SubmissionStatus extends Component {
             </Grid>
         );
     }
+}
+
+SubmissionStatus.defaultProps = {
+    title: "기본 제목",
+    deadline: new Date('1970-01-01T11:59:00')
 }
 
 export default SubmissionStatus;
