@@ -8,7 +8,7 @@ class Problem extends Component {
             <Grid container className="problem_container" direction="column">
                 <Grid container className="problem_description" direction="row" alignItems="flex-start" justify="flex-start">
                     <h6 className="problem_number">{this.props.number + "."}</h6>
-                    <p className="problem_title" align="left">{this.props.info["question_title"]}</p>
+                    <h6 className="problem_title" align="left">{this.props.info["question_title"]}</h6>
                 </Grid>
                 <h6 className="problem_description" align="left">{this.props.info["question_contents"]}</h6>
 

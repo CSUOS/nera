@@ -140,7 +140,7 @@ function Main(props){
     ];
     let q_1 = {
       "question_id" : 1,
-      "quesetion_title" : "",
+      "question_title" : "",
       "question_contents" : "SHA에 대해 조사하세요.",
       "question_info" : "2 page 이상 필수",
       "question_points" : 60,
@@ -154,8 +154,62 @@ function Main(props){
       "question_points" : 60,
       "question_answer":[]
     };
+    let q_3 = {
+      "question_id" : 1,
+      "question_title" : "자료 조사",
+      "question_contents" : "퀵 소트에 대해 조사하세요.",
+      "question_info" : "시간복잡도에 대한 증명 필수",
+      "question_points" : 60,
+      "question_answer":[]
+    };
+    let q_4 = {
+      "question_id" : 2,
+      "question_title" : "알고리즘 구현",
+      "question_contents" : "C/C++로 퀵 소트를 구현하세요.",
+      "question_info" : "함수 void quickSort(int arr[], int left, int right)를 구현할 것",
+      "question_points" : 60,
+      "question_answer":[]
+    };
+    let q_5 = {
+      "question_id" : 1,
+      "question_title" : "자료 조사",
+      "question_contents" : "쉘 소트에 대해 조사하세요.",
+      "question_info" : "시간복잡도에 대한 증명 필수",
+      "question_points" : 60,
+      "question_answer":[]
+    };
+    let q_6 = {
+      "question_id" : 2,
+      "question_title" : "알고리즘 구현",
+      "question_contents" : "C/C++로 쉘 소트를 구현하세요.",
+      "question_info" : "함수 void shellSort(int arr[], int length)를 구현할 것",
+      "question_points" : 60,
+      "question_answer":[]
+    };
+    let q_7 = {
+      "question_id" : 1,
+      "question_title" : "자료 조사",
+      "question_contents" : "쉘 소트에 대해 조사하세요.",
+      "question_info" : "시간복잡도에 대한 증명 필수",
+      "question_points" : 60,
+      "question_answer":[]
+    };
+    let q_8 = {
+      "question_id" : 2,
+      "question_title" : "알고리즘 구현",
+      "question_contents" : "C/C++로 쉘 소트를 구현하세요.",
+      "question_info" : "함수 void shellSort(int arr[], int length)를 구현할 것",
+      "question_points" : 60,
+      "question_answer":[]
+    };
     assignment[0]["question"][0]=q_1;
     assignment[0]["question"][1]=q_2;
+    assignment[1]["question"][0]=q_3;
+    assignment[1]["question"][1]=q_4;
+    assignment[2]["question"][0]=q_5;
+    assignment[2]["question"][1]=q_6;
+    assignment[3]["question"][0]=q_7;
+    assignment[3]["question"][1]=q_8;
 
 
       // 개별 component로 넘길 data들 정리
