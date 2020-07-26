@@ -1,31 +1,83 @@
 import React from 'react';
-import {AccountInfo, BottomPopup, AssignmentBox} from "../components";
+import {AccountInfo, AssignmentBox} from "../components";
+import {Link} from 'react-router-dom';
 
 import { Grid } from '@material-ui/core';
 
 const Home = (props)=>{
+    const {type, main_info, assignment_info} = props;
+    let progress_assignment = [];
+    let finish_assignment = [];
+
+    assignment_info.map((as)=>{
+        if(type===0){ // 교수
+            switch(as[3]){
+                case 0:
+                    progress_assignment.push(as);
+                    break;
+                case 1:
+                    finish_assignment.push(as);
+                    break;
+                case 2:
+                    finish_assignment.push(as);
+                    break;
+            }
+        }else if(type===1){
+            switch(as[3]){
+                case 0:
+                    progress_assignment.push(as);
+                    break;
+                case 1:
+                    progress_assignment.push(as);
+                    break;
+                case 2:
+                    finish_assignment.push(as);
+                    break;
+                case 3:
+                    finish_assignment.push(as);
+                    break;
+            }
+        }
+    })
+    
+
     return (
         <Grid container direction="column" spacing={24}>
             <AccountInfo 
-                name={props.name} 
-                number={props.number} 
-                type={props.type} 
-                major = {props.major}
+                name={main_info.name} 
+                number={main_info.student_number} 
+                type={main_info.type} 
+                major = {main_info.major}
             />
-            <BottomPopup link="#"></BottomPopup>
-            <Grid container direction="column" className="contents_con">    
-                <div className="contents_title"><h6>제출 가능한 과제</h6></div>
+            <Grid container direction="column" className="contents_con">   
+                <div className="contents_title"><h6>{type===0?"마감 전 과제":"제출 가능한 과제" // 제목 수정 필요
+                }</h6></div>
                 <div className="assignment_rootbox">
-                    <AssignmentBox/>
-                    <AssignmentBox/>
+                    {
+                        progress_assignment.map((as)=>
+                            <Link to ={"/home/assignment/"+as[0]}>
+                                <AssignmentBox
+                                    type={main_info.type}
+                                    assignment_info={as}
+                                />
+                            </Link>
+                        )
+                    }
                 </div>
             </Grid>
-            <Grid container direction="column" className="contents_con">    
-                <div className="contents_title"><h6>최근 채점된 과제</h6></div>
+            <Grid container direction="column" className="contents_con">   
+                <div className="contents_title"><h6>마감된 과제</h6></div>
                 <div className="assignment_rootbox">
-                    <AssignmentBox/>
-                    <AssignmentBox/>
-                    <AssignmentBox/>
+                    {
+                        finish_assignment.map((as)=>
+                            <Link to ={"/home/assignment/"+as[0]}>
+                                <AssignmentBox
+                                    type={main_info.type}
+                                    assignment_info={as}
+                                />
+                            </Link>
+                        )
+                    }
                 </div>
             </Grid>
         </Grid>

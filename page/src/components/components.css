@@ -73,28 +73,28 @@
     justify-content: flex-start;
     flex-wrap: wrap;
 }
-.assignment_box{
+.assignment_rootbox>*{
     flex: initial;
     width: 30%;
     height: 160px;
     padding: 15px;
-    display: flex;
-    flex-direction: column;
     margin-right: 2%;
     box-shadow: 1px 1px 3px grey;
+}
+.assignment_box{
+    display: flex;
+    flex-direction: column;
 }
 .assignment_box:last-of-type{
     margin-right:0;
 }
-.a_box_title{
-    font-weight: 600;
-}
-.a_box_contents_ul{
-    list-style:circle square;
-}
-.a_box_contents_ul>li{
+.a_box_header{
     display: flex;
     align-items: center;
+    justify-content: space-between;
+}
+.a_box_title{
+    font-weight: 600;
 }
 
 .problem_container {

@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   
 const SideBar = (props) => {
     const classes = useStyles();
-    const {drawerClose, name, number} = props;
+    const {type, drawerClose, assignment_info} = props;
     const [down, setDown] = React.useState(true);
 
     const handleMenuDown = () => {
@@ -52,42 +52,50 @@ const SideBar = (props) => {
             <Divider />
 
             <List
-            subheader={
-                <ListSubheader component="div" id="subheader">내 과제</ListSubheader>
-            }
+                subheader={
+                    <ListSubheader component="div" id="subheader">
+                        {type===1? "내 과제" : "출제한 과제"}    
+                    </ListSubheader>
+                }
             >
-                <Link to="/assignment/1">
-                    <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                        <StarBorder />
-                        </ListItemIcon>
-                        <ListItemText primary="과제 #1" />
-                    </ListItem>
-                </Link>
-                <Link to="/assignment/2">
-                    <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                        <StarHalfIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="과제 #2" />
-                    </ListItem>
-                </Link>
-                <Link to="/assignment/3">
-                    <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                        <StarIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="과제 #3" />
-                    </ListItem>
-                </Link>
+                {
+                    assignment_info.map((as) => 
+                        <Link to={'/home/assignment/'+as[0]}>
+                            <ListItem button className={classes.nested}>
+                            <ListItemIcon>
+                                {// 수정해야함
+                                type===0?
+                                    (as[2]===0?<StarBorder/>:
+                                        (as[2]===1?<StarHalfIcon/>:<StarIcon/>)
+                                    )
+                                    :(as[2]==0?<StarBorder />: <StarIcon/>)}
+                            </ListItemIcon>
+                            <ListItemText primary={as[1]} />
+                            </ListItem>
+                        </Link>
+                    )
+                }
             </List>
             
-            {props.type === 0 ?
+            {type === 0 ?
             <List
             subheader={
-                <ListSubheader component="div" id="subheader">학생 목록 관리</ListSubheader>
+                <ListSubheader component="div" id="subheader">관리</ListSubheader>
             }
-            ></List> : undefined}
+            >
+                <Link to='/home/setting'>
+                    <ListItem button className={classes.nested}>
+                        <ListItemText primary="과제 관리" />
+                    </ListItem>
+                </Link>
+                <Link to='/home/setting'>
+                {// 여기는 회원 정보 관리로 수정해야함
+                }
+                    <ListItem button className={classes.nested}>
+                        <ListItemText primary="회원 정보 관리" />
+                    </ListItem>
+                </Link>
+            </List> : undefined}
         </div>
     );
 }

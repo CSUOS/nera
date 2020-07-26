@@ -1,36 +1,50 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Checkbox from '@material-ui/core/Checkbox';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import { makeStyles } from '@material-ui/core/styles';
 
-const BorderLinearProgress = withStyles((theme) => ({
-    root: {
-      height: 10,
-      borderRadius: 5,
-    },
-    colorPrimary: {
-      backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
-    },
-    bar: {
-      borderRadius: 5,
-      backgroundColor: '#1a90ff',
-    },
-  }))(LinearProgress);
 
 const AssignmentBox = (props)=>{
+  const {type, assignment_info} = props;
+  const state = assignment_info[3];
+  const deadline = assignment_info[1];
+  let color="black";
+  let state_word = "error";
 
-    return(
-        <div className="assignment_box">
-            <div className="a_box_title">Assignment #3</div>
-            <div className="a_box_contents">
-                <ul className="a_box_contents_ul">
-                    <li><p>Part 1 (문제 풀이)</p><Checkbox /></li>
-                    <li><p>Part 1 (문제 풀이)</p><Checkbox/></li>
-                </ul>
-            </div>
-            <BorderLinearProgress variant="determinate" value={50} />
-        </div>
-    );
+  if(type===0){
+    switch(state){
+      case 0: state_word="마감 전"; color = "green"; break;
+      case 1: state_word="채점 전"; color = "red"; break;
+      case 2: state_word="채점 완료"; color = "blue"; break;
+    }
+  }else if(type===1){
+    switch(state){
+      // 색 조절하기 (수정 필요)
+      case 0: state_word="제출 필요"; color = "red"; break;
+      case 1: state_word="제출 완료"; color = "green"; break;
+      case 2: state_word="채점 중"; color = "green"; break;
+      case 3: state_word="채점 완료"; color = "blue"; break;
+    }
+  }
+
+  const useStyles = makeStyles((theme) => ({
+    circleSytle : {
+      background: color,
+      padding: '5px 10px',
+      color: 'white'
+    }
+  }));
+  
+  const classes = useStyles();
+
+  
+  return(
+      <div className="assignment_box">
+          <div className="a_box_header">
+            <div className="a_box_title">{assignment_info[2]}</div>
+            <div className={classes.circleSytle}>{state_word}</div>
+          </div>
+          <div className="a_box_deadline">{deadline} 까지</div>
+      </div>
+  );
 }
 
 export default AssignmentBox
