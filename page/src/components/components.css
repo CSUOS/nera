@@ -106,8 +106,25 @@
     padding: 10px;
 }
 
+.problem_title {
+    padding: 10px;
+    font-weight: bold;
+}
+
+.problem_info {
+    padding: 10px;
+    font-style: italic;
+    float: left;
+}
+
+.problem_score {
+    padding: 10px;
+    float: right;
+}
+
 .problem_number {
     margin: 0 15px 0 0;
+    font-weight: bold;
 }
 
 .problem_image {

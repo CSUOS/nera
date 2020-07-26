@@ -35,12 +35,22 @@ a:hover{
 }
 
 .save_container{
-    width: "100%";
+    align-self: right;
+    width: max-content;
 }
 
 .save_component{
     margin: 15px;
     align-self: center;
+}
+
+.assignment_page_title {
+    flex-grow: 1;
+}
+
+.assignment_page_header {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .table_root {

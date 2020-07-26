@@ -1,22 +1,56 @@
-import React from 'react';
-import {AssignmentInfo, PartBox} from "../components";
+import React, {Component} from 'react';
+import {AssignmentInfo, Problem} from "../components";
+import PropTypes from 'prop-types';
 
-import { Grid } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 
-const Assignment = (props)=>{
+class Assignment extends Component {
 
-    return (
-        <Grid container direction="column" spacing={24}>
-            <AssignmentInfo title={props.title} deadline={props.deadline}/>
-            <Grid container direction="column" className="contents_con">
-                <div className="contents_title"><h6>과제의 세부 Part 목록</h6></div>
-                <Grid container direction="row" className="assignment_rootbox">
-                    <PartBox title="Part 1: 문제 풀이" link={"/assignment/" + props.assignment_id + "/1"}/>
-                    <PartBox title="Part 2: 질의 응답" link={"/assignment/" + props.assignment_id + "/2"}/>
-                </Grid>
+    render() {
+        return (
+            <Grid container direction="column" spacing={24}>
+                <div className="assignment_page_header">
+                    <div className="assignment_page_title">
+                        <AssignmentInfo title={this.props.info["assignment_title"]} deadline={this.props.info["deadline"]}></AssignmentInfo>
+                    </div>
+                    <div className="save_container">
+                        <Grid container direction="row" alignItems="flex-start" justify="flex-end">
+                            <h6 className="save_component">변경사항 저장 안 됨</h6>
+                            <Button className="save_component" variant="contained">저장</Button>
+                        </Grid>
+                    </div>
+                </div>
+
+                {this.props.info["question"].map((prob, index)=>{
+                    return (
+                        <Problem number={index+1} info={prob} marked={this.props.info["assignment_state"]}></Problem>
+                    );
+                })}
+
             </Grid>
-        </Grid>
-    )
+        );
+    }
 }
 
-export default Assignment
+Assignment.propTypes = {
+    info: PropTypes.shape({
+        "assignment_title": PropTypes.string,
+        "deadline": PropTypes.instanceOf(Date),
+        "assignment_state": PropTypes.number,
+        "points": PropTypes.number,
+        "score": PropTypes.number,
+        "question": PropTypes.arrayOf(PropTypes.shape({
+            "question_title": PropTypes.string,
+            "question_contents": PropTypes.string,
+            "question_info": PropTypes.string,
+            "question_points": PropTypes.number,
+            "question_answer": PropTypes.arrayOf(PropTypes.shape({
+                "answer": PropTypes.string,
+                "submitted": PropTypes.bool,
+                "score": PropTypes.number
+            }))
+        }))
+    })
+}
+
+export default Assignment;

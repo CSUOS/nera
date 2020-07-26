@@ -92,15 +92,16 @@ function Main(props){
 
       // get assignment data from NERA server
 
+    // [assignment_info의 값 종류]
+    // 학생일 경우 0: 제출 필요, 1: 제출 완료, 2: 채점 중, 3: 채점 완료
+    // 교수일 경우 0: 마감 전, 1: 마감 후 채점 전, 2: 마감 후 채점 후
+
     let assignment=[
       {
         "assignment_id":1,
         "assignment_title":"[컴퓨터보안] SHA256 구현",
-        "deadline": "2020-08-21",
+        "deadline": new Date('2020-08-21T11:59:00'),
         "assignment_state": 0,
-        // js에 열거형이 없네요
-        // 학생일 경우 0: 제출 필요, 1: 제출 완료, 2: 채점 중, 3: 채점 완료
-        // 교수일 경우 0: 마감 전, 1: 마감 후 채점 전, 2: 마감 후 채점 후
         "assignment_info": "코드는 반드시 C++로 작성해주세요.",
         "points": 30,
         "question":[{}],
@@ -109,11 +110,8 @@ function Main(props){
       {
         "assignment_id":2,
         "assignment_title":"[컴퓨터알고리즘] 퀵 소트 구현",
-        "deadline": "2020-08-27",
+        "deadline": new Date('2020-08-27T11:59:00'),
         "assignment_state": 2,
-        // js에 열거형이 없네요
-        // 학생일 경우 0: 제출 필요, 1: 제출 완료, 2: 채점 중, 3: 채점 완료
-        // 교수일 경우 0: 마감 전, 1: 마감 후 채점 전, 2: 마감 후 채점 후
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "points": 30,
         "question":[{}],
@@ -122,11 +120,8 @@ function Main(props){
       {
         "assignment_id":3,
         "assignment_title":"[컴퓨터알고리즘] 쉘 소트 구현",
-        "deadline": "2020-08-27",
+        "deadline": new Date('2020-08-27T11:59:00'),
         "assignment_state": 1,
-        // js에 열거형이 없네요
-        // 학생일 경우 0: 제출 필요, 1: 제출 완료, 2: 채점 중, 3: 채점 완료
-        // 교수일 경우 0: 마감 전, 1: 마감 후 채점 전, 2: 마감 후 채점 후
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "points": 30,
         "question":[{}],
@@ -135,11 +130,8 @@ function Main(props){
       {
         "assignment_id":4,
         "assignment_title":"[컴퓨터알고리즘] 힙 소트 구현",
-        "deadline": "2020-08-27",
+        "deadline": new Date('2020-08-27T11:59:00'),
         "assignment_state": 3,
-        // js에 열거형이 없네요
-        // 학생일 경우 0: 제출 필요, 1: 제출 완료, 2: 채점 중, 3: 채점 완료
-        // 교수일 경우 0: 마감 전, 1: 마감 후 채점 전, 2: 마감 후 채점 후
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "points": 30,
         "question":[{}],
@@ -155,7 +147,7 @@ function Main(props){
       "question_answer":[]
     };
     let q_2 = {
-      "question_id" : 1,
+      "question_id" : 2,
       "quesetion_title" : "",
       "question_contents" : "SHA에 대해 조사하세요.",
       "question_info" : "2 page 이상 필수",
@@ -171,13 +163,19 @@ function Main(props){
     const sb_assignment = [];
     for(let i=0; i<assignment.length; i++){
       // id: 0, title : 1, state : 2
-      sb_assignment.push([assignment[i].assignment_id,assignment[i].assignment_title,assignment[i].assignment_state]);
+      sb_assignment.push([assignment[i].assignment_id, assignment[i].assignment_title, assignment[i].assignment_state]);
     }
 
 
+    const findAssignmentById = (id, asList) => {
+      for (let i = 0; i < asList.length; ++i)
+        if (asList[i]["assignment_id"] === id)
+          return asList[i];
 
+      return undefined;
+    }
 
-      // select contents from url
+    // select contents from url
 
     let contents;
     const component = props.match.params.component;
@@ -191,7 +189,7 @@ function Main(props){
       const home_assignment = [];
       for(let i=0; i<assignment.length; i++){
         // id: 0, deadline : 1, title : 2, state : 3, score : 4
-        home_assignment.push([assignment[i].assignment_id,assignment[i].deadline,assignment[i].assignment_title,assignment[i].assignment_state,assignment[i].score]);
+        home_assignment.push([assignment[i].assignment_id, assignment[i].deadline, assignment[i].assignment_title, assignment[i].assignment_state, assignment[i].score]);
       }
   
 
@@ -208,9 +206,7 @@ function Main(props){
             // as_id이 있으면
             contents=
             <Assignment
-              title={"Assignment #" + Number(assignment_id)}
-              assignment_id={assignment_id}
-              deadline={new Date('2020-08-31T11:59:00')}
+              info={findAssignmentById(Number(assignment_id), assignment)}
             />   ;
           }else{
             // as_id이 없으면
