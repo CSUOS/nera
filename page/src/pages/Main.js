@@ -1,6 +1,6 @@
 import React from 'react';
 import {SideBar, Header} from "../components";
-import {Home, Assignment, PAssignment, Setting, Error} from "../pages";
+import {Home, Assignment, Setting, Error, SubmissionStatus} from "../pages";
 import { Route, Switch } from 'react-router-dom';
 import "./pages.css";
 
@@ -224,7 +224,7 @@ function Main(props){
         switch(component){
           case "assignment":
             if(assignment_id!=undefined){
-              contents=<PAssignment/>;  
+              contents=<SubmissionStatus/>;  
             }else{
               contents = <Error/>;
             }
