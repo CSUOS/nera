@@ -6,7 +6,7 @@ const AssignmentBox = (props)=>{
   const {type, assignment_info} = props;
   const state = assignment_info[3];
   const deadline = assignment_info[1].getFullYear() + "-" 
-                + (assignment_info[1].getMonth()+1) + "-"
+                + (assignment_info[1].getMonth()+1 <= 9 ? "0" : "") + (assignment_info[1].getMonth()+1) + "-"
                 + assignment_info[1].getDate() + " "
                 + assignment_info[1].getHours() + ":"
                 + assignment_info[1].getMinutes()
