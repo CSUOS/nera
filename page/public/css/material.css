@@ -27,3 +27,6 @@
     font-size: 2rem!important;
     font-weight: 600!important;
 }
+.MuiGrid-container{
+    flex-wrap: nowrap!important;
+}

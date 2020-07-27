@@ -10,7 +10,7 @@ const Home = (props)=>{
     let finish_assignment = [];
 
     assignment_info.map((as)=>{
-        if(type===0){ // 교수
+        if(type===0){ // 교수 => 0만 마감 전
             switch(as[3]){
                 case 0:
                     progress_assignment.push(as);
@@ -22,7 +22,7 @@ const Home = (props)=>{
                     finish_assignment.push(as);
                     break;
             }
-        }else if(type===1){
+        }else if(type===1){ // 학생 => 0, 1이 마감 전
             switch(as[3]){
                 case 0:
                     progress_assignment.push(as);
@@ -55,12 +55,10 @@ const Home = (props)=>{
                 <div className="assignment_rootbox">
                     {
                         progress_assignment.map((as)=>
-                            <Link to ={"/home/assignment/"+as[0]}>
-                                <AssignmentBox
-                                    type={main_info.type}
-                                    assignment_info={as}
-                                />
-                            </Link>
+                            <AssignmentBox
+                                type={main_info.type}
+                                assignment_info={as}
+                            />
                         )
                     }
                 </div>
@@ -70,12 +68,10 @@ const Home = (props)=>{
                 <div className="assignment_rootbox">
                     {
                         finish_assignment.map((as)=>
-                            <Link to ={"/home/assignment/"+as[0]}>
-                                <AssignmentBox
-                                    type={main_info.type}
-                                    assignment_info={as}
-                                />
-                            </Link>
+                            <AssignmentBox
+                                type={main_info.type}
+                                assignment_info={as}
+                            />
                         )
                     }
                 </div>

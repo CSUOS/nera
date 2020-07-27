@@ -82,7 +82,7 @@ function Main(props){
       "id": 1,
       "name":"우희은",
       "student_number" : "2017920038",
-      "type" : 1,
+      "type" : 0, // 교수 : 0 , 학생 : 1
       "major" : "컴퓨터과학부"
     }
     
@@ -93,8 +93,8 @@ function Main(props){
       // get assignment data from NERA server
 
     // [assignment_info의 값 종류]
-    // 학생일 경우 0: 제출 필요, 1: 제출 완료, 2: 채점 중, 3: 채점 완료
-    // 교수일 경우 0: 마감 전, 1: 마감 후 채점 전, 2: 마감 후 채점 후
+    // 학생일 경우 0: 제출 필요(secondary), 1: 제출 완료(green), 2: 채점 중(primary), 3: 채점 완료(black)
+    // 교수일 경우 0: 마감 전(green), 1: 마감 후 채점 전(secondary), 2: 마감 후 채점 후(black)
 
     let assignment=[
       {
@@ -189,7 +189,7 @@ function Main(props){
     let q_7 = {
       "question_id" : 1,
       "question_title" : "자료 조사",
-      "question_contents" : "쉘 소트에 대해 조사하세요.",
+      "question_contents" : "힙 소트에 대해 조사하세요.",
       "question_info" : "시간복잡도에 대한 증명 필수",
       "question_points" : 60,
       "question_answer":[]
@@ -197,11 +197,12 @@ function Main(props){
     let q_8 = {
       "question_id" : 2,
       "question_title" : "알고리즘 구현",
-      "question_contents" : "C/C++로 쉘 소트를 구현하세요.",
+      "question_contents" : "C/C++로 힙 소트를 구현하세요.",
       "question_info" : "함수 void shellSort(int arr[], int length)를 구현할 것",
       "question_points" : 60,
       "question_answer":[]
     };
+    
     assignment[0]["question"][0]=q_1;
     assignment[0]["question"][1]=q_2;
     assignment[1]["question"][0]=q_3;
@@ -229,13 +230,14 @@ function Main(props){
       return undefined;
     }
 
-    // select contents from url
+
+      // select contents from url
 
     let contents;
     const component = props.match.params.component;
     const assignment_id = props.match.params.as_id;
 
-    // type이 없으면 재로그인 요청 => 추가하기
+    // type이 없으면 재로그인 요청 => 쿠키 완성 시 추가하기
     
     // url의 (type, component)에 따라 component 분리
     if(component==undefined){
@@ -274,7 +276,7 @@ function Main(props){
         switch(component){
           case "assignment":
             if(assignment_id!=undefined){
-              contents=<SubmissionStatus/>;  
+              contents = <SubmissionStatus/>;  
             }else{
               contents = <Error/>;
             }
@@ -289,7 +291,6 @@ function Main(props){
               contents = <Setting/>;
             }
             break;
-          case "submit": // 정현님 여기서 routing 수정하시면 됩니다. break 꼭 넣어주세요 :)
           default:
             contents = <Error/>;
         }

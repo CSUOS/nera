@@ -11,13 +11,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import Collapse from "@material-ui/core/Collapse";
-import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
-import StarBorder from "@material-ui/icons/StarBorder";
-import StarHalfIcon from '@material-ui/icons/StarHalf';
-import StarIcon from '@material-ui/icons/Star';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import { green } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
     nested:{
@@ -35,11 +30,40 @@ const useStyles = makeStyles((theme) => ({
 const SideBar = (props) => {
     const classes = useStyles();
     const {type, drawerClose, assignment_info} = props;
-    const [down, setDown] = React.useState(true);
 
-    const handleMenuDown = () => {
-        setDown(!down);
-      };
+    let primary_assignment = [];
+    let secondary_assignment = [];
+
+    assignment_info.map((as)=>{
+        if(type===0){ // 교수 => 0만 마감 전
+            switch(as[2]){
+                case 0:
+                    secondary_assignment.push(as);
+                    break;
+                case 1:
+                    primary_assignment.push(as);
+                    break;
+                case 2:
+                    secondary_assignment.push(as);
+                    break;
+            }
+        }else if(type===1){ // 학생 => 0, 1이 마감 전
+            switch(as[2]){
+                case 0:
+                    primary_assignment.push(as);
+                    break;
+                case 1:
+                    primary_assignment.push(as);
+                    break;
+                case 2:
+                    secondary_assignment.push(as);
+                    break;
+                case 3:
+                    secondary_assignment.push(as);
+                    break;
+            }
+        }
+    })
 
     return (
         <div className="side_bar">
@@ -59,16 +83,43 @@ const SideBar = (props) => {
                 }
             >
                 {
-                    assignment_info.map((as) => 
+                    primary_assignment.map((as) => 
                         <Link to={'/home/assignment/'+as[0]}>
                             <ListItem button className={classes.nested}>
                             <ListItemIcon>
-                                {// 수정해야함
+                                {
                                 type===0?
-                                    (as[2]===0?<StarBorder/>:
-                                        (as[2]===1?<StarHalfIcon/>:<StarIcon/>)
+                                    (as[2]===0?<FiberManualRecordIcon style={{color:green[700]}}/>:
+                                        (as[2]===1?<FiberManualRecordIcon color="secondary"/>:<FiberManualRecordIcon/>)
                                     )
-                                    :(as[2]==0?<StarBorder />: <StarIcon/>)}
+                                    :(as[2]===0?<FiberManualRecordIcon color="secondary"/>: 
+                                        (as[2]===1?<FiberManualRecordIcon style={{color:green[700]}}/>:
+                                            (as[2]===2?<FiberManualRecordIcon color="primary"/>:<FiberManualRecordIcon/>)
+                                            )
+                                    )
+                                }
+                            </ListItemIcon>
+                            <ListItemText primary={as[1]} />
+                            </ListItem>
+                        </Link>
+                    )
+                }
+                {
+                    secondary_assignment.map((as) => 
+                        <Link to={'/home/assignment/'+as[0]}>
+                            <ListItem button className={classes.nested}>
+                            <ListItemIcon>
+                                {
+                                type===0?
+                                    (as[2]===0?<FiberManualRecordIcon style={{color:green[700]}}/>:
+                                        (as[2]===1?<FiberManualRecordIcon color="secondary"/>:<FiberManualRecordIcon/>)
+                                    )
+                                    :(as[2]===0?<FiberManualRecordIcon color="secondary"/>: 
+                                        (as[2]===1?<FiberManualRecordIcon style={{color:green[700]}}/>:
+                                            (as[2]===2?<FiberManualRecordIcon color="primary"/>:<FiberManualRecordIcon/>)
+                                            )
+                                    )
+                                }
                             </ListItemIcon>
                             <ListItemText primary={as[1]} />
                             </ListItem>

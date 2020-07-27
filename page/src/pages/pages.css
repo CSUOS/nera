@@ -19,7 +19,7 @@ a:hover{
 }
 
 .contents_side>div{
-    flex-wrap: nowrap;
+    flex-wrap: nowrap!important;
 }
 .contents_con{
     margin: 10px 0 25px;

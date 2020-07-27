@@ -73,17 +73,13 @@
     justify-content: flex-start;
     flex-wrap: wrap;
 }
-.assignment_rootbox>*{
-    flex: initial;
-    width: 30%;
-    height: 160px;
-    padding: 15px;
-    margin-right: 2%;
-    box-shadow: 1px 1px 3px grey;
-}
 .assignment_box{
+    min-width: 320px;
     display: flex;
     flex-direction: column;
+    padding: 10px 20px;
+    margin-right: 1%;
+    margin-bottom: 40px;
 }
 .assignment_box:last-of-type{
     margin-right:0;
