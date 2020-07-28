@@ -8,9 +8,9 @@ class AssignmentInfo extends Component {
     getSubTitle = () => {
         let deadlineString = this.props.deadline.getFullYear() + "-" 
                          + (this.props.deadline.getMonth()+1 <= 9 ? "0" : "") + (this.props.deadline.getMonth()+1) + "-"
-                         + this.props.deadline.getDate() + " "
-                         + this.props.deadline.getHours() + ":"
-                         + this.props.deadline.getMinutes()
+                         + (this.props.deadline.getDate() <= 9 ? "0" : "") + this.props.deadline.getDate() + " "
+                         + (this.props.deadline.getHours() <= 9 ? "0" : "") + this.props.deadline.getHours() + ":"
+                         + (this.props.deadline.getMinutes() <= 9 ? "0" : "") + this.props.deadline.getMinutes()
 
         if (isNaN(this.props.score))
             return deadlineString + " 마감"

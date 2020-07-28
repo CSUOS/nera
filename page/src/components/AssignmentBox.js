@@ -9,9 +9,9 @@ const AssignmentBox = (props)=>{
   const state = as_info[3];
   const deadline = as_info[1].getFullYear() + "-" 
                 + (as_info[1].getMonth()+1 <= 9 ? "0" : "") + (as_info[1].getMonth()+1) + "-"
-                + as_info[1].getDate() + " "
-                + as_info[1].getHours() + ":"
-                + as_info[1].getMinutes()
+                + (as_info[1].getDate() <= 9 ? "0" : "") + as_info[1].getDate() + " "
+                + (as_info[1].getHours() <= 9 ? "0" : "") + as_info[1].getHours() + ":"
+                + (as_info[1].getMinutes() <= 9 ? "0" : "") + as_info[1].getMinutes()
                 
   let color="black";
   let state_word = "error";
