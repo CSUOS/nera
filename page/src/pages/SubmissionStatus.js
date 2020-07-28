@@ -55,10 +55,10 @@ const notSubmittedData = [
 const SubmittedRow = (props) => {
     const getLastSaveDate = () => {
         let timeString = props.time.getFullYear() + "-" 
-                         + (props.time.getMonth()+1) + "-"
-                         + props.time.getDate() + " "
-                         + props.time.getHours() + ":"
-                         + props.time.getMinutes()
+                         + (props.time.getMonth()+1 <= 9 ? "0" : "") + (props.time.getMonth()+1) + "-"
+                         + (props.time.getDate() <= 9 ? "0" : "") + props.time.getDate() + " "
+                         + (props.time.getHours() <= 9 ? "0" : "") + props.time.getHours() + ":"
+                         + (props.time.getMinutes() <= 9 ? "0" : "") + props.time.getMinutes()
 
         return timeString;
     }
@@ -70,7 +70,7 @@ const SubmittedRow = (props) => {
             <TableCell>{getLastSaveDate()}</TableCell>
             <TableCell>{props.score}</TableCell>
             <TableCell>
-                <IconButton aria-label="채점 페이지로" size="small">
+                <IconButton aria-label="채점 페이지로" size="small" href={"/home/scoring/" + props.asId}>
                     <CreateIcon></CreateIcon>
                 </IconButton>
             </TableCell>
@@ -125,7 +125,7 @@ const SubmittedTable = (props) => {
 
                     <TableBody>
                         {sortRows(props.rowData).map((row) => (
-                            <SubmittedRow id={row.id} name={row.name} time={row.time} score={row.score}></SubmittedRow>
+                            <SubmittedRow asId={props.asId} id={row.id} name={row.name} time={row.time} score={row.score}></SubmittedRow>
                         ))}
                     </TableBody>
                 </Table>
@@ -204,11 +204,11 @@ class SubmissionStatus extends Component {
 
                 <Grid container direction="column" className="contents_con">
                     <div className="contents_title"><h6>제출한 수강생</h6></div>
-                    <SubmittedTable rowData={submittedData}></SubmittedTable>
+                    <SubmittedTable asId={this.props.info["assignment_id"]} rowData={submittedData}></SubmittedTable>
                 </Grid>
                 <Grid container direction="column" className="contents_con">
                     <div className="contents_title"><h6>제출하지 않은 수강생</h6></div>
-                    <NotSubmittedTable rowData={notSubmittedData}></NotSubmittedTable>
+                    <NotSubmittedTable asId={this.props.info["assignment_id"]} rowData={notSubmittedData}></NotSubmittedTable>
                 </Grid>
             </Grid>
         );
@@ -217,6 +217,7 @@ class SubmissionStatus extends Component {
 
 SubmissionStatus.defaultProps = {
     info: PropTypes.shape({
+        "assignment_id": PropTypes.number,
         "assignment_title": PropTypes.string,
         "deadline": PropTypes.instanceOf(Date),
         "assignment_state": PropTypes.number,

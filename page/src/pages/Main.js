@@ -1,6 +1,6 @@
 import React from 'react';
 import {SideBar, Header} from "../components";
-import {Home, Assignment, Setting, Error, SubmissionStatus, SetAssignment} from "../pages";
+import {Home, Assignment, Setting, Error, SubmissionStatus, SetAssignment, Scoring} from "../pages";
 import "./pages.css";
 
 import clsx from 'clsx';
@@ -280,6 +280,7 @@ function Main(props){
               contents = <Error/>;
             }
             break;
+
           case "setting":
             if(sub!=undefined){
               if(sub==="add"){
@@ -296,6 +297,14 @@ function Main(props){
               />;
             }
             break;
+          
+          case "scoring":
+            if (sub != undefined)
+              contents = <Scoring/>
+            else
+              contents = <Scoring/>
+            break;
+          
           default:
             contents = <Error/>;
         }
