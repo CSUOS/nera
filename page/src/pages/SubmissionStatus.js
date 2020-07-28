@@ -29,7 +29,7 @@ const submittedData = [
         name: "최정현",
         time: new Date('2020-08-01T10:23:00'),
         score: "100",
-    },
+    }
 ];
 
 const notSubmittedData = [
@@ -79,16 +79,34 @@ const SubmittedRow = (props) => {
 
 const SubmittedTable = (props) => {
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [orderBy, setOrderBy] = React.useState('id');
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
+        setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+
+    const compareElements = (a, b) => {
+        if (a[orderBy] < b[orderBy])
+            return -1;
+        else if (a[orderBy] > b[orderBy])
+            return 1;
+        else
+            return 0;
+    }
+
+    const sortRows = (rows) => {
+        const mappedList = rows.map((element, index) => [element, index]);
+        mappedList.sort((a, b) => {
+            return compareElements(a[0], b[0]);
+        });
+        return mappedList.map((el) => el[0]);
+    }
 
     return (
         <Paper className="table_root">
@@ -105,14 +123,14 @@ const SubmittedTable = (props) => {
                     </TableHead>
 
                     <TableBody>
-                        {props.rowData.map((row) => (
+                        {sortRows(props.rowData).map((row) => (
                             <SubmittedRow id={row.id} name={row.name} time={row.time} score={row.score}></SubmittedRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
             <TablePagination
-                rowsPerPageOptions={[10, 25, 50, 100]}
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
                 component="div"
                 count={props.rowData.length}
                 rowsPerPage={rowsPerPage}
@@ -135,7 +153,7 @@ const NotSubmittedRow = (props) => {
 
 const NotSubmittedTable = (props) => {
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -165,7 +183,7 @@ const NotSubmittedTable = (props) => {
                 </Table>
             </TableContainer>
             <TablePagination
-                rowsPerPageOptions={[10, 25, 50, 100]}
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
                 component="div"
                 count={props.rowData.length}
                 rowsPerPage={rowsPerPage}
