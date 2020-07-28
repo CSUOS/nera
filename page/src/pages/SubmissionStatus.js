@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { AssignmentInfo } from "../components";
+import PropTypes from 'prop-types';
 
 import { Grid, Paper } from '@material-ui/core';
 import { TableRow, TableBody, IconButton, Table, TableHead, TableContainer, TablePagination, TableCell } from '@material-ui/core';
@@ -118,7 +119,7 @@ const SubmittedTable = (props) => {
                             <TableCell>이름</TableCell>
                             <TableCell>제출한 시간</TableCell>
                             <TableCell>부여된 점수</TableCell>
-                            <TableCell></TableCell>
+                            <TableCell>채점하기</TableCell>
                         </TableRow>
                     </TableHead>
 
@@ -199,7 +200,7 @@ class SubmissionStatus extends Component {
     render() {
         return (
             <Grid container direction="column" spacing={24}>
-                <AssignmentInfo title={this.props.title} deadline={this.props.deadline} />
+                <AssignmentInfo title={this.props.info["assignment_title"]} deadline={this.props.info["deadline"]} />
 
                 <Grid container direction="column" className="contents_con">
                     <div className="contents_title"><h6>제출한 수강생</h6></div>
@@ -215,8 +216,24 @@ class SubmissionStatus extends Component {
 }
 
 SubmissionStatus.defaultProps = {
-    title: "기본 제목",
-    deadline: new Date('1970-01-01T11:59:00')
+    info: PropTypes.shape({
+        "assignment_title": PropTypes.string,
+        "deadline": PropTypes.instanceOf(Date),
+        "assignment_state": PropTypes.number,
+        "points": PropTypes.number,
+        "score": PropTypes.number,
+        "question": PropTypes.arrayOf(PropTypes.shape({
+            "question_title": PropTypes.string,
+            "question_contents": PropTypes.string,
+            "question_info": PropTypes.string,
+            "question_points": PropTypes.number,
+            "question_answer": PropTypes.arrayOf(PropTypes.shape({
+                "answer": PropTypes.string,
+                "submitted": PropTypes.bool,
+                "score": PropTypes.number
+            }))
+        }))
+    })
 }
 
 export default SubmissionStatus;

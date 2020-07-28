@@ -275,7 +275,7 @@ function Main(props){
         switch(component){
           case "assignment":
             if(sub!=undefined){
-              contents = <SubmissionStatus/>;  
+              contents = <SubmissionStatus info={findAssignmentById(Number(sub), assignment)}/>;  
             }else{
               contents = <Error/>;
             }
