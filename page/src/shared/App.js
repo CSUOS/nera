@@ -10,7 +10,8 @@ class App extends Component {
               <Route exact path="/" component={Login}/>
               <Route exact path="/home" component={Main}/>
               <Route exact path="/home/:component" component={Main}/>
-              <Route exact path="/home/:component/:as_id" component={Main}/>
+              <Route exact path="/home/:component/:sub" component={Main}/>
+              <Route exact path="/home/:component/:sub/:last" component={Main}/>
             </div>
         );
     }

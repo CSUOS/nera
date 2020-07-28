@@ -5,11 +5,11 @@ import {Link} from 'react-router-dom';
 import { Grid } from '@material-ui/core';
 
 const Home = (props)=>{
-    const {type, main_info, assignment_info} = props;
+    const {type, main_info, as_info} = props;
     let progress_assignment = [];
     let finish_assignment = [];
 
-    assignment_info.map((as)=>{
+    as_info.map((as)=>{
         if(type===0){ // 교수 => 0만 마감 전
             switch(as[3]){
                 case 0:
@@ -57,7 +57,7 @@ const Home = (props)=>{
                         progress_assignment.map((as)=>
                             <AssignmentBox
                                 type={main_info.type}
-                                assignment_info={as}
+                                as_info={as}
                             />
                         )
                     }
@@ -70,7 +70,7 @@ const Home = (props)=>{
                         finish_assignment.map((as)=>
                             <AssignmentBox
                                 type={main_info.type}
-                                assignment_info={as}
+                                as_info={as}
                             />
                         )
                     }

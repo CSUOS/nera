@@ -1,14 +1,12 @@
 import React from 'react';
 import {SideBar, Header} from "../components";
-import {Home, Assignment, Setting, Error, SubmissionStatus} from "../pages";
-import { Route, Switch } from 'react-router-dom';
+import {Home, Assignment, Setting, Error, SubmissionStatus, SetAssignment} from "../pages";
 import "./pages.css";
 
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { array } from 'prop-types';
 
 
 // style definition
@@ -98,9 +96,9 @@ function Main(props){
 
     let assignment=[
       {
-        "assignment_id":1,
+        "assignment_id":0,
         "assignment_title":"[컴퓨터보안] SHA256 구현",
-        "deadline": new Date('2020-08-21T11:59:00'),
+        "deadline": new Date('2020-08-13T11:59:00'),
         "assignment_state": 0,
         "assignment_info": "코드는 반드시 C++로 작성해주세요.",
         "points": 30,
@@ -108,9 +106,9 @@ function Main(props){
         "score": 28
       },
       {
-        "assignment_id":2,
+        "assignment_id":1,
         "assignment_title":"[컴퓨터알고리즘] 퀵 소트 구현",
-        "deadline": new Date('2020-08-27T11:59:00'),
+        "deadline": new Date('2020-08-21T11:59:00'),
         "assignment_state": 2,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "points": 30,
@@ -118,9 +116,9 @@ function Main(props){
         "score": 20
       },
       {
-        "assignment_id":3,
+        "assignment_id":2,
         "assignment_title":"[컴퓨터알고리즘] 쉘 소트 구현",
-        "deadline": new Date('2020-08-27T11:59:00'),
+        "deadline": new Date('2020-08-25T11:59:00'),
         "assignment_state": 1,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "points": 30,
@@ -128,7 +126,7 @@ function Main(props){
         "score": 20
       },
       {
-        "assignment_id":4,
+        "assignment_id":3,
         "assignment_title":"[컴퓨터알고리즘] 힙 소트 구현",
         "deadline": new Date('2020-08-27T11:59:00'),
         "assignment_state": 3,
@@ -139,23 +137,23 @@ function Main(props){
       }
     ];
     let q_1 = {
-      "question_id" : 1,
-      "question_title" : "",
+      "question_id" : 0,
+      "question_title" : "SHA 조사",
       "question_contents" : "SHA에 대해 조사하세요.",
       "question_info" : "2 page 이상 필수",
       "question_points" : 60,
       "question_answer":[]
     };
     let q_2 = {
-      "question_id" : 2,
-      "quesetion_title" : "",
-      "question_contents" : "SHA에 대해 조사하세요.",
+      "question_id" : 1,
+      "quesetion_title" : "SHA 조사",
+      "question_contents" : "SHA에 대해 조사하세요.(2)",
       "question_info" : "2 page 이상 필수",
       "question_points" : 60,
       "question_answer":[]
     };
     let q_3 = {
-      "question_id" : 1,
+      "question_id" : 2,
       "question_title" : "자료 조사",
       "question_contents" : "퀵 소트에 대해 조사하세요.",
       "question_info" : "시간복잡도에 대한 증명 필수",
@@ -163,7 +161,7 @@ function Main(props){
       "question_answer":[]
     };
     let q_4 = {
-      "question_id" : 2,
+      "question_id" : 3,
       "question_title" : "알고리즘 구현",
       "question_contents" : "C/C++로 퀵 소트를 구현하세요.",
       "question_info" : "함수 void quickSort(int arr[], int left, int right)를 구현할 것",
@@ -171,7 +169,7 @@ function Main(props){
       "question_answer":[]
     };
     let q_5 = {
-      "question_id" : 1,
+      "question_id" : 4,
       "question_title" : "자료 조사",
       "question_contents" : "쉘 소트에 대해 조사하세요.",
       "question_info" : "시간복잡도에 대한 증명 필수",
@@ -179,7 +177,7 @@ function Main(props){
       "question_answer":[]
     };
     let q_6 = {
-      "question_id" : 2,
+      "question_id" : 5,
       "question_title" : "알고리즘 구현",
       "question_contents" : "C/C++로 쉘 소트를 구현하세요.",
       "question_info" : "함수 void shellSort(int arr[], int length)를 구현할 것",
@@ -187,7 +185,7 @@ function Main(props){
       "question_answer":[]
     };
     let q_7 = {
-      "question_id" : 1,
+      "question_id" : 6,
       "question_title" : "자료 조사",
       "question_contents" : "힙 소트에 대해 조사하세요.",
       "question_info" : "시간복잡도에 대한 증명 필수",
@@ -195,10 +193,10 @@ function Main(props){
       "question_answer":[]
     };
     let q_8 = {
-      "question_id" : 2,
+      "question_id" : 7,
       "question_title" : "알고리즘 구현",
       "question_contents" : "C/C++로 힙 소트를 구현하세요.",
-      "question_info" : "함수 void shellSort(int arr[], int length)를 구현할 것",
+      "question_info" : "함수 void heapSort(int arr[], int length)를 구현할 것",
       "question_points" : 60,
       "question_answer":[]
     };
@@ -215,10 +213,10 @@ function Main(props){
 
       // 개별 component로 넘길 data들 정리
     // SideBar로 넘길 "과제 제목"들
-    const sb_assignment = [];
+    const s_assignment = [];
     for(let i=0; i<assignment.length; i++){
       // id: 0, title : 1, state : 2
-      sb_assignment.push([assignment[i].assignment_id, assignment[i].assignment_title, assignment[i].assignment_state]);
+      s_assignment.push([assignment[i].assignment_id, assignment[i].assignment_title, assignment[i].assignment_state]);
     }
 
 
@@ -235,7 +233,8 @@ function Main(props){
 
     let contents;
     const component = props.match.params.component;
-    const assignment_id = props.match.params.as_id;
+    const sub = props.match.params.sub;
+    const last = props.match.params.last;
 
     // type이 없으면 재로그인 요청 => 쿠키 완성 시 추가하기
     
@@ -253,19 +252,19 @@ function Main(props){
       <Home
         type={type}
         main_info={main_info}
-        assignment_info ={home_assignment}
+        as_info ={home_assignment}
       />;
     }else{
       if(type==1){ // 학생이면
         if(component=="assignment"){
-          if(assignment_id!=undefined){
-            // as_id이 있으면
+          if(sub!=undefined){
+            // sub이 있으면
             contents=
             <Assignment
-              info={findAssignmentById(Number(assignment_id), assignment)}
+              info={findAssignmentById(Number(sub), assignment)}
             />   ;
           }else{
-            // as_id이 없으면
+            // sub이 없으면
             contents = <Error/>; // 나중에 아예 redirection으로 error page를 새로 생성해도됨
           }
         }else{
@@ -275,20 +274,26 @@ function Main(props){
       else if(type==0){ // 교수이면
         switch(component){
           case "assignment":
-            if(assignment_id!=undefined){
+            if(sub!=undefined){
               contents = <SubmissionStatus/>;  
             }else{
               contents = <Error/>;
             }
             break;
           case "setting":
-            if(assignment_id!=undefined){
-              contents=
-              <Setting 
-                assignment_id={assignment_id}
-              />;  
+            if(sub!=undefined){
+              if(sub==="add"){
+                contents= <SetAssignment/>;
+              }else{
+                contents=
+                <SetAssignment
+                  as_info={assignment[sub]}
+                />;  
+              }
             }else{
-              contents = <Setting/>;
+              contents = <Setting
+                as_info={assignment}
+              />;
             }
             break;
           default:
@@ -336,7 +341,7 @@ function Main(props){
                 <SideBar
                   type={type}
                   drawerClose={handleDrawerClose}
-                  assignment_info={sb_assignment}
+                  assignment_info={s_assignment}
                 />
             </Drawer>
             <div

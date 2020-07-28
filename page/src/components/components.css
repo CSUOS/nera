@@ -84,6 +84,7 @@
 .assignment_box:last-of-type{
     margin-right:0;
 }
+
 .a_box_header{
     display: flex;
     align-items: center;
@@ -129,4 +130,26 @@
     width: auto;
     max-width: 100%;
     object-fit: cover;
+}
+
+/* Setting */
+
+.s_assignment_rootbox{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+}
+.s_assignment_box{
+    width:100%;
+    margin-bottom: 30px;
+}
+.s_assignment_box>*{
+    padding:10px 20px;
+}
+
+/* SetAssignment */
+.setting_as_con>*{
+    margin-bottom:10px;
 }

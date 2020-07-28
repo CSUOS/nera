@@ -5,13 +5,13 @@ import {Link} from 'react-router-dom';
 import { Paper } from '@material-ui/core';
 
 const AssignmentBox = (props)=>{
-  const {type, assignment_info} = props;
-  const state = assignment_info[3];
-  const deadline = assignment_info[1].getFullYear() + "-" 
-                + (assignment_info[1].getMonth()+1 <= 9 ? "0" : "") + (assignment_info[1].getMonth()+1) + "-"
-                + assignment_info[1].getDate() + " "
-                + assignment_info[1].getHours() + ":"
-                + assignment_info[1].getMinutes()
+  const {type, as_info} = props;
+  const state = as_info[3];
+  const deadline = as_info[1].getFullYear() + "-" 
+                + (as_info[1].getMonth()+1 <= 9 ? "0" : "") + (as_info[1].getMonth()+1) + "-"
+                + as_info[1].getDate() + " "
+                + as_info[1].getHours() + ":"
+                + as_info[1].getMinutes()
                 
   let color="black";
   let state_word = "error";
@@ -44,9 +44,9 @@ const AssignmentBox = (props)=>{
   
   return(
     <Paper className="assignment_box">
-      <Link to ={"/home/assignment/"+assignment_info[0]}>
+      <Link to ={"/home/assignment/"+as_info[0]}>
             <div className="a_box_header">
-              <div className="a_box_title">{assignment_info[2]}</div>
+              <div className="a_box_title">{as_info[2]}</div>
               <div className={classes.circleSytle}>{state_word}</div>
             </div>
             <div className="a_box_deadline">{deadline} 까지</div>

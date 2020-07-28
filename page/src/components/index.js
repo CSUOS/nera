@@ -8,3 +8,5 @@ export { default as BottomPopup } from './BottomPopup';
 export { default as AssignmentBox } from './AssignmentBox';
 export { default as PartBox } from './PartBox';
 export { default as Problem } from './Problem';
+export { default as TimePicker } from './TimePicker';
+export { default as SimpleModal } from './SetQuestion';
