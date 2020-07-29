@@ -1,18 +1,16 @@
 FROM node:12 as builder
 WORKDIR /usr/src/app
-COPY ./page/package*.json ./
+COPY ./page/package.json ./
 RUN yarn
 COPY ./page/. .
-RUN yarn test:nowatch
 RUN yarn build
 
 FROM node:12
 WORKDIR /usr/src/app
-COPY ./server/package*.json ./
+COPY ./server/package.json ./
 RUN yarn
 COPY --from=builder /usr/src/app/build /usr/src/app/build
 COPY ./server/. .
-RUN yarn test
 
 EXPOSE 3000
 CMD [ "yarn", "start" ]
