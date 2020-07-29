@@ -34,13 +34,13 @@ build:
     - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
     - docker push $CI_REGISTRY_IMAGE:latest
     
-deploy_prod:
+deploy_dev:
   stage: deploy
   image: registry.gitlab.com/gitlab-org/gitlabktl:latest
   script:
   - /usr/bin/gitlabktl app deploy
   environment:
-    name: production
+    name: dev
   only:
   - master
 
