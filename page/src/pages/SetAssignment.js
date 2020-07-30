@@ -46,11 +46,12 @@ function SetAssignment(props){
     }
 
     function printQuestion(){
+        // question_contents를 간단히 나타내기
         return(
             questions.map((q)=>
                 <Grid>
                     <Paper>
-                        <Grid><Typography variant="h6">{q.question_title}</Typography></Grid>
+                        <Grid><Typography variant="h6"></Typography></Grid>
                     </Paper>
                 </Grid>
             )

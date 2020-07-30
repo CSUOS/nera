@@ -80,7 +80,7 @@ function Main(props){
       "id": 1,
       "name":"우희은",
       "student_number" : "2017920038",
-      "type" : 0, // 교수 : 0 , 학생 : 1
+      "type" : 1, // 교수 : 0 , 학생 : 1
       "major" : "컴퓨터과학부"
     }
     

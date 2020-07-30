@@ -40,7 +40,6 @@ Assignment.propTypes = {
         "points": PropTypes.number,
         "score": PropTypes.number,
         "question": PropTypes.arrayOf(PropTypes.shape({
-            "question_title": PropTypes.string,
             "question_contents": PropTypes.string,
             "question_points": PropTypes.number,
             "question_answer": PropTypes.arrayOf(PropTypes.shape({
