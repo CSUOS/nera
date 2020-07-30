@@ -140,7 +140,6 @@ function Main(props){
       "question_id" : 0,
       "question_title" : "SHA 조사",
       "question_contents" : "SHA에 대해 조사하세요.",
-      "question_info" : "2 page 이상 필수",
       "question_points" : 60,
       "question_answer":[]
     };
@@ -148,7 +147,6 @@ function Main(props){
       "question_id" : 1,
       "quesetion_title" : "SHA 조사",
       "question_contents" : "SHA에 대해 조사하세요.(2)",
-      "question_info" : "2 page 이상 필수",
       "question_points" : 60,
       "question_answer":[]
     };
@@ -156,7 +154,6 @@ function Main(props){
       "question_id" : 2,
       "question_title" : "자료 조사",
       "question_contents" : "퀵 소트에 대해 조사하세요.",
-      "question_info" : "시간복잡도에 대한 증명 필수",
       "question_points" : 60,
       "question_answer":[]
     };
@@ -164,7 +161,6 @@ function Main(props){
       "question_id" : 3,
       "question_title" : "알고리즘 구현",
       "question_contents" : "C/C++로 퀵 소트를 구현하세요.",
-      "question_info" : "함수 void quickSort(int arr[], int left, int right)를 구현할 것",
       "question_points" : 60,
       "question_answer":[]
     };
@@ -172,7 +168,6 @@ function Main(props){
       "question_id" : 4,
       "question_title" : "자료 조사",
       "question_contents" : "쉘 소트에 대해 조사하세요.",
-      "question_info" : "시간복잡도에 대한 증명 필수",
       "question_points" : 60,
       "question_answer":[]
     };
@@ -180,7 +175,6 @@ function Main(props){
       "question_id" : 5,
       "question_title" : "알고리즘 구현",
       "question_contents" : "C/C++로 쉘 소트를 구현하세요.",
-      "question_info" : "함수 void shellSort(int arr[], int length)를 구현할 것",
       "question_points" : 60,
       "question_answer":[]
     };
@@ -188,7 +182,6 @@ function Main(props){
       "question_id" : 6,
       "question_title" : "자료 조사",
       "question_contents" : "힙 소트에 대해 조사하세요.",
-      "question_info" : "시간복잡도에 대한 증명 필수",
       "question_points" : 60,
       "question_answer":[]
     };
@@ -196,7 +189,6 @@ function Main(props){
       "question_id" : 7,
       "question_title" : "알고리즘 구현",
       "question_contents" : "C/C++로 힙 소트를 구현하세요.",
-      "question_info" : "함수 void heapSort(int arr[], int length)를 구현할 것",
       "question_points" : 60,
       "question_answer":[]
     };

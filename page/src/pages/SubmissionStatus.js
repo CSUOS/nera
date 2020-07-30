@@ -226,7 +226,6 @@ SubmissionStatus.defaultProps = {
         "question": PropTypes.arrayOf(PropTypes.shape({
             "question_title": PropTypes.string,
             "question_contents": PropTypes.string,
-            "question_info": PropTypes.string,
             "question_points": PropTypes.number,
             "question_answer": PropTypes.arrayOf(PropTypes.shape({
                 "answer": PropTypes.string,

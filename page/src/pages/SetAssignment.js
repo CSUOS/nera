@@ -51,7 +51,6 @@ function SetAssignment(props){
                 <Grid>
                     <Paper>
                         <Grid><Typography variant="h6">{q.question_title}</Typography></Grid>
-                        <Grid>{q.question_info}</Grid>
                     </Paper>
                 </Grid>
             )

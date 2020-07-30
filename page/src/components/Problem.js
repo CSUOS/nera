@@ -13,7 +13,6 @@ class Problem extends Component {
                 <h6 className="problem_description" align="left">{this.props.info["question_contents"]}</h6>
 
                 <div>
-                    <h6 className="problem_info" align="left">{this.props.info["question_info"]}</h6>
                     <h6 className="problem_score" align="right">{this.props.info["question_points"]+"점"}</h6>
                 </div>
                 
@@ -29,7 +28,6 @@ Problem.propTypes = {
     info: PropTypes.shape({
         "question_title": PropTypes.string,
         "question_contents": PropTypes.string,
-        "question_info": PropTypes.string,
         "question_points": PropTypes.number,
         "question_answer": PropTypes.arrayOf(PropTypes.shape({
             "answer": PropTypes.string,
