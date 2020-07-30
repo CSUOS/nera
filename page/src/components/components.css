@@ -107,12 +107,6 @@
     font-weight: bold;
 }
 
-.problem_info {
-    padding: 10px;
-    font-style: italic;
-    float: left;
-}
-
 .problem_score {
     padding: 10px;
     float: right;

@@ -138,56 +138,48 @@ function Main(props){
     ];
     let q_1 = {
       "question_id" : 0,
-      "question_title" : "SHA 조사",
       "question_contents" : "SHA에 대해 조사하세요.",
       "question_points" : 60,
       "question_answer":[]
     };
     let q_2 = {
       "question_id" : 1,
-      "quesetion_title" : "SHA 조사",
       "question_contents" : "SHA에 대해 조사하세요.(2)",
       "question_points" : 60,
       "question_answer":[]
     };
     let q_3 = {
       "question_id" : 2,
-      "question_title" : "자료 조사",
       "question_contents" : "퀵 소트에 대해 조사하세요.",
       "question_points" : 60,
       "question_answer":[]
     };
     let q_4 = {
       "question_id" : 3,
-      "question_title" : "알고리즘 구현",
       "question_contents" : "C/C++로 퀵 소트를 구현하세요.",
       "question_points" : 60,
       "question_answer":[]
     };
     let q_5 = {
       "question_id" : 4,
-      "question_title" : "자료 조사",
       "question_contents" : "쉘 소트에 대해 조사하세요.",
       "question_points" : 60,
       "question_answer":[]
     };
     let q_6 = {
       "question_id" : 5,
-      "question_title" : "알고리즘 구현",
       "question_contents" : "C/C++로 쉘 소트를 구현하세요.",
       "question_points" : 60,
       "question_answer":[]
     };
     let q_7 = {
       "question_id" : 6,
-      "question_title" : "자료 조사",
       "question_contents" : "힙 소트에 대해 조사하세요.",
       "question_points" : 60,
       "question_answer":[]
     };
     let q_8 = {
       "question_id" : 7,
-      "question_title" : "알고리즘 구현",
       "question_contents" : "C/C++로 힙 소트를 구현하세요.",
       "question_points" : 60,
       "question_answer":[]
