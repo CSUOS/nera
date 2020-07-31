@@ -81,7 +81,11 @@ function Main(props){
       "name":"우희은",
       "user_number" : "2017920038",
       "type" : 1, // 교수 : 0 , 학생 : 1
-      "major" : "컴퓨터과학부"
+      "major" : "컴퓨터과학부",
+      "meta": {
+        "create_at": new Date('2020-03-01T11:59:00'),
+        "modified_at": new Date('2020-03-01T11:59:00'),
+      }
     }
     
     const type = main_info.type;
@@ -103,7 +107,11 @@ function Main(props){
         "assignment_info": "코드는 반드시 C++로 작성해주세요.",
         "points": 30,
         "question":[{}],
-        "score": 28
+        "score": 28,
+        "meta": {
+          "create_at": new Date('2020-08-01T11:59:00'),
+          "modified_at": new Date('2020-08-01T11:59:00'),
+        }
       },
       {
         "assignment_id":1,
@@ -113,7 +121,11 @@ function Main(props){
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "points": 30,
         "question":[{}],
-        "score": 20
+        "score": 20,
+        "meta": {
+          "create_at": new Date('2020-08-01T11:59:00'),
+          "modified_at": new Date('2020-08-01T11:59:00'),
+        }
       },
       {
         "assignment_id":2,
@@ -123,7 +135,11 @@ function Main(props){
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "points": 30,
         "question":[{}],
-        "score": 20
+        "score": 20,
+        "meta": {
+          "create_at": new Date('2020-08-01T11:59:00'),
+          "modified_at": new Date('2020-08-01T11:59:00'),
+        }
       },
       {
         "assignment_id":3,
@@ -133,56 +149,92 @@ function Main(props){
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "points": 30,
         "question":[{}],
-        "score": 20
+        "score": 20,
+        "meta": {
+          "create_at": new Date('2020-08-01T11:59:00'),
+          "modified_at": new Date('2020-08-01T11:59:00'),
+        }
       }
     ];
     let q_1 = {
       "question_id" : 0,
       "question_contents" : "SHA에 대해 조사하세요.",
       "question_points" : 60,
-      "question_answer":[]
+      "question_answer":[],
+      "meta": {
+        "create_at": new Date('2020-08-01T11:59:00'),
+        "modified_at": new Date('2020-08-01T11:59:00'),
+      }
     };
     let q_2 = {
       "question_id" : 1,
       "question_contents" : "SHA에 대해 조사하세요.(2)",
       "question_points" : 60,
-      "question_answer":[]
+      "question_answer":[],
+      "meta": {
+        "create_at": new Date('2020-08-01T11:59:00'),
+        "modified_at": new Date('2020-08-01T11:59:00'),
+      }
     };
     let q_3 = {
       "question_id" : 2,
       "question_contents" : "퀵 소트에 대해 조사하세요.",
       "question_points" : 60,
-      "question_answer":[]
+      "question_answer":[],
+      "meta": {
+        "create_at": new Date('2020-08-01T11:59:00'),
+        "modified_at": new Date('2020-08-01T11:59:00'),
+      }
     };
     let q_4 = {
       "question_id" : 3,
       "question_contents" : "C/C++로 퀵 소트를 구현하세요.",
       "question_points" : 60,
-      "question_answer":[]
+      "question_answer":[],
+      "meta": {
+        "create_at": new Date('2020-08-01T11:59:00'),
+        "modified_at": new Date('2020-08-01T11:59:00'),
+      }
     };
     let q_5 = {
       "question_id" : 4,
       "question_contents" : "쉘 소트에 대해 조사하세요.",
       "question_points" : 60,
-      "question_answer":[]
+      "question_answer":[],
+      "meta": {
+        "create_at": new Date('2020-08-01T11:59:00'),
+        "modified_at": new Date('2020-08-01T11:59:00'),
+      }
     };
     let q_6 = {
       "question_id" : 5,
       "question_contents" : "C/C++로 쉘 소트를 구현하세요.",
       "question_points" : 60,
-      "question_answer":[]
+      "question_answer":[],
+      "meta": {
+        "create_at": new Date('2020-08-01T11:59:00'),
+        "modified_at": new Date('2020-08-01T11:59:00'),
+      }
     };
     let q_7 = {
       "question_id" : 6,
       "question_contents" : "힙 소트에 대해 조사하세요.",
       "question_points" : 60,
-      "question_answer":[]
+      "question_answer":[],
+      "meta": {
+        "create_at": new Date('2020-08-01T11:59:00'),
+        "modified_at": new Date('2020-08-01T11:59:00'),
+      }
     };
     let q_8 = {
       "question_id" : 7,
       "question_contents" : "C/C++로 힙 소트를 구현하세요.",
       "question_points" : 60,
-      "question_answer":[]
+      "question_answer":[],
+      "meta": {
+        "create_at": new Date('2020-08-01T11:59:00'),
+        "modified_at": new Date('2020-08-01T11:59:00'),
+      }
     };
     
     assignment[0]["question"][0]=q_1;
