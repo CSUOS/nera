@@ -14,7 +14,8 @@ dotenv.config();
 router.use(Bodyparser());
 router.use(Cookie());
 
-router.post('/', (ctx: Koa.Context) => {
+// 로그인
+router.post('/login', (ctx: Koa.Context) => {
   const { body } = ctx.request;
   const id = body.user_id;
   const pw = Buffer.from(crypto.createHmac('sha256', process.env.LoginSecretKey)
@@ -24,6 +25,7 @@ router.post('/', (ctx: Koa.Context) => {
   const loginInfo = {
     id, pw,
   };
+  ctx.cookies.set('access_token', 'login', { httpOnly: true, maxAge: 1000 * 60 * 60 });
   ctx.body = loginInfo;
   // 일단 사용자 아이디와 비밀번호(암호화)를 보이도록
   /*
@@ -39,11 +41,14 @@ router.post('/', (ctx: Koa.Context) => {
   });
   */
 });
-
 /*
 * 유저 아이디와 비밀번호를 받음
 * NERA 토큰과 같이 RABUMS 서버와 통신
 * 로그인 성공시 유저 정보와 관련된 토큰 발급
 */
-
+// 로그아웃
+router.post('/logout', (ctx: Koa.Context) => {
+  ctx.cookies.set('access_token', '', { httpOnly: true, maxAge: 0 });
+  ctx.status = 204;
+});
 export = router
