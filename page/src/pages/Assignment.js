@@ -41,7 +41,7 @@ Assignment.propTypes = {
         "score": PropTypes.number,
         "questions": PropTypes.arrayOf(PropTypes.shape({
             "question_content": PropTypes.string,
-            "question_points": PropTypes.number,
+            "full_score": PropTypes.number,
             "question_answer": PropTypes.arrayOf(PropTypes.shape({
                 "answer": PropTypes.string,
                 "submitted": PropTypes.bool,

@@ -159,7 +159,7 @@ function Main(props){
     let q_1 = {
       "question_id" : 0,
       "question_content" : "SHA에 대해 조사하세요.",
-      "question_points" : 60,
+      "full_score" : 60,
       "question_answer":[],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),
@@ -169,7 +169,7 @@ function Main(props){
     let q_2 = {
       "question_id" : 1,
       "question_content" : "SHA에 대해 조사하세요.(2)",
-      "question_points" : 60,
+      "full_score" : 60,
       "question_answer":[],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),
@@ -179,7 +179,7 @@ function Main(props){
     let q_3 = {
       "question_id" : 2,
       "question_content" : "퀵 소트에 대해 조사하세요.",
-      "question_points" : 60,
+      "full_score" : 60,
       "question_answer":[],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),
@@ -189,7 +189,7 @@ function Main(props){
     let q_4 = {
       "question_id" : 3,
       "question_content" : "C/C++로 퀵 소트를 구현하세요.",
-      "question_points" : 60,
+      "full_score" : 60,
       "question_answer":[],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),
@@ -199,7 +199,7 @@ function Main(props){
     let q_5 = {
       "question_id" : 4,
       "question_content" : "쉘 소트에 대해 조사하세요.",
-      "question_points" : 60,
+      "full_score" : 60,
       "question_answer":[],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),
@@ -209,7 +209,7 @@ function Main(props){
     let q_6 = {
       "question_id" : 5,
       "question_content" : "C/C++로 쉘 소트를 구현하세요.",
-      "question_points" : 60,
+      "full_score" : 60,
       "question_answer":[],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),
@@ -219,7 +219,7 @@ function Main(props){
     let q_7 = {
       "question_id" : 6,
       "question_content" : "힙 소트에 대해 조사하세요.",
-      "question_points" : 60,
+      "full_score" : 60,
       "question_answer":[],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),
@@ -229,7 +229,7 @@ function Main(props){
     let q_8 = {
       "question_id" : 7,
       "question_content" : "C/C++로 힙 소트를 구현하세요.",
-      "question_points" : 60,
+      "full_score" : 60,
       "question_answer":[],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),

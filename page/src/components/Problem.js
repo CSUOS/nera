@@ -12,7 +12,7 @@ class Problem extends Component {
                 </Grid>
 
                 <div>
-                    <h6 className="problem_score" align="right">{this.props.info["question_points"]+"점"}</h6>
+                    <h6 className="problem_score" align="right">{this.props.info["full_score"]+"점"}</h6>
                 </div>
                 
                 {this.props.image ? <img className="problem_image" src={this.props.image} alt="Problem Image"/> : null}
@@ -26,7 +26,7 @@ class Problem extends Component {
 Problem.propTypes = {
     info: PropTypes.shape({
         "question_content": PropTypes.string,
-        "question_points": PropTypes.number,
+        "full_score": PropTypes.number,
         "question_answer": PropTypes.arrayOf(PropTypes.shape({
             "answer": PropTypes.string,
             "submitted": PropTypes.bool,
