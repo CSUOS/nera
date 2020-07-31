@@ -11,7 +11,7 @@ class Assignment extends Component {
             <Grid container direction="column" spacing={24}>
                 <div className="assignment_page_header">
                     <div className="assignment_page_title">
-                        <AssignmentInfo title={this.props.info["assignment_title"]} deadline={this.props.info["deadline"]}></AssignmentInfo>
+                        <AssignmentInfo title={this.props.info["assignment_name"]} deadline={this.props.info["deadline"]}></AssignmentInfo>
                     </div>
                     <div className="save_container">
                         <Grid container direction="row" alignItems="flex-start" justify="flex-end">
@@ -34,7 +34,7 @@ class Assignment extends Component {
 
 Assignment.propTypes = {
     info: PropTypes.shape({
-        "assignment_title": PropTypes.string,
+        "assignment_name": PropTypes.string,
         "deadline": PropTypes.instanceOf(Date),
         "assignment_state": PropTypes.number,
         "points": PropTypes.number,

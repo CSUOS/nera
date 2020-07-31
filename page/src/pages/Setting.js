@@ -14,7 +14,7 @@ function Setting(props){
 
     function getAssignmentBox(as){
         const id = as.assignment_id;
-        const title = as.assignment_title;
+        const title = as.assignment_name;
         const state = as.assignment_state;
         let state_word="error";
         

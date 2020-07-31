@@ -200,7 +200,7 @@ class SubmissionStatus extends Component {
     render() {
         return (
             <Grid container direction="column" spacing={24}>
-                <AssignmentInfo title={this.props.info["assignment_title"]} deadline={this.props.info["deadline"]} />
+                <AssignmentInfo title={this.props.info["assignment_name"]} deadline={this.props.info["deadline"]} />
 
                 <Grid container direction="column" className="contents_con">
                     <div className="contents_title"><h6>제출한 수강생</h6></div>
@@ -218,7 +218,7 @@ class SubmissionStatus extends Component {
 SubmissionStatus.defaultProps = {
     info: PropTypes.shape({
         "assignment_id": PropTypes.number,
-        "assignment_title": PropTypes.string,
+        "assignment_name": PropTypes.string,
         "deadline": PropTypes.instanceOf(Date),
         "assignment_state": PropTypes.number,
         "points": PropTypes.number,

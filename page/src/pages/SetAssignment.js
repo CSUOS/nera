@@ -18,7 +18,7 @@ function SetAssignment(props){
     let info = "";
 
     if(as_info!=undefined){
-        let tmp = as_info.assignment_title.split('[');
+        let tmp = as_info.assignment_name.split('[');
         tmp = tmp[1].split(']');
         lecture_name = tmp[0];
         title=tmp[1];

@@ -101,7 +101,7 @@ function Main(props){
     let assignment=[
       {
         "assignment_id":0,
-        "assignment_title":"[컴퓨터보안] SHA256 구현",
+        "assignment_name":"[컴퓨터보안] SHA256 구현",
         "deadline": new Date('2020-08-13T11:59:00'),
         "assignment_state": 0,
         "assignment_info": "코드는 반드시 C++로 작성해주세요.",
@@ -115,7 +115,7 @@ function Main(props){
       },
       {
         "assignment_id":1,
-        "assignment_title":"[컴퓨터알고리즘] 퀵 소트 구현",
+        "assignment_name":"[컴퓨터알고리즘] 퀵 소트 구현",
         "deadline": new Date('2020-08-21T11:59:00'),
         "assignment_state": 2,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
@@ -129,7 +129,7 @@ function Main(props){
       },
       {
         "assignment_id":2,
-        "assignment_title":"[컴퓨터알고리즘] 쉘 소트 구현",
+        "assignment_name":"[컴퓨터알고리즘] 쉘 소트 구현",
         "deadline": new Date('2020-08-25T11:59:00'),
         "assignment_state": 1,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
@@ -143,7 +143,7 @@ function Main(props){
       },
       {
         "assignment_id":3,
-        "assignment_title":"[컴퓨터알고리즘] 힙 소트 구현",
+        "assignment_name":"[컴퓨터알고리즘] 힙 소트 구현",
         "deadline": new Date('2020-08-27T11:59:00'),
         "assignment_state": 3,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
@@ -252,7 +252,7 @@ function Main(props){
     const s_assignment = [];
     for(let i=0; i<assignment.length; i++){
       // id: 0, title : 1, state : 2
-      s_assignment.push([assignment[i].assignment_id, assignment[i].assignment_title, assignment[i].assignment_state]);
+      s_assignment.push([assignment[i].assignment_id, assignment[i].assignment_name, assignment[i].assignment_state]);
     }
 
 
@@ -280,7 +280,7 @@ function Main(props){
       const home_assignment = [];
       for(let i=0; i<assignment.length; i++){
         // id: 0, deadline : 1, title : 2, state : 3, score : 4
-        home_assignment.push([assignment[i].assignment_id, assignment[i].deadline, assignment[i].assignment_title, assignment[i].assignment_state, assignment[i].score]);
+        home_assignment.push([assignment[i].assignment_id, assignment[i].deadline, assignment[i].assignment_name, assignment[i].assignment_state, assignment[i].score]);
       }
   
 
