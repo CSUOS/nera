@@ -224,7 +224,7 @@ SubmissionStatus.defaultProps = {
         "full_score": PropTypes.number,
         "score": PropTypes.number,
         "questions": PropTypes.arrayOf(PropTypes.shape({
-            "question_contents": PropTypes.string,
+            "question_content": PropTypes.string,
             "question_points": PropTypes.number,
             "question_answer": PropTypes.arrayOf(PropTypes.shape({
                 "answer": PropTypes.string,

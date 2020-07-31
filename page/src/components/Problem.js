@@ -8,7 +8,7 @@ class Problem extends Component {
             <Grid container className="problem_container" direction="column">
                 <Grid container className="problem_description" direction="row" alignItems="flex-start" justify="flex-start">
                     <h6 className="problem_number">{this.props.number + "."}</h6>
-                    <h6 align="left">{this.props.info["question_contents"]}</h6>
+                    <h6 align="left">{this.props.info["question_content"]}</h6>
                 </Grid>
 
                 <div>
@@ -25,7 +25,7 @@ class Problem extends Component {
 
 Problem.propTypes = {
     info: PropTypes.shape({
-        "question_contents": PropTypes.string,
+        "question_content": PropTypes.string,
         "question_points": PropTypes.number,
         "question_answer": PropTypes.arrayOf(PropTypes.shape({
             "answer": PropTypes.string,
