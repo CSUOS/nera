@@ -2,7 +2,7 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import Logger from 'koa-logger';
 import Api, { route } from './api';
-import User from './v1/user';
+import Login from './v1/login';
 
 const serve = require('koa-static');
 const send = require('koa-send');
@@ -15,7 +15,7 @@ router.get('/', (ctx: Koa.Context) => {
 });
 
 router.use('/api', Api.routes());
-router.use('/v1/user', User.routes());
+router.use('/v1/login', Login.routes());
 
 app.use(Logger());
 app.use(router.routes());

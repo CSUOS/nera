@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import app from './server/index';
 
 const port = process.env.PORT || 3000;
