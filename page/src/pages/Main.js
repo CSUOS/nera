@@ -106,7 +106,7 @@ function Main(props){
         "assignment_state": 0,
         "assignment_info": "코드는 반드시 C++로 작성해주세요.",
         "full_score": 30,
-        "question":[{}],
+        "questions":[{}],
         "score": 28,
         "meta": {
           "create_at": new Date('2020-08-01T11:59:00'),
@@ -120,7 +120,7 @@ function Main(props){
         "assignment_state": 2,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "full_score": 30,
-        "question":[{}],
+        "questions":[{}],
         "score": 20,
         "meta": {
           "create_at": new Date('2020-08-01T11:59:00'),
@@ -134,7 +134,7 @@ function Main(props){
         "assignment_state": 1,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "full_score": 30,
-        "question":[{}],
+        "questions":[{}],
         "score": 20,
         "meta": {
           "create_at": new Date('2020-08-01T11:59:00'),
@@ -148,7 +148,7 @@ function Main(props){
         "assignment_state": 3,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "full_score": 30,
-        "question":[{}],
+        "questions":[{}],
         "score": 20,
         "meta": {
           "create_at": new Date('2020-08-01T11:59:00'),
@@ -237,14 +237,14 @@ function Main(props){
       }
     };
     
-    assignment[0]["question"][0]=q_1;
-    assignment[0]["question"][1]=q_2;
-    assignment[1]["question"][0]=q_3;
-    assignment[1]["question"][1]=q_4;
-    assignment[2]["question"][0]=q_5;
-    assignment[2]["question"][1]=q_6;
-    assignment[3]["question"][0]=q_7;
-    assignment[3]["question"][1]=q_8;
+    assignment[0]["questions"][0]=q_1;
+    assignment[0]["questions"][1]=q_2;
+    assignment[1]["questions"][0]=q_3;
+    assignment[1]["questions"][1]=q_4;
+    assignment[2]["questions"][0]=q_5;
+    assignment[2]["questions"][1]=q_6;
+    assignment[3]["questions"][0]=q_7;
+    assignment[3]["questions"][1]=q_8;
 
 
       // 개별 component로 넘길 data들 정리

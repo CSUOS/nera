@@ -42,7 +42,7 @@ function SetAssignment(props){
     let questions = [];
 
     if(as_info!=undefined){
-        questions = as_info.question;
+        questions = as_info.questions;
     }
 
     function printQuestion(){

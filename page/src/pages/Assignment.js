@@ -21,7 +21,7 @@ class Assignment extends Component {
                     </div>
                 </div>
 
-                {this.props.info["question"].map((prob, index)=>{
+                {this.props.info["questions"].map((prob, index)=>{
                     return (
                         <Problem number={index+1} info={prob} marked={this.props.info["assignment_state"]}></Problem>
                     );
@@ -39,7 +39,7 @@ Assignment.propTypes = {
         "assignment_state": PropTypes.number,
         "full_score": PropTypes.number,
         "score": PropTypes.number,
-        "question": PropTypes.arrayOf(PropTypes.shape({
+        "questions": PropTypes.arrayOf(PropTypes.shape({
             "question_contents": PropTypes.string,
             "question_points": PropTypes.number,
             "question_answer": PropTypes.arrayOf(PropTypes.shape({
