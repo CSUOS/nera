@@ -221,7 +221,7 @@ SubmissionStatus.defaultProps = {
         "assignment_name": PropTypes.string,
         "deadline": PropTypes.instanceOf(Date),
         "assignment_state": PropTypes.number,
-        "points": PropTypes.number,
+        "full_score": PropTypes.number,
         "score": PropTypes.number,
         "question": PropTypes.arrayOf(PropTypes.shape({
             "question_contents": PropTypes.string,

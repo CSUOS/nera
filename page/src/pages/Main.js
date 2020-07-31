@@ -105,7 +105,7 @@ function Main(props){
         "deadline": new Date('2020-08-13T11:59:00'),
         "assignment_state": 0,
         "assignment_info": "코드는 반드시 C++로 작성해주세요.",
-        "points": 30,
+        "full_score": 30,
         "question":[{}],
         "score": 28,
         "meta": {
@@ -119,7 +119,7 @@ function Main(props){
         "deadline": new Date('2020-08-21T11:59:00'),
         "assignment_state": 2,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
-        "points": 30,
+        "full_score": 30,
         "question":[{}],
         "score": 20,
         "meta": {
@@ -133,7 +133,7 @@ function Main(props){
         "deadline": new Date('2020-08-25T11:59:00'),
         "assignment_state": 1,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
-        "points": 30,
+        "full_score": 30,
         "question":[{}],
         "score": 20,
         "meta": {
@@ -147,7 +147,7 @@ function Main(props){
         "deadline": new Date('2020-08-27T11:59:00'),
         "assignment_state": 3,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
-        "points": 30,
+        "full_score": 30,
         "question":[{}],
         "score": 20,
         "meta": {
