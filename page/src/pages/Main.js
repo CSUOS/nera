@@ -70,7 +70,7 @@ function Main(props){
     let main_info = {
       "id": props.location.state.id, 
       "name" :props.location.state.name, 
-      "student_number" :  props.location.state.student_number,
+      "user_number" :  props.location.state.user_number,
       "type" : props.location.state.type,
       "major": props.location.state.major
     }*/
@@ -79,7 +79,7 @@ function Main(props){
     let main_info={
       "id": 1,
       "name":"우희은",
-      "student_number" : "2017920038",
+      "user_number" : "2017920038",
       "type" : 1, // 교수 : 0 , 학생 : 1
       "major" : "컴퓨터과학부"
     }

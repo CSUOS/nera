@@ -11,7 +11,7 @@ class Login extends Component {
         this.name = "우희은";
         this.major = "컴퓨터과학부";
         this.type = 1;
-        this.student_number = "2017920038";
+        this.user_number = "2017920038";
     }
 
     render() {
@@ -26,7 +26,7 @@ class Login extends Component {
                         name: this.name,
                         major: this.major,
                         type: this.type,
-                        student_number: this.student_number
+                        user_number: this.user_number
                     }
                 }}>
                     <button>click</button>

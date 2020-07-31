@@ -45,7 +45,7 @@ const Home = (props)=>{
         <Grid container direction="column" spacing={24}>
             <AccountInfo 
                 name={main_info.name} 
-                number={main_info.student_number} 
+                number={main_info.user_number} 
                 type={main_info.type} 
                 major = {main_info.major}
             />
