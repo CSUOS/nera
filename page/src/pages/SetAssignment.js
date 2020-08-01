@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Paper, TextField, Typography } from '@material-ui/core';
-import {PageInfo, TimePicker, SimpleModal} from '../components';
+import {PageInfo, TimePicker} from '../components';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Modal from '@material-ui/core/Modal';

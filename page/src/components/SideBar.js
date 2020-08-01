@@ -139,11 +139,9 @@ const SideBar = (props) => {
                         <ListItemText primary="과제 관리" />
                     </ListItem>
                 </Link>
-                <Link to='/home/setting'>
-                {// 여기는 회원 정보 관리로 수정해야함
-                }
+                <Link to='/home/setList'>
                     <ListItem button className={classes.nested}>
-                        <ListItemText primary="회원 정보 관리" />
+                        <ListItemText primary="수강생 목록 관리" />
                     </ListItem>
                 </Link>
             </List> : undefined}

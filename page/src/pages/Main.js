@@ -1,6 +1,6 @@
 import React from 'react';
 import {SideBar, Header} from "../components";
-import {Home, Assignment, Setting, Error, SubmissionStatus, SetAssignment, Scoring} from "../pages";
+import {Home, Assignment, Setting, Error, SubmissionStatus, SetAssignment, Scoring, SetStudentList} from "../pages";
 import "./pages.css";
 
 import clsx from 'clsx';
@@ -80,7 +80,7 @@ function Main(props){
       "id": 1,
       "name":"우희은",
       "user_number" : "2017920038",
-      "type" : 1, // 교수 : 0 , 학생 : 1
+      "type" : 0, // 교수 : 0 , 학생 : 1
       "major" : "컴퓨터과학부",
       "meta": {
         "create_at": new Date('2020-03-01T11:59:00'),
@@ -341,6 +341,14 @@ function Main(props){
               contents = <Scoring/>
             break;
           
+          case "setList":
+            if(sub!=undefined){
+              contents = <Error/>;
+            }else{
+              contents = <SetStudentList/>;
+            }
+            break;
+
           default:
             contents = <Error/>;
         }

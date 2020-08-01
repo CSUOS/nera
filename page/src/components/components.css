@@ -147,3 +147,14 @@
 .setting_as_con>*{
     margin-bottom:10px;
 }
+
+/* SetStudentList */
+.student_list_con>div{
+    padding:10px;
+}
+.student_list_con{
+    margin: 0 1% 10px 0;
+}
+.student_list_con:hover{
+    cursor: pointer;
+}

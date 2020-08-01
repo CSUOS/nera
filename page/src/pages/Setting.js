@@ -22,6 +22,7 @@ function Setting(props){
             case 0: state_word="마감 전"; break;
             case 1: state_word="채점 전"; break;
             case 2: state_word="채점 완료"; break;
+            default: return;
         }
 
         return(
