@@ -61,20 +61,16 @@ function SetStudentList(props){
     }
     
     function AddStudent(){
-        let tmp = added_field;
-        tmp.push(<TextField label="학생" required rows={1} rowsMax={10000}></TextField>);
-        setField(tmp);
     }
     
 
     function PrintModal(gi){
         return(
-            <Paper>
-                <form className="list_field_con">
+            <Paper className="modal_paper">
+                <form className="modal_form">
                     <TextField label="목록 이름" required rows={1} rowsMax={10000}></TextField>
                     <TextField label="학생" required rows={1} rowsMax={10000}></TextField>
-                    {
-                        added_field.map((field)=>{console.log(field)})  
+                    {// add field 구현
                     }
                     <AddCircleIcon onClick={AddStudent}/>
                     <button onclick={AddList}>저장</button>
@@ -111,14 +107,11 @@ function SetStudentList(props){
                     onClose={handleClose}
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
-                >
-                    <Paper>
+                    className="modal">
+                    <Paper className="modal_con">
                         <form className="list_field_con">
-                            <TextField label="목록 이름" required rows={1} rowsMax={10000}></TextField>
-                            <TextField label="학생" required rows={1} rowsMax={10000}></TextField>
-                            {
-                                added_field.map((field)=>{console.log(field)})  // 미완
-                            }
+                            <TextField label="목록 이름" required rows={1} rowsMax={10000} className="modal_input_field"></TextField>
+                            <TextField label="학생" required rows={1} rowsMax={10000} className="modal_input_field"></TextField>
                             <AddCircleIcon onClick={AddStudent}/>
                             <button onclick={AddList}>저장</button>
                         </form>

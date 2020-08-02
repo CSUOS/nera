@@ -161,3 +161,11 @@
     border: none;
     padding:10px;
 }
+
+/* modal */
+.modal_form{
+    padding:10px;
+}
+.modal_input_field{
+    margin: 10px!important;
+}

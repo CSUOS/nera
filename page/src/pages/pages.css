@@ -59,6 +59,10 @@ a:hover{
 
 .modal{
     position: fixed;
-    right: 50%;
-    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal_con:focus{
+    outline:none;
 }

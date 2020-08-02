@@ -1,30 +1,15 @@
 import React from 'react';
 import { Grid, Paper, TextField, Typography, Button } from '@material-ui/core';
 import {PageInfo, TimePicker} from '../components';
+import clsx from 'clsx';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Modal from '@material-ui/core/Modal';
-import { makeStyles } from '@material-ui/core/styles';
 
-
-const useStyles = makeStyles((theme) => ({
-    modal: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    input_field: {
-        margin: '10px',
-    },
-    paper:{
-        padding: '16px',
-    }
-  }));
   
 
 function SetAssignment(props){
-    const classes = useStyles();
     const {as_info} = props;
 
         // data 정리
@@ -94,12 +79,12 @@ function SetAssignment(props){
 
     function PrintModal(){
         return(
-            <Paper className={classes.paper}>
-                <form>
-                    <TextField label="문제 제목" required rows={1} rowsMax={10000} className={classes.input_field}></TextField>
-                    <TextField label="문제 내용" multiline rows={1} rowsMax={10000} className={classes.input_field}></TextField>
-                    <TextField label="문제 설명" multiline rows={1} rowsMax={10000} className={classes.input_field}></TextField>
-                    <TextField label="배점" required rows={1} rowsMax={10000} className={classes.input_field}></TextField>
+            <Paper className="modal_con">
+                <form className="modal_form">
+                    <TextField label="문제 제목" required rows={1} rowsMax={10000} className="modal_input_field"></TextField>
+                    <TextField label="문제 내용" multiline rows={1} rowsMax={10000} className="modal_input_field"></TextField>
+                    <TextField label="문제 설명" multiline rows={1} rowsMax={10000} className="modal_input_field"></TextField>
+                    <TextField label="배점" required rows={1} rowsMax={10000} className="modal_input_field"></TextField>
                     <Button onclick={AddQuestion}>저장</Button>
                 </form>
             </Paper>
@@ -138,8 +123,7 @@ function SetAssignment(props){
                                 onClose={handleClose}
                                 aria-labelledby="add question to assignment"
                                 aria-describedby="add question to assignment"
-                                className={classes.modal}
-                            >
+                                className="modal">
                             {PrintModal()}
                             </Modal>
                         </Grid>
