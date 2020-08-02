@@ -169,3 +169,13 @@
 .modal_input_field{
     margin: 10px!important;
 }
+
+.scoring_bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.score_text {
+    margin: 0 10px 0 10px;
+}

@@ -254,7 +254,7 @@ function Main(props){
           "user_number": sampleNumbers[j],
           "question_id": assignment[Math.floor(i/2)].assignment_id * 1000 + q[i].question_id,
           "name": sampleNames[j],
-          "answer_content": [`${sampleNames[j]}의 ${i%2}번 문제에 대한 답입니다.`],
+          "answer_content": [`${sampleNames[j]}의 ${i%2 + 1}번 문제에 대한 답입니다.`],
           "submitted": true,
           "score": q[i].full_score,
           "meta": {
@@ -284,6 +284,32 @@ function Main(props){
       return undefined;
     }
 
+    const isAbleToMark = (asId, userNumber) => {
+      let submittedCount = 0;
+      for (const ques of assignment[asId].questions)
+        for (const answer of ques.question_answer) 
+          if (userNumber == answer.user_number && answer.submitted)
+            ++submittedCount;
+      
+      return submittedCount === assignment[asId].questions.length;
+    }
+
+    const selectAnswers = (asId, userNumber) => {
+      let result = JSON.parse(JSON.stringify(assignment[asId]));
+
+      for (let ques of result.questions) {
+        let newAnswers = [];
+
+        for (let answer of ques.question_answer) {
+          if (answer.user_number === userNumber)
+            newAnswers.push(JSON.parse(JSON.stringify(answer)));
+        }
+
+        ques.question_answer = newAnswers;
+      }
+
+      return result;
+    }
 
       // select contents from url
 
@@ -355,10 +381,10 @@ function Main(props){
             break;
           
           case "scoring":
-            if (sub != undefined)
-              contents = <Scoring/>
+            if (sub != undefined && last != undefined && isAbleToMark(Number(sub), Number(last)))
+              contents = <Scoring info={selectAnswers(Number(sub), Number(last))} number={Number(last)}/>
             else
-              contents = <Scoring/>
+              contents = <Error/>
             break;
           
           case "setList":

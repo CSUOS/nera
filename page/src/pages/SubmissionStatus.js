@@ -19,12 +19,12 @@ const SubmittedRow = (props) => {
 
     return (
         <TableRow>
-            <TableCell>{props.id}</TableCell>
+            <TableCell>{props.userNumber}</TableCell>
             <TableCell>{props.name}</TableCell>
             <TableCell>{getLastSaveDate()}</TableCell>
             <TableCell>{props.score}</TableCell>
             <TableCell>
-                <IconButton aria-label="채점 페이지로" size="small" href={"/home/scoring/" + props.asId}>
+                <IconButton aria-label="채점 페이지로" size="small" href={`/home/scoring/${props.asId}/${props.userNumber}`}>
                     <CreateIcon></CreateIcon>
                 </IconButton>
             </TableCell>
@@ -35,7 +35,7 @@ const SubmittedRow = (props) => {
 const SubmittedTable = (props) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [orderBy, setOrderBy] = React.useState('id');
+    const [orderBy, setOrderBy] = React.useState('userNumber');
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -83,7 +83,7 @@ const SubmittedTable = (props) => {
                             .map((row) => (
                             <SubmittedRow 
                                 asId={props.asId} 
-                                id={row.id} 
+                                userNumber={row.userNumber} 
                                 name={row.name} 
                                 time={row.time} 
                                 score={row.score}></SubmittedRow>
@@ -107,7 +107,7 @@ const SubmittedTable = (props) => {
 const NotSubmittedRow = (props) => {
     return (
         <TableRow>
-            <TableCell>{props.id}</TableCell>
+            <TableCell>{props.userNumber}</TableCell>
             <TableCell>{props.name}</TableCell>
         </TableRow>
     );
@@ -116,7 +116,7 @@ const NotSubmittedRow = (props) => {
 const NotSubmittedTable = (props) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [orderBy, setOrderBy] = React.useState('id');
+    const [orderBy, setOrderBy] = React.useState('userNumber');
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -159,7 +159,7 @@ const NotSubmittedTable = (props) => {
                         {sortRows(props.rowData)
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row) => (
-                            <NotSubmittedRow id={row.id} name={row.name}></NotSubmittedRow>
+                            <NotSubmittedRow userNumber={row.userNumber} name={row.name}></NotSubmittedRow>
                         ))}
                     </TableBody>
                 </Table>
@@ -221,7 +221,7 @@ const SubmissionStatus = (props) => {
         if (submittedCount == props.info.questions.length)
         {
             submittedData.push({
-                id: num,
+                userNumber: num,
                 name: ansArray[0].name,
                 time: getLatestModified(ansArray),
                 score: getSumOfScores(ansArray)
@@ -230,7 +230,7 @@ const SubmissionStatus = (props) => {
         else
         {
             notSubmittedData.push({
-                id: num,
+                userNumber: num,
                 name: ansArray[0].name
             });
         }

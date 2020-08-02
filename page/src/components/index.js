@@ -2,6 +2,7 @@ export { default as SideBar } from './SideBar';
 export { default as Header } from './Header';
 export { default as PageInfo } from './PageInfo';
 export { default as AccountInfo } from './AccountInfo';
+export { default as ScoringInfo } from './ScoringInfo';
 export { default as AssignmentInfo } from './AssignmentInfo';
 export { default as PartInfo } from './PartInfo';
 export { default as BottomPopup } from './BottomPopup';

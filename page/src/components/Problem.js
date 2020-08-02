@@ -17,7 +17,14 @@ class Problem extends Component {
                 
                 {this.props.image ? <img className="problem_image" src={this.props.image} alt="Problem Image"/> : null}
 
-                <TextField label="답안" margin="normal" required multiline rows={1} rowsMax={10000}>sdfadfs</TextField>
+                <TextField disabled={!this.props.editable} 
+                    label="답안" 
+                    margin="normal" 
+                    required multiline 
+                    rows={1} 
+                    rowsMax={10000}
+                    value={this.props.info.question_answer[0].answer_content[0] ?? ""}>
+                </TextField>
             </Grid>
         );
     }
@@ -25,14 +32,30 @@ class Problem extends Component {
 
 Problem.propTypes = {
     info: PropTypes.shape({
+        "question_id": PropTypes.number,
         "question_content": PropTypes.string,
         "full_score": PropTypes.number,
         "question_answer": PropTypes.arrayOf(PropTypes.shape({
-            "answer": PropTypes.string,
+            "user_number": PropTypes.number,
+            "question_id": PropTypes.number,
+            "name": PropTypes.string,
+            "answer_content": PropTypes.arrayOf(PropTypes.string),
             "submitted": PropTypes.bool,
-            "score": PropTypes.number
-        }))
+            "score": PropTypes.number,
+            "meta": {
+                "create_at": PropTypes.instanceOf(Date),
+                "modified_at": PropTypes.instanceOf(Date)
+            }
+        })),
+        "meta": {
+            "create_at": PropTypes.instanceOf(Date),
+            "modified_at": PropTypes.instanceOf(Date)
+        }
     })
+}
+
+Problem.defaultProps = {
+
 }
 
 export default Problem;
