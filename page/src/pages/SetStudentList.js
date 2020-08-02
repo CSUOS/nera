@@ -1,12 +1,17 @@
 import React from 'react';
-import { Grid, Paper, TextField} from '@material-ui/core';
+import { Grid, Paper, TextField } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import {PageInfo} from '../components';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-function SetStudentList(){
+function SetStudentList(props){
+    const [open, setOpen] = React.useState(false);
+    const [gi, setGroupId] = React.useState(0);
+    const [added_field, setField] = React.useState([]);
+
     const professor = 10203040; // professor = user_number;
     let group_list = [];
     
@@ -42,40 +47,36 @@ function SetStudentList(){
     group_list.push(group4);
     group_list.push(group5);
     
-    const [open, setOpen] = React.useState(false);
 
     const handleOpen = () => {
-      setOpen(true);
+        setOpen(true);
+    };
+    
+    const handleClose = () => {
+        setOpen(false);
     };
   
-    const handleClose = () => {
-      setOpen(false);
-    };
-
-    
     function AddList(){
 
     }
     
-    function getStudentList(gr){
-        return (
-            <Grid flex="3" className="student_list_con" onclick={handleOpen}>
-                <Paper>
-                    {gr.class_name}
-                </Paper>
-            </Grid>
-        );
+    function AddStudent(){
+        let tmp = added_field;
+        tmp.push(<TextField label="학생" required rows={1} rowsMax={10000}></TextField>);
+        setField(tmp);
     }
+    
 
-
-    function PrintModal(){
+    function PrintModal(gi){
         return(
             <Paper>
-                <form>
-                    <TextField label="문제 제목" required rows={1} rowsMax={10000}></TextField>
-                    <TextField label="문제 내용" required multiline rows={1} rowsMax={10000}></TextField>
-                    <TextField label="문제 설명" required multiline rows={1} rowsMax={10000}></TextField>
-                    <TextField label="배점" required rows={1} rowsMax={10000}></TextField>
+                <form className="list_field_con">
+                    <TextField label="목록 이름" required rows={1} rowsMax={10000}></TextField>
+                    <TextField label="학생" required rows={1} rowsMax={10000}></TextField>
+                    {
+                        added_field.map((field)=>{console.log(field)})  
+                    }
+                    <AddCircleIcon onClick={AddStudent}/>
                     <button onclick={AddList}>저장</button>
                 </form>
             </Paper>
@@ -90,11 +91,19 @@ function SetStudentList(){
                 subTitle="" />
             <Grid container wrap="wrap" alignItems="center">
                 {
-                    group_list.map((gr)=>getStudentList(gr))
+                    group_list.map((gr)=>(
+                    
+                        <Grid flex="3" className="student_list_con">
+                            <Paper>
+                                <button onClick={handleOpen}>{gr.class_name}</button>
+                            </Paper>
+                        </Grid>
+                        )
+                    )
                 }
-                <Grid flex="3" className="student_list_con" onclick={handleOpen}>
+                <Grid flex="3" className="student_list_con">
                     <Paper>
-                        <AddCircleIcon/>
+                        <AddCircleIcon onClick={handleOpen}/>
                     </Paper>
                 </Grid>
                 <Modal
@@ -103,7 +112,17 @@ function SetStudentList(){
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
                 >
-                    {PrintModal()}
+                    <Paper>
+                        <form className="list_field_con">
+                            <TextField label="목록 이름" required rows={1} rowsMax={10000}></TextField>
+                            <TextField label="학생" required rows={1} rowsMax={10000}></TextField>
+                            {
+                                added_field.map((field)=>{console.log(field)})  // 미완
+                            }
+                            <AddCircleIcon onClick={AddStudent}/>
+                            <button onclick={AddList}>저장</button>
+                        </form>
+                    </Paper>
                 </Modal>
             </Grid>
         </Grid>

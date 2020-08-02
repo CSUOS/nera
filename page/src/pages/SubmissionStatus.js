@@ -203,11 +203,11 @@ class SubmissionStatus extends Component {
                 <AssignmentInfo title={this.props.info["assignment_name"]} deadline={this.props.info["deadline"]} />
 
                 <Grid container direction="column" className="contents_con">
-                    <div className="contents_title"><h6>제출한 수강생</h6></div>
+                    <Grid className="contents_title"><h6>제출한 수강생</h6></Grid>
                     <SubmittedTable asId={this.props.info["assignment_id"]} rowData={submittedData}></SubmittedTable>
                 </Grid>
                 <Grid container direction="column" className="contents_con">
-                    <div className="contents_title"><h6>제출하지 않은 수강생</h6></div>
+                    <Grid className="contents_title"><h6>제출하지 않은 수강생</h6></Grid>
                     <NotSubmittedTable asId={this.props.info["assignment_id"]} rowData={notSubmittedData}></NotSubmittedTable>
                 </Grid>
             </Grid>

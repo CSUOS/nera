@@ -1,11 +1,30 @@
 import React from 'react';
-import { Grid, Paper, TextField, Typography } from '@material-ui/core';
+import { Grid, Paper, TextField, Typography, Button } from '@material-ui/core';
 import {PageInfo, TimePicker} from '../components';
+
 import SettingsIcon from '@material-ui/icons/Settings';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Modal from '@material-ui/core/Modal';
+import { makeStyles } from '@material-ui/core/styles';
+
+
+const useStyles = makeStyles((theme) => ({
+    modal: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    input_field: {
+        margin: '10px',
+    },
+    paper:{
+        padding: '16px',
+    }
+  }));
+  
 
 function SetAssignment(props){
+    const classes = useStyles();
     const {as_info} = props;
 
         // data 정리
@@ -59,18 +78,29 @@ function SetAssignment(props){
     }
 
     function AddQuestion(){
-
+        // 해야함
+        const tmp = {  
+            "question_id" : 0,
+            "question_content" : "SHA에 대해 조사하세요.",
+            "full_score" : 60,
+            "question_answer":[],
+            "meta": {
+                "create_at": new Date('2020-08-01T11:59:00'),
+                "modified_at": new Date('2020-08-01T11:59:00'),
+            }
+        }
+        questions.push(tmp);
     }
 
     function PrintModal(){
         return(
-            <Paper>
+            <Paper className={classes.paper}>
                 <form>
-                    <TextField label="문제 제목" required rows={1} rowsMax={10000}></TextField>
-                    <TextField label="문제 내용" required multiline rows={1} rowsMax={10000}></TextField>
-                    <TextField label="문제 설명" required multiline rows={1} rowsMax={10000}></TextField>
-                    <TextField label="배점" required rows={1} rowsMax={10000}></TextField>
-                    <button onclick={AddQuestion}>저장</button>
+                    <TextField label="문제 제목" required rows={1} rowsMax={10000} className={classes.input_field}></TextField>
+                    <TextField label="문제 내용" multiline rows={1} rowsMax={10000} className={classes.input_field}></TextField>
+                    <TextField label="문제 설명" multiline rows={1} rowsMax={10000} className={classes.input_field}></TextField>
+                    <TextField label="배점" required rows={1} rowsMax={10000} className={classes.input_field}></TextField>
+                    <Button onclick={AddQuestion}>저장</Button>
                 </form>
             </Paper>
         );
@@ -106,8 +136,9 @@ function SetAssignment(props){
                             <Modal
                                 open={open}
                                 onClose={handleClose}
-                                aria-labelledby="simple-modal-title"
-                                aria-describedby="simple-modal-description"
+                                aria-labelledby="add question to assignment"
+                                aria-describedby="add question to assignment"
+                                className={classes.modal}
                             >
                             {PrintModal()}
                             </Modal>

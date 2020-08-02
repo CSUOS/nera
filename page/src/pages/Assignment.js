@@ -9,17 +9,17 @@ class Assignment extends Component {
     render() {
         return (
             <Grid container direction="column" spacing={24}>
-                <div className="assignment_page_header">
-                    <div className="assignment_page_title">
+                <Grid className="assignment_page_header">
+                    <Grid className="assignment_page_title">
                         <AssignmentInfo title={this.props.info["assignment_name"]} deadline={this.props.info["deadline"]}></AssignmentInfo>
-                    </div>
-                    <div className="save_container">
+                    </Grid>
+                    <Grid className="save_container">
                         <Grid container direction="row" alignItems="flex-start" justify="flex-end">
                             <h6 className="save_component">변경사항 저장 안 됨</h6>
                             <Button className="save_component" variant="contained">저장</Button>
                         </Grid>
-                    </div>
-                </div>
+                    </Grid>
+                </Grid>
 
                 {this.props.info["questions"].map((prob, index)=>{
                     return (

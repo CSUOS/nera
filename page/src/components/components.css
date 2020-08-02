@@ -72,7 +72,9 @@
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
+    height: 120px;
 }
+
 .assignment_box{
     min-width: 320px;
     display: flex;
@@ -149,12 +151,13 @@
 }
 
 /* SetStudentList */
-.student_list_con>div{
-    padding:10px;
-}
 .student_list_con{
     margin: 0 1% 10px 0;
 }
 .student_list_con:hover{
     cursor: pointer;
+}
+.student_list_con button{
+    border: none;
+    padding:10px;
 }

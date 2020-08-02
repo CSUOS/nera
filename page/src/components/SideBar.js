@@ -1,9 +1,10 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import "./components.css";
+
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import { Divider, ListSubheader } from '@material-ui/core';
+import { Divider, ListSubheader, Grid } from '@material-ui/core';
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import IconButton from '@material-ui/core/IconButton';
@@ -66,13 +67,13 @@ const SideBar = (props) => {
     })
 
     return (
-        <div className="side_bar">
-            <div className={clsx(classes.drawerHeader,"sideBar_header")}>
-                <Link to="/home"><div className="NERA"><a href="#"><h1>NERA</h1></a></div></Link>
+        <Grid className="side_bar">
+            <Grid className={clsx(classes.drawerHeader,"sideBar_header")}>
+                <Link to="/home"><Grid className="NERA"><a href="#"><h1>NERA</h1></a></Grid></Link>
                 <IconButton onClick={drawerClose}>
                     <ChevronLeftIcon />
                 </IconButton>
-            </div>
+            </Grid>
             <Divider />
 
             <List
@@ -145,7 +146,7 @@ const SideBar = (props) => {
                     </ListItem>
                 </Link>
             </List> : undefined}
-        </div>
+        </Grid>
     );
 }
 export default SideBar

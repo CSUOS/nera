@@ -23,7 +23,7 @@ class PartBox extends Component {
 
     render() {
         return (
-            <div style={{width:"100%"}}>
+            <Grid style={{width:"100%"}}>
                 <ButtonBase className="mainButton" style={{width:"100%"}} href={this.props.link}>
                     <Paper style={{width:"100%"}} className="part_box">
                         <Grid container spacing={24}>
@@ -37,7 +37,7 @@ class PartBox extends Component {
                         <BorderLinearProgress variant="determinate" value={50} />
                     </Paper>
                 </ButtonBase>
-            </div>
+            </Grid>
         );
     }
 }

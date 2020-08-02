@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
+import { Grid } from '@material-ui/core';
 
 class Login extends Component {
     componentWillMount(){
@@ -17,7 +18,7 @@ class Login extends Component {
     render() {
         const path_name = "/home";
         return (
-            <div className="Login">
+            <Grid className="Login">
                 <Link to={{
                     pathname:path_name,
                     state:{
@@ -31,7 +32,7 @@ class Login extends Component {
                 }}>
                     <button>click</button>
                 </Link>
-            </div>
+            </Grid>
         );
     }
 }

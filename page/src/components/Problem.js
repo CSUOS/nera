@@ -11,9 +11,9 @@ class Problem extends Component {
                     <h6 align="left">{this.props.info["question_content"]}</h6>
                 </Grid>
 
-                <div>
+                <Grid>
                     <h6 className="problem_score" align="right">{this.props.info["full_score"]+"점"}</h6>
-                </div>
+                </Grid>
                 
                 {this.props.image ? <img className="problem_image" src={this.props.image} alt="Problem Image"/> : null}
 

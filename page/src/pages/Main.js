@@ -4,6 +4,7 @@ import {Home, Assignment, Setting, Error, SubmissionStatus, SetAssignment, Scori
 import "./pages.css";
 
 import clsx from 'clsx';
+import { Grid } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -374,7 +375,7 @@ function Main(props){
       // rendering
 
     return (
-        <div className="main container">
+        <Grid container>
             <CssBaseline />
             <Header
               drawerOpen={handleDrawerOpen}
@@ -397,14 +398,14 @@ function Main(props){
                   assignment_info={s_assignment}
                 />
             </Drawer>
-            <div
+            <Grid
                className={clsx(classes.content, {
                 [classes.contentShift]: open,
               }, "margin-top-64", "contents_side")}
             >
               {contents}
-            </div>
-        </div>
+            </Grid>
+        </Grid>
     )
 }
 
