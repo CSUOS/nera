@@ -99,15 +99,15 @@ function Main(props){
     // 학생일 경우 0: 제출 필요(secondary), 1: 제출 완료(green), 2: 채점 중(primary), 3: 채점 완료(black)
     // 교수일 경우 0: 마감 전(green), 1: 마감 후 채점 전(secondary), 2: 마감 후 채점 후(black)
 
-    let assignment=[
+    let assignment = [
       {
-        "assignment_id":0,
-        "assignment_name":"[컴퓨터보안] SHA256 구현",
+        "assignment_id": 0,
+        "assignment_name": "[컴퓨터보안] SHA256 구현",
         "deadline": new Date('2020-08-13T11:59:00'),
         "assignment_state": 0,
         "assignment_info": "코드는 반드시 C++로 작성해주세요.",
         "full_score": 30,
-        "questions":[{}],
+        "questions": [{}],
         "score": 28,
         "meta": {
           "create_at": new Date('2020-08-01T11:59:00'),
@@ -115,13 +115,13 @@ function Main(props){
         }
       },
       {
-        "assignment_id":1,
-        "assignment_name":"[컴퓨터알고리즘] 퀵 소트 구현",
+        "assignment_id": 1,
+        "assignment_name": "[컴퓨터알고리즘] 퀵 소트 구현",
         "deadline": new Date('2020-08-21T11:59:00'),
         "assignment_state": 2,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "full_score": 30,
-        "questions":[{}],
+        "questions": [{}],
         "score": 20,
         "meta": {
           "create_at": new Date('2020-08-01T11:59:00'),
@@ -129,13 +129,13 @@ function Main(props){
         }
       },
       {
-        "assignment_id":2,
-        "assignment_name":"[컴퓨터알고리즘] 쉘 소트 구현",
+        "assignment_id": 2,
+        "assignment_name": "[컴퓨터알고리즘] 쉘 소트 구현",
         "deadline": new Date('2020-08-25T11:59:00'),
         "assignment_state": 1,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "full_score": 30,
-        "questions":[{}],
+        "questions": [{}],
         "score": 20,
         "meta": {
           "create_at": new Date('2020-08-01T11:59:00'),
@@ -143,13 +143,13 @@ function Main(props){
         }
       },
       {
-        "assignment_id":3,
-        "assignment_name":"[컴퓨터알고리즘] 힙 소트 구현",
+        "assignment_id": 3,
+        "assignment_name": "[컴퓨터알고리즘] 힙 소트 구현",
         "deadline": new Date('2020-08-27T11:59:00'),
         "assignment_state": 3,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "full_score": 30,
-        "questions":[{}],
+        "questions": [{}],
         "score": 20,
         "meta": {
           "create_at": new Date('2020-08-01T11:59:00'),
@@ -157,95 +157,108 @@ function Main(props){
         }
       }
     ];
-    let q_1 = {
-      "question_id" : 0,
-      "question_content" : "SHA에 대해 조사하세요.",
-      "full_score" : 60,
-      "question_answer":[],
+
+    let q = [{
+      "question_id": 0,
+      "question_content": "SHA에 대해 조사하세요.",
+      "full_score": 60,
+      "question_answer": [],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),
         "modified_at": new Date('2020-08-01T11:59:00'),
       }
-    };
-    let q_2 = {
-      "question_id" : 1,
-      "question_content" : "SHA에 대해 조사하세요.(2)",
-      "full_score" : 60,
-      "question_answer":[],
+    },
+    {
+      "question_id": 1,
+      "question_content": "SHA에 대해 조사하세요.(2)",
+      "full_score": 60,
+      "question_answer": [],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),
         "modified_at": new Date('2020-08-01T11:59:00'),
       }
-    };
-    let q_3 = {
-      "question_id" : 2,
-      "question_content" : "퀵 소트에 대해 조사하세요.",
-      "full_score" : 60,
-      "question_answer":[],
+    },
+    {
+      "question_id": 2,
+      "question_content": "퀵 소트에 대해 조사하세요.",
+      "full_score": 60,
+      "question_answer": [],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),
         "modified_at": new Date('2020-08-01T11:59:00'),
       }
-    };
-    let q_4 = {
-      "question_id" : 3,
-      "question_content" : "C/C++로 퀵 소트를 구현하세요.",
-      "full_score" : 60,
-      "question_answer":[],
+    },
+    {
+      "question_id": 3,
+      "question_content": "C/C++로 퀵 소트를 구현하세요.",
+      "full_score": 60,
+      "question_answer": [],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),
         "modified_at": new Date('2020-08-01T11:59:00'),
       }
-    };
-    let q_5 = {
-      "question_id" : 4,
-      "question_content" : "쉘 소트에 대해 조사하세요.",
-      "full_score" : 60,
-      "question_answer":[],
+    },
+    {
+      "question_id": 4,
+      "question_content": "쉘 소트에 대해 조사하세요.",
+      "full_score": 60,
+      "question_answer": [],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),
         "modified_at": new Date('2020-08-01T11:59:00'),
       }
-    };
-    let q_6 = {
-      "question_id" : 5,
-      "question_content" : "C/C++로 쉘 소트를 구현하세요.",
-      "full_score" : 60,
-      "question_answer":[],
+    },
+    {
+      "question_id": 5,
+      "question_content": "C/C++로 쉘 소트를 구현하세요.",
+      "full_score": 60,
+      "question_answer": [],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),
         "modified_at": new Date('2020-08-01T11:59:00'),
       }
-    };
-    let q_7 = {
-      "question_id" : 6,
-      "question_content" : "힙 소트에 대해 조사하세요.",
-      "full_score" : 60,
-      "question_answer":[],
+    },
+    {
+      "question_id": 6,
+      "question_content": "힙 소트에 대해 조사하세요.",
+      "full_score": 60,
+      "question_answer": [],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),
         "modified_at": new Date('2020-08-01T11:59:00'),
       }
-    };
-    let q_8 = {
-      "question_id" : 7,
-      "question_content" : "C/C++로 힙 소트를 구현하세요.",
-      "full_score" : 60,
-      "question_answer":[],
+    },
+    {
+      "question_id": 7,
+      "question_content": "C/C++로 힙 소트를 구현하세요.",
+      "full_score": 60,
+      "question_answer": [],
       "meta": {
         "create_at": new Date('2020-08-01T11:59:00'),
         "modified_at": new Date('2020-08-01T11:59:00'),
       }
-    };
-    
-    assignment[0]["questions"][0]=q_1;
-    assignment[0]["questions"][1]=q_2;
-    assignment[1]["questions"][0]=q_3;
-    assignment[1]["questions"][1]=q_4;
-    assignment[2]["questions"][0]=q_5;
-    assignment[2]["questions"][1]=q_6;
-    assignment[3]["questions"][0]=q_7;
-    assignment[3]["questions"][1]=q_8;
+    }];
+
+    const sampleNames = ["가정현", "나정현", "다정현", "라정현", "마정현", "바정현", "사정현"];
+    for (let i = 0; i < q.length; ++i)
+    {
+      for (let j = 0; j < sampleNames.length; ++j)
+      {
+        q[i].question_answer.push({
+          "user_number": 2019920001 + i,
+          "question_id": assignment[Math.floor(i/2)].assignment_id * 1000 + q[i].question_id,
+          "name": sampleNames[j],
+          "answer_content": [`${sampleNames[j]}의 ${i%2}번 문제에 대한 답입니다.`],
+          "submitted": true,
+          "score": q[i].full_score,
+          "meta": {
+            "create_at": new Date('2020-08-02T11:59:00'),
+            "modified_at": new Date('2020-08-02T11:59:00')
+          }
+        });
+      }
+      assignment[Math.floor(i/2)].questions.push(q[i]);
+    }
 
 
       // 개별 component로 넘길 data들 정리
