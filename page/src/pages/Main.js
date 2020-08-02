@@ -99,6 +99,9 @@ function Main(props){
     // 학생일 경우 0: 제출 필요(secondary), 1: 제출 완료(green), 2: 채점 중(primary), 3: 채점 완료(black)
     // 교수일 경우 0: 마감 전(green), 1: 마감 후 채점 전(secondary), 2: 마감 후 채점 후(black)
 
+    const sampleNames = ["가정현", "나정현", "다정현", "라정현", "마정현", "바정현", "사정현"];
+    const sampleNumbers = [2019920001, 2019920002, 2019920003, 2019920004, 2019920005, 2019920006, 2019920007];
+
     let assignment = [
       {
         "assignment_id": 0,
@@ -107,8 +110,9 @@ function Main(props){
         "assignment_state": 0,
         "assignment_info": "코드는 반드시 C++로 작성해주세요.",
         "full_score": 30,
-        "questions": [{}],
+        "questions": [],
         "score": 28,
+        "students": JSON.parse(JSON.stringify(sampleNumbers)),
         "meta": {
           "create_at": new Date('2020-08-01T11:59:00'),
           "modified_at": new Date('2020-08-01T11:59:00'),
@@ -121,8 +125,9 @@ function Main(props){
         "assignment_state": 2,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "full_score": 30,
-        "questions": [{}],
+        "questions": [],
         "score": 20,
+        "students": JSON.parse(JSON.stringify(sampleNumbers)),
         "meta": {
           "create_at": new Date('2020-08-01T11:59:00'),
           "modified_at": new Date('2020-08-01T11:59:00'),
@@ -135,8 +140,9 @@ function Main(props){
         "assignment_state": 1,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "full_score": 30,
-        "questions": [{}],
+        "questions": [],
         "score": 20,
+        "students": JSON.parse(JSON.stringify(sampleNumbers)),
         "meta": {
           "create_at": new Date('2020-08-01T11:59:00'),
           "modified_at": new Date('2020-08-01T11:59:00'),
@@ -149,8 +155,9 @@ function Main(props){
         "assignment_state": 3,
         "assignment_info": "코드는 C언어 또는 C++로 작성해주세요.",
         "full_score": 30,
-        "questions": [{}],
+        "questions": [],
         "score": 20,
+        "students": JSON.parse(JSON.stringify(sampleNumbers)),
         "meta": {
           "create_at": new Date('2020-08-01T11:59:00'),
           "modified_at": new Date('2020-08-01T11:59:00'),
@@ -239,13 +246,12 @@ function Main(props){
       }
     }];
 
-    const sampleNames = ["가정현", "나정현", "다정현", "라정현", "마정현", "바정현", "사정현"];
     for (let i = 0; i < q.length; ++i)
     {
       for (let j = 0; j < sampleNames.length; ++j)
       {
         q[i].question_answer.push({
-          "user_number": 2019920001 + i,
+          "user_number": sampleNumbers[j],
           "question_id": assignment[Math.floor(i/2)].assignment_id * 1000 + q[i].question_id,
           "name": sampleNames[j],
           "answer_content": [`${sampleNames[j]}의 ${i%2}번 문제에 대한 답입니다.`],
