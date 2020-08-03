@@ -16,13 +16,6 @@ test-page:
   script:
     - yarn --cwd ./page
     - yarn --cwd ./page test:nowatch
-    
-test-server:
-  stage: test
-  image: node:12
-  script:
-    - yarn --cwd ./server
-    - yarn --cwd ./server test
 
 build:
   stage: build
