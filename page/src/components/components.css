@@ -72,7 +72,9 @@
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
+    height: 120px;
 }
+
 .assignment_box{
     min-width: 320px;
     display: flex;
@@ -105,12 +107,6 @@
 
 .problem_title {
     font-weight: bold;
-}
-
-.problem_info {
-    padding: 10px;
-    font-style: italic;
-    float: left;
 }
 
 .problem_score {
@@ -152,4 +148,34 @@
 /* SetAssignment */
 .setting_as_con>*{
     margin-bottom:10px;
+}
+
+/* SetStudentList */
+.student_list_con{
+    margin: 0 1% 10px 0;
+}
+.student_list_con:hover{
+    cursor: pointer;
+}
+.student_list_con button{
+    border: none;
+    padding:10px;
+}
+
+/* modal */
+.modal_form{
+    padding:10px;
+}
+.modal_input_field{
+    margin: 10px!important;
+}
+
+.scoring_bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.score_text {
+    margin: 0 10px 0 10px;
 }

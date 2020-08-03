@@ -14,7 +14,7 @@ function Setting(props){
 
     function getAssignmentBox(as){
         const id = as.assignment_id;
-        const title = as.assignment_title;
+        const title = as.assignment_name;
         const state = as.assignment_state;
         let state_word="error";
         
@@ -22,6 +22,7 @@ function Setting(props){
             case 0: state_word="마감 전"; break;
             case 1: state_word="채점 전"; break;
             case 2: state_word="채점 완료"; break;
+            default: return;
         }
 
         return(

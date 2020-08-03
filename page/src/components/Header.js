@@ -1,6 +1,7 @@
 import React from 'react';
 import LockIcon from '@material-ui/icons/Lock';
 import { makeStyles } from '@material-ui/core/styles';
+import { Grid } from "@material-ui/core";
 import clsx from 'clsx';
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -95,19 +96,19 @@ const Header =(props)=> {
                 >
                 <MenuIcon />
                 </IconButton>
-                <div className="header">
-                    <div className="name_field"><p className="name">{name}</p>{type===0?"교수":""}<p>님, 환영합니다.</p></div>
-                    <div className="menu_field">
-                        <div className="header_menu">
+                <Grid className="header">
+                    <Grid className="name_field"><p className="name">{name}</p>{type===0?"교수":""}<p>님, 환영합니다.</p></Grid>
+                    <Grid className="menu_field">
+                        <Grid className="header_menu">
                             <LockIcon/>
                             <a href="#"><p>회원 정보 변경</p></a>
-                        </div>
-                        <div className="header_menu">
+                        </Grid>
+                        <Grid className="header_menu">
                             <ExitToAppIcon/>
                             <a href="#"><p>로그아웃</p></a>
-                        </div>
-                    </div>
-                </div>
+                        </Grid>
+                    </Grid>
+                </Grid>
             </Toolbar>
             </AppBar>
         </HideOnScroll>
