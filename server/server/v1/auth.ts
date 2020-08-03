@@ -25,7 +25,7 @@ router.post('/login', (ctx: Koa.Context) => {
   const loginInfo = {
     id, pw,
   };
-  ctx.cookies.set('access_token', 'login', { httpOnly: true, maxAge: 1000 * 60 * 60 });
+  //  ctx.cookies.set('access_token', 'login', { httpOnly: true, maxAge: 1000 * 60 * 60 });
   ctx.body = loginInfo;
   // 일단 사용자 아이디와 비밀번호(암호화)를 보이도록
   /*

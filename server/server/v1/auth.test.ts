@@ -14,13 +14,13 @@ test('/ 로그인 확인', async () => {
     .update(Buffer.from(login.user_pw).toString('base64'))
     .digest('hex')).toString('base64');
   const response = await request(app.callback())
-    .post('/v1/auth/login')
+    .post('/v1/user')
     .send(login);
   expect(response.status).toBe(200);
   expect(response.text).toBe(`{"id":"${login.user_id}","pw":"${pw}"}`);
 });
 test('/ 로그아웃 확인', async () => {
   const response = await request(app.callback())
-    .post('/v1/auth/logout');
+    .post('/v1/user/logout');
   expect(response.status).toBe(204);
 });

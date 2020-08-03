@@ -21,6 +21,7 @@
   "dependencies": {
     "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-cookie": "^1.0.0",
+    "@types/mongodb": "^3.5.25",
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "jsonwebtoken": "^8.5.1",
@@ -29,7 +30,10 @@
     "koa-cookie": "^1.0.0",
     "koa-logger": "^3.2.1",
     "koa-router": "^9.1.0",
-    "koa-static": "^5.0.0"
+    "koa-static": "^5.0.0",
+    "mikro-orm": "^3.6.15",
+    "mongodb": "^3.6.0",
+    "mongoose": "^5.9.27"
   },
   "devDependencies": {
     "@types/jest": "^26.0.4",

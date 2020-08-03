@@ -3,6 +3,8 @@ import Router from 'koa-router';
 import Logger from 'koa-logger';
 import Api, { route } from './api';
 import Auth from './v1/auth';
+import Answer from './v1/answer';
+import Test from './v1/cookieTest'; // 테스트용 쿠키 발급
 
 const serve = require('koa-static');
 const send = require('koa-send');
@@ -16,6 +18,8 @@ router.get('/', (ctx: Koa.Context) => {
 
 router.use('/api', Api.routes());
 router.use('/v1/auth', Auth.routes());
+router.use('/v1/answer', Answer.routes());
+router.use('/v1/cookieTest', Test.routes());
 
 app.use(Logger());
 app.use(router.routes());
