@@ -1,0 +1,99 @@
+import React, { Component } from 'react';
+import { Grid, IconButton, Button, TextField } from '@material-ui/core';
+import { ScoringInfo, Problem } from '../components';
+import PropTypes from 'prop-types';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+
+const Scoring = (props) => {
+    const [page, setPage] = React.useState(0);
+    console.log(props.info);
+
+    const ableToGoPrev = () => {
+        return page >= 1;
+    }
+
+    const ableToGoNext = () => {
+        return page < props.info.questions.length-1;
+    }
+
+    const goPrev = () => {
+        if (ableToGoPrev())
+            setPage(page-1);
+    }
+
+    const goNext = () => {
+        if (ableToGoNext())
+            setPage(page+1);
+    }
+
+    return (
+        <div className="scoring_container">
+            <Grid className="scoring_page_header">
+                <Grid className="scoring_page_title">
+                    <ScoringInfo userNumber={props.number} asName={props.info.assignment_name}></ScoringInfo>
+                </Grid>
+                <Grid className="save_container">
+                    <Grid container direction="row" alignItems="flex-start" justify="flex-end">
+                        <TextField className="score_field" 
+                            inputProps={{ style: {textAlign: 'center'} }} 
+                            value={`${props.info.questions[page].question_answer[0].score}`}></TextField>
+                        <h5 className="score_text">{`/ ${props.info.questions[page].full_score}`}</h5>
+                        <Button className="save_component" variant="contained">저장</Button>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <Problem number={page + 1} info={props.info.questions[page]} editable={false}></Problem>
+
+            <div className="scoring_bottom">
+                <IconButton aria-label="이전 문제" size="medium" onClick={goPrev} disabled={page < 1}>
+                    <ArrowBackIcon></ArrowBackIcon>
+                </IconButton>
+                <IconButton aria-label="다음 문제" size="medium" onClick={goNext} disabled={page >= props.info.questions.length-1}>
+                    <ArrowForwardIcon></ArrowForwardIcon>
+                </IconButton>
+            </div>
+        </div>
+    )
+}
+
+Scoring.defaultProps = {
+    info: PropTypes.shape({
+        "assignment_id": PropTypes.number,
+        "assignment_name": PropTypes.string,
+        "deadline": PropTypes.instanceOf(Date),
+        "assignment_state": PropTypes.number,
+        "assignment_info": PropTypes.string,
+        "full_score": PropTypes.number,
+        "score": PropTypes.number,
+        "students": PropTypes.arrayOf(PropTypes.number),
+        "questions": PropTypes.arrayOf(PropTypes.shape({
+            "question_id": PropTypes.number,
+            "question_content": PropTypes.string,
+            "full_score": PropTypes.number,
+            "question_answer": PropTypes.arrayOf(PropTypes.shape({
+                "user_number": PropTypes.number,
+                "question_id": PropTypes.number,
+                "name": PropTypes.string,
+                "answer_content": PropTypes.arrayOf(PropTypes.string),
+                "submitted": PropTypes.bool,
+                "score": PropTypes.number,
+                "meta": {
+                    "create_at": PropTypes.instanceOf(Date),
+                    "modified_at": PropTypes.instanceOf(Date)
+                }
+            })),
+            "meta": {
+                "create_at": PropTypes.instanceOf(Date),
+                "modified_at": PropTypes.instanceOf(Date)
+            }
+        })),
+        "meta": {
+            "create_at": PropTypes.instanceOf(Date),
+            "modified_at": PropTypes.instanceOf(Date)
+        }
+    })
+}
+
+export default Scoring;

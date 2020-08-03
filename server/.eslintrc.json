@@ -16,6 +16,7 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "linebreak-style": 0,
         "no-unused-vars":"warn",
         "import/no-extraneous-dependencies": "off",
         "import/extensions": "off"

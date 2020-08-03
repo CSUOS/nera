@@ -1,0 +1,181 @@
+/* public */
+
+
+/* side_bar */
+
+.sideBar_header{
+    justify-content: space-between !important;
+    padding: 0px 8px 15px;
+}
+.NERA{
+    padding-left: 10px;
+}
+.NERA h1{
+    margin: 0!important;
+}
+.side_bar{
+    background-color: rgb(201, 201, 201);
+    height:100%;
+    padding: 30px;
+}
+
+/* Header */
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 10px;
+    width: 100%;
+    font-size: 1rem;
+}
+.header_menu{
+    display: flex;
+    margin-right: 15px;
+    align-items: center;
+}
+.header_menu>*{
+    padding-right: 5px;
+}
+.menu_field{
+    display: flex;
+}
+.name_field{
+    display: flex;
+    align-items: center;
+}
+.name_field .name{
+    font-weight: 600;
+}
+
+/* accountinfo */
+
+.page_info{
+    margin:10px;
+}
+
+/* PartBox */
+.part_box{
+    margin:5px 0;
+    padding: 15px;
+}
+.part_title{
+    margin-left: 8px!important;
+    font-size: 1.5rem!important;
+    font-weight: 600!important;
+}
+.part_component{
+    padding: 10px;
+}
+
+/*assignment box*/
+.assignment_rootbox{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    height: 120px;
+}
+
+.assignment_box{
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px;
+    margin-right: 1%;
+    margin-bottom: 40px;
+}
+.assignment_box:last-of-type{
+    margin-right:0;
+}
+
+.a_box_header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.a_box_title{
+    font-weight: 600;
+}
+
+.problem_container {
+    width: "100%";
+    padding: 50px 0 50px 0;
+}
+
+.problem_description {
+    padding: 10px;
+}
+
+.problem_title {
+    font-weight: bold;
+}
+
+.problem_score {
+    padding: 10px;
+    float: right;
+}
+
+.problem_number {
+    margin: 0 15px 0 0;
+    font-weight: bold;
+}
+
+.problem_image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    max-width: 100%;
+    object-fit: cover;
+}
+
+/* Setting */
+
+.s_assignment_rootbox{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+}
+.s_assignment_box{
+    width:100%;
+    margin-bottom: 30px;
+}
+.s_assignment_box>*{
+    padding:10px 20px;
+}
+
+/* SetAssignment */
+.setting_as_con>*{
+    margin-bottom:10px;
+}
+
+/* SetStudentList */
+.student_list_con{
+    margin: 0 1% 10px 0;
+}
+.student_list_con:hover{
+    cursor: pointer;
+}
+.student_list_con button{
+    border: none;
+    padding:10px;
+}
+
+/* modal */
+.modal_form{
+    padding:10px;
+}
+.modal_input_field{
+    margin: 10px!important;
+}
+
+.scoring_bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.score_text {
+    margin: 0 10px 0 10px;
+}

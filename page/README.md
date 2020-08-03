@@ -1,68 +1,101 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Page 폴더 관련사항 정리
 
-## Available Scripts
+## React 구동법
 
-In the project directory, you can run:
+page 폴더가 현재 작업 디렉토리인 채로 `npm start`나 `yarn start` 명령 실행
 
-### `npm start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## 흐름 정리
 
-### `npm test`
+1. index.js => index.html
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   public의 index.html 내에 있는 id가 root인 div에 index.js의 render가 작용함
 
-### `npm run build`
+2. Root.js => index.js
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   src의 client 디렉토리에 있는 Root.js가 index.js에서 컴포넌트로 호출됨
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+3. App.js => Root.js
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   Root.js는 src의 shared 디렉토리에 있는 App.js를 컴포넌트로 호출
 
-### `npm run eject`
+4. Login, Main.js => App.js
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+   App.js는 각 페이지로 가는 라우트를 설정하는 컴포넌트
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   주소에 따라 각각의 컴포넌트 호출
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+5. Header, SideBar, Home, Assignment, Error, Setting.js=> Main.js
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+   Main.js는 Header와 SideBar 그리고 메인 컨텐츠 영역으로 구성되어있음
+   
+   => 메인 컨텐츠 영역은 url에 따라 pages의 컴포넌트들로 바뀜
+   
+6. components의 js => pages의 js
 
-## Learn More
+   각 컴포넌트들은 페이지들에서 쓰이며, 쓰이는 대로 호출됨
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+## 폴더 정리
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+* public
 
-### Analyzing the Bundle Size
+  정적인 파일들을 담아두는 디렉토리
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+  * style.css
 
-### Making a Progressive Web App
+* src
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+  * client
 
-### Advanced Configuration
+    index.js로 랜더링되는 최종 js만을 담아두는 디렉토리
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+  * components
 
-### Deployment
+    여러 페이지에서 공통적으로 쓰이는 컴포넌트 요소들을 담아두는 디렉토리
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+  * pages
 
-### `npm run build` fails to minify
+    구현된 페이지들을 담아두는 디렉토리
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+  * shared
+
+    라우트를 담당하는 App.js를 담아두는 디렉토리
+
+  
+
+css 파일들은 page 별로 따로, components는 하나의 파일로 관리
+
+> page의 공통된 css는 *pages.css* 에서 관리
+
+material 라이브러리의 커스터마이징은 *material.css*에서 관리
+
+
+
+## 페이지 정리
+
+| url                                                          | 페이지 유형 | 비고           |
+| ------------------------------------------------------------ | ----------- | -------------- |
+| http://localhost:3000/                                       | 로그인      | 버튼 클릭 시 home 페이지로 이동 |
+| http://localhost:3000/home                                   | 메인 페이지 |                |
+| http://localhost:3000/home/assignment/:as_id | 과제 페이지 | type에 따라 컴포넌트가 랜더링 됨<br>학생 : Assignment.js<br>교수: ? |
+| http://localhost:3000/home/setting/:as_id | 과제 관리 페이지 | 교수님만 접근 가능 |
+|                                              |                  |                |
+
+
+
+## 데이터 정리
+
+https://www.notion.so/data-049c77d3a2614f8fa3dde8cd5b580ee4
+
+ 모든 데이터는 Main.js에서 관리하며 렌더링할 컴포넌트가 필요로 하는 정보를 넘겨주는 식으로 진행함
+
+
+
+## 라이브러리
+
+Material-UI 사용
+
+

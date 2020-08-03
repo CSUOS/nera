@@ -1,0 +1,90 @@
+/* pages 공통 요소 css */
+
+#app>div{
+    display: flex;
+}
+.side_bar{
+    flex:2;
+}
+.right_side{
+    flex:10;
+}
+
+html, body, #root, #app, #app>div{
+    height: 100%;
+}
+
+a:hover{
+    color:rgb(60, 60, 60);
+}
+
+.contents_side>div{
+    flex-wrap: nowrap!important;
+}
+.contents_con{
+    margin: 10px 0 25px;
+}
+.contents_title{
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.contents_title h6::before{
+    content: "";
+    border-left: 3px solid rgb(54, 54, 54);
+    margin-right: 10px;
+}
+
+.save_container{
+    align-self: right;
+    width: max-content;
+}
+
+.save_component{
+    margin: 15px;
+    align-self: center;
+}
+
+.assignment_page_title {
+    flex-grow: 1;
+}
+
+.assignment_page_header {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.table_root {
+    width: 100%;
+}
+
+.modal{
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal_con:focus{
+    outline:none;
+}
+
+.score_field {
+    width: 30px;
+}
+
+.scoring_controllers_container {
+    width: min-content;
+}
+
+.scoring_page_title {
+    flex-grow: 1;
+}
+
+.scoring_page_header {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.score_field {
+    width: 30px;
+    
+}
