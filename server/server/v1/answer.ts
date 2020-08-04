@@ -52,6 +52,7 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
       prevAnswer.meta.modifiedAt = getCurrentDate();
       // 수정 날짜 변경
       prevAnswer.save().then(() => console.log('답안 수정 완료'));
+      // DB에 저장
       ctx.body = prevAnswer; // 확인용
     }
   } catch (error) {

@@ -12,11 +12,7 @@ const { GroupModel } = require('./models/groupModel');
 dotenv.config();
 router.use(Bodyparser());
 router.use(Cookie());
-function getNextId() {
-  return GroupModel.find({})
-    .sort({ groupId: -1 })
-    .limit(1).exec();
-}
+
 router.post('/', async (ctx: Koa.Context) => {
   try {
     const token = ctx.cookies.get('access_token');
@@ -33,25 +29,36 @@ router.post('/', async (ctx: Koa.Context) => {
     }
     const prevGroup = await GroupModel
       .findOne({ professorNumber: userInfo.userNumber, className: body.className }).exec();
-    // 이전에 작성한 답안이 있는지 탐색
+    // 이전에 생성한 그룹이 있는지 탐색
+
     if (prevGroup === null) {
+    // 이전에 생성한 그룹이 없으면
       const newGroup = new GroupModel();
+      // 새로운 그룹 생성
       newGroup.professorNumber = userInfo.userNumber;
       newGroup.className = body.className;
       newGroup.students = body.students;
       const maxId = await GroupModel.findOne({}).sort({ groupId: -1 }).exec();
+      // 가장 큰 groupId를 가진 데이터를 가져옴
       if (maxId === null) {
         newGroup.groupId = 0;
+        // 데이터가 없으면 groupId를 0으로
       } else {
         newGroup.groupId = maxId.groupId + 1;
+        // 데이터가 있으면 해당 groupId에 1을 더해서 groupId로 정함
       }
       newGroup.save().then(() => console.log('수강생 목록 생성 완료'));
-      ctx.body = newGroup;
+      // DB에 저장
+      ctx.body = newGroup; // 확인용
     } else {
+      // 이전에 생성한 그룹이 있으면
       prevGroup.students = body.students;
+      // 수강생 목록 변경
       prevGroup.meta.modifiedAt = getCurrentDate();
+      // 수정 날짜 변경
       prevGroup.save().then(() => console.log('수강생 목록 수정 완료'));
-      ctx.body = prevGroup;
+      // DB에 저장
+      ctx.body = prevGroup; // 확인용
     }
   } catch (error) {
     ctx.body = error;
