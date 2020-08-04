@@ -11,5 +11,4 @@ const groupSchema = new Mongoose.Schema({
   students: [Number],
   meta: metaData,
 });
-
 exports.GroupModel = Mongoose.model('Group', groupSchema);

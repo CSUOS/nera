@@ -41,9 +41,8 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
       // 새로운 답안 생성
       newAnswer.userNumber = body.userNumber;
       newAnswer.assignmentId = ctx.params.assignmentId;
-      newAnswer.assignmentState = 0;
       newAnswer.answers = body.answers;
-      newAnswer.save().then(() => console.log('Create 완료'));
+      newAnswer.save().then(() => console.log('답안 생성 완료'));
       // DB에 저장
       ctx.body = newAnswer; // 확인용
     } else {
@@ -52,11 +51,11 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
       // 현재의 답으로 답안 변경
       prevAnswer.meta.modifiedAt = getCurrentDate();
       // 수정 날짜 변경
-      prevAnswer.save().then(() => console.log('Update 완료'));
+      prevAnswer.save().then(() => console.log('답안 수정 완료'));
       ctx.body = prevAnswer; // 확인용
     }
   } catch (error) {
-    ctx.body = error.status;
+    ctx.body = error;
   }
 });
 router.post('/:assignmentId/:userNumber', (ctx: Koa.Context) => {

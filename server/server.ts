@@ -3,7 +3,7 @@ import app from './server/index';
 
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/test',
+const connection = mongoose.connect('mongodb://localhost:27017/test',
   { useNewUrlParser: true, useUnifiedTopology: true },
   () => { console.log('db와 연결되었습니다.'); });
 
