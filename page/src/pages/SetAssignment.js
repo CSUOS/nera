@@ -23,13 +23,15 @@ function SetAssignment(props){
     let info = "";
     let questions = [];
 
+    console.log(as_info);
+
     if(as_info!=undefined){
         let tmp = as_info.assignment_name.split('[');
         tmp = tmp[1].split(']');
         lecture_name = tmp[0];
         title=tmp[1];
-        start_date = Date.now();
-        end_date = as_info.deadline;
+        start_date = Date.now(); // 시작 날짜 받기
+        end_date = as_info.deadline; // 마감 날짜 받기
         score = as_info.score;
         info = as_info.assignment_info;
         questions = as_info.questions;
