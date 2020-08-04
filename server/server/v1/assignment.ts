@@ -37,10 +37,8 @@ router.post('/', async (ctx: Koa.Context) => {
         newAssignment.students = body.students;
         newAssignment.assignmentName = body.assignmentName;
         newAssignment.assignmentInfo = body.assignmentInfo;
-        /*
         newAssignment.publishingTime = body.publishingTime;
         newAssignment.deadline = body.deadline;
-        */
         newAssignment.questions = body.questions;
         newAssignment.save().then(() => console.log('assignment create 완료'));
         // DB에 저장
