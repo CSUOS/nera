@@ -32,7 +32,7 @@ function Login(){
     return (
         <Grid className="Login">
             <form>
-                <Grid container alignItems="center" justifyContents="center" className="login_container" direction="column">
+                <Grid container alignItems="center" justifycontents="center" className="login_container" direction="column">
                     <Typography variant="h5">로그인</Typography>
                     <TextField variant="outlined" label="id" required rows={1} rowsMax={10}></TextField>
                     <TextField variant="outlined" label="password" required rows={1} rowsMax={10}></TextField>

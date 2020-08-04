@@ -8,7 +8,7 @@ const Home = (props)=>{
     let progress_assignment = [];
     let finish_assignment = [];
 
-    as_info.map((as)=>{
+    const result = as_info.map((as)=>{
         if(type===0){ // 교수 => 0만 마감 전
             switch(as[3]){
                 case 0:
@@ -37,7 +37,9 @@ const Home = (props)=>{
                     break;
             }
         }
-    })
+    });
+
+    console.log(result);
     
 
     return (
