@@ -1,7 +1,5 @@
 import dotenv from 'dotenv';
 import app from './server/index';
-import Answers from './server/v1/entities/Answers';
-import BaseEntity from './server/v1/entities/BaseEntity';
 
 const mongoose = require('mongoose');
 

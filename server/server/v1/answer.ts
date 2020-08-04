@@ -3,68 +3,60 @@ import Router from 'koa-router';
 import Bodyparser from 'koa-bodyparser';
 import Cookie from 'koa-cookie';
 import dotenv from 'dotenv';
+import { getCurrentDate } from './models/meta';
 
 const router = new Router();
 const jwt = require('jsonwebtoken');
 const { AnswerModel } = require('./models/answerModel');
 
-const at = {
-  questionId: 3,
-  answerContent: 'ㅇㄹㄴㄹ',
-  score: 43,
-};
 dotenv.config();
 router.use(Bodyparser());
 router.use(Cookie());
 router.post('/:assignmentId', async (ctx: Koa.Context) => {
   // 답안 입력, 수정
-  const test = new AnswerModel(1111, 2016920003, 1, at);
-  ctx.body = test;
-
   try {
     const token = ctx.cookies.get('access_token');
+    // 유저정보 쿠키 get
+
     const userInfo = jwt.verify(token, process.env.AccessSecretKey);
+    // 토큰화된 유저 정보 decode
+
     const { body } = ctx.request;
+    // 유저가 보낸 데이터
 
     if (userInfo.userNumber !== body.userNumber) { ctx.throw(403, '권한이 없습니다.'); }
-    const query = AnswerModel
-      .findOne({ assignmentId: ctx.params.assignmentId, userNumber: body.userNumber });
-    const data = query.exec();
+    // 유저가 보낸 데이터의 학번과 쿠키에 있는 학번이 다를 경우 error
+    body.answers.forEach((element: any) => {
+      if (element.score !== undefined) { ctx.throw(403, '권한이 없습니다.'); }
+    });
+    // 유저가 보낸 데이터가 문제의 score 정보를 가지고 있을 경우 error
 
-    console.log(ctx.params.assignmentId);
-    if (ctx.status === 404) {
+    const prevAnswer = await AnswerModel
+      .findOne({ assignmentId: ctx.params.assignmentId, userNumber: body.userNumber }).exec();
+    // 이전에 작성한 답안이 있는지 탐색
+
+    if (prevAnswer === null) {
+    // 이전에 작성한 답안이 없을 경우
       const newAnswer = new AnswerModel();
-      newAnswer.professorNumber = body.professorNumber;
-      newAnswer.assignmentId = ctx.params.assignmentId;
+      // 새로운 답안 생성
       newAnswer.userNumber = body.userNumber;
+      newAnswer.assignmentId = ctx.params.assignmentId;
       newAnswer.assignmentState = 0;
       newAnswer.answers = body.answers;
-      newAnswer.meta.createAt = Date();
-      newAnswer.meta.modifiedAt = Date();
-      newAnswer.save().then(() => {
-        console.log('Create 완료');
-      });
-      ctx.body = newAnswer;
-    }
-    console.log(prevAnswer);
-    if (!prevAnswer) {
-      console.log('여기까진 괜찮음2');
-      const newAnswer = new AnswerModel();
-      newAnswer.professorNumber = body.professorNumber;
-      newAnswer.assignmentId = ctx.params.assignmentId;
-      newAnswer.userNumber = body.userNumber;
-      newAnswer.assignmentState = 0;
-      newAnswer.answers = body.Answers;
-      newAnswer.meta.createAt = Date();
-      newAnswer.meta.modifiedAt = Date();
-      ctx.body = newAnswer;
+      newAnswer.save().then(() => console.log('Create 완료'));
+      // DB에 저장
+      ctx.body = newAnswer; // 확인용
     } else {
-      prevAnswer.answers = body.Answers;
-      prevAnswer.metamodifiedAt = Date();
-      ctx.body = prevAnswer;
+    // 이전에 작성한 답안이 있을 경우
+      prevAnswer.answers = body.answers;
+      // 현재의 답으로 답안 변경
+      prevAnswer.meta.modifiedAt = getCurrentDate();
+      // 수정 날짜 변경
+      prevAnswer.save().then(() => console.log('Update 완료'));
+      ctx.body = prevAnswer; // 확인용
     }
   } catch (error) {
-    ctx.body = 'error';
+    ctx.body = error.status;
   }
 });
 router.post('/:assignmentId/:userNumber', (ctx: Koa.Context) => {
