@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {Link} from 'react-router-dom';
-import { Grid } from '@material-ui/core';
+import { Grid, TextField, Button, Typography } from '@material-ui/core';
 
 function Login(){
     let name = ""; let major = ""; let user_number = -1; let meta = {"create_at":Date(),"modified_at":Date()};
@@ -31,18 +31,26 @@ function Login(){
     const path_name = "/home";
     return (
         <Grid className="Login">
-            <Link to={{
-                pathname:path_name,
-                state:{
-                    // 로그인 시 회원인증 서버에서 넘어오는 정보 넘기기
-                    name: name,
-                    major: major,
-                    user_number: user_number,
-                    meta: meta,
-                }
-            }}>
-                <button>click</button>
-            </Link>
+            <form>
+                <Grid container alignItems="center" justifyContents="center" className="login_container" direction="column">
+                    <Typography variant="h5">로그인</Typography>
+                    <TextField variant="outlined" label="id" required rows={1} rowsMax={10}></TextField>
+                    <TextField variant="outlined" label="password" required rows={1} rowsMax={10}></TextField>
+                    
+                    <Link to={{
+                        pathname:path_name,
+                        state:{
+                            // 로그인 시 회원인증 서버에서 넘어오는 정보 넘기기
+                            name: name,
+                            major: major,
+                            user_number: user_number,
+                            meta: meta,
+                        }
+                    }}>
+                        <Button>login</Button>
+                    </Link>
+                </Grid>
+            </form>
         </Grid>
     );
 }

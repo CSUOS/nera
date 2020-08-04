@@ -83,7 +83,7 @@ function SetAssignment(props){
                 <form className="modal_form">
                     <TextField label="문제 내용" required multiline rows={1} rowsMax={10000} className="modal_input_field" defaultValue={q_info["content"]}></TextField>
                     <TextField label="배점" required rows={1} rowsMax={10000} className="modal_input_field" defaultValue={q_info["full_score"]}></TextField>
-                    <Button onClick={AddQuestion}>저장</Button>
+                    <Button className="save_button" onClick={event=>{handleClose(); AddQuestion();}}>저장</Button>
                 </form>
             </Paper>
         );
