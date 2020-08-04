@@ -2,9 +2,73 @@ import React, { Component } from 'react';
 import { AssignmentInfo } from "../components";
 import PropTypes from 'prop-types';
 
-import { Grid, Paper } from '@material-ui/core';
+import { Grid, Paper, TableSortLabel } from '@material-ui/core';
 import { TableRow, TableBody, IconButton, Table, TableHead, TableContainer, TablePagination, TableCell } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
+
+const compareElements = (a, b, orderBy) => {
+    if (a[orderBy] < b[orderBy])
+        return -1;
+    else if (a[orderBy] > b[orderBy])
+        return 1;
+    else
+        return 0;
+}
+
+const sortRows = (rows, order, orderBy) => {
+    const mappedList = rows.map((element, index) => [element, index]);
+    mappedList.sort((a, b) => {
+        let compared = compareElements(a[0], b[0], orderBy);
+        return order === "asc" ? compared : -compared;
+    });
+    return mappedList.map((el) => el[0]);
+}
+
+const SortableTableHead = (props) => {
+    const getSortHandler = (property) => (event) => {
+        props.onRequestSort(event, property);
+    };
+
+    return (
+        <TableHead>
+            <TableRow>
+                {props.headCells?.map((headCell) => (
+                    <TableCell 
+                        key={headCell.id}
+                        sortDirection={props.orderBy === headCell.id ? props.order : false}>
+                        
+                        {headCell.allowSorting ? (
+                            <TableSortLabel
+                                active={props.orderBy === headCell.id}
+                                direction={props.orderBy === headCell.id ? props.order : "asc"}
+                                onClick={getSortHandler(headCell.id)}>
+                                
+                                {headCell.label}
+                                {props.orderBy === headCell.id ? (
+                                    <span>
+                                        {props.order === "desc" ? "(내림차순)" : "(오름차순)"}
+                                    </span>
+                                ) : null}
+                            </TableSortLabel>
+                        ) : headCell.label}
+
+                    </TableCell>
+                ))}
+            </TableRow>
+        </TableHead>
+    )
+}
+
+SortableTableHead.propTypes = {
+    headCells: PropTypes.arrayOf(PropTypes.shape({
+        "id": PropTypes.string,
+        "label": PropTypes.string,
+        "allowSorting": PropTypes.bool
+    })),
+    onRequestSort: PropTypes.func.isRequired,
+    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+    orderBy: PropTypes.string.isRequired,
+};
 
 const SubmittedRow = (props) => {
     const getLastSaveDate = () => {
@@ -36,6 +100,20 @@ const SubmittedTable = (props) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [orderBy, setOrderBy] = React.useState('userNumber');
+    const [order, setOrder] = React.useState("asc");
+
+    const calcAverageScore = () => {
+        let sum = 0
+        for (const row of props.rowData)
+            sum += row.score;
+        return sum / props.rowData.length;
+    }
+
+    const handleRequestSort = (event, property) => {
+        const isAsc = orderBy === property && order === "asc";
+        setOrder(isAsc ? "desc" : "asc");
+        setOrderBy(property);
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -46,39 +124,47 @@ const SubmittedTable = (props) => {
         setPage(0);
     };
 
-    const compareElements = (a, b) => {
-        if (a[orderBy] < b[orderBy])
-            return -1;
-        else if (a[orderBy] > b[orderBy])
-            return 1;
-        else
-            return 0;
-    }
-
-    const sortRows = (rows) => {
-        const mappedList = rows.map((element, index) => [element, index]);
-        mappedList.sort((a, b) => {
-            return compareElements(a[0], b[0]);
-        });
-        return mappedList.map((el) => el[0]);
-    }
+    const headCells = [
+        {
+            "id": "userNumber",
+            "label": "학번",
+            "allowSorting" : true
+        },
+        {
+            "id": "name",
+            "label": "이름",
+            "allowSorting" : true
+        },
+        {
+            "id": "time",
+            "label": "제출한 시간",
+            "allowSorting" : true
+        },
+        {
+            "id": "score",
+            "label": "부여된 점수",
+            "allowSorting" : true
+        },
+        {
+            "id": "mark",
+            "label": "채점하기",
+            "allowSorting" : false
+        }
+    ];
 
     return (
         <Paper className="table_root">
             <TableContainer>
                 <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>학번</TableCell>
-                            <TableCell>이름</TableCell>
-                            <TableCell>제출한 시간</TableCell>
-                            <TableCell>부여된 점수</TableCell>
-                            <TableCell>채점하기</TableCell>
-                        </TableRow>
-                    </TableHead>
+                    <caption>{`평균 점수는 ${calcAverageScore()}점 입니다.`}</caption>
+                    <SortableTableHead 
+                        headCells={headCells} 
+                        onRequestSort={handleRequestSort} 
+                        order={order} 
+                        orderBy={orderBy}></SortableTableHead>
 
                     <TableBody>
-                        {sortRows(props.rowData)
+                        {sortRows(props.rowData, order, orderBy)
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row) => (
                             <SubmittedRow 
@@ -117,6 +203,13 @@ const NotSubmittedTable = (props) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [orderBy, setOrderBy] = React.useState('userNumber');
+    const [order, setOrder] = React.useState("asc");
+
+    const handleRequestSort = (event, property) => {
+        const isAsc = orderBy === property && order === "asc";
+        setOrder(isAsc ? "desc" : "asc");
+        setOrderBy(property);
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -127,36 +220,31 @@ const NotSubmittedTable = (props) => {
         setPage(0);
     };
 
-    const compareElements = (a, b) => {
-        if (a[orderBy] < b[orderBy])
-            return -1;
-        else if (a[orderBy] > b[orderBy])
-            return 1;
-        else
-            return 0;
-    }
-
-    const sortRows = (rows) => {
-        const mappedList = rows.map((element, index) => [element, index]);
-        mappedList.sort((a, b) => {
-            return compareElements(a[0], b[0]);
-        });
-        return mappedList.map((el) => el[0]);
-    }
+    const headCells = [
+        {
+            "id": "userNumber",
+            "label": "학번",
+            "allowSorting" : true
+        },
+        {
+            "id": "name",
+            "label": "이름",
+            "allowSorting" : true
+        }
+    ];
 
     return (
         <Paper className="table_root">
             <TableContainer>
                 <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>학번</TableCell>
-                            <TableCell>이름</TableCell>
-                        </TableRow>
-                    </TableHead>
+                <SortableTableHead 
+                        headCells={headCells} 
+                        onRequestSort={handleRequestSort} 
+                        order={order} 
+                        orderBy={orderBy}></SortableTableHead>
 
                     <TableBody>
-                        {sortRows(props.rowData)
+                        {sortRows(props.rowData, order, orderBy)
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row) => (
                             <NotSubmittedRow userNumber={row.userNumber} name={row.name}></NotSubmittedRow>
@@ -202,11 +290,9 @@ const SubmissionStatus = (props) => {
     let notSubmittedData = []
     let answerDict = {}
     
-    console.log(props.info.students);
     for (const num of props.info.students)
         answerDict[num] = []
 
-    console.log(props.info.questions);
     for (const ques of props.info.questions)
         for (const answer of ques.question_answer)
             answerDict[answer.user_number].push(answer);

@@ -255,8 +255,8 @@ function Main(props){
           "question_id": assignment[Math.floor(i/2)].assignment_id * 1000 + q[i].question_id,
           "name": sampleNames[j],
           "answer_content": [`${sampleNames[j]}의 ${i%2 + 1}번 문제에 대한 답입니다.`],
-          "submitted": true,
-          "score": q[i].full_score,
+          "submitted": (j % 2 == 0 ? true : false),
+          "score": Math.floor(q[i].full_score / (j+1)),
           "meta": {
             "create_at": new Date('2020-08-02T11:59:00'),
             "modified_at": new Date('2020-08-02T11:59:00')
