@@ -10,7 +10,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 function SetStudentList(props){
     const [open, setOpen] = React.useState(false);
     const [group, setGroup] = React.useState({"class_name":"","students":[]});
-    const [added_field, setField] = React.useState([]);
+    const [addnum, setAddNum] = React.useState(1);
 
     const professor = 10203040; // professor = user_number;
     let group_list = [];
@@ -62,6 +62,8 @@ function SetStudentList(props){
     }
     
     function AddStudent(){
+        setAddNum(addnum+1);
+        // 구현해야함
     }
     
     function setStudentList(group_information){
@@ -107,6 +109,9 @@ function SetStudentList(props){
                                 group["students"].map((student)=>
                                     <TextField label="학생" required rows={1} rowsMax={10000} className="modal_input_field" defaultValue={student}></TextField>
                                 )
+                            }
+                            {
+                                
                             }
                             <TextField label="학생" required rows={1} rowsMax={10000} className="modal_input_field" ></TextField>
                             <AddCircleIcon onClick={AddStudent}/>
