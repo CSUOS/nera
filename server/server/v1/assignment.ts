@@ -158,6 +158,7 @@ router.get('/:assignmentId', async (ctx: Koa.Context) => {
       takeAssignment = await AssignmentModel
         .findOne({ professorNumber: userInfo.userNumber, assignmentId: ctx.params.assignmentId })
         .exec();
+      // 사용자가 
     } else if (String(userInfo.userNumber).charAt(0) === '2') {
       takeAssignment = await AssignmentModel
         .findOne({ students: userInfo.userNumber, assignmentId: ctx.params.assignmentId }).exec();
