@@ -27,7 +27,8 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
 
     const { body } = ctx.request;
     // 유저가 보낸 데이터
-
+    if (body.answers === undefined) { ctx.throw(400, '잘못된 요청'); }
+    // 요청에 className이나 학생 목록이 없는 경우
     await body.answers.forEach((element: any) => {
       if (element.score !== undefined) { ctx.throw(403, '권한 없음'); }
     });
@@ -100,7 +101,12 @@ router.post('/:assignmentId/:userNumber', async (ctx: Koa.Context) => {
 
     const { body } = ctx.request;
     // 유저가 보낸 데이터
+    if (body.answers === undefined) { ctx.throw(400, '잘못된 요청'); }
+    // 요청에 className이나 학생 목록이 없는 경우
 
+    body.answers.forEach((element: any) => {
+      if (element.questionId === undefined || element.score === undefined) { ctx.throw(400, '잘못된 요청'); }
+    });
     const userInfo = jwt.verify(token, process.env.AccessSecretKey);
     // 토큰화된 유저 정보 decode
 
@@ -119,7 +125,7 @@ router.post('/:assignmentId/:userNumber', async (ctx: Koa.Context) => {
     // 답안이 없는 경우 error
     for (let a = 0; a < studentAnswerPaper.answers.length; a += 1) {
       const s = body.answers
-        .find(async (e: any) => e.questionId === studentAnswerPaper.answers[a].questionId);
+        .find((e: any) => e.questionId === studentAnswerPaper.answers[a].questionId);
       // 유저가 보낸 데이터에서 답안의 questionId와 같은 객체를 찾음
 
       studentAnswerPaper.answers[a].score = s.score;
@@ -149,7 +155,7 @@ router.get('/:assignmentId', async (ctx: Koa.Context) => {
       .exec();
     // 쿠키의 userNumber와 매개변수로 넘어온 과제 id로 답안 조회
 
-    if (answer.length === null) { ctx.throw(404, '찾을 수 없음'); }
+    if (answer === null) { ctx.throw(404, '찾을 수 없음'); }
     // 없을 경우 에러
 
     ctx.body = answer;

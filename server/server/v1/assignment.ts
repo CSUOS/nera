@@ -8,12 +8,31 @@ import { getCurrentDate } from './models/meta';
 const jwt = require('jsonwebtoken');
 
 const { AssignmentModel } = require('./models/assignmentModel');
+const { AnswerPaperModel } = require('./models/answerPaperModel');
 
 const router = new Router();
 
 dotenv.config();
 router.use(Bodyparser());
 router.use(Cookie());
+
+async function calState(assignment: any, userInfo: any) {
+  const now = getCurrentDate().getTime();
+  if ((now - assignment.publishingTime.getTime()) < 0) {
+    return 0; // 공개전, 진행중, 채점완료
+  }
+  if ((now - assignment.deadline.getTime()) < 0) {
+    return 1; // 진행중
+  }
+  if (String(userInfo.userNumber).charAt(0) === '1') { return 2; }
+  const answer = await AnswerPaperModel.findOne({ userNumber: userInfo.userNumber }).exec();
+  for (let i = 0; i < answer.answers.length; i += 1) {
+    if (answer.answers[i].score === -1) {
+      return 2; // 마감됨
+    }
+  }
+  return 3; // 채점완료
+}
 
 router.post('/', async (ctx: Koa.Context) => {
   try {
@@ -46,8 +65,8 @@ router.post('/', async (ctx: Koa.Context) => {
       const newAssignment = new AssignmentModel();
       // 새로운 과제 생성
 
-      const maxId = await AssignmentModel.findOne({}).sort({ groupId: -1 }).exec();
-      // 가장 큰 groupId를 가진 데이터를 가져옴
+      const maxId = await AssignmentModel.findOne({}).sort({ assignmentId: -1 }).exec();
+      // 가장 큰 assignmentId를 가진 데이터를 가져옴
 
       if (maxId === null) {
       // 데이터가 없으면
@@ -117,7 +136,7 @@ router.post('/', async (ctx: Koa.Context) => {
 });
 
 router.get('/', async (ctx: Koa.Context) => {
-  let takeAssignment;
+  let takeAssignment: any;
   try {
     const token = ctx.cookies.get('access_token');
     // 유저정보 쿠키 get
@@ -135,11 +154,17 @@ router.get('/', async (ctx: Koa.Context) => {
       takeAssignment = await AssignmentModel.find({ students: userInfo.userNumber }).exec();
       // 사용자가 학생일 경우
     }
+    await Promise.all(
+      takeAssignment.map(async (element: any) => {
+        const t = element;
+        t.assignmentState = await calState(t, userInfo);
+      }),
+    );
+
+    ctx.body = takeAssignment;
   } catch (error) {
     ctx.body = error;
   }
-
-  ctx.body = takeAssignment;
 });
 
 router.get('/:assignmentId', async (ctx: Koa.Context) => {
@@ -158,12 +183,17 @@ router.get('/:assignmentId', async (ctx: Koa.Context) => {
       takeAssignment = await AssignmentModel
         .findOne({ professorNumber: userInfo.userNumber, assignmentId: ctx.params.assignmentId })
         .exec();
-      // 사용자가 
+
+      // 사용자가 교수일 경우
+      if (takeAssignment === null) { ctx.throw(404, '찾을 수 없음'); }
     } else if (String(userInfo.userNumber).charAt(0) === '2') {
       takeAssignment = await AssignmentModel
         .findOne({ students: userInfo.userNumber, assignmentId: ctx.params.assignmentId }).exec();
       // 사용자가 학생일 경우
+      if (takeAssignment === null) { ctx.throw(404, '찾을 수 없음'); }
     }
+
+    takeAssignment.assignmentState = await calState(takeAssignment, userInfo);
     ctx.body = takeAssignment;
   } catch (error) {
     ctx.body = error;
