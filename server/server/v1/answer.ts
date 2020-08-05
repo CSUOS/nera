@@ -36,6 +36,9 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
     });
     // 유저가 보낸 데이터가 문제의 score 정보를 가지고 있을 경우 error
 
+    if (body.professorNumber !== undefined) { ctx.throw(403, '권한 없음'); }
+    // 유저가 답안의 교수 번호를 변경하려는 경우 error
+
     const assignment = await AssignmentModel
       .findOne({ assignmentId: ctx.params.assignmentId }).exec();
     // assignmentId로 과제 탐색
@@ -45,9 +48,6 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
 
     if (!assignment.students.includes(userInfo.userNumber)) { ctx.throw(403, '권한이 없습니다.'); }
     // 과제에 본인의 학번이 포함되지 않은 경우
-
-    if (body.professorNumber === undefined) { ctx.throw(400, '잘못된 요청'); }
-    // 요청에 professorNumber가 없는 경우
 
     const prevAnswer = await AnswerPaperModel
       .findOne({ assignmentId: ctx.params.assignmentId, userNumber: body.userNumber }).exec();
@@ -62,7 +62,7 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
       newAnswer.userNumber = body.userNumber;
       // 새 답안의 학번
 
-      newAnswer.professorNumber = body.professorNumber;
+      newAnswer.professorNumber = assignment.professorNumber;
       // 새 답안의 교수 번호
 
       newAnswer.assignmentId = ctx.params.assignmentId;
