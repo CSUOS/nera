@@ -16,7 +16,7 @@ const answerPaperSchema = new Mongoose.Schema({
   // 과제 id
   assignmentId: Number,
   // 배점
-  fullScore: Number,
+  // fullScore: Number,
   // 답안 배열
   answers: [answerSchema],
   meta: metaData,
