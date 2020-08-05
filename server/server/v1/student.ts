@@ -14,6 +14,7 @@ router.use(Bodyparser());
 router.use(Cookie());
 
 router.post('/', async (ctx: Koa.Context) => {
+  // 그룹 생성, 수정
   try {
     const token = ctx.cookies.get('access_token');
     // 유저정보 쿠키 get
@@ -84,6 +85,7 @@ router.post('/', async (ctx: Koa.Context) => {
   }
 });
 router.delete('/:groupId', async (ctx: Koa.Context) => {
+  // 그룹 삭제
   try {
     const token = ctx.cookies.get('access_token');
     // 유저정보 쿠키 get
@@ -107,6 +109,7 @@ router.delete('/:groupId', async (ctx: Koa.Context) => {
   }
 });
 router.get('/', async (ctx: Koa.Context) => {
+  // 그룹 조회
   try {
     const token = ctx.cookies.get('access_token');
     // 유저정보 쿠키 get
