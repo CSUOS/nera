@@ -16,7 +16,6 @@ router.use(Bodyparser());
 router.use(Cookie());
 
 router.post('/', async (ctx: Koa.Context) => {
-  // 과제 생성, 수정
   try {
     const token = ctx.cookies.get('access_token');
     // 유저정보 쿠키 get
@@ -116,6 +115,60 @@ router.post('/', async (ctx: Koa.Context) => {
     ctx.body = error;
   }
 });
+
+router.get('/', async (ctx: Koa.Context) => {
+  let takeAssignment;
+  try {
+    const token = ctx.cookies.get('access_token');
+    // 유저정보 쿠키 get
+
+    if (token === undefined) { ctx.throw(401, '인증 실패'); }
+    // access_token이 없는 경우
+
+    const userInfo = jwt.verify(token, process.env.AccessSecretKey);
+    // 토큰화된 유저 정보 decode
+
+    if (String(userInfo.userNumber).charAt(0) === '1') {
+      takeAssignment = await AssignmentModel.find({ professorNumber: userInfo.userNumber }).exec();
+      // 사용자가 교수일 경우
+    } else if (String(userInfo.userNumber).charAt(0) === '2') {
+      takeAssignment = await AssignmentModel.find({ students: userInfo.userNumber }).exec();
+      // 사용자가 학생일 경우
+    }
+  } catch (error) {
+    ctx.body = error;
+  }
+
+  ctx.body = takeAssignment;
+});
+
+router.get('/:assignmentId', async (ctx: Koa.Context) => {
+  let takeAssignment;
+  try {
+    const token = ctx.cookies.get('access_token');
+    // 유저정보 쿠키 get
+
+    if (token === undefined) { ctx.throw(401, '인증 실패'); }
+    // access_token이 없는 경우
+
+    const userInfo = jwt.verify(token, process.env.AccessSecretKey);
+    // 토큰화된 유저 정보 decode
+
+    if (String(userInfo.userNumber).charAt(0) === '1') {
+      takeAssignment = await AssignmentModel
+        .findOne({ professorNumber: userInfo.userNumber, assignmentId: ctx.params.assignmentId })
+        .exec();
+    } else if (String(userInfo.userNumber).charAt(0) === '2') {
+      takeAssignment = await AssignmentModel
+        .findOne({ students: userInfo.userNumber, assignmentId: ctx.params.assignmentId }).exec();
+      // 사용자가 학생일 경우
+    }
+    ctx.body = takeAssignment;
+  } catch (error) {
+    ctx.body = error;
+  }
+});
+
 router.delete('/:assignmentId', async (ctx: Koa.Context) => {
   // 과제 삭제
   try {
@@ -140,4 +193,5 @@ router.delete('/:assignmentId', async (ctx: Koa.Context) => {
     ctx.body = error;
   }
 });
+
 export = router;
