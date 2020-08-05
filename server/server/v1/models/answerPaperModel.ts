@@ -9,6 +9,8 @@ const answerSchema = new Mongoose.Schema({
   score: { type: Number, default: -1 },
 });
 const answerPaperSchema = new Mongoose.Schema({
+  // 교수 번호
+  professorNumber: Number,
   // 학번
   userNumber: Number,
   // 과제 id
@@ -19,4 +21,4 @@ const answerPaperSchema = new Mongoose.Schema({
   answers: [answerSchema],
   meta: metaData,
 });
-exports.AnswerModel = Mongoose.model('AnswerPaper', answerPaperSchema);
+exports.AnswerPaperModel = Mongoose.model('AnswerPaper', answerPaperSchema);

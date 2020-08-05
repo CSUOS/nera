@@ -20,7 +20,7 @@ const assignmentSchema = new Mongoose.Schema({
   // 과제 정보
   assignmentInfo: String,
   // 과제 상태
-  assignmentState: Number,
+  assignmentState: { type: Number, default: 0 },
   // 발행 날짜
   publishingTime: Date,
   // 마감 날짜
