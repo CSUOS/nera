@@ -28,7 +28,7 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
     const { body } = ctx.request;
     // 유저가 보낸 데이터
 
-    body.answers.forEach((element: any) => {
+    await body.answers.forEach((element: any) => {
       if (element.score !== undefined) { ctx.throw(403, '권한 없음'); }
     });
     // 유저가 보낸 데이터가 문제의 score 정보를 가지고 있을 경우 error
@@ -89,8 +89,48 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
     ctx.body = error;
   }
 });
-router.post('/:assignmentId/:userNumber', (ctx: Koa.Context) => {
+router.post('/:assignmentId/:userNumber', async (ctx: Koa.Context) => {
   // 채점
+  try {
+    const token = ctx.cookies.get('access_token');
+    // 유저정보 쿠키 get
+
+    if (token === undefined) { ctx.throw(401, '인증 실패'); }
+    // access_token이 없는 경우
+
+    const { body } = ctx.request;
+    // 유저가 보낸 데이터
+
+    const userInfo = jwt.verify(token, process.env.AccessSecretKey);
+    // 토큰화된 유저 정보 decode
+
+    if (String(userInfo.userNumber).charAt(0) !== '1') { ctx.throw(403, '권한 없음'); }
+    // User가 교수가 아닌 경우
+
+    const studentAnswerPaper = await AnswerPaperModel
+      .findOne({
+        assignmentId: ctx.params.assignmentId,
+        userNumber: ctx.params.userNumber,
+        professorNumber: userInfo.userNumber,
+      });
+    // 과제 id, 학생의 userNumber, 교수 본인의 userNumber로 학생이 작성한 답안 검색
+
+    if (studentAnswerPaper === null) { ctx.throw(404, '찾을 수 없음'); }
+    // 답안이 없는 경우 error
+    for (let a = 0; a < studentAnswerPaper.answers.length; a += 1) {
+      const s = body.answers
+        .find(async (e: any) => e.questionId === studentAnswerPaper.answers[a].questionId);
+      // 유저가 보낸 데이터에서 답안의 questionId와 같은 객체를 찾음
+
+      studentAnswerPaper.answers[a].score = s.score;
+      // 답안의 점수를 그 객체의 점수로 변경
+    }
+    studentAnswerPaper.save().then(() => '채점 완료');
+    // DB에 저장
+    ctx.body = studentAnswerPaper; // 확인용
+  } catch (error) {
+    ctx.body = error;
+  }
 });
 router.get('/:assignmentId', async (ctx: Koa.Context) => {
   // 답안 조회
