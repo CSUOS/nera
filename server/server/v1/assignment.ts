@@ -105,8 +105,11 @@ router.post('/', async (ctx: Koa.Context) => {
 
       prevAssignment.meta.modifiedAt = getCurrentDate();
       // 수정 날짜 변경
+
       await prevAssignment.save().then(() => console.log('assignment update 완료'));
-      ctx.body = prevAssignment;
+      // DB에 저장
+
+      ctx.body = prevAssignment; // 확인용
     }
   } catch (error) {
     ctx.body = error;
