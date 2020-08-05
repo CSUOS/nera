@@ -115,5 +115,27 @@ router.post('/', async (ctx: Koa.Context) => {
     ctx.body = error;
   }
 });
+router.delete('/:assignmentId', async (ctx: Koa.Context) => {
+  try {
+    const token = ctx.cookies.get('access_token');
+    // 유저정보 쿠키 get
 
+    if (token === undefined) { ctx.throw(401, '인증 실패'); }
+    // access_token이 없는 경우
+
+    const userInfo = jwt.verify(token, process.env.AccessSecretKey);
+    // 토큰화된 유저 정보 decode
+
+    if (String(userInfo.userNumber).charAt(0) !== '1') { ctx.throw(403, '권한 없음'); }
+    // User가 교수가 아닌 경우
+
+    await AssignmentModel
+      .deleteOne({ assignmentId: ctx.params.assignmentId, professorNumber: userInfo.userNumber });
+    // group 컬렉션에서 교수 넘버, 그룹 id가 일치하는 그룹 삭제
+
+    ctx.status = 204;
+  } catch (error) {
+    ctx.body = error;
+  }
+});
 export = router;

@@ -28,9 +28,6 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
     const { body } = ctx.request;
     // 유저가 보낸 데이터
 
-    if (userInfo.userNumber !== body.userNumber) { ctx.throw(403, '권한 없음'); }
-    // 유저가 보낸 데이터의 학번과 쿠키에 있는 학번이 다를 경우 error
-
     body.answers.forEach((element: any) => {
       if (element.score !== undefined) { ctx.throw(403, '권한 없음'); }
     });
@@ -46,11 +43,8 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
     if (assignment === null) { ctx.throw(404, '해당 과제 없음'); }
     // 과제가 없는 경우
 
-    if (!assignment.students.includes(userInfo.userNumber)) { ctx.throw(403, '권한이 없습니다.'); }
-    // 과제에 본인의 학번이 포함되지 않은 경우
-
     const prevAnswer = await AnswerPaperModel
-      .findOne({ assignmentId: ctx.params.assignmentId, userNumber: body.userNumber }).exec();
+      .findOne({ assignmentId: ctx.params.assignmentId, userNumber: userInfo.userNumber }).exec();
     // 이전에 작성한 답안이 있는지 탐색
 
     if (prevAnswer === null) {
@@ -59,7 +53,7 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
       const newAnswer = new AnswerPaperModel();
       // 새로운 답안 생성
 
-      newAnswer.userNumber = body.userNumber;
+      newAnswer.userNumber = userInfo.userNumber;
       // 새 답안의 학번
 
       newAnswer.professorNumber = assignment.professorNumber;
