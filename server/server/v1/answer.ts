@@ -98,5 +98,29 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
 router.post('/:assignmentId/:userNumber', (ctx: Koa.Context) => {
   // 채점
 });
+router.get('/:assignmentId', async (ctx: Koa.Context) => {
+  // 답안 조회
+  try {
+    const token = ctx.cookies.get('access_token');
+    // 유저정보 쿠키 get
 
+    if (token === undefined) { ctx.throw(401, '인증 실패'); }
+    // access_token이 없는 경우
+
+    const userInfo = jwt.verify(token, process.env.AccessSecretKey);
+    // 토큰화된 유저 정보 decode
+
+    const answer = await AnswerPaperModel
+      .findOne({ userNumber: userInfo.userNumber, assignmentId: ctx.params.assignmentId })
+      .exec();
+    // 쿠키의 userNumber와 매개변수로 넘어온 과제 id로 답안 조회
+
+    if (answer.length === null) { ctx.throw(404, '찾을 수 없음'); }
+    // 없을 경우 에러
+
+    ctx.body = answer;
+  } catch (error) {
+    ctx.body = error;
+  }
+});
 export = router

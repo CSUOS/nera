@@ -44,10 +44,10 @@ router.post('/', async (ctx: Koa.Context) => {
       // 새로운 그룹 생성
 
       newGroup.professorNumber = userInfo.userNumber;
-      // 새 그룹의 professorNumber는 교수 본인의 userNumber
+      // 새 그룹의 교수 번호는 교수 본인의 userNumber
 
       newGroup.className = body.className;
-      // 새 그룹의 className
+      // 새 그룹의 강의 이름
 
       newGroup.students = body.students;
       // 새 그룹의 학생 목록
@@ -79,6 +79,31 @@ router.post('/', async (ctx: Koa.Context) => {
 
       ctx.body = prevGroup; // 확인용
     }
+  } catch (error) {
+    ctx.body = error;
+  }
+});
+router.get('/', async (ctx: Koa.Context) => {
+  try {
+    const token = ctx.cookies.get('access_token');
+    // 유저정보 쿠키 get
+
+    if (token === undefined) { ctx.throw(401, '인증 실패'); }
+    // access_token이 없는 경우
+
+    const userInfo = jwt.verify(token, process.env.AccessSecretKey);
+    // 토큰화된 유저 정보 decode
+
+    if (String(userInfo.userNumber).charAt(0) !== '1') { ctx.throw(403, '권한 없음'); }
+    // User가 교수가 아닌 경우
+
+    const groups = await GroupModel.find({ professorNumber: userInfo.userNumber }).exec();
+    // 본인의 userNumber가 교수 번호로 들어가 있는 그룹 목록 탐색
+
+    if (groups.length === 0) { ctx.throw(404, '찾을 수 없음'); }
+    // 없을 경우 에러
+
+    ctx.body = groups;
   } catch (error) {
     ctx.body = error;
   }
