@@ -43,6 +43,7 @@ router의 동작을 확인하기 위한 테스트 페이지
 * student.ts
 
 post - 그룹 생성, 수정, userNumber, className으로 중복 체크
+
 요청 예시
 ```
 {
@@ -61,6 +62,7 @@ delete/{groupId} - 그룹 삭제
 * assignment.ts
 
 post - 과제 생성, 수정, userNumber, assignmentName으로 중복 체크
+
 요청 예시
 ```
 {
@@ -89,6 +91,7 @@ delete - 과제 삭제
 * answer.ts
 
 post/{assignmentId} - 답안 생성, 수정, assignmentId와 본인의 userNumber로 중복 체크
+
 요청 예시
 ```
 {
@@ -105,6 +108,7 @@ post/{assignmentId} - 답안 생성, 수정, assignmentId와 본인의 userNumbe
 }
 ```
 post/{assignmentId}/{userNumber} - 채점
+
 요청 예시
 ```
 {
