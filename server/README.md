@@ -44,14 +44,15 @@ router의 동작을 확인하기 위한 테스트 페이지
 
 post - 그룹 생성, 수정, userNumber, className으로 중복 체크
 요청 예시
-```{
+```
+{
   "className": "test용 목록",
   "students": [
   	2016920003,
   	2016920004
   	]
 }
-
+```
 
 get - 그룹 조회
 
@@ -61,7 +62,8 @@ delete/{groupId} - 그룹 삭제
 
 post - 과제 생성, 수정, userNumber, assignmentName으로 중복 체크
 요청 예시
-```{
+```
+{
   "students": [
     2016920003,
     1016920003
@@ -77,7 +79,7 @@ post - 과제 생성, 수정, userNumber, assignmentName으로 중복 체크
     }
   ]
 }
-
+```
 get - 전체 과제 조회
 
 get/{assignmentId} - 특정 과제 조회
@@ -88,7 +90,8 @@ delete - 과제 삭제
 
 post/{assignmentId} - 답안 생성, 수정, assignmentId와 본인의 userNumber로 중복 체크
 요청 예시
-```{
+```
+{
   "answers": [
     {
       "questionId": 1525001,
@@ -115,7 +118,7 @@ post/{assignmentId}/{userNumber} - 채점
     }
   ]
 }
-
+```
 get/{assignmentId} - 학생이 본인의 답안 조회
 
 get/{assignmentId}/{userNumber} - 교수가 학생의 답안 조회
