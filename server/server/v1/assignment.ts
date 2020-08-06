@@ -183,7 +183,6 @@ router.get('/:assignmentId', async (ctx: Koa.Context) => {
       takeAssignment = await AssignmentModel
         .findOne({ professorNumber: userInfo.userNumber, assignmentId: ctx.params.assignmentId })
         .exec();
-
       // 사용자가 교수일 경우
       if (takeAssignment === null) { ctx.throw(404, '찾을 수 없음'); }
     } else if (String(userInfo.userNumber).charAt(0) === '2') {

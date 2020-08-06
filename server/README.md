@@ -42,21 +42,83 @@ router의 동작을 확인하기 위한 테스트 페이지
 
 * student.ts
 
-그룹 생성, 수정 api
+post - 그룹 생성, 수정, userNumber, className으로 중복 체크
+요청 예시
+```{
+  "className": "test용 목록",
+  "students": [
+  	2016920003,
+  	2016920004
+  	]
+}
 
-post - 생성, 수정
+
+get - 그룹 조회
+
+delete/{groupId} - 그룹 삭제
 
 * assignment.ts
 
-과제 생성, 수정 api
+post - 과제 생성, 수정, userNumber, assignmentName으로 중복 체크
+요청 예시
+```{
+  "students": [
+    2016920003,
+    1016920003
+  ],
+  "assignmentName": "과제 이름임",
+  "assignmentInfo": "과제 정보임",
+  "publishingTime": "2020-08-05T05:03:01.292Z",
+  "deadline": "2020-08-05T05:03:01.292Z",
+  "questions": [
+    {
+      "questionContent": "문제임",
+      "fullScore": 0
+    }
+  ]
+}
 
-post - 생성, 수정
+get - 전체 과제 조회
+
+get/{assignmentId} - 특정 과제 조회
+
+delete - 과제 삭제
 
 * answer.ts
 
-답안 생성, 수정 api
+post/{assignmentId} - 답안 생성, 수정, assignmentId와 본인의 userNumber로 중복 체크
+요청 예시
+```{
+  "answers": [
+    {
+      "questionId": 1525001,
+      "answerContent": "답안1"
+    },
+    {
+    "questionId": 1525002,
+      "answerContent": "답안2"
+    }
+  ]
+}
 
-post - 생성, 수정
+post/{assignmentId}/{userNumber} - 채점
+요청 예시
+```{
+  "answers": [
+    {
+      "questionId": 1525001,
+      "score": 100
+    },
+    {
+      "questionId": 1525002,
+      "score": 10
+    }
+  ]
+}
+
+get/{assignmentId} - 학생이 본인의 답안 조회
+
+get/{assignmentId}/{userNumber} - 교수가 학생의 답안 조회
 
 * anwerPaperModel.ts
 
