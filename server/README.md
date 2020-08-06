@@ -103,10 +103,11 @@ post/{assignmentId} - 답안 생성, 수정, assignmentId와 본인의 userNumbe
     }
   ]
 }
-
+```
 post/{assignmentId}/{userNumber} - 채점
 요청 예시
-```{
+```
+{
   "answers": [
     {
       "questionId": 1525001,
