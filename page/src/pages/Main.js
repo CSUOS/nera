@@ -81,7 +81,7 @@ function Main(props){
       "id": 1,
       "name":"우희은",
       "user_number" : "2017920038",
-      "type" : 0, // 교수 : 0 , 학생 : 1
+      "type" : 1, // 교수 : 0 , 학생 : 1
       "major" : "컴퓨터과학부",
       "meta": {
         "create_at": new Date('2020-03-01T11:59:00'),
@@ -256,7 +256,7 @@ function Main(props){
           "name": sampleNames[j],
           "answer_content": [`${sampleNames[j]}의 ${i%2 + 1}번 문제에 대한 답입니다.`],
           "submitted": (j % 2 == 0 ? true : false),
-          "score": Math.floor(q[i].full_score / (j+1)),
+          "score": Math.floor(q[i].full_score / (j+1) / (i%2 + 1)),
           "meta": {
             "create_at": new Date('2020-08-02T11:59:00'),
             "modified_at": new Date('2020-08-02T11:59:00')
