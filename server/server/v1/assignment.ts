@@ -150,9 +150,15 @@ router.get('/', async (ctx: Koa.Context) => {
     if (String(userInfo.userNumber).charAt(0) === '1') {
       takeAssignment = await AssignmentModel.find({ professorNumber: userInfo.userNumber }).exec();
       // 사용자가 교수일 경우
+
+      if (String(userInfo.userNumber).charAt(0) !== '1') { ctx.throw(403, '권한 없음'); }
+      // 사용자가 교수가 아닌 경우
     } else if (String(userInfo.userNumber).charAt(0) === '2') {
       takeAssignment = await AssignmentModel.find({ students: userInfo.userNumber }).exec();
       // 사용자가 학생일 경우
+
+      if (String(userInfo.userNumber).charAt(0) !== '2') { ctx.throw(403, '권한 없음'); }
+      // User가 학생이 아닌 경우
     }
     await Promise.all(
       takeAssignment.map(async (element: any) => {
