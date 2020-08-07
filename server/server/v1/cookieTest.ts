@@ -5,12 +5,11 @@ const router = new Router();
 
 const jwt = require('jsonwebtoken');
 
-console.log('sdfsdf');
 const userInfo = {
   _id: 0,
   userId: 'thereisnotruth',
   userName: '고태진',
-  userNumber: 2016920003,
+  userNumber: 1016920003,
 };
 
 router.get('/', (ctx: Koa.Context) => {
