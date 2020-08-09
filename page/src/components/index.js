@@ -12,3 +12,4 @@ export { default as Problem } from './Problem';
 export { default as TimePicker } from './TimePicker';
 export { default as SimpleModal } from './SetQuestion';
 export { default as useRequest } from './useRequest';
+export { default as UserAnswer } from './UserAnswer';
