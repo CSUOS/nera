@@ -16,13 +16,6 @@ const Proxy = require('koa-proxy-middleware');
 
 const app = new Koa();
 const router = new Router();
-const proxy = new Proxy({
-  proxies:[
-    {
-      host:'http://localhost:3002/'
-    }
-  ]
-});
 
 router.get('/', (ctx: Koa.Context) => {
   ctx.body = 'hello, NERA!';
@@ -41,6 +34,5 @@ app.use(serve(`${__dirname}/../build`));
 app.use(async (ctx) => {
   if (ctx.status === 404) await send(ctx, 'index.html', { root: `${__dirname}/../build` });
 });
-app.use(proxy);
 
 export = app
