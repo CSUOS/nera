@@ -1,13 +1,19 @@
 import React, {useState} from 'react';
 import { Grid, Paper, TextField, Button } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
-import {PageInfo} from '../components';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import {PageInfo, useRequest} from '../components';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 function SetStudentList(props){
+    const [response, loading, error] = useRequest(
+        '/v1/cookieTest'
+      );
+    if(response){
+        console.log(response);
+    }
+
     let group_list = [];
     // api로 professor에 해당하는 그룹 받아오기
     let group1 = {

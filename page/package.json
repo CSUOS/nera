@@ -11,6 +11,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.19.2",
     "classnames": "^2.2.6",
     "date-fns": "^2.15.0",
     "react": "^16.13.1",
@@ -54,5 +55,6 @@
     "plugins": [
       "@babel/plugin-proposal-class-properties"
     ]
-  }
+  },
+  "proxy": "http://localhost:3001"
 }
