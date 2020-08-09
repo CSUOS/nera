@@ -441,7 +441,6 @@ function Main(props){
                 [classes.contentShift]: open,
               }, "margin-top-64", "contents_side")}
             >
-              {api_res}
               {contents}
             </Grid>
         </Grid>

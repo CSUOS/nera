@@ -38,8 +38,6 @@ const Home = (props)=>{
             }
         }
     });
-
-    console.log(result);
     
 
     return (

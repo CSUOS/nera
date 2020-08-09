@@ -20,10 +20,13 @@ router.post('/', async (ctx: Koa.Context) => {
   const id = body.userId;
   const pw = body.userPw;
 
+  console.log(id);
+  console.log(pw);
+
   await axios.post('라붐스주소', {
     token: '',
-    userId: 'train96', //id, // train96
-    userPw: '12345678',//hashPw, // 변환된 비밀번호
+    userId: id,
+    userPw: pw, // 변환된 비밀번호
   }).then((response) => {
     const accessToken = jwt.sign(response.data, process.env.AccessSecretKey, { expiresIn: '7d' });
     // jwt 토큰 생성
