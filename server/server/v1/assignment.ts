@@ -4,9 +4,6 @@ import Bodyparser from 'koa-bodyparser';
 import Cookie from 'koa-cookie';
 import dotenv from 'dotenv';
 import { getCurrentDate } from './models/meta';
-import { userInfo } from 'os';
-
-const jwt = require('jsonwebtoken');
 
 const { AssignmentModel } = require('./models/assignmentModel');
 const { AnswerPaperModel } = require('./models/answerPaperModel');
@@ -165,7 +162,7 @@ router.get('/:assignmentId', async (ctx: Koa.Context) => {
       // 사용자가 학생일 경우
     }
     if (takeAssignment === null) { ctx.throw(404, '찾을 수 없음'); }
-    takeAssignment.assignmentState = await calState(takeAssignment, userInfo);
+    takeAssignment.assignmentState = await calState(takeAssignment, ctx.user);
     ctx.body = takeAssignment;
   } catch (error) {
     ctx.body = error;

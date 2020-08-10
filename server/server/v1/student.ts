@@ -6,7 +6,6 @@ import dotenv from 'dotenv';
 import { getCurrentDate } from './models/meta';
 
 const router = new Router();
-const jwt = require('jsonwebtoken');
 const { GroupModel } = require('./models/groupModel');
 
 dotenv.config();
@@ -54,7 +53,8 @@ router.post('/', async (ctx: Koa.Context) => {
         newGroup.groupId = maxId.groupId + 1;
         // 데이터가 있으면 해당 groupId에 1을 더해서 groupId로 정함
       }
-      await newGroup.save().then(() => console.log('수강생 목록 생성 완료'));
+      await newGroup.save();
+      console.log('수강생 목록 생성 완료');
       // DB에 저장
       ctx.body = newGroup; // 확인용
     } else {
@@ -66,7 +66,8 @@ router.post('/', async (ctx: Koa.Context) => {
       prevGroup.meta.modifiedAt = getCurrentDate();
       // 수정 날짜 변경
 
-      await prevGroup.save().then(() => console.log('수강생 목록 수정 완료'));
+      await prevGroup.save();
+      console.log('수강생 목록 수정 완료');
       // DB에 저장
 
       ctx.body = prevGroup; // 확인용

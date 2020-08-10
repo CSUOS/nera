@@ -16,7 +16,9 @@ router.get('/', async (ctx: Koa.Context) => {
   const token = jwt.sign(userInfo, ctx.env.accessSecretKey, { expiresIn: '1h' });
   ctx.cookies.set('access_token', token, { httpOnly: true, maxAge: 1000 * 60 * 60 });
   // 쿠키 발급, 유효시간 1시간 1000ms * 60 * 60
-  ctx.body = 'test';
+  ctx.user = userInfo;
+  ctx.body = ctx.user;
+  ctx.role = String(userInfo.userNumber).charAt(0);
 });
 
 router.get('/test', async (ctx: Koa.Context) => {

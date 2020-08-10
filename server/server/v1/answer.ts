@@ -6,7 +6,6 @@ import dotenv from 'dotenv';
 import { getCurrentDate } from './models/meta';
 
 const router = new Router();
-const jwt = require('jsonwebtoken');
 const { AnswerPaperModel } = require('./models/answerPaperModel');
 const { AssignmentModel } = require('./models/assignmentModel');
 
@@ -65,8 +64,8 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
       // 새 답안의 답
       // newAnswer.fullScore = assignment.fullScore;
 
-      await newAnswer.save()
-        .then(() => console.log('답안 생성 완료'));
+      await newAnswer.save();
+      console.log('답안 생성 완료');
       // DB에 저장
 
       ctx.body = newAnswer; // 확인용
@@ -79,7 +78,8 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
       prevAnswer.meta.modifiedAt = getCurrentDate();
       // 수정 날짜 변경
 
-      await prevAnswer.save().then(() => console.log('답안 수정 완료'));
+      await prevAnswer.save();
+      console.log('답안 수정 완료');
       // DB에 저장
 
       ctx.body = prevAnswer; // 확인용

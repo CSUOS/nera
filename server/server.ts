@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import Koa from 'koa';
 import app from './server/index';
 import getEnv from './config';
 
