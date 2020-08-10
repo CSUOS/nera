@@ -1,27 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import { Grid, TextField, Button, Typography } from '@material-ui/core';
 
 function Login(){
     // id, password
     const [id,setId]= useState();
     const [pw,setPw]= useState();
-    
-    async function sendLoginData(e){
-        const sha256 = require('sha256');
-        const secret = process.env.REACT_APP_SECRET;
-        const hashed_pw = sha256(pw + secret);
-        console.log(secret);
-        
-        await axios.post('/v1/auth', {
-            userId: id,
-            userPw: hashed_pw,
-          }).then((response) => {
-            console.log(response);
-          }
-        );
+    const [hide, setHide] = useState(false); // hide form or not
+
+    // Main으로 넘겨줄 정보들
+    const [name, setName] = useState("");
+    const [user_number, setUNumber] = useState(-1);
+    const [meta, setMeta] = useState(Date());
+
+    async function setLoginData(e){ // pw 암호화 및 api data 받기
+        try{
+            const sha256 = require('sha256');
+            const secret = process.env.REACT_APP_SECRET;
+            const hashed_pw = sha256(pw + secret);
+            
+            await axios.post('/v1/auth', {
+                userId: id,
+                userPw: hashed_pw,
+            }).then((response) => setDataAndMove(response));
+        }catch(e){
+            // error 처리 어떻게 할까요?
+            console.log(e);
+        }
     }
+
+    async function setDataAndMove(response){ // api data를 state에 저장, home으로 이동 버튼 띄우기
+        try{
+            setName(response.data.userName);
+            setUNumber(response.data.userNumber);
+            let meta = {create_at : Date(), modified_at : Date()};
+            meta.create_at = response.data.meta.createAt;
+            meta.modified_at = response.data.meta.modifiedAt;
+            setMeta(meta);
+            
+        }catch(e){
+            console.log(e);
+        }
+    };
 
     function changeId(){
         const id = document.querySelector('#userId');
@@ -32,54 +53,19 @@ function Login(){
         const password = document.querySelector('#userPw');
         setPw(password.value);
     }
-    
-
-    let name = ""; let major = ""; let user_number = -1; let meta = {"create_at":Date(),"modified_at":Date()};
-
-    // before rendering
-    
-    // 로그인 api 
-    name = "우희은";
-    user_number = 2017920038;
-    meta["create_at"]="2020-08-03T01:09:49.742Z";
-    meta["modified_at"]="2020-08-03T01:09:49.742Z";
-    
-    // major 계산
-    let major_number = user_number.toString().substring(4,7);
-    switch(major_number){
-        case "920":
-            major = "컴퓨터과학부";
-            break;
-        default:
-            major = "~~~~부";
-            break;
-    }
 
     useEffect(()=>{
 
     });
 
-    const path_name = "/home";
     return (
         <Grid className="Login">
-            <form method="post" onClick={sendLoginData}>
+            <form method="post">
                 <Grid container alignItems="center" justifycontents="center" className="login_container" direction="column">
                     <Typography variant="h5">로그인</Typography>
                     <TextField variant="outlined" id="userId" label="id" required rows={1} rowsMax={10} onChange={changeId}></TextField>
                     <TextField variant="outlined" id="userPw" label="password" type="password" required rows={1} rowsMax={10} onChange={changePw}></TextField>
-                    
-                    <Link to={{
-                        pathname:path_name,
-                        state:{
-                            // 로그인 시 회원인증 서버에서 넘어오는 정보 넘기기
-                            name: name,
-                            major: major,
-                            user_number: user_number,
-                            meta: meta,
-                        }
-                    }}>
-                        <Button>login</Button>
-                    </Link>
+                    <Button onClick={setLoginData}>login</Button>
                 </Grid>
             </form>
         </Grid>

@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import {SideBar, Header} from "../components";
 import {Home, Assignment, Setting, Error, SubmissionStatus, SetAssignment, Scoring, SetStudentList} from "../pages";
 import "./pages.css";
-
 import clsx from 'clsx';
+
 import { Grid } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,7 +13,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 // style definition
 
 const drawerWidth = 300;
-
 const useStyles = makeStyles((theme) => ({
     appBar: {
       transition: theme.transitions.create(['margin', 'width'], {
@@ -58,13 +57,15 @@ const useStyles = makeStyles((theme) => ({
       }),
       marginLeft: 0,
     },
-  }));
+}));
 
 
 // main pages
 
 function Main(props){
     
+    // Login.js로부터 받은 정보
+    console.log(props);
     
     // 쿠키에 저장된 정보
     let main_info={

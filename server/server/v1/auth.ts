@@ -23,6 +23,17 @@ router.post('/', async (ctx: Koa.Context) => {
   console.log(id);
   console.log(pw);
 
+  // rabums 연결 전 테스트 용
+  ctx.body = {
+    userId : "string",
+    userName : "우희은",
+    userNumber : 2017920038,
+    meta : {
+      createAt : new Date("2020-08-10"),
+      modifiedAt : new Date("2020-08-10")
+    }
+  };
+/*
   await axios.post('라붐스주소', {
     token: '',
     userId: id,
@@ -34,8 +45,9 @@ router.post('/', async (ctx: Koa.Context) => {
     ctx.cookies.set('access_token', accessToken, { httpOnly: true, maxAge: 1000 * 60 * 60 });
     // 토큰을 쿠키로 발급
     ctx.body = response.data; // 확인용
-  });
+  });*/
 });
+
 /*
 * 유저 아이디와 비밀번호를 받음
 * NERA 토큰과 같이 RABUMS 서버와 통신
