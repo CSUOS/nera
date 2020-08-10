@@ -20,14 +20,14 @@ router.post('/', async (ctx: Koa.Context) => {
   const { body } = ctx.request;
   const id = body.userId;
   const pw = body.userPw;
-  const secret = await getEnv();
+  const secret = ctx.env;
 
   await axios.post(secret.rabumsAddr, {
     token: secret.rabumsToken,
     userId: id, // train96
     userPw: pw, // 변환된 비밀번호
   }).then((response) => {
-    const accessToken = jwt.sign(response.data, process.env.AccessSecretKey, { expiresIn: '1h' });
+    const accessToken = jwt.sign(response.data, ctx.env.accessSecretKey, { expiresIn: '1h' });
     // jwt 토큰 생성
 
     ctx.cookies.set('access_token', accessToken, { httpOnly: true, maxAge: 1000 * 60 * 60 });
