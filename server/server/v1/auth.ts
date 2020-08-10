@@ -4,6 +4,7 @@ import Bodyparser from 'koa-bodyparser';
 import Cookie from 'koa-cookie';
 import dotenv from 'dotenv';
 import axios from 'axios';
+import getEnv from '../../config';
 
 const router = new Router();
 const crypto = require('crypto');
@@ -19,17 +20,18 @@ router.post('/', async (ctx: Koa.Context) => {
   const { body } = ctx.request;
   const id = body.userId;
   const pw = body.userPw;
+  const secret = await getEnv();
 
-  await axios.post('라붐스주소', {
-    token: '',
+  await axios.post(secret.rabumsAddr, {
+    token: secret.rabumsToken,
     userId: id, // train96
-    userPw: hashPw, // 변환된 비밀번호
+    userPw: pw, // 변환된 비밀번호
   }).then((response) => {
-    const accessToken = jwt.sign(response.data, process.env.AccessSecretKey, { expiresIn: '7d' });
+    const accessToken = jwt.sign(response.data, process.env.AccessSecretKey, { expiresIn: '1h' });
     // jwt 토큰 생성
 
     ctx.cookies.set('access_token', accessToken, { httpOnly: true, maxAge: 1000 * 60 * 60 });
-    // 토큰을 쿠키로 발급
+    // 토큰을 쿠키로 발급 1000ms * 60 * 60 = 1h
     ctx.body = response.data; // 확인용
   });
 });

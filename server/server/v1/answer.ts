@@ -16,15 +16,6 @@ router.use(Cookie());
 router.post('/:assignmentId', async (ctx: Koa.Context) => {
   // 답안 입력, 수정
   try {
-    const token = ctx.cookies.get('access_token');
-    // 유저정보 쿠키 get
-
-    if (token === undefined) { ctx.throw(401, '인증 실패'); }
-    // access_token이 없는 경우
-
-    const userInfo = jwt.verify(token, process.env.AccessSecretKey);
-    // 토큰화된 유저 정보 decode
-
     const { body } = ctx.request;
     // 유저가 보낸 데이터
 
@@ -36,7 +27,7 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
     });
     // 답안 배열 내 원소에 문제 번호, 답안이 없을 경우
 
-    await body.answers.forEach((element: any) => {
+    body.answers.forEach((element: any) => {
       if (element.score !== undefined) { ctx.throw(403, '권한 없음'); }
     });
     // 유저가 보낸 데이터가 문제의 score 정보를 가지고 있을 경우 error
@@ -52,7 +43,7 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
     // 과제가 없는 경우
 
     const prevAnswer = await AnswerPaperModel
-      .findOne({ assignmentId: ctx.params.assignmentId, userNumber: userInfo.userNumber }).exec();
+      .findOne({ assignmentId: ctx.params.assignmentId, userNumber: ctx.user.userNumber }).exec();
     // 이전에 작성한 답안이 있는지 탐색
 
     if (prevAnswer === null) {
@@ -61,7 +52,7 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
       const newAnswer = new AnswerPaperModel();
       // 새로운 답안 생성
 
-      newAnswer.userNumber = userInfo.userNumber;
+      newAnswer.userNumber = ctx.user.userNumber;
       // 새 답안의 학번
 
       newAnswer.professorNumber = assignment.professorNumber;
@@ -100,12 +91,6 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
 router.post('/:assignmentId/:userNumber', async (ctx: Koa.Context) => {
   // 채점
   try {
-    const token = ctx.cookies.get('access_token');
-    // 유저정보 쿠키 get
-
-    if (token === undefined) { ctx.throw(401, '인증 실패'); }
-    // access_token이 없는 경우
-
     const { body } = ctx.request;
     // 유저가 보낸 데이터
     if (body.answers === undefined) { ctx.throw(400, '잘못된 요청'); }
@@ -116,17 +101,14 @@ router.post('/:assignmentId/:userNumber', async (ctx: Koa.Context) => {
     });
     // 답안 배열 내 원소에 문제 번호, 점수가 없을 경우
 
-    const userInfo = jwt.verify(token, process.env.AccessSecretKey);
-    // 토큰화된 유저 정보 decode
-
-    if (String(userInfo.userNumber).charAt(0) !== '1') { ctx.throw(403, '권한 없음'); }
+    if (String(ctx.user.userNumber).charAt(0) !== '1') { ctx.throw(403, '권한 없음'); }
     // User가 교수가 아닌 경우
 
     const studentAnswerPaper = await AnswerPaperModel
       .findOne({
         assignmentId: ctx.params.assignmentId,
         userNumber: ctx.params.userNumber,
-        professorNumber: userInfo.userNumber,
+        professorNumber: ctx.user.userNumber,
       });
     // 과제 id, 학생의 userNumber, 교수 본인의 userNumber로 학생이 작성한 답안 검색
 
@@ -150,17 +132,8 @@ router.post('/:assignmentId/:userNumber', async (ctx: Koa.Context) => {
 router.get('/:assignmentId', async (ctx: Koa.Context) => {
   // 답안 조회
   try {
-    const token = ctx.cookies.get('access_token');
-    // 유저정보 쿠키 get
-
-    if (token === undefined) { ctx.throw(401, '인증 실패'); }
-    // access_token이 없는 경우
-
-    const userInfo = jwt.verify(token, process.env.AccessSecretKey);
-    // 토큰화된 유저 정보 decode
-
     const answer = await AnswerPaperModel
-      .findOne({ userNumber: userInfo.userNumber, assignmentId: ctx.params.assignmentId })
+      .findOne({ userNumber: ctx.user.userNumber, assignmentId: ctx.params.assignmentId })
       .exec();
     // 쿠키의 userNumber와 매개변수로 넘어온 과제 id로 답안 조회
 
@@ -175,23 +148,14 @@ router.get('/:assignmentId', async (ctx: Koa.Context) => {
 router.get('/:assignmentId/:userNumber', async (ctx: Koa.Context) => {
   // 채점
   try {
-    const token = ctx.cookies.get('access_token');
-    // 유저정보 쿠키 get
-
-    if (token === undefined) { ctx.throw(401, '인증 실패'); }
-    // access_token이 없는 경우
-
-    const userInfo = jwt.verify(token, process.env.AccessSecretKey);
-    // 토큰화된 유저 정보 decode
-
-    if (String(userInfo.userNumber).charAt(0) !== '1') { ctx.throw(403, '권한 없음'); }
+    if (ctx.role !== '1') { ctx.throw(403, '권한 없음'); }
     // User가 교수가 아닌 경우
 
     const studentAnswerPaper = await AnswerPaperModel
       .findOne({
         assignmentId: ctx.params.assignmentId,
         userNumber: ctx.params.userNumber,
-        professorNumber: userInfo.userNumber,
+        professorNumber: ctx.user.userNumber,
       });
     // 과제 id, 학생의 userNumber, 교수 본인의 userNumber로 학생이 작성한 답안 검색
 

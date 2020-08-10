@@ -7,9 +7,11 @@ import Answer from './v1/answer';
 import Student from './v1/student';
 import Test from './v1/cookieTest'; // 테스트용 쿠키 발급
 import Assignment from './v1/assignment';
+import TTT from './v1/test';
 
 const serve = require('koa-static');
 const send = require('koa-send');
+const { jwtMiddleware, envMiddleware} = require('../config');
 
 const app = new Koa();
 const router = new Router();
@@ -24,11 +26,17 @@ router.use('/v1/answer', Answer.routes());
 router.use('/v1/student', Student.routes());
 router.use('/v1/cookieTest', Test.routes());
 router.use('/v1/assignment', Assignment.routes());
+router.use('/v1/test', TTT.routes());
 
 app.use(Logger());
+
+app.use(envMiddleware);
+app.use(jwtMiddleware);
+
 app.use(router.routes());
 app.use(serve(`${__dirname}/../build`));
 app.use(async (ctx) => {
   if (ctx.status === 404) await send(ctx, 'index.html', { root: `${__dirname}/../build` });
 });
+
 export = app
