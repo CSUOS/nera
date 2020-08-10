@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SideBar, Header} from "../components";
 import {Home, Assignment, Setting, Error, SubmissionStatus, SetAssignment, Scoring, SetStudentList} from "../pages";
 import "./pages.css";
-
 import clsx from 'clsx';
+
 import { Grid } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,7 +13,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 // style definition
 
 const drawerWidth = 300;
-
 const useStyles = makeStyles((theme) => ({
     appBar: {
       transition: theme.transitions.create(['margin', 'width'], {
@@ -58,23 +57,15 @@ const useStyles = makeStyles((theme) => ({
       }),
       marginLeft: 0,
     },
-  }));
+}));
 
 
 // main pages
 
 function Main(props){
-
-      // get data from USERINFOSERVER => save in cookie
-
-    /*
-    let main_info = {
-      "id": props.location.state.id, 
-      "name" :props.location.state.name, 
-      "user_number" :  props.location.state.user_number,
-      "type" : props.location.state.type,
-      "major": props.location.state.major
-    }*/
+    
+    // Login.js로부터 받은 정보
+    console.log(props);
     
     // 쿠키에 저장된 정보
     let main_info={
@@ -255,8 +246,8 @@ function Main(props){
           "question_id": assignment[Math.floor(i/2)].assignment_id * 1000 + q[i].question_id,
           "name": sampleNames[j],
           "answer_content": [`${sampleNames[j]}의 ${i%2 + 1}번 문제에 대한 답입니다.`],
-          "submitted": true,
-          "score": q[i].full_score,
+          "submitted": (j % 2 == 0 ? true : false),
+          "score": Math.floor(q[i].full_score / (j+1) / (i%2 + 1)),
           "meta": {
             "create_at": new Date('2020-08-02T11:59:00'),
             "modified_at": new Date('2020-08-02T11:59:00')
@@ -267,6 +258,7 @@ function Main(props){
     }
 
 
+
       // 개별 component로 넘길 data들 정리
     // SideBar로 넘길 "과제 제목"들
     const s_assignment = [];
@@ -274,6 +266,100 @@ function Main(props){
       // id: 0, title : 1, state : 2
       s_assignment.push([assignment[i].assignment_id, assignment[i].assignment_name, assignment[i].assignment_state]);
     }
+
+    
+      // select contents from url
+
+      let contents;
+      const component = props.match.params.component;
+      const sub = props.match.params.sub;
+      const last = props.match.params.last;
+  
+      // type이 없으면 재로그인 요청 => 쿠키 완성 시 추가하기
+      
+      // url의 (type, component)에 따라 component 분리
+  
+      if(component==undefined){
+        
+        const home_assignment = [];
+        for(let i=0; i<assignment.length; i++){
+          // id: 0, deadline : 1, title : 2, state : 3, score : 4
+          home_assignment.push([assignment[i].assignment_id, assignment[i].deadline, assignment[i].assignment_name, assignment[i].assignment_state, assignment[i].score]);
+        }
+    
+  
+        contents=
+        <Home
+          type={type}
+          main_info={main_info}
+          as_info ={home_assignment}
+        />;
+      }else{
+        if(type==1){ // 학생이면
+          if(component=="assignment"){
+            if(sub!=undefined){
+              // sub이 있으면
+              contents=
+              <Assignment
+                info={findAssignmentById(Number(sub), assignment)}
+              />   ;
+            }else{
+              // sub이 없으면
+              contents = <Error/>; // 나중에 아예 redirection으로 error page를 새로 생성해도됨
+            }
+          }else{
+            contents = <Error/>;
+          }
+        }
+        else if(type==0){ // 교수이면
+          switch(component){
+            case "assignment":
+              if(sub!=undefined){
+                contents = <SubmissionStatus info={findAssignmentById(Number(sub), assignment)}/>;  
+              }else{
+                contents = <Error/>;
+              }
+              break;
+  
+            case "setting":
+              if(sub!=undefined){
+                if(sub==="add"){
+                  contents= <SetAssignment/>;
+                }else{
+                  contents=
+                  <SetAssignment
+                    as_info={assignment[sub]}
+                  />;  
+                }
+              }else{
+                contents = <Setting
+                  as_info={assignment}
+                />;
+              }
+              break;
+            
+            case "scoring":
+              if (sub != undefined && last != undefined && isAbleToMark(Number(sub), Number(last)))
+                contents = <Scoring info={selectAnswers(Number(sub), Number(last))} number={Number(last)}/>
+              else
+                contents = <Error/>
+              break;
+            
+            case "setList":
+              if(sub!=undefined){
+                contents = <Error/>;
+              }else{
+                contents = <SetStudentList/>;
+              }
+              break;
+  
+            default:
+              contents = <Error/>;
+          }
+        }else{
+          contents = <Error/>;
+        }
+      }
 
 
     const findAssignmentById = (id, asList) => {
@@ -311,101 +397,9 @@ function Main(props){
       return result;
     }
 
-      // select contents from url
-
-    let contents;
-    const component = props.match.params.component;
-    const sub = props.match.params.sub;
-    const last = props.match.params.last;
-
-    // type이 없으면 재로그인 요청 => 쿠키 완성 시 추가하기
-    
-    // url의 (type, component)에 따라 component 분리
-    if(component==undefined){
-      
-      const home_assignment = [];
-      for(let i=0; i<assignment.length; i++){
-        // id: 0, deadline : 1, title : 2, state : 3, score : 4
-        home_assignment.push([assignment[i].assignment_id, assignment[i].deadline, assignment[i].assignment_name, assignment[i].assignment_state, assignment[i].score]);
-      }
-  
-
-      contents=
-      <Home
-        type={type}
-        main_info={main_info}
-        as_info ={home_assignment}
-      />;
-    }else{
-      if(type==1){ // 학생이면
-        if(component=="assignment"){
-          if(sub!=undefined){
-            // sub이 있으면
-            contents=
-            <Assignment
-              info={findAssignmentById(Number(sub), assignment)}
-            />   ;
-          }else{
-            // sub이 없으면
-            contents = <Error/>; // 나중에 아예 redirection으로 error page를 새로 생성해도됨
-          }
-        }else{
-          contents = <Error/>;
-        }
-      }
-      else if(type==0){ // 교수이면
-        switch(component){
-          case "assignment":
-            if(sub!=undefined){
-              contents = <SubmissionStatus info={findAssignmentById(Number(sub), assignment)}/>;  
-            }else{
-              contents = <Error/>;
-            }
-            break;
-
-          case "setting":
-            if(sub!=undefined){
-              if(sub==="add"){
-                contents= <SetAssignment/>;
-              }else{
-                contents=
-                <SetAssignment
-                  as_info={assignment[sub]}
-                />;  
-              }
-            }else{
-              contents = <Setting
-                as_info={assignment}
-              />;
-            }
-            break;
-          
-          case "scoring":
-            if (sub != undefined && last != undefined && isAbleToMark(Number(sub), Number(last)))
-              contents = <Scoring info={selectAnswers(Number(sub), Number(last))} number={Number(last)}/>
-            else
-              contents = <Error/>
-            break;
-          
-          case "setList":
-            if(sub!=undefined){
-              contents = <Error/>;
-            }else{
-              contents = <SetStudentList/>;
-            }
-            break;
-
-          default:
-            contents = <Error/>;
-        }
-      }else{
-        contents = <Error/>;
-      }
-    }
-
       // drawer 코드
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false); // header와 drawer에 동시 적용되어야하기 때문에 Main에 저장
+    const [open, setOpen] = useState(false); // header와 drawer에 동시 적용되어야하기 때문에 Main에 저장
 
     const handleDrawerOpen = () => {
         setOpen(true);

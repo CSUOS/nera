@@ -100,12 +100,8 @@ const Header =(props)=> {
                     <Grid className="name_field"><p className="name">{name}</p>{type===0?"교수":""}<p>님, 환영합니다.</p></Grid>
                     <Grid className="menu_field">
                         <Grid className="header_menu">
-                            <LockIcon/>
-                            <a href="#"><p>회원 정보 변경</p></a>
-                        </Grid>
-                        <Grid className="header_menu">
                             <ExitToAppIcon/>
-                            <a href="#"><p>로그아웃</p></a>
+                            <a href="/"><p>로그아웃</p></a>
                         </Grid>
                     </Grid>
                 </Grid>

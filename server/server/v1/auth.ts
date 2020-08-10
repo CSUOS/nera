@@ -15,32 +15,39 @@ router.use(Bodyparser());
 router.use(Cookie());
 
 // 로그인
-router.post('/login', (ctx: Koa.Context) => {
+router.post('/', async (ctx: Koa.Context) => {
   const { body } = ctx.request;
-  const id = body.user_id;
-  const pw = Buffer.from(crypto.createHmac('sha256', process.env.LoginSecretKey)
-    .update(Buffer.from(body.user_pw).toString('base64'))
-    .digest('hex')).toString('base64');
-  // base64형태로 변환 -> 비밀키와 sha256으로 암호화 -> base64형태로 변환
-  const loginInfo = {
-    id, pw,
+  const id = body.userId;
+  const pw = body.userPw;
+
+  console.log(id);
+  console.log(pw);
+
+  // rabums 연결 전 테스트 용
+  ctx.body = {
+    userId : "string",
+    userName : "우희은",
+    userNumber : 2017920038,
+    meta : {
+      createAt : new Date("2020-08-10"),
+      modifiedAt : new Date("2020-08-10")
+    }
   };
-  //  ctx.cookies.set('access_token', 'login', { httpOnly: true, maxAge: 1000 * 60 * 60 });
-  ctx.body = loginInfo;
-  // 일단 사용자 아이디와 비밀번호(암호화)를 보이도록
-  /*
-  axios.post('/v1/get', {
+/*
+  await axios.post('라붐스주소', {
+    token: '',
     userId: id,
-    userPw: pw,
+    userPw: pw, // 변환된 비밀번호
   }).then((response) => {
-    ctx.body = response;
-    const token = jwt.sign(response, process.env.AccessSecretKey, { expiresIn: '7d' });
-    ctx.cookies.set('access_token', token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7 });
-  }).catch((error) => {
-    ctx.body = error;
-  });
-  */
+    const accessToken = jwt.sign(response.data, process.env.AccessSecretKey, { expiresIn: '7d' });
+    // jwt 토큰 생성
+
+    ctx.cookies.set('access_token', accessToken, { httpOnly: true, maxAge: 1000 * 60 * 60 });
+    // 토큰을 쿠키로 발급
+    ctx.body = response.data; // 확인용
+  });*/
 });
+
 /*
 * 유저 아이디와 비밀번호를 받음
 * NERA 토큰과 같이 RABUMS 서버와 통신

@@ -15,10 +15,23 @@ export default function TimePicker(props) {
   const [endDate, setEndDate] = React.useState(new Date(end_date));
 
   const handleStartDateChange = (date) => {
+    if(date.getTime()<=endDate.getTime()){
+      // 해당 날짜 포함으로 고쳐야함
+      setStartDate(date);
+    }else{
+      alert("발행날짜가 마감날짜보다 이후일 수 없습니다.");
+      setStartDate(startDate);
+    }
     setStartDate(date);
   };
   const handleEndDateChange = (date)=>{
-    setEndDate(date);
+    if(date.getTime()>=startDate.getTime()){
+      // 해당 날짜 포함으로 고쳐야함
+      setEndDate(date);
+    }else{
+      alert("마감날짜가 발행날짜보다 이전일 수 없습니다.");
+      setEndDate(endDate);
+    }
   }
 
   return (

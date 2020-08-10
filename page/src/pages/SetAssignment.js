@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Grid, Paper, TextField, Typography, Button } from '@material-ui/core';
 import {PageInfo, TimePicker} from '../components';
 import clsx from 'clsx';
@@ -10,6 +10,7 @@ import Modal from '@material-ui/core/Modal';
   
 
 function SetAssignment(props){
+    const [q_info, setQInfo] = useState({"content":"","full_score":0});
     const {as_info} = props;
 
         // data 정리
@@ -20,16 +21,18 @@ function SetAssignment(props){
     let end_date = Date.now();
     let score = "";
     let info = "";
+    let questions = [];
 
     if(as_info!=undefined){
         let tmp = as_info.assignment_name.split('[');
         tmp = tmp[1].split(']');
         lecture_name = tmp[0];
         title=tmp[1];
-        start_date = Date.now();
-        end_date = as_info.deadline;
+        start_date = Date.now(); // 시작 날짜 받기 => 나중에 문서 추가되면 실제로 as_info에서 받기
+        end_date = as_info.deadline; // 마감 날짜 받기
         score = as_info.score;
         info = as_info.assignment_info;
+        questions = as_info.questions;
     }
 
     const [open, setOpen] = React.useState(false);
@@ -40,22 +43,30 @@ function SetAssignment(props){
   
     const handleClose = () => {
       setOpen(false);
+      setQInfo([]);
     };
 
-
-    let questions = [];
-
-    if(as_info!=undefined){
-        questions = as_info.questions;
+    const setQuestionInfo = (q_id)=>{
+        if(q_id!=-1){
+            console.log(q_id);
+            for(let i=0; i<questions.length; i++){
+                if(questions[i].question_id===q_id){
+                    let tmp = [];
+                    tmp["content"] = questions[i].question_content;
+                    tmp["full_score"] = questions[i].full_score;
+                    setQInfo(tmp);
+                }
+            }
+        }
     }
 
     function printQuestion(){
         // question_content를 간단히 나타내기
         return(
             questions.map((q)=>
-                <Grid>
-                    <Paper>
-                        <Grid><Typography variant="h6"></Typography></Grid>
+                <Grid className="admin_question_con">
+                    <Paper onClick={event => {handleOpen(); setQuestionInfo(q.question_id);}}>
+                        <Grid><Typography variant="h6">{q.question_content}</Typography></Grid>
                     </Paper>
                 </Grid>
             )
@@ -63,34 +74,20 @@ function SetAssignment(props){
     }
 
     function AddQuestion(){
-        // 해야함
-        const tmp = {  
-            "question_id" : 0,
-            "question_content" : "SHA에 대해 조사하세요.",
-            "full_score" : 60,
-            "question_answer":[],
-            "meta": {
-                "create_at": new Date('2020-08-01T11:59:00'),
-                "modified_at": new Date('2020-08-01T11:59:00'),
-            }
-        }
-        questions.push(tmp);
+        // api로 수정 or 저장하기
     }
 
     function PrintModal(){
         return(
             <Paper className="modal_con">
                 <form className="modal_form">
-                    <TextField label="문제 제목" required rows={1} rowsMax={10000} className="modal_input_field"></TextField>
-                    <TextField label="문제 내용" multiline rows={1} rowsMax={10000} className="modal_input_field"></TextField>
-                    <TextField label="문제 설명" multiline rows={1} rowsMax={10000} className="modal_input_field"></TextField>
-                    <TextField label="배점" required rows={1} rowsMax={10000} className="modal_input_field"></TextField>
-                    <Button onclick={AddQuestion}>저장</Button>
+                    <TextField label="문제 내용" required multiline rows={1} rowsMax={10000} className="modal_input_field" defaultValue={q_info["content"]}></TextField>
+                    <TextField label="배점" required rows={1} rowsMax={10000} className="modal_input_field" defaultValue={q_info["full_score"]}></TextField>
+                    <Button className="save_button" onClick={event=>{handleClose(); AddQuestion();}}>저장</Button>
                 </form>
             </Paper>
         );
     }
-
     return(
         <Grid container direction="column">
             <PageInfo className="assignment_info"
@@ -124,7 +121,7 @@ function SetAssignment(props){
                                 aria-labelledby="add question to assignment"
                                 aria-describedby="add question to assignment"
                                 className="modal">
-                            {PrintModal()}
+                                {PrintModal()}
                             </Modal>
                         </Grid>
                     </Grid>

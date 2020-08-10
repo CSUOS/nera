@@ -88,3 +88,87 @@ a:hover{
     width: 30px;
     
 }
+
+
+
+
+/* Setting */
+
+.s_assignment_rootbox{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+}
+.s_assignment_box{
+    width:100%;
+    margin-bottom: 30px;
+}
+.s_assignment_box>*{
+    padding:10px 20px;
+}
+
+/* SetAssignment */
+.setting_as_con>*{
+    margin-bottom:10px;
+}
+.admin_question_con>div{
+    cursor: pointer;
+    padding: 10px;
+}
+.admin_question_con{
+    margin: 10px 0;
+}
+
+/* SetStudentList */
+.student_list_con{
+    margin: 0 1% 10px 0;
+}
+.student_list_con:hover{
+    cursor: pointer;
+}
+.student_list_con button{
+    padding:10px;
+}
+.list_field_con{
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+/* modal */
+.modal_form{
+    padding:10px;
+}
+.modal_input_field{
+    margin: 10px!important;
+}
+.modal_con{
+    margin: 20px;
+    padding: 10px;
+}
+
+.scoring_bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.score_text {
+    margin: 0 10px 0 10px;
+}
+
+
+/*login*/
+.Login{
+    width:100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login_container>div{
+    margin: 10px;
+}

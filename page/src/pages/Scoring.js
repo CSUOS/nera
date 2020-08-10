@@ -1,13 +1,33 @@
 import React, { Component } from 'react';
-import { Grid, IconButton, Button, TextField } from '@material-ui/core';
-import { ScoringInfo, Problem } from '../components';
+import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
+import { Grid, IconButton, Button, TextField, FormControl, Input, InputAdornment } from '@material-ui/core';
+import { ScoringInfo, UserAnswer } from '../components';
 import PropTypes from 'prop-types';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    margin: {
+        margin: theme.spacing(1),
+    },
+    withoutLabel: {
+        marginTop: theme.spacing(3),
+    },
+    textField: {
+        width: '25ch',
+    },
+}));
+
 const Scoring = (props) => {
+    const classes = useStyles();
     const [page, setPage] = React.useState(0);
-    console.log(props.info);
+    const [scoreText, setScoreText] = React.useState(props.info.questions[page].question_answer[0].score);
+    const [fullScoreText, setFullScoreText] = React.useState(props.info.questions[page].full_score);
 
     const ableToGoPrev = () => {
         return page >= 1;
@@ -18,13 +38,25 @@ const Scoring = (props) => {
     }
 
     const goPrev = () => {
-        if (ableToGoPrev())
-            setPage(page-1);
+        if (ableToGoPrev()) {
+            const currentPage = page;
+            setPage(currentPage-1);
+            setScoreText(props.info.questions[currentPage-1].question_answer[0].score);
+            setFullScoreText(props.info.questions[currentPage-1].full_score);
+        }
     }
 
     const goNext = () => {
-        if (ableToGoNext())
-            setPage(page+1);
+        if (ableToGoNext()) {
+            const currentPage = page;
+            setPage(currentPage+1);
+            setScoreText(props.info.questions[currentPage+1].question_answer[0].score);
+            setFullScoreText(props.info.questions[currentPage+1].full_score);
+        }
+    }
+
+    const handleScoreTextChange = (event) => {
+        setScoreText(event.target.value);
     }
 
     return (
@@ -35,17 +67,26 @@ const Scoring = (props) => {
                 </Grid>
                 <Grid className="save_container">
                     <Grid container direction="row" alignItems="flex-start" justify="flex-end">
-                        <TextField className="score_field" 
+                        {/* <TextField className="score_field" 
                             inputProps={{ style: {textAlign: 'center'} }} 
                             value={`${props.info.questions[page].question_answer[0].score}`}></TextField>
                         <h5 className="score_text">{`/ ${props.info.questions[page].full_score}`}</h5>
-                        <Button className="save_component" variant="contained">저장</Button>
+                        <Button className="save_component" variant="contained">저장</Button> */}
+
+                        <FormControl className={clsx(classes.margin, classes.withoutLabel, classes.textField)}>
+                            <Input
+                                value={scoreText}
+                                onChange={handleScoreTextChange}
+                                endAdornment={<InputAdornment position="end">/{fullScoreText}점</InputAdornment>}>
+                            </Input>
+                        </FormControl>
+
                     </Grid>
                 </Grid>
             </Grid>
 
-            <Problem number={page + 1} info={props.info.questions[page]} editable={false}></Problem>
-
+            <UserAnswer number={page + 1} info={props.info.questions[page]}></UserAnswer>
+            
             <div className="scoring_bottom">
                 <IconButton aria-label="이전 문제" size="medium" onClick={goPrev} disabled={page < 1}>
                     <ArrowBackIcon></ArrowBackIcon>

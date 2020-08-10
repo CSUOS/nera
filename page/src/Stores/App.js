@@ -3,6 +3,8 @@ import { Route, Switch } from 'react-router-dom';
 import { Login, Main } from '../pages';
 
 class App extends Component {
+    // data store
+    
     
     render() {
         return (
