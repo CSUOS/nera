@@ -27,4 +27,5 @@ router.get('/test', async (ctx: Koa.Context) => {
   ctx.body = user;
   console.log(user.iat);
 });
+
 export = router

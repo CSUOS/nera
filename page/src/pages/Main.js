@@ -64,9 +64,6 @@ const useStyles = makeStyles((theme) => ({
 
 function Main(props){
     
-    // Login.js로부터 받은 정보
-    console.log(props);
-    
     // 쿠키에 저장된 정보
     let main_info={
       "id": 1,
