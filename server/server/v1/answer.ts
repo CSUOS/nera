@@ -2,14 +2,12 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import Bodyparser from 'koa-bodyparser';
 import Cookie from 'koa-cookie';
-import dotenv from 'dotenv';
 import { getCurrentDate } from './models/meta';
 
 const router = new Router();
 const { AnswerPaperModel } = require('./models/answerPaperModel');
 const { AssignmentModel } = require('./models/assignmentModel');
 
-dotenv.config();
 router.use(Bodyparser());
 router.use(Cookie());
 router.post('/:assignmentId', async (ctx: Koa.Context) => {
