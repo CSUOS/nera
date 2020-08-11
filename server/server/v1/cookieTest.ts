@@ -4,6 +4,7 @@ import Router from 'koa-router';
 const router = new Router();
 
 const jwt = require('jsonwebtoken');
+const secret = require('../../server');
 
 const userInfo = {
   _id: 0,
@@ -13,7 +14,7 @@ const userInfo = {
 };
 
 router.get('/', async (ctx: Koa.Context) => {
-  const token = jwt.sign(userInfo, ctx.env.accessSecretKey, { expiresIn: '1h' });
+  const token = jwt.sign(userInfo, secret.env.accessSecretKey, { expiresIn: '1h' });
   ctx.cookies.set('access_token', token, { httpOnly: true, maxAge: 1000 * 60 * 60 });
   // 쿠키 발급, 유효시간 1시간 1000ms * 60 * 60
   ctx.user = userInfo;
@@ -23,7 +24,7 @@ router.get('/', async (ctx: Koa.Context) => {
 
 router.get('/test', async (ctx: Koa.Context) => {
   const token = ctx.cookies.get('access_token');
-  const user = jwt.verify(token, ctx.env.accessSecretKey);
+  const user = jwt.verify(token, secret.env.accessSecretKey);
   ctx.body = user;
   console.log(user.iat);
 });

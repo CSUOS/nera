@@ -7,6 +7,7 @@ import crypto from 'crypto';
 
 const router = new Router();
 const jwt = require('jsonwebtoken');
+const secret = require('../../server');
 
 router.use(Bodyparser());
 router.use(Cookie());
@@ -16,14 +17,13 @@ router.post('/', async (ctx: Koa.Context) => {
   const { body } = ctx.request;
   const id = body.userId;
   const pw = body.userPw;
-  const secret = ctx.env;
 
-  const response = await axios.post(secret.rabumsAddr, {
-    token: secret.rabumsToken,
+  const response = await axios.post(secret.env.rabumsAddr, {
+    token: secret.env.rabumsToken,
     userId: id, // train96
     userPw: pw, // 변환된 비밀번호
   });
-  const accessToken = jwt.sign(response.data, secret.accessSecretKey, { expiresIn: '1h' });
+  const accessToken = jwt.sign(response.data, secret.env.accessSecretKey, { expiresIn: '1h' });
   // jwt 토큰 생성
 
   ctx.cookies.set('access_token', accessToken, { httpOnly: true, maxAge: 1000 * 60 * 60 });

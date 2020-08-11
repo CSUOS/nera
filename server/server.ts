@@ -1,21 +1,32 @@
 import Koa from 'koa';
 import app from './server/index';
-import getEnv from './config';
+import loadConfig from './config';
 
 const mongoose = require('mongoose');
 
-async function mongoConnect() {
-  const secret = await getEnv();
+const port = process.env.PORT || 3000;
+
+function mongoConnect(secret: any) { // mongoDB 연결 함수
   mongoose.connect(secret.mongoAddr,
     { useNewUrlParser: true, useUnifiedTopology: true },
     () => { console.log('db와 연결되었습니다.'); });
 }
 
-mongoConnect();
+loadConfig().then(async (res: any) => {
+  await mongoConnect(res); // mongoDB 연결
+  await app.listen(port); // 서버 구동
+  console.info(`Listening to http://0.0.0.0:${port}`);
+  exports.env = {
+    accessSecretKey: res.accessSecretKey,
+    // access_token 암호화 키값
 
-const port = process.env.PORT || 3000;
+    mongoAddr: res.mongoAddr,
+    // mongoDB 주소
 
-console.info(`Listening to http://0.0.0.0:${port}`);
-const server = app.listen(port);
+    rabumsAddr: res.rabumsAddr,
+    // RABUMS 주소
 
-export default server;
+    rabumsToken: res.rabumsToken,
+    // RABUMS 토큰
+  };
+});
