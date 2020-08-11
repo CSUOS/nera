@@ -9,6 +9,8 @@ import Student from './v1/student';
 import Test from './v1/cookieTest'; // 테스트용 쿠키 발급
 import Assignment from './v1/assignment';
 
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
 const serve = require('koa-static');
 const send = require('koa-send');
 const { jwtMiddleware, envMiddleware } = require('../config');

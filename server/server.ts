@@ -13,7 +13,7 @@ async function mongoConnect() {
 
 mongoConnect();
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 console.info(`Listening to http://0.0.0.0:${port}`);
 const server = app.listen(port);
