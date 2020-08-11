@@ -44,7 +44,7 @@ exports.jwtMiddleware = async (ctx: Koa.Context, next: any) => {
     decoded = await jwtDecoder(token, secretKey);
     if (Date.now() / 1000 - decoded.iat < 60 * 60) {
       // 유효한 토큰이라면
-      console.log(1);
+
       // 토큰을 디코드
 
       const user = {

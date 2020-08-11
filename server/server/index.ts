@@ -39,10 +39,10 @@ router.get('/', (ctx: Koa.Context) => {
   ctx.body = 'hello, NERA!';
 });
 
-login.use('/v1/login', Login.routes());
+login.use('/v1/login', Login.routes()); // 로그인 필요하지 않은 api
 login.use('/v1/cookieTest', Test.routes());
 
-router.use('/api', Api.routes());
+router.use('/api', Api.routes()); // 로그인이 필요한 api
 router.use('/v1/answer', Answer.routes());
 router.use('/v1/student', Student.routes());
 router.use('/v1/assignment', Assignment.routes());

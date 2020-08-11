@@ -17,20 +17,24 @@ router.post('/', async (ctx: Koa.Context) => {
   const { body } = ctx.request;
   const id = body.userId;
   const pw = body.userPw;
+  try {
+    const response = await axios.post(secret.env.rabumsAddr, {
+      token: secret.env.rabumsToken,
+      userId: id, // train96
+      userPw: pw, // 변환된 비밀번호
+    });
 
-  const response = await axios.post(secret.env.rabumsAddr, {
-    token: secret.env.rabumsToken,
-    userId: id, // train96
-    userPw: pw, // 변환된 비밀번호
-  });
-  const accessToken = jwt.sign(response.data, secret.env.accessSecretKey, { expiresIn: '1h' });
-  // jwt 토큰 생성
+    const accessToken = jwt.sign(response.data, secret.env.accessSecretKey, { expiresIn: '1h' });
+    // jwt 토큰 생성
 
-  ctx.cookies.set('access_token', accessToken, { httpOnly: true, maxAge: 1000 * 60 * 60 });
-  // 토큰을 쿠키로 발급 1000ms * 60 * 60 = 1h
-  ctx.body = response.data; // 확인용
-  ctx.user = response.data;
-  ctx.role = String(response.data.userNumber).charAt(0);
+    ctx.cookies.set('access_token', accessToken, { httpOnly: true, maxAge: 1000 * 60 * 60 });
+    // 토큰을 쿠키로 발급 1000ms * 60 * 60 = 1h
+    ctx.body = response.data; // 확인용
+    ctx.user = response.data;
+    ctx.role = String(response.data.userNumber).charAt(0);
+  } catch (error) {
+    ctx.body = error;
+  }
 });
 /*
 * 유저 아이디와 비밀번호를 받음

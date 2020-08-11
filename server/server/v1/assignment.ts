@@ -15,13 +15,15 @@ router.use(Cookie());
 async function calState(assignment: any, userInfo: any) {
   const now = getCurrentDate().getTime();
   if ((now - assignment.publishingTime.getTime()) < 0) {
-    return 0; // 공개전, 진행중, 채점완료
+    return 0; // 공개전
   }
   if ((now - assignment.deadline.getTime()) < 0) {
     return 1; // 진행중
   }
+  //---------
   if (String(userInfo.userNumber).charAt(0) === '1') { return 2; }
-  const answer = await AnswerPaperModel.findOne({ userNumber: userInfo.userNumber }).exec();
+  const answer = await AnswerPaperModel
+    .findOne({ userNumber: userInfo.userNumber, assignmentId: assignment.assignmentId }).exec();
   for (let i = 0; i < answer.answers.length; i += 1) {
     if (answer.answers[i].score === -1) {
       return 2; // 마감됨
@@ -31,6 +33,7 @@ async function calState(assignment: any, userInfo: any) {
 }
 
 router.post('/', async (ctx: Koa.Context) => {
+  // 과제 생성 api
   try {
     const { body } = ctx.request;
     // 유저가 보낸 데이터
