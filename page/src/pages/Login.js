@@ -20,9 +20,14 @@ function Login(){
         return result
     }
 
-    function hashProcess(){
+    async function hashProcess(){
         const sha256 = require('sha256');
-        const hashed_token = 'hi'; // api로 받기
+        const hashed_token = await axios.get('/v1/token',{
+        }).catch((e)=>{
+            if(e.response.status==404){
+                alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
+            }
+        });
 
         // base64
         let hashed_pw = btoa(pw);
@@ -37,24 +42,23 @@ function Login(){
     }
 
     async function setLoginData(e){ // pw 암호화 및 api data 받기
-        try{
-/*
-            let hashed_pw = await hashProcess();
+        let hashed_pw = await hashProcess();
 
-            var response = await axios.post('/v1/auth', { // get api data
-                userId: id,
-                userPw: hashed_pw,
-            }).catch((e)=>{
-                // error 처리 필요
-                console.log(e);
-            })
-*/
-            window.location.href="/home";
+        var response = await axios.post('/v1/auth', { // get api data
+            userId: id,
+            userPw: hashed_pw,
+        }).catch((e)=>{
+            const status = e.response.status;
+            if(status==400){
+                alert("아이디, 패스워드가 기입되었는지 다시 한 번 확인해주세요.");
+            }else if(status==403){
+                alert("아이디, 패스워드가 정확히 기입되었는지 다시 한 번 확인해주세요.");
+            }else if(status==500){
+                alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
+            }
+        })
 
-        }catch(e){
-            // error 처리 하기
-            console.log(e);
-        }
+        window.location.href="/home";
     }
 
     function changeId(){
