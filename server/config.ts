@@ -38,16 +38,16 @@ exports.jwtMiddleware = async (ctx: Koa.Context, next: any) => {
     // 토큰이 없을 경우 인증 실패
   }
   const secretKey = secret.env.accessSecretKey;
-  // ctx.env에 저장된 로그인 토큰 암호화 키
+  // Vault 에 저장된 로그인 토큰 암호화 키
 
   let decoded: typeof jwt;
   try {
-    decoded = await jwtDecoder(token, secretKey);
-    // 토큰을 디코드
+    if (Date.now() / 1000 - decoded.iat < 60 * 60) {
+      // 유효한 토큰이라면
 
-    if (Date.now() / 1000 - decoded.iat > 60 * 50) {
-      // 발행된지 50분이 지났을 경우 재발급
-      // refresh token 사용하도록 수정할 것
+      decoded = await jwtDecoder(token, secretKey);
+      // 토큰을 디코드
+
       const user = decoded;
       // 디코딩한 정보
 
@@ -55,10 +55,10 @@ exports.jwtMiddleware = async (ctx: Koa.Context, next: any) => {
       // 새 토큰
 
       ctx.cookies.set('access_token', freshToken, { httpOnly: true, maxAge: 1000 * 60 * 60 });
-      // 쿠키 새로 발급
+      // api 요청시마다 쿠키 새로 발급
+      ctx.user = decoded; // 유저 정보 update
+      ctx.role = String(ctx.user.userNumber).charAt(0); // 권한 update
     }
-    ctx.user = decoded; // 유저 정보 update
-    ctx.role = String(ctx.user.userNumber).charAt(0); // 권한 updatee
   } catch (error) {
     console.log(error);
     ctx.user = { // 에러일 경우 초기화
