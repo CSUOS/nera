@@ -31,7 +31,9 @@ router.post('/', async (ctx: Koa.Context) => {
   ctx.body = response.data; // 확인용
   ctx.user = response.data;
   ctx.role = String(response.data.userNumber).charAt(0);
-  
+});
+
+
 /*
 * 유저 아이디와 비밀번호를 받음
 * NERA 토큰과 같이 RABUMS 서버와 통신

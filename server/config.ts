@@ -36,7 +36,7 @@ exports.jwtMiddleware = async (ctx: Koa.Context, next: any) => {
     ctx.throw(401, '인증 실패');
     // 토큰이 없을 경우 인증 실패
   }
-  const secretKey = ctx.env.accessSecretKey;
+  const secretKey = 'secretkey';//ctx.env.accessSecretKey;
   // ctx.env에 저장된 로그인 토큰 암호화 키
 
   let decoded: typeof jwt;

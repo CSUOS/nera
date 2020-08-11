@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from "axios";
-import { Link } from 'react-router-dom';
 import { Grid, TextField, Button, Typography } from '@material-ui/core';
 
 function Login(){
@@ -39,19 +38,18 @@ function Login(){
 
     async function setLoginData(e){ // pw 암호화 및 api data 받기
         try{
+/*
             let hashed_pw = await hashProcess();
 
-            if(hashed_pw){
-                var response = await axios.post('/v1/auth', { // get api data
-                    userId: id,
-                    userPw: hashed_pw,
-                }).catch((e)=>{
-                    console.log(e);
-                })
-
-                //if(response.status===200)
-                    //window.location.href="/home";
-            }
+            var response = await axios.post('/v1/auth', { // get api data
+                userId: id,
+                userPw: hashed_pw,
+            }).catch((e)=>{
+                // error 처리 필요
+                console.log(e);
+            })
+*/
+            window.location.href="/home";
 
         }catch(e){
             // error 처리 하기
@@ -68,21 +66,17 @@ function Login(){
         const password = document.querySelector('#userPw');
         setPw(password.value);
     }
-
-    useEffect(()=>{
-
-    });
+    
+    /* rendering */
 
     return (
         <Grid className="Login">
-            <form method="post">
-                <Grid container alignItems="center" justifycontents="center" className="login_container" direction="column">
-                    <Typography variant="h5">로그인</Typography>
-                    <TextField variant="outlined" id="userId" label="id" required rows={1} rowsMax={10} onChange={changeId}></TextField>
-                    <TextField variant="outlined" id="userPw" label="password" type="password" required rows={1} rowsMax={10} onChange={changePw}></TextField>
-                    <Button onClick={setLoginData}>login</Button>
-                </Grid>
-            </form>
+            <Grid container alignItems="center" justifycontents="center" className="login_container" direction="column">
+                <Typography variant="h5">로그인</Typography>
+                <TextField variant="outlined" id="userId" label="id" required rows={1} rowsMax={10} onChange={changeId}></TextField>
+                <TextField variant="outlined" id="userPw" label="password" type="password" required rows={1} rowsMax={10} onChange={changePw}></TextField>
+                <Button onClick={setLoginData}>login</Button>
+            </Grid>
         </Grid>
     );
 }
