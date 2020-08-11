@@ -39,16 +39,19 @@ exports.jwtMiddleware = async (ctx: Koa.Context, next: any) => {
   }
   const secretKey = secret.env.accessSecretKey;
   // Vault 에 저장된 로그인 토큰 암호화 키
-
   let decoded: typeof jwt;
   try {
+    decoded = await jwtDecoder(token, secretKey);
     if (Date.now() / 1000 - decoded.iat < 60 * 60) {
       // 유효한 토큰이라면
-
-      decoded = await jwtDecoder(token, secretKey);
+      console.log(1);
       // 토큰을 디코드
 
-      const user = decoded;
+      const user = {
+        userId: decoded.userId,
+        userName: decoded.userName,
+        userNumber: decoded.userNumber,
+      };
       // 디코딩한 정보
 
       const freshToken = jwt.sign(user, secretKey, { expiresIn: '1h' });
