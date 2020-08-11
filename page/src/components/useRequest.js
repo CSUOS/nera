@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function useRequest(url) {
+function UseRequest(url) {
   // loading, response, error 값을 다루는 hooks
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
@@ -25,4 +25,4 @@ function useRequest(url) {
   return [response, loading, error]; // 현재 값들을 배열로 반환
 }
 
-export default useRequest;
+export default UseRequest;

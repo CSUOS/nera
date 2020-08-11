@@ -4,7 +4,7 @@ import {AccountInfo, AssignmentBox} from "../components";
 import { Grid } from '@material-ui/core';
 
 const Home = (props)=>{
-    const {type, main_info, as_info} = props;
+    const {type, user_info, as_info} = props;
     let progress_assignment = [];
     let finish_assignment = [];
 
@@ -43,10 +43,10 @@ const Home = (props)=>{
     return (
         <Grid container direction="column" spacing={24}>
             <AccountInfo 
-                name={main_info.name} 
-                number={main_info.user_number} 
-                type={main_info.type} 
-                major = {main_info.major}
+                name={user_info.name} 
+                number={user_info.user_number} 
+                type={user_info.type} 
+                major = {user_info.major}
             />
             <Grid container direction="column" className="contents_con">   
                 <Grid className="contents_title"><h6>{type===0?"마감 전 과제":"제출 가능한 과제" // 제목 수정 필요
@@ -55,7 +55,7 @@ const Home = (props)=>{
                     {
                         progress_assignment.map((as)=>
                             <AssignmentBox
-                                type={main_info.type}
+                                type={user_info.type}
                                 as_info={as}
                             />
                         )
@@ -68,7 +68,7 @@ const Home = (props)=>{
                     {
                         finish_assignment.map((as)=>
                             <AssignmentBox
-                                type={main_info.type}
+                                type={user_info.type}
                                 as_info={as}
                             />
                         )
