@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import {Link} from 'react-router-dom';
-import { Paper } from '@material-ui/core';
+import { Grid, Paper } from '@material-ui/core';
 
 const AssignmentBox = (props)=>{
   const {type, as_info} = props;
@@ -45,11 +45,11 @@ const AssignmentBox = (props)=>{
   return(
     <Paper className="assignment_box">
       <Link to ={"/home/assignment/"+as_info[0]}>
-            <div className="a_box_header">
-              <div className="a_box_title">{as_info[2]}</div>
-              <div className={classes.circleSytle}>{state_word}</div>
-            </div>
-            <div className="a_box_deadline">{deadline} 까지</div>
+            <Grid className="a_box_header">
+              <Grid className="a_box_title">{as_info[2]}</Grid>
+              <Grid className={classes.circleSytle}>{state_word}</Grid>
+            </Grid>
+            <Grid className="a_box_deadline">{deadline} 까지</Grid>
       </Link>
     </Paper>
   );

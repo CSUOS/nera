@@ -1,4 +1,6 @@
 import React from 'react';
+import { Grid } from "@material-ui/core";
+
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Button from '@material-ui/core/Button';
@@ -141,7 +143,7 @@ class BottomPopup extends React.Component {
         const { classes } = this.props;
 
         return (
-            <div>
+            <Grid>
                 {/* 디버그용 */}
                 <Button className={classes.margin} onClick={this.handleClick}>
                     최근 수정한 과제 알림 디버그!
@@ -162,7 +164,7 @@ class BottomPopup extends React.Component {
                         message="남은 과제하러 오셨나요? 최근에 수정한 과제가 있습니다."
                     />
                 </Snackbar>
-            </div>
+            </Grid>
         );
     }
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 
@@ -43,16 +44,16 @@ export default function SimpleModal() {
   };
 
   const body = (
-    <div style={modalStyle} className={classes.paper}>
+    <Grid style={modalStyle} className={classes.paper}>
       <h2 id="simple-modal-title">Question</h2>
       <p id="simple-modal-description">
         Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
       </p>
-    </div>
+    </Grid>
   );
 
   return (
-    <div>
+    <Grid>
       <button type="button" onClick={handleOpen}>
         문제 추가
       </button>
@@ -64,6 +65,6 @@ export default function SimpleModal() {
       >
         {body}
       </Modal>
-    </div>
+    </Grid>
   );
 }

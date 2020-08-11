@@ -1,14 +1,8 @@
-import { Grid, TextField } from '@material-ui/core';
+import { Grid, Typography, Paper } from '@material-ui/core';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-const Problem = (props) => {
-    const [text, setText] = React.useState(props.info.question_answer[0].answer_content[0]);
-    
-    const handleTextChange = (event) => {
-        setText(event.target.value);
-    }
-
+const UserAnswer = (props) => {
     return (
         <Grid container className="problem_container" direction="column">
             <Grid container className="problem_description" direction="row" alignItems="flex-start" justify="flex-start">
@@ -16,23 +10,16 @@ const Problem = (props) => {
                 <h6 align="left">{props.info["question_content"]}</h6>
             </Grid>
 
-            <h6 className="problem_score" align="right">{props.info["full_score"] + "점"}</h6>
             {props.image ? <img className="problem_image" src={props.image} alt="Problem Image" /> : null}
 
-            <TextField
-                label="답안"
-                margin="normal"
-                required multiline
-                rows={1}
-                rowsMax={10000}
-                value={text}
-                onChange={handleTextChange}>
-            </TextField>
+            <Paper className="answer_content">
+                <Typography variant="body1">{props.info.question_answer[0].answer_content[0]}</Typography>
+            </Paper>
         </Grid>
     );
 }
 
-Problem.propTypes = {
+UserAnswer.propTypes = {
     info: PropTypes.shape({
         "question_id": PropTypes.number,
         "question_content": PropTypes.string,
@@ -56,4 +43,4 @@ Problem.propTypes = {
     })
 }
 
-export default Problem;
+export default UserAnswer;
