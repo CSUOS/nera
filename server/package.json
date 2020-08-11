@@ -36,7 +36,8 @@
     "mikro-orm": "^3.6.15",
     "mongodb": "^3.6.0",
     "mongoose": "^5.9.27",
-    "mongoose-auto-increment": "^5.0.1"
+    "mongoose-auto-increment": "^5.0.1",
+    "node-vault": "^0.9.20"
   },
   "devDependencies": {
     "@types/jest": "^26.0.4",
