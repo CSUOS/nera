@@ -10,6 +10,11 @@ import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
+// 로컬에서 디버그할 땐 서버를 3000에 실행시킨 다음,
+// 프론트를 3001에서 실행시킨다.
+// 그 후 아래 변수를 http://localhost:3000로 설정한다.
+// 로컬에서 디버그하는 상황 외에는 실제 서버 주소로 설정해야 한다.
+const SERVER_ADDR = "http://localhost:3000"
 
 /* style definition => 대부분 css로 옮길 예정 */
 
@@ -62,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 /* main pages */
-function Main(props) {
+async function Main(props) {
 
   /* get data from cookie */
   // 쿠키가 제대로 되어있지 않으면 login 페이지로 redirect 시키기
@@ -297,86 +302,74 @@ function Main(props) {
 
   /* 지워야 할 부분 (임시 data) */
 
-  let user_info = undefined;
-  let assignment = undefined;
-
   async function getUserInfo() {
-    if (user_info === undefined) {
-      user_info = await axios.get('/v1/userInfo')
-        .catch((e) => {
-          const status = e.response.status;
-          if (status === 401) {
-            alert("사용자 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
-          }
-          else if (status === 500) {
-            alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...")
-          }
-          window.location.href = "/";
-        });
+    try {
+      let response = await axios.get(SERVER_ADDR + '/v1/userInfo', {}, { credentials: true });
+      return response;
+    } catch (err) {
+      const status = err.response.status;
+      if (status === 401) {
+        alert("사용자 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
+      }
+      else if (status === 500) {
+        alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...")
+      }
+      //window.location.href = "/";
     }
-
-    return user_info;
+    return undefined;
   }
 
   async function getAssignmentInfo() {
-    if (assignment === undefined) {
-      assignment = await axios.get('/v1/assignment')
-        .catch((e) => {
-          const status = e.response.status;
-          if (status === 400 || status === 401) {
-            alert("과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
-          }
-          else if (status === 404) {
-            alert("과제를 찾을 수 없습니다.");
-          }
-          else if (status === 500) {
-            alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...")
-          }
-          window.location.href = "/";
-        });
+    try {
+      let response = await axios.get(SERVER_ADDR + '/v1/assignment', {}, { credentials: true });
+    } catch (err) {
+      const status = err.response.status;
+      if (status === 400 || status === 401) {
+        alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
+      }
+      else if (status === 404) {
+        alert("과제를 찾을 수 없습니다.");
+      }
+      else if (status === 500) {
+        alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...")
+      }
+      //window.location.href = "/";
     }
-
-    return assignment;
+    return undefined;
   }
 
   // 개별 component로 넘길 data들 정리
 
+  // 사용자의 type (교수 0, 학생 1)
+  let type;
   // SideBar로 넘길 "과제 제목"들
-  async function getDataForSideBar() {
-    let assignment = await getAssignmentInfo();
+  let s_assignment = [];
+  // home으로 넘길 정보 정리
+  let home_assignment = [];
 
-    const s_assignment = [];
-    for (let i = 0; i < assignment.length; i++) {
-      // id: 0, title : 1, state : 2
-      s_assignment.push(
-        [
-          assignment[i].assignmentId,
-          assignment[i].assignmentName,
-          assignment[i].assignmentState
-        ]);
-    }
+  let [user_info, assignment] = await Promise.all(getUserInfo(), getAssignmentInfo());
 
-    return s_assignment;
+  type = String(user_info.userNumber).charAt(0) === 1 ? 0 : 1;
+
+  for (let i = 0; i < assignment.length; i++) {
+    // id: 0, title : 1, state : 2
+    s_assignment.push(
+      [
+        assignment[i].assignmentId,
+        assignment[i].assignmentName,
+        assignment[i].assignmentState
+      ]);
   }
 
-  // home으로 넘길 정보 정리
-  async function getDataForHome() {
-    let assignment = await getAssignmentInfo();
-
-    // id, deadline, name, state, score
-    const home_assignment = [];
-    for (let i = 0; i < assignment.length; i++) {
-      home_assignment.push(
-        [
-          assignment[i].assignmentId,
-          assignment[i].deadline,
-          assignment[i].assignmentName,
-          assignment[i].assignmentState,
-          assignment[i].score
-        ]);
-    }
-
-    return home_assignment;
+  for (let i = 0; i < assignment.length; i++) {
+    home_assignment.push(
+      [
+        assignment[i].assignmentId,
+        assignment[i].deadline,
+        assignment[i].assignmentName,
+        assignment[i].assignmentState,
+        assignment[i].score
+      ]);
   }
 
   /* select component from url */
@@ -392,18 +385,18 @@ function Main(props) {
     // home component setting
     contents =
       <Home
-        type={getUserInfo()}
-        user_info={getUserInfo()}
-        as_info={getDataForHome()}
+        type={type}
+        user_info={user_info}
+        as_info={home_assignment}
       />;
   } else { // 'home/' => 여러 컴포넌트로 분리
-    if (String(getUserInfo().id).charAt(0) == 2) { // 학생이면
+    if (type === 1) { // 학생이면
       switch (component) {
         case "assignment": // 'home/assignment' => Assignment.js
           if (sub != undefined) { // 'home/assignment/:as_id' (as_id가 sub)
             contents =
               <Assignment
-                info={findAssignmentById(Number(sub), getAssignmentInfo())}
+                info={findAssignmentById(Number(sub), assignment)}
               />;
           } else { // 'home/assignment' default page가 없음
             // 첫번째 과제 페이지로 redirect
@@ -413,21 +406,20 @@ function Main(props) {
         default: // 학생은 현재 Assignment 컴포넌트 말고 다른 컴포넌트가 없음
           contents = <Error />;
       }
-    } else if (String(getUserInfo().id).charAt(0) != 2) { // 교수이면
+    } else if (type === 0) { // 교수이면
       switch (component) {
         case "assignment": // 'home/assignment' => SubmissionStatus.js
           if (sub != undefined) {
-            contents = <SubmissionStatus info={findAssignmentById(Number(sub), getAssignmentInfo())} />;
+            contents = <SubmissionStatus info={findAssignmentById(Number(sub), assignment)} />;
           } else { // 'home/assignment' default page가 없음
-            // 첫번째 과제 페이지로 redirect
-            window.location.href = "/home/assignment/1";
+            contents = <Error></Error>
           }
           break;
 
         case "setting":
           if (sub == undefined) { // 'home/setting' => Setting.js
             contents = <Setting
-              as_info={getAssignmentInfo()}
+              as_info={assignment}
             />;
           } else {
             if (sub === "add") { // 'home/setting/add' => SetAssignment.js
@@ -436,7 +428,7 @@ function Main(props) {
               // add가 아닌 Number type이면 해당 id의 과제 설정창 => SetAssignment.js
               contents =
                 <SetAssignment
-                  as_info={getAssignmentInfo()[sub]}
+                  as_info={findAssignmentById(Number(sub), assignment)}
                 />;
             }
           }
@@ -448,7 +440,7 @@ function Main(props) {
           if (sub != undefined && last != undefined)
             // TODO: API와 동기화를 시키면서 isAbleToMark와 selectAnswers를 사용하지 않기로 했으므로, 
             // 그 컴포넌트의 코드를 수정해야 함.
-            contents = <Scoring info={undefined} number={Number(last)} />
+            contents = <Scoring as_info={assignment} number={Number(last)} />
           else
             contents = <Error />
           break;
@@ -491,8 +483,8 @@ function Main(props) {
       <Header
         drawerOpen={handleDrawerOpen}
         open={open}
-        type={String(getUserInfo().id).charAt(0)}
-        name={getUserInfo().name}
+        type={type}
+        name={user_info.userName}
       />
       <Drawer
         className={classes.drawer}
@@ -504,9 +496,9 @@ function Main(props) {
         }}
       >
         <SideBar
-          type={String(getUserInfo().id).charAt(0)}
+          type={type}
           drawerClose={handleDrawerClose}
-          assignment_info={getDataForSideBar()}
+          assignment_info={s_assignment}
         />
       </Drawer>
       <Grid

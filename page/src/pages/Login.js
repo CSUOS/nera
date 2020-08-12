@@ -35,7 +35,7 @@ function Login(){
 
     async function hashProcess(){
         try {
-            let hashed_token = await axios.get(SERVER_ADDR+'/v1/token');
+            let hashed_token = await axios.get(SERVER_ADDR+'/v1/token', {}, { credentials: true });
 
             if (hashed_token.status == 404) {
                 alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
@@ -59,7 +59,7 @@ function Login(){
             var response = await axios.post(SERVER_ADDR + '/v1/login', { // get api data
                 userId: id,
                 userPw: hashed_pw,
-            });
+            }, { credentials: true });
 
             const status = response.status;
             const rabumsStatus = response?.data?.message?.slice(response.data.message.length - 3);
@@ -91,7 +91,7 @@ function Login(){
 
     async function loginAsTestAccount(e) {
         try {
-            let hashed_token = await axios.get(SERVER_ADDR+'/v1/token');
+            let hashed_token = await axios.get(SERVER_ADDR+'/v1/token', {}, { credentials: true });
 
             if (hashed_token.status == 404) {
                 alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
@@ -101,7 +101,7 @@ function Login(){
             let response = await axios.post(SERVER_ADDR+'/v1/login', { // get api data
                 userId: "train96",
                 userPw: hashData(hashed_token.data + "962d3b4a8f231a9d9902619e1775648ee8db3ac90966ad013a27bdfa24940f93"),
-            });
+            }, { credentials: true });
 
             const status = response.status;
             const rabumsStatus = response?.data?.message?.slice(response.data.message.length - 3);
