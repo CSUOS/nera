@@ -8,13 +8,14 @@ const secret = require('./server');
 dotenv.config();
 
 export default function loadConfig() {
-  return axios.get(process.env.VADDR, {
+  const vault = `${process.env.vaultAddr}/v1/csuos/nera`;
+  return axios.get(vault, {
     // VAULT 서버와 통신, 환경변수로 VAULT 주소 받음
     headers: {
-      'X-Vault-Token': process.env.VAULT_TOKEN,
+      'X-Vault-Token': process.env.vaultToken,
       // 환경변수로 VAULT 토큰 값 받음
     },
-  }).then((res: any) => res.data.data.data).catch((err: any) => {
+  }).then((res: any) => res.data.data).catch((err: any) => {
     console.log(err);
   });
 }
