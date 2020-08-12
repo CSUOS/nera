@@ -11,6 +11,8 @@ import Assignment from './v1/assignment';
 import Token from './v1/token';
 import UserInfo from './v1/userInfo';
 
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
 const serve = require('koa-static');
 const send = require('koa-send');
 const { jwtMiddleware, envMiddleware } = require('../config');

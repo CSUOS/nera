@@ -108,3 +108,7 @@ h5{
 h6{
     font-size:1.1rem;
 }
+
+form:focus, button:focus{
+    outline: none;
+}

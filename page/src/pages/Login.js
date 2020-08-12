@@ -1,38 +1,83 @@
-import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
+import React, { useState } from 'react';
+import axios from "axios";
+import { Grid, TextField, Button, Typography } from '@material-ui/core';
 
-class Login extends Component {
-    componentWillMount(){
-        // before rendering
-        
-        // 회원 인증 서버에서 일치하는 데이터 가져오기
-        // 일단은 직접 작성
-        this.id = 1;
-        this.name = "우희은";
-        this.major = "컴퓨터과학부";
-        this.type = 1;
-        this.student_number = "2017920038";
+function Login(){
+    // id, password
+    const [id,setId]= useState();
+    const [pw,setPw]= useState();
+
+
+    String.prototype.hexEncode = function(){ // string to hex code
+        var hex, i;
+    
+        var result = "";
+        for (i=0; i<this.length; i++) {
+            hex = this.charCodeAt(i).toString(16);
+            result += ("000"+hex).slice(-4);
+        }
+    
+        return result
     }
 
-    render() {
-        const path_name = "/home";
-        return (
-            <div className="Login">
-                <Link to={{
-                    pathname:path_name,
-                    state:{
-                        // 로그인 시 회원인증 서버에서 넘어오는 정보 넘기기
-                        id: this.id,
-                        name: this.name,
-                        major: this.major,
-                        type: this.type,
-                        student_number: this.student_number
-                    }
-                }}>
-                    <button>click</button>
-                </Link>
-            </div>
-        );
+    function hashProcess(){
+        const sha256 = require('sha256');
+        const hashed_token = 'hi'; // api로 받기
+
+        // base64
+        let hashed_pw = btoa(pw);
+        // hash sha256
+        hashed_pw = sha256(hashed_pw);
+        // hex encoding
+        hashed_pw = hashed_pw.hexEncode();
+        // hash with token
+        hashed_pw = sha256(hashed_token + hashed_pw);
+
+        return hashed_pw;
     }
+
+    async function setLoginData(e){ // pw 암호화 및 api data 받기
+        try{
+/*
+            let hashed_pw = await hashProcess();
+
+            var response = await axios.post('/v1/auth', { // get api data
+                userId: id,
+                userPw: hashed_pw,
+            }).catch((e)=>{
+                // error 처리 필요
+                console.log(e);
+            })
+*/
+            window.location.href="/home";
+
+        }catch(e){
+            // error 처리 하기
+            console.log(e);
+        }
+    }
+
+    function changeId(){
+        const id = document.querySelector('#userId');
+        setId(id.value);
+    }
+
+    function changePw(){
+        const password = document.querySelector('#userPw');
+        setPw(password.value);
+    }
+    
+    /* rendering */
+
+    return (
+        <Grid className="Login">
+            <Grid container alignItems="center" justifycontents="center" className="login_container" direction="column">
+                <Typography variant="h5">로그인</Typography>
+                <TextField variant="outlined" id="userId" label="id" required rows={1} rowsMax={10} onChange={changeId}></TextField>
+                <TextField variant="outlined" id="userPw" label="password" type="password" required rows={1} rowsMax={10} onChange={changePw}></TextField>
+                <Button onClick={setLoginData}>login</Button>
+            </Grid>
+        </Grid>
+    );
 }
 export default Login

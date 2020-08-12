@@ -72,7 +72,9 @@
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
+    height: 120px;
 }
+
 .assignment_box{
     min-width: 320px;
     display: flex;
@@ -107,12 +109,6 @@
     font-weight: bold;
 }
 
-.problem_info {
-    padding: 10px;
-    font-style: italic;
-    float: left;
-}
-
 .problem_score {
     padding: 10px;
     float: right;
@@ -132,24 +128,6 @@
     object-fit: cover;
 }
 
-/* Setting */
-
-.s_assignment_rootbox{
-    display: flex;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    flex-direction: column;
-    align-items: center;
-}
-.s_assignment_box{
-    width:100%;
-    margin-bottom: 30px;
-}
-.s_assignment_box>*{
-    padding:10px 20px;
-}
-
-/* SetAssignment */
-.setting_as_con>*{
-    margin-bottom:10px;
+.answer_content {
+    padding: 10px;
 }

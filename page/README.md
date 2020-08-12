@@ -26,7 +26,7 @@ page 폴더가 현재 작업 디렉토리인 채로 `npm start`나 `yarn start` 
 
    주소에 따라 각각의 컴포넌트 호출
 
-5. Header, SideBar, Home, Assignment, Error, Setting.js=> Main.js
+5. Header, SideBar, Home, Assignment, Error, Setting.js, SubmissionStatus.js, Scoring.js => Main.js
 
    Main.js는 Header와 SideBar 그리고 메인 컨텐츠 영역으로 구성되어있음
    
@@ -80,8 +80,9 @@ material 라이브러리의 커스터마이징은 *material.css*에서 관리
 | ------------------------------------------------------------ | ----------- | -------------- |
 | http://localhost:3000/                                       | 로그인      | 버튼 클릭 시 home 페이지로 이동 |
 | http://localhost:3000/home                                   | 메인 페이지 |                |
-| http://localhost:3000/home/assignment/:as_id | 과제 페이지 | type에 따라 컴포넌트가 랜더링 됨<br>학생 : Assignment.js<br>교수: ? |
+| http://localhost:3000/home/assignment/:as_id | 과제 페이지 | type에 따라 컴포넌트가 랜더링 됨<br>학생 : Assignment.js<br>교수: SubmissionStatus.js |
 | http://localhost:3000/home/setting/:as_id | 과제 관리 페이지 | 교수님만 접근 가능 |
+| http://localhost:3000/home/scoring/:as_id/:user_number | 답안 채점 페이지 | 교수님만 접근 가능<br>각 문제에 대한 답안을<br>한 페이지씩 보여줌 |
 |                                              |                  |                |
 
 
