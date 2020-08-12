@@ -77,11 +77,12 @@ function Main(props) {
     return undefined;
   }
 
-  const isAbleToMark = (asId, userNumber) => {
+  // isAbleToMark와 selectAnswers는 일시적으로 사용되지 않을 예정
+  /*const isAbleToMark = (asId, userNumber) => {
     let submittedCount = 0;
     for (const ques of assignment[asId].questions)
-      for (const answer of ques.question_answer)
-        if (userNumber == answer.user_number && answer.submitted)
+      for (const answer of ques.questionAnswer)
+        if (userNumber == answer.userNumber && answer.submitted)
           ++submittedCount;
 
     return submittedCount === assignment[asId].questions.length;
@@ -102,7 +103,7 @@ function Main(props) {
     }
 
     return result;
-  }
+  }*/
 
   /* 지워야 할 부분 (임시 data) */
 
@@ -342,10 +343,10 @@ function Main(props) {
   for (let i = 0; i < assignment.length; i++) {
     home_assignment.push(
       [
-        assignment[i].assignment_id,
+        assignment[i].assignmentId,
         assignment[i].deadline,
-        assignment[i].assignment_name,
-        assignment[i].assignment_state,
+        assignment[i].assignmentName,
+        assignment[i].assignmentState,
         assignment[i].score
       ]);
   }
@@ -416,8 +417,10 @@ function Main(props) {
         case "scoring": // 'home/scoring/sub/last' => Scoring.js
           // sub, last가 둘 다 존재할 때만 동작
           // sub : 과제 번호, last : 학번
-          if (sub != undefined && last != undefined && isAbleToMark(Number(sub), Number(last)))
-            contents = <Scoring info={selectAnswers(Number(sub), Number(last))} number={Number(last)} />
+          if (sub != undefined && last != undefined)
+            // TODO: API와 동기화를 시키면서 isAbleToMark와 selectAnswers를 사용하지 않기로 했으므로, 
+            // 그 컴포넌트의 코드를 수정해야 함.
+            contents = <Scoring info={undefined} number={Number(last)} />
           else
             contents = <Error />
           break;
