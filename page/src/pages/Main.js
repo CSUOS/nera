@@ -297,58 +297,86 @@ function Main(props) {
 
   /* 지워야 할 부분 (임시 data) */
 
-  var user_info = await axios.get('/v1/userInfo')
-    .catch((e) => {
-      const status = e.response.status;
-      if (status === 401) {
-        alert("사용자 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
-      }
-      else if (status === 500) {
-        alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...")
-      }
-      windows.location.href = "/";
-    });
+  let user_info = undefined;
+  let assignment = undefined;
 
-  var assignment = await axios.get('/v1/assignment')
-    .catch((e) => {
-      const status = e.response.status;
-      if (status === 400 || status === 401) {
-        alert("과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
-      }
-      else if (status === 404) {
-        alert("과제를 찾을 수 없습니다.");
-      }
-      else if (status === 500) {
-        alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...")
-      }
-      windows.location.href = "/";
-    });
+  async function getUserInfo() {
+    if (user_info === undefined) {
+      user_info = await axios.get('/v1/userInfo')
+        .catch((e) => {
+          const status = e.response.status;
+          if (status === 401) {
+            alert("사용자 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
+          }
+          else if (status === 500) {
+            alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...")
+          }
+          window.location.href = "/";
+        });
+    }
+
+    return user_info;
+  }
+
+  async function getAssignmentInfo() {
+    if (assignment === undefined) {
+      assignment = await axios.get('/v1/assignment')
+        .catch((e) => {
+          const status = e.response.status;
+          if (status === 400 || status === 401) {
+            alert("과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
+          }
+          else if (status === 404) {
+            alert("과제를 찾을 수 없습니다.");
+          }
+          else if (status === 500) {
+            alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...")
+          }
+          window.location.href = "/";
+        });
+    }
+
+    return assignment;
+  }
 
   // 개별 component로 넘길 data들 정리
+
   // SideBar로 넘길 "과제 제목"들
-  const s_assignment = [];
-  for (let i = 0; i < assignment.length; i++) {
-    // id: 0, title : 1, state : 2
-    s_assignment.push(
-      [
-        assignment[i].assignmentId, 
-        assignment[i].assignmentName, 
-        assignment[i].assignmentState
-      ]);
+  async function getDataForSideBar() {
+    let assignment = await getAssignmentInfo();
+
+    const s_assignment = [];
+    for (let i = 0; i < assignment.length; i++) {
+      // id: 0, title : 1, state : 2
+      s_assignment.push(
+        [
+          assignment[i].assignmentId,
+          assignment[i].assignmentName,
+          assignment[i].assignmentState
+        ]);
+    }
+
+    return s_assignment;
   }
 
   // home으로 넘길 정보 정리
-  // id, deadline, name, state, score
-  const home_assignment = [];
-  for (let i = 0; i < assignment.length; i++) {
-    home_assignment.push(
-      [
-        assignment[i].assignmentId,
-        assignment[i].deadline,
-        assignment[i].assignmentName,
-        assignment[i].assignmentState,
-        assignment[i].score
-      ]);
+  async function getDataForHome() {
+    let assignment = await getAssignmentInfo();
+
+    // id, deadline, name, state, score
+    const home_assignment = [];
+    for (let i = 0; i < assignment.length; i++) {
+      home_assignment.push(
+        [
+          assignment[i].assignmentId,
+          assignment[i].deadline,
+          assignment[i].assignmentName,
+          assignment[i].assignmentState,
+          assignment[i].score
+        ]);
+    }
+
+    return home_assignment;
   }
 
   /* select component from url */
@@ -364,18 +392,18 @@ function Main(props) {
     // home component setting
     contents =
       <Home
-        type={type}
-        user_info={user_info}
-        as_info={home_assignment}
+        type={getUserInfo()}
+        user_info={getUserInfo()}
+        as_info={getDataForHome()}
       />;
   } else { // 'home/' => 여러 컴포넌트로 분리
-    if (type == 1) { // 학생이면
+    if (String(getUserInfo().id).charAt(0) == 2) { // 학생이면
       switch (component) {
         case "assignment": // 'home/assignment' => Assignment.js
           if (sub != undefined) { // 'home/assignment/:as_id' (as_id가 sub)
             contents =
               <Assignment
-                info={findAssignmentById(Number(sub), assignment)}
+                info={findAssignmentById(Number(sub), getAssignmentInfo())}
               />;
           } else { // 'home/assignment' default page가 없음
             // 첫번째 과제 페이지로 redirect
@@ -385,11 +413,11 @@ function Main(props) {
         default: // 학생은 현재 Assignment 컴포넌트 말고 다른 컴포넌트가 없음
           contents = <Error />;
       }
-    } else if (type == 0) { // 교수이면
+    } else if (String(getUserInfo().id).charAt(0) != 2) { // 교수이면
       switch (component) {
         case "assignment": // 'home/assignment' => SubmissionStatus.js
           if (sub != undefined) {
-            contents = <SubmissionStatus info={findAssignmentById(Number(sub), assignment)} />;
+            contents = <SubmissionStatus info={findAssignmentById(Number(sub), getAssignmentInfo())} />;
           } else { // 'home/assignment' default page가 없음
             // 첫번째 과제 페이지로 redirect
             window.location.href = "/home/assignment/1";
@@ -399,7 +427,7 @@ function Main(props) {
         case "setting":
           if (sub == undefined) { // 'home/setting' => Setting.js
             contents = <Setting
-              as_info={assignment}
+              as_info={getAssignmentInfo()}
             />;
           } else {
             if (sub === "add") { // 'home/setting/add' => SetAssignment.js
@@ -408,7 +436,7 @@ function Main(props) {
               // add가 아닌 Number type이면 해당 id의 과제 설정창 => SetAssignment.js
               contents =
                 <SetAssignment
-                  as_info={assignment[sub]}
+                  as_info={getAssignmentInfo()[sub]}
                 />;
             }
           }
@@ -463,8 +491,8 @@ function Main(props) {
       <Header
         drawerOpen={handleDrawerOpen}
         open={open}
-        type={type}
-        name={user_info.name}
+        type={String(getUserInfo().id).charAt(0)}
+        name={getUserInfo().name}
       />
       <Drawer
         className={classes.drawer}
@@ -476,9 +504,9 @@ function Main(props) {
         }}
       >
         <SideBar
-          type={type}
+          type={String(getUserInfo().id).charAt(0)}
           drawerClose={handleDrawerClose}
-          assignment_info={s_assignment}
+          assignment_info={getDataForSideBar()}
         />
       </Drawer>
       <Grid
