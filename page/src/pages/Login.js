@@ -11,10 +11,10 @@ const SERVER_ADDR = "http://localhost:3000"
 
 function Login(){
     // id, password
-    const [id,setId]= useState();
-    const [pw,setPw]= useState();
+    const [id,setId]= useState("");
+    const [pw,setPw]= useState("");
 
-    // 아래의 digest("hex")로 대체되었습니다.
+    // 아래의 함수는 digest("hex")로 대체되었습니다. hashData 함수를 확인해주세요!
     /*String.prototype.hexEncode = function(){ // string to hex code
         var hex, i;
     
@@ -34,42 +34,49 @@ function Login(){
     }
 
     async function hashProcess(){
-        const hashed_token = await axios.get(SERVER_ADDR+'/v1/token',{
-        }).catch((e)=>{
-            if(e.response.status==404){
+        try {
+            let hashed_token = await axios.get(SERVER_ADDR+'/v1/token');
+
+            if (hashed_token.status == 404) {
                 alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
+                return;
             }
-        });
+            // hash password
+            let hashed_pw = hashData(hashData(pw));
+            // hash result
+            let result = hashData(hashed_token + hashed_pw);
 
-        // hash password
-        let hashed_pw = hashData(hashData(pw));
-        // hash result
-        let result = hashData(hashed_token + hashed_pw);
-
-        return result;
+            return result;
+        } catch (err) {
+            alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err);
+        }
+        
     }
 
     async function setLoginData(e){ // pw 암호화 및 api data 받기
-        let hashed_pw = await hashProcess();
+        try {
+            let hashed_pw = await hashProcess();
+            var response = await axios.post(SERVER_ADDR + '/v1/login', { // get api data
+                userId: id,
+                userPw: hashed_pw,
+            });
 
-        let success = true;
-        var response = await axios.post(SERVER_ADDR+'/v1/login', { // get api data
-            userId: id,
-            userPw: hashed_pw,
-        }).catch((e)=>{
-            success = false;
-            const status = e.response.status;
-            if(status==400){
+            const status = response.status;
+            const rabumsStatus = response?.data?.message?.slice(response.data.message.length - 3);
+            if(status==400 || rabumsStatus == "400"){
                 alert("아이디, 패스워드가 기입되었는지 다시 한 번 확인해주세요.");
-            }else if(status==403){
+            }else if(status==403 || rabumsStatus == "403"){
                 alert("아이디, 패스워드가 정확히 기입되었는지 다시 한 번 확인해주세요.");
-            }else if(status==500){
+            }else if(status==500 || rabumsStatus == "500"){
                 alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
             }
-        })
 
-        if (success)
-            window.location.href = "/home";
+            if (status === 200 && rabumsStatus == undefined) {
+                window.location.href = "/home";
+            }
+        } catch (err) {
+            alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err);
+        }
     }
 
     function changeId(){
@@ -83,31 +90,35 @@ function Login(){
     }
 
     async function loginAsTestAccount(e) {
-        const hashed_token = await axios.get(SERVER_ADDR+'/v1/token',{
-        }).catch((e)=>{
-            if(e.response.status==404){
-                alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
-            }
-        });
+        try {
+            let hashed_token = await axios.get(SERVER_ADDR+'/v1/token');
 
-        let success = true;
-        var response = await axios.post(SERVER_ADDR+'/v1/login', { // get api data
-            userId: "train96",
-            userPw: hashData(hashed_token + "962d3b4a8f231a9d9902619e1775648ee8db3ac90966ad013a27bdfa24940f93"),
-        }).catch((e)=>{
-            success = false;
-            const status = e.response.status;
-            if(status==400){
+            if (hashed_token.status == 404) {
+                alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
+                return;
+            }
+
+            let response = await axios.post(SERVER_ADDR+'/v1/login', { // get api data
+                userId: "train96",
+                userPw: hashData(hashed_token.data + "962d3b4a8f231a9d9902619e1775648ee8db3ac90966ad013a27bdfa24940f93"),
+            });
+
+            const status = response.status;
+            const rabumsStatus = response?.data?.message?.slice(response.data.message.length - 3);
+            if(status==400 || rabumsStatus == "400"){
                 alert("아이디, 패스워드가 기입되었는지 다시 한 번 확인해주세요.");
-            }else if(status==403){
+            }else if(status==403 || rabumsStatus == "403"){
                 alert("아이디, 패스워드가 정확히 기입되었는지 다시 한 번 확인해주세요.");
-            }else if(status==500){
+            }else if(status==500 || rabumsStatus == "500"){
                 alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
             }
-        })
 
-        if (success)
-            window.location.href = "/home";
+            if (status == 200 && rabumsStatus == undefined) {
+                window.location.href = "/home";
+            }
+        } catch (err) {
+            alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err);
+        }
     }
     
     /* rendering */
