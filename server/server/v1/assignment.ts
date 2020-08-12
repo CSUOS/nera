@@ -2,7 +2,7 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import Bodyparser from 'koa-bodyparser';
 import Cookie from 'koa-cookie';
-import { getCurrentDate } from './models/meta';
+import { getCurrentDate, isNumber } from './models/meta';
 
 const { AssignmentModel } = require('./models/assignmentModel');
 const { AnswerPaperModel } = require('./models/answerPaperModel');
@@ -152,6 +152,7 @@ router.get('/', async (ctx: Koa.Context) => {
 router.get('/:assignmentId', async (ctx: Koa.Context) => {
   let takeAssignment;
   try {
+    if (!isNumber(ctx.params.assignmentId)) { ctx.throw(400, '잘못된 요청'); }
     if (ctx.role === '1') {
       takeAssignment = await AssignmentModel
         .findOne({ professorNumber: ctx.user.userNumber, assignmentId: ctx.params.assignmentId })
@@ -173,6 +174,7 @@ router.get('/:assignmentId', async (ctx: Koa.Context) => {
 router.delete('/:assignmentId', async (ctx: Koa.Context) => {
   // 과제 삭제
   try {
+    if (!isNumber(ctx.params.assignmentId)) { ctx.throw(400, '잘못된 요청'); }
     if (ctx.role !== '1') { ctx.throw(403, '권한 없음'); }
     // User가 교수가 아닌 경우
 
