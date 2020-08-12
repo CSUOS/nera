@@ -3,7 +3,7 @@ import Router from 'koa-router';
 import Bodyparser from 'koa-bodyparser';
 import Cookie from 'koa-cookie';
 import dotenv from 'dotenv';
-import { getCurrentDate } from './models/meta';
+import { getCurrentDate, isNumber } from './models/meta';
 
 dotenv.config();
 const router = new Router();
@@ -79,6 +79,7 @@ router.post('/', async (ctx: Koa.Context) => {
 router.delete('/:groupId', async (ctx: Koa.Context) => {
   // 그룹 삭제
   try {
+    if (!isNumber(ctx.params.groupId)) { ctx.throw(400, '잘못된 요청'); }
     if (ctx.role !== '1') { ctx.throw(403, '권한 없음'); }
     // User가 교수가 아닌 경우
 
@@ -93,7 +94,6 @@ router.delete('/:groupId', async (ctx: Koa.Context) => {
 });
 router.get('/', async (ctx: Koa.Context) => {
   // 그룹 조회
-  console.log(process.env.VAULT_ADDR);
   try {
     if (ctx.role !== '1') { ctx.throw(403, '권한 없음'); }
     // User가 교수가 아닌 경우
