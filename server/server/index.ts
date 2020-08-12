@@ -49,6 +49,7 @@ router.get('/', (ctx: Koa.Context) => {
 
 login.use('/v1/login', Login.routes()); // 로그인 필요하지 않은 api
 login.use('/v1/cookieTest', Test.routes());
+login.use('/v1/token', Token.routes());
 
 router.use('/api', Api.routes()); // 로그인이 필요한 api
 router.use('/v1/answer', Answer.routes());
@@ -56,7 +57,6 @@ router.use('/v1/student', Student.routes());
 router.use('/v1/assignment', Assignment.routes());
 router.use('/v1/logout', Logout.routes());
 router.use('/v1/userInfo', UserInfo.routes());
-router.use('/v1/token', Token.routes());
 
 app.use(cors(corsOption));
 app.use(Logger());
