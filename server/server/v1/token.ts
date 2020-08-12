@@ -1,14 +1,16 @@
 import Koa from 'koa';
 import Router from 'koa-router';
+import crypto from 'crypto';
 
 const secret = require('../../server');
 
 const router = new Router();
 
-router.get('/', (ctx: Koa.Context) => {
+router.get('/', async (ctx: Koa.Context) => {
   const token = secret.env.rabumsToken;
+  const hashToken = await crypto.createHash('sha256').update(Buffer.from(token, 'utf8').toString('base64')).digest('hex');
   if (!token) { ctx.throw(404, '찾을 수 없음'); }
-  ctx.body = token;
+  ctx.body = hashToken;
 });
 
 export = router
