@@ -33,6 +33,7 @@ router.post('/', async (ctx: Koa.Context) => {
     ctx.user = response.data;
     ctx.role = String(response.data.userNumber).charAt(0);
   } catch (error) {
+    ctx.status = error.status;
     ctx.body = error;
   }
 });

@@ -121,6 +121,7 @@ router.post('/', async (ctx: Koa.Context) => {
       ctx.body = prevAssignment; // 확인용
     }
   } catch (error) {
+    ctx.status = error.status;
     ctx.body = error;
   }
 });
@@ -145,6 +146,7 @@ router.get('/', async (ctx: Koa.Context) => {
 
     ctx.body = takeAssignment;
   } catch (error) {
+    ctx.status = error.status;
     ctx.body = error;
   }
 });
@@ -167,6 +169,7 @@ router.get('/:assignmentId', async (ctx: Koa.Context) => {
     takeAssignment.assignmentState = await calState(takeAssignment, ctx.user);
     ctx.body = takeAssignment;
   } catch (error) {
+    ctx.status = error.status;
     ctx.body = error;
   }
 });
@@ -184,6 +187,7 @@ router.delete('/:assignmentId', async (ctx: Koa.Context) => {
 
     ctx.status = 204;
   } catch (error) {
+    ctx.status = error.status;
     ctx.body = error;
   }
 });

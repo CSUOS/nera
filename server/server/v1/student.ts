@@ -73,6 +73,7 @@ router.post('/', async (ctx: Koa.Context) => {
       ctx.body = prevGroup; // 확인용
     }
   } catch (error) {
+    ctx.status = error.status;
     ctx.body = error;
   }
 });
@@ -89,6 +90,7 @@ router.delete('/:groupId', async (ctx: Koa.Context) => {
 
     ctx.status = 204;
   } catch (error) {
+    ctx.status = error.status;
     ctx.body = error;
   }
 });
@@ -104,6 +106,7 @@ router.get('/', async (ctx: Koa.Context) => {
 
     ctx.body = groups;
   } catch (error) {
+    ctx.status = error.status;
     ctx.body = error;
   }
 });
