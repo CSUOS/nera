@@ -2,8 +2,10 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import Bodyparser from 'koa-bodyparser';
 import Cookie from 'koa-cookie';
-import { getCurrentDate } from './models/meta';
+import dotenv from 'dotenv';
+import { getCurrentDate, isNumber } from './models/meta';
 
+dotenv.config();
 const router = new Router();
 const { GroupModel } = require('./models/groupModel');
 
@@ -77,6 +79,7 @@ router.post('/', async (ctx: Koa.Context) => {
 router.delete('/:groupId', async (ctx: Koa.Context) => {
   // 그룹 삭제
   try {
+    if (!isNumber(ctx.params.groupId)) { ctx.throw(400, '잘못된 요청'); }
     if (ctx.role !== '1') { ctx.throw(403, '권한 없음'); }
     // User가 교수가 아닌 경우
 

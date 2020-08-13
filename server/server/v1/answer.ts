@@ -2,7 +2,7 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import Bodyparser from 'koa-bodyparser';
 import Cookie from 'koa-cookie';
-import { getCurrentDate } from './models/meta';
+import { getCurrentDate, isNumber } from './models/meta';
 
 const router = new Router();
 const { AnswerPaperModel } = require('./models/answerPaperModel');
@@ -18,7 +18,7 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
 
     if (body.answers === undefined) { ctx.throw(400, '잘못된 요청'); }
     // 요청에 answers 배열이 없는 경우
-
+    if (!isNumber(ctx.params.assignmentId)) { ctx.throw(400, '잘못된 요청'); }
     body.answers.forEach((element: any) => {
       if (element.questionId === undefined || element.answerContent === undefined) { ctx.throw(400, '잘못된 요청'); }
     });
@@ -93,7 +93,7 @@ router.post('/:assignmentId/:userNumber', async (ctx: Koa.Context) => {
     // 유저가 보낸 데이터
     if (body.answers === undefined) { ctx.throw(400, '잘못된 요청'); }
     // 요청에 answers 배열이 없는 경우
-
+    if (!isNumber(ctx.params.assignmentId) || !isNumber(ctx.params.userNumber)) { ctx.throw(400, '잘못된 요청'); }
     body.answers.forEach((element: any) => {
       if (element.questionId === undefined || element.score === undefined) { ctx.throw(400, '잘못된 요청'); }
     });
@@ -130,6 +130,7 @@ router.post('/:assignmentId/:userNumber', async (ctx: Koa.Context) => {
 router.get('/:assignmentId', async (ctx: Koa.Context) => {
   // 답안 조회
   try {
+    if (!isNumber(ctx.params.assignmentId)) { ctx.throw(400, '잘못된 요청'); }
     const answer = await AnswerPaperModel
       .findOne({ userNumber: ctx.user.userNumber, assignmentId: ctx.params.assignmentId })
       .exec();
@@ -144,11 +145,11 @@ router.get('/:assignmentId', async (ctx: Koa.Context) => {
   }
 });
 router.get('/:assignmentId/:userNumber', async (ctx: Koa.Context) => {
-  // 채점
+  // 학생의 답안 조회
   try {
     if (ctx.role !== '1') { ctx.throw(403, '권한 없음'); }
     // User가 교수가 아닌 경우
-
+    if (!isNumber(ctx.params.assignmentId) || !isNumber(ctx.params.userNumber)) { ctx.throw(400, '잘못된 요청'); }
     const studentAnswerPaper = await AnswerPaperModel
       .findOne({
         assignmentId: ctx.params.assignmentId,

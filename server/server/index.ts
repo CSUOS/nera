@@ -15,11 +15,17 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const serve = require('koa-static');
 const send = require('koa-send');
+const cors = require('@koa/cors');
 const { jwtMiddleware, envMiddleware } = require('../config');
 
 const app = new Koa();
 const router = new Router();
 const login = new Router();
+
+const corsOption = {
+  origin: 'http://localhost:3001',
+  credentials: true,
+};
 
 app.context.user = { // 유저 정보 저장
   _id: 0, // 고유 id
@@ -52,6 +58,7 @@ router.use('/v1/assignment', Assignment.routes());
 router.use('/v1/logout', Logout.routes());
 router.use('/v1/userInfo', UserInfo.routes());
 
+app.use(cors(corsOption));
 app.use(Logger());
 // app.use(envMiddleware);
 app.use(login.routes()); // 로그인, 쿠키 발급 테스트 api
