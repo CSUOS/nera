@@ -4,7 +4,7 @@ import loadConfig from './config';
 
 const mongoose = require('mongoose');
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
 function mongoConnect(secret: any) { // mongoDB 연결 함수
   mongoose.connect(secret.mongoURI,
