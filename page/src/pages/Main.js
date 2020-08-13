@@ -69,10 +69,6 @@ const useStyles = makeStyles((theme) => ({
 /* main pages */
 async function Main(props) {
 
-  /* get data from cookie */
-  // 쿠키가 제대로 되어있지 않으면 login 페이지로 redirect 시키기
-  console.log(document.cookie);
-
   /* using function */
   const findAssignmentById = (id, asList) => {
     for (let i = 0; i < asList.length; ++i)
@@ -305,14 +301,16 @@ async function Main(props) {
   async function getUserInfo() {
     try {
       let response = await axios.get(SERVER_ADDR + '/v1/userInfo', {}, { credentials: true });
-      return response;
+      console.log(response);
     } catch (err) {
       const status = err.response.status;
       if (status === 401) {
-        alert("사용자 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
+        console.log("사용자 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
+        //alert("사용자 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
       }
       else if (status === 500) {
-        alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...")
+        console.log("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
+        //alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
       }
       //window.location.href = "/";
     }
@@ -325,13 +323,16 @@ async function Main(props) {
     } catch (err) {
       const status = err.response.status;
       if (status === 400 || status === 401) {
-        alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
+        console.log("과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})");
+        //alert("과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})");
       }
       else if (status === 404) {
-        alert("과제를 찾을 수 없습니다.");
+        console.log("과제를 찾을 수 없습니다.");
+       // alert("과제를 찾을 수 없습니다.");
       }
       else if (status === 500) {
-        alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...")
+        console.log("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
+        //alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...")
       }
       //window.location.href = "/";
     }

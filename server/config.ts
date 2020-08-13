@@ -32,6 +32,7 @@ function jwtDecoder(token: any, secretKey: any) {
 }
 
 exports.jwtMiddleware = async (ctx: Koa.Context, next: any) => {
+  //console.log(ctx);
   const token = ctx.cookies.get('access_token');
   // 쿠키에 저장된 토큰을 가져옴
   if (!token) {
@@ -58,7 +59,7 @@ exports.jwtMiddleware = async (ctx: Koa.Context, next: any) => {
       const freshToken = jwt.sign(user, secretKey, { expiresIn: '1h' });
       // 새 토큰
 
-      ctx.cookies.set('access_token', freshToken, { httpOnly: true, maxAge: 1000 * 60 * 60 });
+      ctx.cookies.set('access_token', freshToken, { maxAge: 1000 * 60 * 60 });
       // api 요청시마다 쿠키 새로 발급
       ctx.user = decoded; // 유저 정보 update
       ctx.role = String(ctx.user.userNumber).charAt(0); // 권한 update

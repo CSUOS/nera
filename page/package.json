@@ -24,7 +24,7 @@
     "sha256": "^0.2.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set PORT=3001 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:nowatch": "react-scripts test --watchAll=false --passWithNoTests",

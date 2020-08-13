@@ -60,6 +60,8 @@ function Login(){
             userPw: hashed_pw,
         }, { credentials: true }).catch((err)=>alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));
 
+        console.log(response);
+
         const status = response.status;
         const rabumsStatus = response?.data?.message?.slice(response.data.message.length - 3);
 
@@ -72,7 +74,7 @@ function Login(){
         }
 
         if (status === 200 && rabumsStatus == undefined) {
-            window.location.href = "/home";
+            //window.location.href = "/home";
         }
     }
 
@@ -99,7 +101,7 @@ function Login(){
             userPw: hashData(hashed_token.data + "962d3b4a8f231a9d9902619e1775648ee8db3ac90966ad013a27bdfa24940f93"),
         }, { credentials: true }).catch((err)=>alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));
 
-        const status = response.stat.us;
+        const status = response.status;
         const rabumsStatus = response?.data?.message?.slice(response.data.message.length - 3);
         if(status==400 || rabumsStatus == "400"){
             alert("아이디, 패스워드가 기입되었는지 다시 한 번 확인해주세요.");
@@ -110,7 +112,7 @@ function Login(){
         }
 
         if (status == 200 && rabumsStatus == undefined) {
-            window.location.href = "/home";
+           //window.location.href = "/home";
         }
     }
     
