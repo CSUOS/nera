@@ -44,7 +44,7 @@ function Login(){
     async function setLoginData(e){ // pw 암호화 및 api data 받기
         let hashed_pw = await hashProcess();
 
-        var response = await axios.post('/v1/auth', { // get api data
+        var response = await axios.post('/v1/login', { // get api data
             userId: id,
             userPw: hashed_pw,
         }).catch((e)=>{

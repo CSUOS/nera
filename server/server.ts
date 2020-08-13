@@ -4,10 +4,10 @@ import loadConfig from './config';
 
 const mongoose = require('mongoose');
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 function mongoConnect(secret: any) { // mongoDB 연결 함수
-  mongoose.connect(secret.mongoAddr,
+  mongoose.connect(secret.mongoURI,
     { useNewUrlParser: true, useUnifiedTopology: true },
     () => { console.log('db와 연결되었습니다.'); });
 }
@@ -20,7 +20,7 @@ loadConfig().then(async (res: any) => {
     accessSecretKey: res.accessSecretKey,
     // access_token 암호화 키값
 
-    mongoAddr: res.mongoAddr,
+    mongoAddr: res.mongoURI,
     // mongoDB 주소
 
     rabumsAddr: res.rabumsAddr,
