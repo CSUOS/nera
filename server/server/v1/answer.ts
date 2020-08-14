@@ -83,6 +83,7 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
       ctx.body = prevAnswer; // 확인용
     }
   } catch (error) {
+    ctx.status = error.status;
     ctx.body = error;
   }
 });
@@ -124,6 +125,7 @@ router.post('/:assignmentId/:userNumber', async (ctx: Koa.Context) => {
     // DB에 저장
     ctx.body = studentAnswerPaper; // 확인용
   } catch (error) {
+    ctx.status = error.status;
     ctx.body = error;
   }
 });
@@ -141,6 +143,7 @@ router.get('/:assignmentId', async (ctx: Koa.Context) => {
 
     ctx.body = answer;
   } catch (error) {
+    ctx.status = error.status;
     ctx.body = error;
   }
 });
@@ -163,6 +166,7 @@ router.get('/:assignmentId/:userNumber', async (ctx: Koa.Context) => {
 
     ctx.body = studentAnswerPaper; // 확인용
   } catch (error) {
+    ctx.status = error.status;
     ctx.body = error;
   }
 });
