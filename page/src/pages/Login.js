@@ -35,7 +35,7 @@ function Login(){
 
     async function hashProcess(){
         try {
-            let hashed_token = await axios.get(SERVER_ADDR+'/v1/token', {}, { withCredentials: true });
+            let hashed_token = await axios.get(SERVER_ADDR+'/v1/token', { withCredentials: true });
 
             if (hashed_token.status == 404) {
                 alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
@@ -88,15 +88,14 @@ function Login(){
         setPw(password.value);
     }
     async function cookieTest(e){
-        
-        let cookie = await axios.get(SERVER_ADDR+'/cookieTest/', {}, {credentials : true});
+        let cookie = await axios.get(SERVER_ADDR+'/v1/cookieTest/', { withCredentials: true });
         console.log(cookie);
     }
 
     async function loginAsTestAccount(e) {
 
         let hashed_token = await axios.get(
-                            SERVER_ADDR+'/v1/token', {}, { credentials: true }
+                            SERVER_ADDR+'/v1/token', { withCredentials: true }
                             ).catch((err)=>console.log(err));
 
         if (hashed_token.status == 404) {
