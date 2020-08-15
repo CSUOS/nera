@@ -107,6 +107,7 @@ function Login(){
             userId: "train96",
             userPw: hashData(hashed_token.data + "962d3b4a8f231a9d9902619e1775648ee8db3ac90966ad013a27bdfa24940f93"),
         }, { credentials: true }).catch((err)=>alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));*/
+        
         let response = await axios.get(SERVER_ADDR+'/v1/cookieTest', { withCredentials: true }).
             catch((err) => alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));
         const status = response.status;
@@ -134,7 +135,7 @@ function Login(){
                 <TextField variant="outlined" id="userId" label="id" required rows={1} rowsMax={10} onChange={changeId}></TextField>
                 <TextField variant="outlined" id="userPw" label="password" type="password" required rows={1} rowsMax={10} onChange={changePw}></TextField>
                 <Button onClick={setLoginData}>login</Button>
-                <Button onClick={cookieTest}>debug</Button>
+                <Button onClick={loginAsTestAccount}>debug</Button>
             </Grid>
         </Grid>
     );

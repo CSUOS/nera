@@ -16,6 +16,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 // 로컬에서 디버그하는 상황 외에는 실제 서버 주소로 설정해야 한다.
 const SERVER_ADDR = "http://localhost:3000"
 
+// jwt 추가
+const jwt = require('jsonwebtoken');
+
 /* style definition => 대부분 css로 옮길 예정 */
 
 const drawerWidth = 300;
@@ -93,227 +96,7 @@ function Main(props) {
 
     return undefined;
   }
-
-  // isAbleToMark와 selectAnswers는 일시적으로 사용되지 않을 예정
-  /*const isAbleToMark = (asId, userNumber) => {
-    let submittedCount = 0;
-    for (const ques of assign[asId].questions)
-      for (const answer of ques.questionAnswer)
-        if (userNumber == answer.userNumber && answer.submitted)
-          ++submittedCount;
-
-    return submittedCount === assign[asId].questions.length;
-  }
-
-  const selectAnswers = (asId, userNumber) => {
-    let contents = JSON.parse(JSON.stringify(assign[asId]));
-
-    for (let ques of contents.questions) {
-      let newAnswers = [];
-
-      for (let answer of ques.question_answer) {
-        if (answer.user_number === userNumber)
-          newAnswers.push(JSON.parse(JSON.stringify(answer)));
-      }
-
-      ques.question_answer = newAnswers;
-    }
-
-    return contents;
-  }*/
-
-  /* 지워야 할 부분 (임시 data) */
-
-  // let user={
-  //   //"id": 1,
-  //   "name":"우희은",
-  //   "user_number" : "2017920038",
-  //   "type" : 0, // 교수 : 0 , 학생 : 1 // 도출해내야하는 정보
-  //   "major" : "컴퓨터과학부", // 도출해내야하는 정보
-  //   "meta": {
-  //     "create_at": new Date('2020-03-01T11:59:00'),
-  //     "modified_at": new Date('2020-03-01T11:59:00'),
-  //   }
-  // }
-
-  // const type = user.type;
-
-  //   // get assign data from NERA server
-
-  // // [assignment_info의 값 종류]
-  // // 학생일 경우 0: 제출 필요(secondary), 1: 제출 완료(green), 2: 채점 중(primary), 3: 채점 완료(black)
-  // // 교수일 경우 0: 마감 전(green), 1: 마감 후 채점 전(secondary), 2: 마감 후 채점 후(black)
-  // // api 맞춰서 변경해야함
-
-  // const sampleNames = ["가정현", "나정현", "다정현", "라정현", "마정현", "바정현", "사정현"];
-  // const sampleNumbers = [2019920001, 2019920002, 2019920003, 2019920004, 2019920005, 2019920006, 2019920007];
-
-  // let assign = [
-  //   {
-  //     "assignment_id": 0,
-  //     "professor" : 0,
-  //     "students": JSON.parse(JSON.stringify(sampleNumbers)),
-  //     "assignment_name": "[컴퓨터보안] SHA256 구현",
-  //     "assignment_info": "코드는 반드시 C++로 작성해주세요.",
-  //     "assignment_state": 0,
-  //     "publishingTime" : new Date('2020-08-13T11:59:00'),
-  //     "deadline" : new Date('2020-08-13T11:59:00'),
-  //     "questions": [],
-  //     "meta": {
-  //       "create_at": new Date('2020-08-01T11:59:00'),
-  //       "modified_at": new Date('2020-08-01T11:59:00'),
-  //     }
-  //   },
-  //   {
-  //     "assignment_id": 0,
-  //     "professor" : 0,
-  //     "students": JSON.parse(JSON.stringify(sampleNumbers)),
-  //     "assignment_name": "[컴퓨터보안] SHA256 구현",
-  //     "assignment_info": "코드는 반드시 C++로 작성해주세요.",
-  //     "assignment_state": 0,
-  //     "publishingTime" : new Date('2020-08-13T11:59:00'),
-  //     "deadline" : new Date('2020-08-13T11:59:00'),
-  //     "questions": [],
-  //     "meta": {
-  //       "create_at": new Date('2020-08-01T11:59:00'),
-  //       "modified_at": new Date('2020-08-01T11:59:00'),
-  //     }
-  //   },
-  //   {
-  //     "assignment_id": 0,
-  //     "professor" : 0,
-  //     "students": JSON.parse(JSON.stringify(sampleNumbers)),
-  //     "assignment_name": "[컴퓨터보안] SHA256 구현",
-  //     "assignment_info": "코드는 반드시 C++로 작성해주세요.",
-  //     "assignment_state": 0,
-  //     "publishingTime" : new Date('2020-08-13T11:59:00'),
-  //     "deadline" : new Date('2020-08-13T11:59:00'),
-  //     "questions": [],
-  //     "meta": {
-  //       "create_at": new Date('2020-08-01T11:59:00'),
-  //       "modified_at": new Date('2020-08-01T11:59:00'),
-  //     }
-  //   },
-  //   {
-  //     "assignment_id": 0,
-  //     "professor" : 0,
-  //     "students": JSON.parse(JSON.stringify(sampleNumbers)),
-  //     "assignment_name": "[컴퓨터보안] SHA256 구현",
-  //     "assignment_info": "코드는 반드시 C++로 작성해주세요.",
-  //     "assignment_state": 0,
-  //     "publishingTime" : new Date('2020-08-13T11:59:00'),
-  //     "deadline" : new Date('2020-08-13T11:59:00'),
-  //     "questions": [],
-  //     "meta": {
-  //       "create_at": new Date('2020-08-01T11:59:00'),
-  //       "modified_at": new Date('2020-08-01T11:59:00'),
-  //     }
-  //   }
-  // ];
-
-  // let q = [{
-  //   "question_id": 0,
-  //   "question_content": "SHA에 대해 조사하세요.",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // },
-  // {
-  //   "question_id": 1,
-  //   "question_content": "SHA에 대해 조사하세요.(2)",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // },
-  // {
-  //   "question_id": 2,
-  //   "question_content": "퀵 소트에 대해 조사하세요.",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // },
-  // {
-  //   "question_id": 3,
-  //   "question_content": "C/C++로 퀵 소트를 구현하세요.",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // },
-  // {
-  //   "question_id": 4,
-  //   "question_content": "쉘 소트에 대해 조사하세요.",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // },
-  // {
-  //   "question_id": 5,
-  //   "question_content": "C/C++로 쉘 소트를 구현하세요.",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // },
-  // {
-  //   "question_id": 6,
-  //   "question_content": "힙 소트에 대해 조사하세요.",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // },
-  // {
-  //   "question_id": 7,
-  //   "question_content": "C/C++로 힙 소트를 구현하세요.",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // }];
-
-  // for (let i = 0; i < q.length; ++i)
-  // {
-  //   for (let j = 0; j < sampleNames.length; ++j)
-  //   {
-  //     q[i].question_answer.push({
-  //       "user_number": sampleNumbers[j],
-  //       "question_id": assign[Math.floor(i/2)].assignment_id * 1000 + q[i].question_id,
-  //       "name": sampleNames[j],
-  //       "answer_content": [`${sampleNames[j]}의 ${i%2 + 1}번 문제에 대한 답입니다.`],
-  //       "submitted": (j % 2 == 0 ? true : false),
-  //       "score": Math.floor(q[i].full_score / (j+1) / (i%2 + 1)),
-  //       "meta": {
-  //         "create_at": new Date('2020-08-02T11:59:00'),
-  //         "modified_at": new Date('2020-08-02T11:59:00')
-  //       }
-  //     });
-  //   }
-  //   assign[Math.floor(i/2)].questions.push(q[i]);
-  // }
-
-  /* 지워야 할 부분 (임시 data) */
-
+/*
   async function getUserInfo() {
     try {
       let response = await axios.get(SERVER_ADDR+'/v1/userInfo', { withCredentials: true });
@@ -332,6 +115,23 @@ function Main(props) {
     }
     return [];
   }
+*/
+
+  function getCookie(name) {
+    let value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return value? value[2] : null;
+  };
+
+  async function getUserInfo(){
+    try{
+      const access_token = getCookie('access_token');
+      const token = jwt.decode(access_token);
+      return token;
+    }catch(err){
+      console.log(err);
+    }
+  }
+
 
   async function getAssignmentInfo() {
     try {
