@@ -87,9 +87,17 @@ function Login(){
         const password = document.querySelector('#userPw');
         setPw(password.value);
     }
+    async function cookieTest(e){
+        
+        let cookie = await axios.get(SERVER_ADDR+'/cookieTest/', {}, {credentials : true});
+        console.log(cookie);
+    }
 
     async function loginAsTestAccount(e) {
-        let hashed_token = await axios.get(SERVER_ADDR+'/v1/token', {}, { credentials: true });
+
+        let hashed_token = await axios.get(
+                            SERVER_ADDR+'/v1/token', {}, { credentials: true }
+                            ).catch((err)=>console.log(err));
 
         if (hashed_token.status == 404) {
             alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
@@ -112,7 +120,7 @@ function Login(){
         }
 
         if (status == 200 && rabumsStatus == undefined) {
-           //window.location.href = "/home";
+            window.location.href = "/home";
         }
     }
     
@@ -125,7 +133,7 @@ function Login(){
                 <TextField variant="outlined" id="userId" label="id" required rows={1} rowsMax={10} onChange={changeId}></TextField>
                 <TextField variant="outlined" id="userPw" label="password" type="password" required rows={1} rowsMax={10} onChange={changePw}></TextField>
                 <Button onClick={setLoginData}>login</Button>
-                <Button onClick={loginAsTestAccount}>debug</Button>
+                <Button onClick={cookieTest}>debug</Button>
             </Grid>
         </Grid>
     );

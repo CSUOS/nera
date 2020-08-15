@@ -27,7 +27,7 @@ router.post('/', async (ctx: Koa.Context) => {
     const accessToken = jwt.sign(response.data, secret.env.accessSecretKey, { expiresIn: '1h' });
     // jwt 토큰 생성
 
-    ctx.cookies.set('accesstoken', accessToken, { httpOnly: false, maxAge: 1000 * 60 * 60 });
+    ctx.cookies.set('access_token', accessToken, { httpOnly: false, maxAge: 1000 * 60 * 60 });
 
     // 토큰을 쿠키로 발급 1000ms * 60 * 60 = 1h
     ctx.body = response.data; // 확인용
