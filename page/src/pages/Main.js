@@ -351,15 +351,15 @@ function Main(props) {
     }
     return undefined;
   }
-  const fetchData = async () => {
-    const aaa = await getUserInfo();
-    const bbb = await getAssignmentInfo();
-    setUser(aaa);
-    setAssign(bbb);
-  }
+  
   useEffect(() => {
+    async function fetchData() {
+      setUser(await getUserInfo());
+      setUser(await getAssignmentInfo());
+    }
     fetchData();
-  }, [assign.length]);
+  }, [assign]);
+
   // 개별 component로 넘길 data들 정리
   // 사용자의 type (교수 0, 학생 1)
   let type;
