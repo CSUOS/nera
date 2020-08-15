@@ -61,20 +61,11 @@ router.use('/v1/userInfo', UserInfo.routes());
 router.use('/v1/test', TTT.routes());
 
 app.use(Logger());
-// app.use(envMiddleware);
+
+app.use(login.routes());
 app.use(jwtMiddleware);
-// app.use(login.routes()); // 로그인, 쿠키 발급 테스트 api
-// app.use(router.routes()); // 나머지 api
-app.use(async (ctx: any, next: any) => {
-  console.log(ctx.role, 'sds');
-  if (ctx.role === '') {
-    await login.routes()(ctx, next);
-  } else {
-    await router.routes()(ctx, next);
-  }
-});
 app.use(router.routes());
-// 분기 설정은 좀 더 생각해봐야 할 듯
+
 app.use(serve(`${__dirname}/../build`));
 app.use(async (ctx) => {
   if (ctx.status === 404) await send(ctx, 'index.html', { root: `${__dirname}/../build` });
