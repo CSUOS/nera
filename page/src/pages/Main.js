@@ -73,6 +73,10 @@ function Main(props) {
   const [open, setOpen] = useState(false); // header와 drawer에 동시 적용되어야하기 때문에 Main에 저장
   const [user, setUser] = useState({});
   const [assign, setAssign] = useState([]);
+  const [type, setType] = useState(1);
+  const [sideAssign, setSideAssign] = useState([]);
+  const [homeAssign, setHomeAssign] = useState([]);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -93,18 +97,18 @@ function Main(props) {
   // isAbleToMark와 selectAnswers는 일시적으로 사용되지 않을 예정
   /*const isAbleToMark = (asId, userNumber) => {
     let submittedCount = 0;
-    for (const ques of assignment[asId].questions)
+    for (const ques of assign[asId].questions)
       for (const answer of ques.questionAnswer)
         if (userNumber == answer.userNumber && answer.submitted)
           ++submittedCount;
 
-    return submittedCount === assignment[asId].questions.length;
+    return submittedCount === assign[asId].questions.length;
   }
 
   const selectAnswers = (asId, userNumber) => {
-    let result = JSON.parse(JSON.stringify(assignment[asId]));
+    let contents = JSON.parse(JSON.stringify(assign[asId]));
 
-    for (let ques of result.questions) {
+    for (let ques of contents.questions) {
       let newAnswers = [];
 
       for (let answer of ques.question_answer) {
@@ -115,12 +119,12 @@ function Main(props) {
       ques.question_answer = newAnswers;
     }
 
-    return result;
+    return contents;
   }*/
 
   /* 지워야 할 부분 (임시 data) */
 
-  // let user_info={
+  // let user={
   //   //"id": 1,
   //   "name":"우희은",
   //   "user_number" : "2017920038",
@@ -132,9 +136,9 @@ function Main(props) {
   //   }
   // }
 
-  // const type = user_info.type;
+  // const type = user.type;
 
-  //   // get assignment data from NERA server
+  //   // get assign data from NERA server
 
   // // [assignment_info의 값 종류]
   // // 학생일 경우 0: 제출 필요(secondary), 1: 제출 완료(green), 2: 채점 중(primary), 3: 채점 완료(black)
@@ -144,7 +148,7 @@ function Main(props) {
   // const sampleNames = ["가정현", "나정현", "다정현", "라정현", "마정현", "바정현", "사정현"];
   // const sampleNumbers = [2019920001, 2019920002, 2019920003, 2019920004, 2019920005, 2019920006, 2019920007];
 
-  // let assignment = [
+  // let assign = [
   //   {
   //     "assignment_id": 0,
   //     "professor" : 0,
@@ -294,7 +298,7 @@ function Main(props) {
   //   {
   //     q[i].question_answer.push({
   //       "user_number": sampleNumbers[j],
-  //       "question_id": assignment[Math.floor(i/2)].assignment_id * 1000 + q[i].question_id,
+  //       "question_id": assign[Math.floor(i/2)].assignment_id * 1000 + q[i].question_id,
   //       "name": sampleNames[j],
   //       "answer_content": [`${sampleNames[j]}의 ${i%2 + 1}번 문제에 대한 답입니다.`],
   //       "submitted": (j % 2 == 0 ? true : false),
@@ -305,7 +309,7 @@ function Main(props) {
   //       }
   //     });
   //   }
-  //   assignment[Math.floor(i/2)].questions.push(q[i]);
+  //   assign[Math.floor(i/2)].questions.push(q[i]);
   // }
 
   /* 지워야 할 부분 (임시 data) */
@@ -326,7 +330,7 @@ function Main(props) {
       }
       window.location.href = "/";
     }
-    return undefined;
+    return [];
   }
 
   async function getAssignmentInfo() {
@@ -349,85 +353,83 @@ function Main(props) {
       }
       window.location.href = "/";
     }
-    return undefined;
+    return [];
   }
-  
+
   useEffect(() => {
     async function fetchData() {
-      setUser(await getUserInfo());
-      setUser(await getAssignmentInfo());
+      setUser(await getUserInfo(), updateType);
+      setAssign(await getAssignmentInfo(), updateAssignments);
     }
+
+    async function updateType() {
+      // 사용자의 type (교수 0, 학생 1)
+      setType((String(user.userNumber).charAt(0) === '1') ? 0 : 1);
+    }
+
+    async function updateAssignments() {
+      // SideBar로 넘길 "과제 제목"들
+      let sAssign = [];
+      // home으로 넘길 정보 정리
+      let hAssign = [];
+
+      for (let i = 0; i < assign.length; i++) {
+        // id: 0, title : 1, state : 2
+        sAssign.push(
+          [
+            assign[i].assignmentId,
+            assign[i].assignmentName,
+            assign[i].assignmentState
+          ]);
+      }
+
+      for (let i = 0; i < assign.length; i++) {
+        hAssign.push(
+          [
+            assign[i].assignmentId,
+            assign[i].deadline,
+            assign[i].assignmentName,
+            assign[i].assignmentState,
+            assign[i].score
+          ]);
+      }
+
+      setSideAssign(sAssign);
+      setHomeAssign(hAssign);
+    }
+
     fetchData();
-  }, [assign]);
-
-  // 개별 component로 넘길 data들 정리
-  // 사용자의 type (교수 0, 학생 1)
-  let type;
-  // SideBar로 넘길 "과제 제목"들
-  let s_assignment = [];
-  // home으로 넘길 정보 정리
-  let home_assignment = [];
-  // await getUserInfo();
-  // await getAssignmentInfo();  
-  let user_info = user;
-  let assignment = assign;
-  // let [user_info, assignment] = await Promise.all(getUserInfo(), getAssignmentInfo());
-
-  type = String(user_info.userNumber).charAt(0) === '1' ? 0 : 1;
-
-  for (let i = 0; i < assignment.length; i++) {
-    // id: 0, title : 1, state : 2
-    s_assignment.push(
-      [
-        assignment[i].assignmentId,
-        assignment[i].assignmentName,
-        assignment[i].assignmentState
-      ]);
-  }
-
-  for (let i = 0; i < assignment.length; i++) {
-    home_assignment.push(
-      [
-        assignment[i].assignmentId,
-        assignment[i].deadline,
-        assignment[i].assignmentName,
-        assignment[i].assignmentState,
-        assignment[i].score
-      ]);
-  }
+  }, [assign.length]);
 
   /* select component from url */
-
   // url은 http://NERA서버/component/sub/last 순으로 구성되어있음
   const component = props.match.params.component;
   const sub = props.match.params.sub;
   const last = props.match.params.last;
 
   let contents;
-
-  console.log(type);
   if (component == undefined) { // '/home' => Home.js
 
     // home component setting
     contents =
       <Home
         type={type}
-        user_info={user_info}
-        as_info={home_assignment}
+        user_info={user}
+        as_info={homeAssign}
       />;
   } else { // 'home/' => 여러 컴포넌트로 분리
     if (type === 1) { // 학생이면
       switch (component) {
-        case "assignment": // 'home/assignment' => Assignment.js
-          if (sub != undefined) { // 'home/assignment/:as_id' (as_id가 sub)
+        case "assign": // 'home/assign' => Assignment.js
+          if (sub != undefined) { // 'home/assign/:as_id' (as_id가 sub)
             contents =
               <Assignment
-                info={findAssignmentById(Number(sub), assignment)}
+                info={findAssignmentById(Number(sub), assign)}
               />;
 
-          } else { // 'home/assignment' default page가 없음
+          } else { // 'home/assign' default page가 없음
             // 첫번째 과제 페이지로 redirect
-            window.location.href = "/home/assignment/1";
+            window.location.href = "/home/assign/1";
           }
           break;
         default: // 학생은 현재 Assignment 컴포넌트 말고 다른 컴포넌트가 없음
@@ -435,10 +437,10 @@ function Main(props) {
       }
     } else if (type === 0) { // 교수이면
       switch (component) {
-        case "assignment": // 'home/assignment' => SubmissionStatus.js
+        case "assign": // 'home/assign' => SubmissionStatus.js
           if (sub != undefined) {
-            contents = <SubmissionStatus info={findAssignmentById(Number(sub), assignment)} />;
-          } else { // 'home/assignment' default page가 없음
+            contents = <SubmissionStatus info={findAssignmentById(Number(sub), assign)} />;
+          } else { // 'home/assign' default page가 없음
             contents = <Error></Error>
           }
           break;
@@ -446,7 +448,7 @@ function Main(props) {
         case "setting":
           if (sub == undefined) { // 'home/setting' => Setting.js
             contents = <Setting
-              as_info={assignment}
+              as_info={assign}
             />;
           } else {
             if (sub === "add") { // 'home/setting/add' => SetAssignment.js
@@ -455,7 +457,7 @@ function Main(props) {
               // add가 아닌 Number type이면 해당 id의 과제 설정창 => SetAssignment.js
               contents =
                 <SetAssignment
-                  as_info={findAssignmentById(Number(sub), assignment)}
+                  as_info={findAssignmentById(Number(sub), assign)}
                 />;
             }
           }
@@ -467,7 +469,7 @@ function Main(props) {
           if (sub != undefined && last != undefined)
             // TODO: API와 동기화를 시키면서 isAbleToMark와 selectAnswers를 사용하지 않기로 했으므로, 
             // 그 컴포넌트의 코드를 수정해야 함.
-            contents = <Scoring as_info={assignment} number={Number(last)} />
+            contents = <Scoring as_info={assign} number={Number(last)} />
           else
             contents = <Error />
           break;
@@ -488,10 +490,7 @@ function Main(props) {
     }
   }
 
-
-
   /* rendering */
-
   return (
     <Grid container>
       <CssBaseline />
@@ -499,7 +498,7 @@ function Main(props) {
         drawerOpen={handleDrawerOpen}
         open={open}
         type={type}
-        name={user_info.userName}
+        name={user.userName}
       />
       <Drawer
         className={classes.drawer}
@@ -513,7 +512,7 @@ function Main(props) {
         <SideBar
           type={type}
           drawerClose={handleDrawerClose}
-          assignment_info={s_assignment}
+          assignment_info={sideAssign}
         />
       </Drawer>
       <Grid
