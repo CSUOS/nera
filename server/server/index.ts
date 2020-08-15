@@ -10,6 +10,7 @@ import Test from './v1/cookieTest'; // 테스트용 쿠키 발급
 import Assignment from './v1/assignment';
 import Token from './v1/token';
 import UserInfo from './v1/userInfo';
+import TTT from './v1/test';
 
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
@@ -17,6 +18,7 @@ const serve = require('koa-static');
 const send = require('koa-send');
 const cors = require('@koa/cors');
 const { jwtMiddleware, envMiddleware } = require('../config');
+const { isLogin } = require('./v1/login');
 
 const app = new Koa();
 const router = new Router();
@@ -26,7 +28,7 @@ const corsOption = {
   origin: 'http://localhost:3001',
   credentials: true,
 };
-
+app.use(cors(corsOption));
 app.context.user = { // 유저 정보 저장
   _id: 0, // 고유 id
   userId: '', // 유저 id
@@ -42,7 +44,6 @@ app.context.env = { // 환경변수
 };
 */
 app.context.role = ''; // 유저 권한 1 - 교수, 2 - 학생
-
 router.get('/', (ctx: Koa.Context) => {
   ctx.body = 'hello, NERA!';
 });
@@ -57,14 +58,22 @@ router.use('/v1/student', Student.routes());
 router.use('/v1/assignment', Assignment.routes());
 router.use('/v1/logout', Logout.routes());
 router.use('/v1/userInfo', UserInfo.routes());
+router.use('/v1/test', TTT.routes());
 
-app.use(cors(corsOption));
 app.use(Logger());
 // app.use(envMiddleware);
-app.use(login.routes()); // 로그인, 쿠키 발급 테스트 api
-app.use(jwtMiddleware); // 로그인 되지 않은 상태면 이곳에서 에러 처리함
-app.use(router.routes()); // 나머지 api
-// app.use(async (ctx: any, next: any) => { await router.routes()(ctx, next); });
+app.use(jwtMiddleware);
+// app.use(login.routes()); // 로그인, 쿠키 발급 테스트 api
+// app.use(router.routes()); // 나머지 api
+app.use(async (ctx: any, next: any) => {
+  console.log(ctx.role, 'sds');
+  if (ctx.role === '') {
+    await login.routes()(ctx, next);
+  } else {
+    await router.routes()(ctx, next);
+  }
+});
+app.use(router.routes());
 // 분기 설정은 좀 더 생각해봐야 할 듯
 app.use(serve(`${__dirname}/../build`));
 app.use(async (ctx) => {

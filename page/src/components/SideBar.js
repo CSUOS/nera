@@ -69,7 +69,7 @@ const SideBar = (props) => {
     return (
         <Grid className="side_bar">
             <Grid className={clsx(classes.drawerHeader,"sideBar_header")}>
-                <Link to="/home"><Grid className="NERA"><a href="#"><h1>NERA</h1></a></Grid></Link>
+                <Link to="/home"><Grid className="NERA"><h1>NERA</h1></Grid></Link>
                 <IconButton onClick={drawerClose}>
                     <ChevronLeftIcon />
                 </IconButton>
@@ -85,7 +85,7 @@ const SideBar = (props) => {
             >
                 {
                     primary_assignment.map((as) => 
-                        <Link to={'/home/assignment/'+as[0]}>
+                        <Link to={'/home/assignment/'+as[0]} key={as[0]}>
                             <ListItem button className={classes.nested}>
                             <ListItemIcon>
                                 {
@@ -107,7 +107,7 @@ const SideBar = (props) => {
                 }
                 {
                     secondary_assignment.map((as) => 
-                        <Link to={'/home/assignment/'+as[0]}>
+                        <Link to={'/home/assignment/'+as[0]} key={as[0]}>
                             <ListItem button className={classes.nested}>
                             <ListItemIcon>
                                 {

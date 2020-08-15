@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SideBar, Header } from "../components";
 import { Home, Assignment, Setting, Error, SubmissionStatus, SetAssignment, Scoring, SetStudentList } from "../pages";
 import "./pages.css";
@@ -67,8 +67,20 @@ const useStyles = makeStyles((theme) => ({
 
 
 /* main pages */
-async function Main(props) {
-
+function Main(props) {
+  /* drawer 코드 */
+  const classes = useStyles();
+  const [open, setOpen] = useState(false); // header와 drawer에 동시 적용되어야하기 때문에 Main에 저장
+  const [user, setUser] = useState({});
+  const [assign, setAssign] = useState([]);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  
   /* using function */
   const findAssignmentById = (id, asList) => {
     for (let i = 0; i < asList.length; ++i)
@@ -300,8 +312,8 @@ async function Main(props) {
 
   async function getUserInfo() {
     try {
-      let response = await axios.get(SERVER_ADDR + '/v1/userInfo', {}, { credentials: true });
-      console.log(response);
+      let response = await axios.get('http://localhost:3000/v1/userInfo', { withCredentials: true });
+      return response.data;
     } catch (err) {
       const status = err.response.status;
       if (status === 401) {
@@ -319,7 +331,8 @@ async function Main(props) {
 
   async function getAssignmentInfo() {
     try {
-      let response = await axios.get(SERVER_ADDR + '/v1/assignment', {}, { credentials: true });
+      let response = await axios.get('http://localhost:3000/v1/assignment', { withCredentials: true });
+      return response.data
     } catch (err) {
       const status = err.response.status;
       if (status === 400 || status === 401) {
@@ -338,19 +351,29 @@ async function Main(props) {
     }
     return undefined;
   }
-
+  const fetchData = async () => {
+    const aaa = await getUserInfo();
+    const bbb = await getAssignmentInfo();
+    setUser(aaa);
+    setAssign(bbb);
+  }
+  useEffect(() => {
+    fetchData();
+  }, [assign.length]);
   // 개별 component로 넘길 data들 정리
-
   // 사용자의 type (교수 0, 학생 1)
   let type;
   // SideBar로 넘길 "과제 제목"들
   let s_assignment = [];
   // home으로 넘길 정보 정리
   let home_assignment = [];
+  // await getUserInfo();
+  // await getAssignmentInfo();  
+  let user_info = user;
+  let assignment = assign;
+  // let [user_info, assignment] = await Promise.all(getUserInfo(), getAssignmentInfo());
 
-  let [user_info, assignment] = await Promise.all(getUserInfo(), getAssignmentInfo());
-
-  type = String(user_info.userNumber).charAt(0) === 1 ? 0 : 1;
+  type = String(user_info.userNumber).charAt(0) === '1' ? 0 : 1;
 
   for (let i = 0; i < assignment.length; i++) {
     // id: 0, title : 1, state : 2
@@ -381,6 +404,8 @@ async function Main(props) {
   const last = props.match.params.last;
 
   let contents;
+
+  console.log(type);
   if (component == undefined) { // '/home' => Home.js
 
     // home component setting
@@ -399,6 +424,7 @@ async function Main(props) {
               <Assignment
                 info={findAssignmentById(Number(sub), assignment)}
               />;
+
           } else { // 'home/assignment' default page가 없음
             // 첫번째 과제 페이지로 redirect
             window.location.href = "/home/assignment/1";
@@ -461,18 +487,6 @@ async function Main(props) {
       contents = <Error />;
     }
   }
-
-  /* drawer 코드 */
-  const classes = useStyles();
-  const [open, setOpen] = useState(false); // header와 drawer에 동시 적용되어야하기 때문에 Main에 저장
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
 
 
 

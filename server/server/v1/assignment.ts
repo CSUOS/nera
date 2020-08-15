@@ -127,6 +127,7 @@ router.post('/', async (ctx: Koa.Context) => {
 });
 
 router.get('/', async (ctx: Koa.Context) => {
+  const token = ctx.cookies.get('access_token');
   let takeAssignment: any;
   try {
     if (ctx.role === '1') {
