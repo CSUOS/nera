@@ -11,7 +11,7 @@ class Assignment extends Component {
             <Grid container direction="column" spacing={24}>
                 <Grid className="assignment_page_header">
                     <Grid className="assignment_page_title">
-                        <AssignmentInfo title={this.props.info["assignment_name"]} deadline={this.props.info["deadline"]}></AssignmentInfo>
+                        <AssignmentInfo title={this.props.assignmentName} deadline={this.props.deadline}></AssignmentInfo>
                     </Grid>
                     <Grid className="save_container">
                         <Grid container direction="row" alignItems="flex-start" justify="flex-end">
@@ -21,9 +21,9 @@ class Assignment extends Component {
                     </Grid>
                 </Grid>
 
-                {this.props.info["questions"].map((prob, index)=>{
+                {this.props.questions.map((prob, index)=>{
                     return (
-                        <Problem number={index+1} info={prob} marked={this.props.info["assignment_state"]}></Problem>
+                        <Problem number={index+1} info={prob} marked={this.props.assignmentState}></Problem>
                     );
                 })}
 

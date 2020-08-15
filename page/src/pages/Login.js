@@ -35,7 +35,7 @@ function Login(){
 
     async function hashProcess(){
         try {
-            let hashed_token = await axios.get(SERVER_ADDR+'/v1/token', {}, { credentials: true });
+            let hashed_token = await axios.get(SERVER_ADDR+'/v1/token', {}, { withCredentials: true });
 
             if (hashed_token.status == 404) {
                 alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
@@ -58,7 +58,7 @@ function Login(){
         var response = await axios.post(SERVER_ADDR + '/v1/login', { // get api data
             userId: id,
             userPw: hashed_pw,
-        }, { credentials: true }).catch((err)=>alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));
+        }, { withCredentials: true }).catch((err)=>alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));
 
         console.log(response);
 
@@ -89,18 +89,18 @@ function Login(){
     }
 
     async function loginAsTestAccount(e) {
-        let hashed_token = await axios.get(SERVER_ADDR+'/v1/token', {}, { credentials: true });
-
-        if (hashed_token.status == 404) {
+        let hashed_token = await axios.get(SERVER_ADDR+'/v1/token', {}, { withCredentials: true });
+        if (hashed_token.status === 404) {
             alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
             return;
         }
 
-        let response = await axios.post(SERVER_ADDR+'/v1/login', { // get api data
+        /*let response = await axios.post(SERVER_ADDR+'/v1/login', { // get api data
             userId: "train96",
             userPw: hashData(hashed_token.data + "962d3b4a8f231a9d9902619e1775648ee8db3ac90966ad013a27bdfa24940f93"),
-        }, { credentials: true }).catch((err)=>alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));
-
+        }, { credentials: true }).catch((err)=>alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));*/
+        let response = await axios.get(SERVER_ADDR+'/v1/cookieTest', { withCredentials: true }).
+            catch((err) => alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));
         const status = response.status;
         const rabumsStatus = response?.data?.message?.slice(response.data.message.length - 3);
         if(status==400 || rabumsStatus == "400"){
@@ -110,9 +110,10 @@ function Login(){
         }else if(status==500 || rabumsStatus == "500"){
             alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
         }
-
+        console.log(response.data);
         if (status == 200 && rabumsStatus == undefined) {
-           //window.location.href = "/home";
+           window.location.href = "/home";
+           console.log(response);
         }
     }
     

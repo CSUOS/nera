@@ -7,15 +7,14 @@ const Home = (props)=>{
     const {type, user_info, as_info} = props;
     let progress_assignment = [];
     let finish_assignment = [];
-
     const result = as_info.map((as)=>{
-        if(type===0){ // 교수 => 0만 마감 전
+        if(type===0){ // 교수 => 0, 1이 마감 전 0 => 발행전, 1 => 진행 중
             switch(as[3]){
                 case 0:
                     progress_assignment.push(as);
                     break;
                 case 1:
-                    finish_assignment.push(as);
+                    progress_assignment.push(as);
                     break;
                 case 2:
                     finish_assignment.push(as);
@@ -38,14 +37,13 @@ const Home = (props)=>{
             }
         }
     });
-    
 
     return (
         <Grid container direction="column" spacing={24}>
             <AccountInfo 
                 name={user_info.name} 
                 number={user_info.user_number} 
-                type={user_info.type} 
+                type={type} 
                 major = {user_info.major}
             />
             <Grid container direction="column" className="contents_con">   
@@ -55,8 +53,9 @@ const Home = (props)=>{
                     {
                         progress_assignment.map((as)=>
                             <AssignmentBox
-                                type={user_info.type}
+                                type={type}
                                 as_info={as}
+                                key={as[2]}
                             />
                         )
                     }
@@ -68,8 +67,9 @@ const Home = (props)=>{
                     {
                         finish_assignment.map((as)=>
                             <AssignmentBox
-                                type={user_info.type}
+                                type={type}
                                 as_info={as}
+                                key={as[2]}
                             />
                         )
                     }
