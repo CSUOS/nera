@@ -126,6 +126,23 @@ function Main(props) {
     try{
       const access_token = getCookie('access_token');
       const token = jwt.decode(access_token);
+
+      // 사용자의 major (920 => 컴과, 다른 학과는 나중에 추가하기)
+      // type이 1일 때만 setting
+      // type이 0이면(교수면) default로 ""
+      const majorNumber = String(token.userNumber).substring(4,7);
+      if(type===0)
+        return;
+      else if(type===1){
+        switch(majorNumber){
+          case "920" : 
+            token['major'] = "컴퓨터과학부";
+            break;
+          default :
+            token['major'] = "~~~~부";
+        }
+      }
+
       return token;
     }catch(err){
       console.log(err);
@@ -158,15 +175,24 @@ function Main(props) {
 
   useEffect(() => {
     async function fetchData() {
-      setUser(await getUserInfo(), updateType);
-      setAssign(await getAssignmentInfo(), updateAssignments);
+      setUser(await getUserInfo());
+      setAssign(await getAssignmentInfo());
     }
 
+    fetchData();
+
+  }, [user.userId]);
+
+  useEffect(()=>{
     async function updateType() {
       // 사용자의 type (교수 0, 학생 1)
       setType((String(user.userNumber).charAt(0) === '1') ? 0 : 1);
     }
 
+    updateType();
+  }, [user.userNumber]);
+
+  useEffect(()=>{
     async function updateAssignments() {
       // SideBar로 넘길 "과제 제목"들
       let sAssign = [];
@@ -196,10 +222,11 @@ function Main(props) {
 
       setSideAssign(sAssign);
       setHomeAssign(hAssign);
-    }
+    };
 
-    fetchData();
-  }, [assign.length]);
+    updateAssignments();
+  }, [assign])
+
 
   /* select component from url */
   // url은 http://NERA서버/component/sub/last 순으로 구성되어있음
@@ -214,8 +241,8 @@ function Main(props) {
     contents =
       <Home
         type={type}
-        user_info={user}
-        as_info={homeAssign}
+        userInfo={user}
+        asInfo={homeAssign}
       />;
   } else { // 'home/' => 여러 컴포넌트로 분리
     if (type === 1) { // 학생이면

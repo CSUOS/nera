@@ -10,7 +10,7 @@ const userInfo = {
   _id: 0,
   userId: 'thereisnotruth',
   userName: '고태진',
-  userNumber: 1016920003,
+  userNumber: 2016920003,
 };
 
 router.get('/', async (ctx: Koa.Context) => {
