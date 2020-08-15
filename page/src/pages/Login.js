@@ -94,17 +94,12 @@ function Login(){
     }
 
     async function loginAsTestAccount(e) {
-<<<<<<< HEAD
 
         let hashed_token = await axios.get(
                             SERVER_ADDR+'/v1/token', {}, { credentials: true }
                             ).catch((err)=>console.log(err));
 
         if (hashed_token.status == 404) {
-=======
-        let hashed_token = await axios.get(SERVER_ADDR+'/v1/token', {}, { withCredentials: true });
-        if (hashed_token.status === 404) {
->>>>>>> 0ca15265df03f920a532ca0e59cbf044128ec6fa
             alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
             return;
         }
