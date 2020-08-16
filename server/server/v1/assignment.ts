@@ -141,7 +141,7 @@ router.get('/', async (ctx: Koa.Context) => {
     await Promise.all(
       takeAssignment.map(async (element: any) => {
         const t = element;
-        t.assignmentState = await calState(t, ctx.user);
+        t.assignmentState = await calState(t, ctx.user).catch((err)=>console.log(err));
       }),
     );
 
