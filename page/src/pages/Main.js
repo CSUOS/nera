@@ -80,6 +80,8 @@ function Main(props) {
   const [sideAssign, setSideAssign] = useState([]);
   const [homeAssign, setHomeAssign] = useState([]);
 
+  const [contents, setContents] = useState();
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -87,7 +89,7 @@ function Main(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  
+
   /* using function */
   const findAssignmentById = (id, asList) => {
     for (let i = 0; i < asList.length; ++i)
@@ -180,7 +182,6 @@ function Main(props) {
     }
 
     fetchData();
-
   }, [user.userId]);
 
   useEffect(()=>{
@@ -215,8 +216,8 @@ function Main(props) {
             assign[i].assignmentId,
             assign[i].deadline,
             assign[i].assignmentName,
-            assign[i].assignmentState,
-            assign[i].score
+            assign[i].assignmentState
+            //,assign[i].score => 없어졌음
           ]);
       }
 
@@ -225,97 +226,101 @@ function Main(props) {
     };
 
     updateAssignments();
-  }, [assign])
-
-
-  /* select component from url */
+  }, [assign]);
+  
+  useEffect(()=>{
+    function selectComponent(){
+      /* select component from url */
+      
   // url은 http://NERA서버/component/sub/last 순으로 구성되어있음
-  const component = props.match.params.component;
-  const sub = props.match.params.sub;
-  const last = props.match.params.last;
+      const component = props.match.params.component;
+      const sub = props.match.params.sub;
+      const last = props.match.params.last;
 
-  let contents;
-  if (component == undefined) { // '/home' => Home.js
+      if (component == undefined) { // '/home' => Home.js
 
-    // home component setting
-    contents =
-      <Home
-        type={type}
-        userInfo={user}
-        asInfo={homeAssign}
-      />;
-  } else { // 'home/' => 여러 컴포넌트로 분리
-    if (type === 1) { // 학생이면
-      switch (component) {
-        case "assign": // 'home/assign' => Assignment.js
-          if (sub != undefined) { // 'home/assign/:as_id' (as_id가 sub)
-            contents =
-              <Assignment
-                info={findAssignmentById(Number(sub), assign)}
-              />;
-
-          } else { // 'home/assign' default page가 없음
-            // 첫번째 과제 페이지로 redirect
-            window.location.href = "/home/assign/1";
+        // home component setting
+        setContents(
+          <Home
+            type={type}
+            userInfo={user}
+            asInfo={homeAssign}
+        />);
+      } else { // 'home/' => 여러 컴포넌트로 분리
+        if (type === 1) { // 학생이면
+          switch (component) {
+            case "assign": // 'home/assign' => Assignment.js
+              if (sub != undefined) { // 'home/assign/:as_id' (as_id가 sub)
+                setContents(
+                    <Assignment
+                      info={findAssignmentById(Number(sub), assign)}
+                    />);
+              } else { // 'home/assign' default page가 없음
+                // 첫번째 과제 페이지로 redirect
+                window.location.href = "/home/assign/1";
+              }
+              break;
+            default: // 학생은 현재 Assignment 컴포넌트 말고 다른 컴포넌트가 없음
+              setContents(<Error />);
           }
-          break;
-        default: // 학생은 현재 Assignment 컴포넌트 말고 다른 컴포넌트가 없음
-          contents = <Error />;
+        } else if (type === 0) { // 교수이면
+          switch (component) {
+            case "assign": // 'home/assign' => SubmissionStatus.js
+              if (sub != undefined) {
+                setContents(<SubmissionStatus info={findAssignmentById(Number(sub), assign)} />); 
+              } else { // 'home/assign' default page가 없음
+                setContents(<Error/>);
+              }
+              break;
+
+            case "setting":
+              if (sub == undefined) { // 'home/setting' => Setting.js
+                setContents(<Setting
+                  as_info={assign}
+                />);
+              } else {
+                if (sub === "add") { // 'home/setting/add' => SetAssignment.js
+                  contents = <SetAssignment />;
+                } else {
+                  // add가 아닌 Number type이면 해당 id의 과제 설정창 => SetAssignment.js
+                  setContents(
+                    <SetAssignment
+                      as_info={findAssignmentById(Number(sub), assign)}
+                    />);
+                }
+              }
+              break;
+
+            case "scoring": // 'home/scoring/sub/last' => Scoring.js
+              // sub, last가 둘 다 존재할 때만 동작
+              // sub : 과제 번호, last : 학번
+              if (sub != undefined && last != undefined)
+                // TODO: API와 동기화를 시키면서 isAbleToMark와 selectAnswers를 사용하지 않기로 했으므로, 
+                // 그 컴포넌트의 코드를 수정해야 함.
+                setContents(<Scoring as_info={assign} number={Number(last)} />);
+              else
+                setContents(<Error />);
+              break;
+
+            case "setList": // 'home/setList' => SetStudentList.js
+              if (sub != undefined) {
+                setContents(<Error />);
+              } else {
+                setContents(<SetStudentList />);
+              }
+              break;
+
+            default:
+              setContents(<Error />);
+          }
+        } else {
+          setContents(<Error />);
+        }
       }
-    } else if (type === 0) { // 교수이면
-      switch (component) {
-        case "assign": // 'home/assign' => SubmissionStatus.js
-          if (sub != undefined) {
-            contents = <SubmissionStatus info={findAssignmentById(Number(sub), assign)} />;
-          } else { // 'home/assign' default page가 없음
-            contents = <Error></Error>
-          }
-          break;
-
-        case "setting":
-          if (sub == undefined) { // 'home/setting' => Setting.js
-            contents = <Setting
-              as_info={assign}
-            />;
-          } else {
-            if (sub === "add") { // 'home/setting/add' => SetAssignment.js
-              contents = <SetAssignment />;
-            } else {
-              // add가 아닌 Number type이면 해당 id의 과제 설정창 => SetAssignment.js
-              contents =
-                <SetAssignment
-                  as_info={findAssignmentById(Number(sub), assign)}
-                />;
-            }
-          }
-          break;
-
-        case "scoring": // 'home/scoring/sub/last' => Scoring.js
-          // sub, last가 둘 다 존재할 때만 동작
-          // sub : 과제 번호, last : 학번
-          if (sub != undefined && last != undefined)
-            // TODO: API와 동기화를 시키면서 isAbleToMark와 selectAnswers를 사용하지 않기로 했으므로, 
-            // 그 컴포넌트의 코드를 수정해야 함.
-            contents = <Scoring as_info={assign} number={Number(last)} />
-          else
-            contents = <Error />
-          break;
-
-        case "setList": // 'home/setList' => SetStudentList.js
-          if (sub != undefined) {
-            contents = <Error />;
-          } else {
-            contents = <SetStudentList />;
-          }
-          break;
-
-        default:
-          contents = <Error />;
-      }
-    } else {
-      contents = <Error />;
     }
-  }
+
+    selectComponent();
+  }, [assign]);
 
   /* rendering */
   return (

@@ -4,23 +4,11 @@ import {AssignmentInfo, Problem} from "../components";
 import { Button, Grid } from '@material-ui/core';
 
 const Assignment = (props)=>{
-    const {asInfo, asId} = props;
+    const {asInfo} = props;
     const [info, setInfo] = useState();
     const [questions, setQuestions] = useState();
 
-    console.log(asInfo);
-    console.log(asId);
-
-    const findAssignmentById = () => {
-        for (let i = 0; i < asInfo.length; ++i)
-        if (asInfo[i]["assignmentId"] === asId){
-            console.log(asInfo[i]);
-            return asInfo[i];
-        }
-        return undefined;
-    }
-
-    setInfo(findAssignmentById());
+    setInfo(asInfo);
 
     useEffect(()=>{
         setQuestions(info.questions);
