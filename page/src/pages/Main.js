@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { SideBar, Header } from "../components";
-import { Home, Assignment, Setting, Error, SubmissionStatus, SetAssignment, Scoring, SetStudentList } from "../pages";
+import { Home, Assignment, Setting, Error, SubmissionStatus, SetAssignment, Scoring, SetStudentList, Test1, Test2, TestHome } from "../pages";
 import "./pages.css";
 import clsx from 'clsx';
 import axios from "axios";
+import { Route, Link } from 'react-router-dom';
 
 import { Grid } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
@@ -234,8 +235,7 @@ function Main(props) {
       
   // url은 http://NERA서버/component/sub/last 순으로 구성되어있음
       const component = props.match.params.component;
-      const sub = props.match.params.sub;
-      const last = props.match.params.last;
+      /*
 
       if (component == undefined) { // '/home' => Home.js
 
@@ -317,8 +317,8 @@ function Main(props) {
           setContents(<Error />);
         }
       }
+*/
     }
-
     selectComponent();
   }, [assign]);
 
@@ -352,7 +352,7 @@ function Main(props) {
           [classes.contentShift]: open,
         }, "margin-top-64", "contents_side")}
       >
-        {contents}
+        <Route exact path="/home/:assignment" component={TestHome}/>
       </Grid>
     </Grid>
   )

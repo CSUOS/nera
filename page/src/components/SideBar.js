@@ -85,7 +85,7 @@ const SideBar = (props) => {
             >
                 {
                     primary_assignment.map((as) => 
-                        <Link to={'/home/assignment/'+as[0]} key={as[0]}>
+                        <Link to={'/home/assign/'+as[0]} key={as[0]}>
                             <ListItem button className={classes.nested}>
                             <ListItemIcon>
                                 {
@@ -107,7 +107,7 @@ const SideBar = (props) => {
                 }
                 {
                     secondary_assignment.map((as) => 
-                        <Link to={'/home/assignment/'+as[0]} key={as[0]}>
+                        <Link to={'/home/assign/'+as[0]} key={as[0]}>
                             <ListItem button className={classes.nested}>
                             <ListItemIcon>
                                 {

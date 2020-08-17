@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {AssignmentInfo, Problem} from "../components";
+import { Route } from 'react-router-dom';
 
 import { Button, Grid } from '@material-ui/core';
 
@@ -27,12 +28,7 @@ const Assignment = (props)=>{
                     </Grid>
                 </Grid>
             </Grid>
-
-            {questions.map((prob, index)=>{
-                return (
-                    <Problem number={index+1} info={prob} marked={info.assignmentState}></Problem>
-                );
-            })}
+            <Route exact path="/home/assign/:number" component={Error}/>
         </Grid>
     );
 }

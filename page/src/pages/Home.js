@@ -1,14 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {AccountInfo, AssignmentBox} from "../components";
+import { Link } from 'react-router-dom';
 
 import { Grid } from '@material-ui/core';
 
 const Home = (props)=>{
     const {type, userInfo, asInfo} = props;
+    console.log(asInfo);
     const [PAssignment, setPA] = useState([]); // progress
     const [FAssignment, setFA] = useState([]); // finish
 
     useEffect(()=>{
+        /*
         const result = asInfo.map((as)=>{
             if(type===0){ // 교수 => 0, 1이 마감 전 0 => 발행전, 1 => 진행 중
                 switch(as[3]){
@@ -38,7 +41,8 @@ const Home = (props)=>{
                         break;
                 }
             }
-        });
+        });*/
+        setPA(asInfo);
     }, [asInfo]);
 
     return (
