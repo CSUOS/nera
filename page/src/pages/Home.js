@@ -5,6 +5,7 @@ import { getMajorStr } from '../shared/MajorDictionary';
 
 import { Grid } from '@material-ui/core';
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 // jwt 추가
 const jwt = require('jsonwebtoken');
@@ -13,6 +14,7 @@ const Home = (props)=>{
     const [PAssignment, setPA] = useState(undefined); // progress
     const [FAssignment, setFA] = useState(undefined); // finish
     const [user, setUser] = useState(undefined);
+    const history = useHistory();
 
     function getCookie(name) {
         let value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
@@ -37,7 +39,7 @@ const Home = (props)=>{
             return token;
         } catch (err) {
             alert(`사용자 정보를 가져오는 중 오류가 발생하였습니다. (${err})`);
-            window.location.href = "/";
+            history.push("/");
         }
     }
 
@@ -82,7 +84,7 @@ const Home = (props)=>{
                 else if (status === 500) {
                     alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
                 }
-                window.location.href = "/";
+                history.push("/");
             })
     }, []);
 

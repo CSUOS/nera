@@ -12,6 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { set } from 'date-fns';
 import { getMajorStr } from '../shared/MajorDictionary';
+import { useHistory } from "react-router-dom";
 
 // jwt 추가
 const jwt = require('jsonwebtoken');
@@ -73,6 +74,7 @@ function Main(props) {
   const [open, setOpen] = useState(true); // header와 drawer에 동시 적용되어야하기 때문에 Main에 저장
   const [user, setUser] = useState(undefined);
   const [sideAssign, setSideAssign] = useState(undefined);
+  const history = useHistory();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -105,7 +107,7 @@ function Main(props) {
       return token;
     }catch(err){
       alert(`사용자 정보를 가져오는 중 오류가 발생하였습니다. (${err})`);
-      window.location.href = "/";
+      history.push("/");
     }
   }
 
@@ -164,7 +166,7 @@ function Main(props) {
         else if (status === 500) {
           alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
         }
-        window.location.href = "/";
+        history.push("/");
       })
   }, []);
 
@@ -349,7 +351,7 @@ function Main(props) {
         }, "margin-top-64", "contents_side")}
       >
         <Route exact path="/home" component={Home}/>
-        <Route exact path="/home/assignment/:as_id" component={Home}/>
+        <Route exact path="/home/assignment/:as_id" component={Assignment}/>
       </Grid>
     </Grid>
   )

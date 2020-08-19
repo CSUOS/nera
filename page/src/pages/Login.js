@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import axios from "axios";
 import { Grid, TextField, Button, Typography } from '@material-ui/core';
 import crypto from 'crypto';
+import { useHistory } from "react-router-dom";
 
 function Login(){
     // id, password
     const [id,setId]= useState("");
     const [pw,setPw]= useState("");
+    const history = useHistory();
 
     function hashData(data) {
         return crypto.createHash("sha256")
@@ -97,7 +99,7 @@ function Login(){
         }
         console.log(response.data);
         if (status == 200 && rabumsStatus == undefined) {
-           window.location.href = "/home";
+            history.push("/home");
            console.log(response);
         }
     }
