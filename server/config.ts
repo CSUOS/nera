@@ -36,9 +36,8 @@ exports.jwtMiddleware = async (ctx: Koa.Context, next: any) => {
   const token = ctx.cookies.get('access_token');
   // 쿠키에 저장된 토큰을 가져옴
   if (!token) {
-    // ctx.throw(401, '인증 실패');
+    ctx.throw(401, '인증 실패');
     // 토큰이 없을 경우 인증 실패
-    return next();
   }
   const secretKey = secret.env.accessSecretKey;
   // Vault 에 저장된 로그인 토큰 암호화 키
