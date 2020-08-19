@@ -11,12 +11,6 @@ import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-// 로컬에서 디버그할 땐 서버를 3000에 실행시킨 다음,
-// 프론트를 3001에서 실행시킨다.
-// 그 후 아래 변수를 http://localhost:3000로 설정한다.
-// 로컬에서 디버그하는 상황 외에는 실제 서버 주소로 설정해야 한다.
-const SERVER_ADDR = "http://localhost:3000"
-
 // jwt 추가
 const jwt = require('jsonwebtoken');
 
@@ -155,7 +149,7 @@ function Main(props) {
 
   async function getAssignmentInfo() {
     try {
-      let response = await axios.get(SERVER_ADDR+'/v1/assignment', { withCredentials: true });
+      let response = await axios.get('/v1/assignment', { withCredentials: true });
       return response.data
     } catch (err) {
       const status = err.response.status;

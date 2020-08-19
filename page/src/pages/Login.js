@@ -3,12 +3,6 @@ import axios from "axios";
 import { Grid, TextField, Button, Typography } from '@material-ui/core';
 import crypto from 'crypto';
 
-// 로컬에서 디버그할 땐 서버를 3000에 실행시킨 다음,
-// 프론트를 3001에서 실행시킨다.
-// 그 후 아래 변수를 http://localhost:3000로 설정한다.
-// 로컬에서 디버그하는 상황 외에는 실제 서버 주소로 설정해야 한다.
-const SERVER_ADDR = "http://localhost:3000"
-
 function Login(){
     // id, password
     const [id,setId]= useState("");
@@ -35,7 +29,7 @@ function Login(){
 
     async function hashProcess(){
         try {
-            let hashed_token = await axios.get(SERVER_ADDR+'/v1/token', { withCredentials: true });
+            let hashed_token = await axios.get('/v1/token', { withCredentials: true });
 
             if (hashed_token.status == 404) {
                 alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
@@ -55,7 +49,7 @@ function Login(){
 
     async function setLoginData(e){ // pw 암호화 및 api data 받기
         let hashed_pw = await hashProcess();
-        var response = await axios.post(SERVER_ADDR + '/v1/login', { // get api data
+        var response = await axios.post('/v1/login', { // get api data
             userId: id,
             userPw: hashed_pw,
         }, { withCredentials: true }).catch((err)=>alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));
@@ -88,14 +82,14 @@ function Login(){
         setPw(password.value);
     }
     async function cookieTest(e){
-        let cookie = await axios.get(SERVER_ADDR+'/v1/cookieTest/', { withCredentials: true });
+        let cookie = await axios.get('/v1/cookieTest/', { withCredentials: true });
         console.log(cookie);
     }
 
     async function loginAsTestAccount(e) {
 
         let hashed_token = await axios.get(
-                            SERVER_ADDR+'/v1/token', { withCredentials: true }
+                            '/v1/token', { withCredentials: true }
                             ).catch((err)=>console.log(err));
 
         if (hashed_token.status == 404) {
@@ -108,7 +102,7 @@ function Login(){
             userPw: hashData(hashed_token.data + "962d3b4a8f231a9d9902619e1775648ee8db3ac90966ad013a27bdfa24940f93"),
         }, { credentials: true }).catch((err)=>alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));*/
         
-        let response = await axios.get(SERVER_ADDR+'/v1/cookieTest', { withCredentials: true }).
+        let response = await axios.get('/v1/cookieTest', { withCredentials: true }).
             catch((err) => alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));
         const status = response.status;
         const rabumsStatus = response?.data?.message?.slice(response.data.message.length - 3);
