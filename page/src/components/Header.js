@@ -84,7 +84,7 @@ const Header =(props)=> {
       let doLogout = window.confirm("정말로 로그아웃 하시겠습니까?");
     
       if (doLogout) {
-        axios.post('v1/logout', { withCredentials: true })
+        axios.post('/v1/logout', { withCredentials: true })
           .then(res => {
             history.push("/");
           })

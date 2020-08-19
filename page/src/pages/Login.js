@@ -97,7 +97,7 @@ function Login(){
         }else if(status==500 || rabumsStatus == "500"){
             alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
         }
-        console.log(response.data);
+        
         if (status == 200 && rabumsStatus == undefined) {
             history.push("/home");
            console.log(response);
