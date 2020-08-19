@@ -25,7 +25,7 @@ async function calState(assignment: any, userInfo: any) {
   const answer = await AnswerPaperModel
     .findOne({ userNumber: userInfo.userNumber, assignmentId: assignment.assignmentId }).exec();
   for (let i = 0; i < answer.answers.length; i += 1) {
-    if (answer.answers[i].score === -1) {
+    if (answer.answers[i].score === -1 || !answer) {
       return 2; // 마감됨
     }
   }
