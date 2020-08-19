@@ -6,8 +6,8 @@ import { Grid, Paper } from '@material-ui/core';
 
 const AssignmentBox = (props)=>{
   const {type, as_info} = props;
-  const state = as_info[3];
-  const date = new Date(as_info[1]);
+  const state = as_info.assignmentState;
+  const date = new Date(as_info.deadline);
   const deadline = date.getFullYear() + "-" 
                 + (date.getMonth()+1 <= 9 ? "0" : "") + (date.getMonth()+1) + "-"
                 + (date.getDate() <= 9 ? "0" : "") + date.getDate() + " "
@@ -44,9 +44,9 @@ const AssignmentBox = (props)=>{
   
   return(
     <Paper className="assignment_box">
-      <Link to ={"/home/assign"}>
+      <Link to ={`/home/assignment/${as_info.assignmentId}`}>
             <Grid className="a_box_header">
-              <Grid className="a_box_title">{as_info[2]}</Grid>
+              <Grid className="a_box_title">{as_info.assignmentName}</Grid>
               <Grid className={classes.circleSytle}>{state_word}</Grid>
             </Grid>
             <Grid className="a_box_deadline">{deadline} 까지</Grid>

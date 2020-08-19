@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 const SideBar = (props) => {
     const classes = useStyles();
     const {type, drawerClose, assignment_info} = props;
+    console.log(props)
 
     let primary_assignment = [];
     let secondary_assignment = [];
@@ -85,7 +86,7 @@ const SideBar = (props) => {
             >
                 {
                     primary_assignment.map((as) => 
-                        <Link to={'/home/assign/'+as[0]} key={as[0]}>
+                        <Link to={'/home/assignment/'+as[0]}>
                             <ListItem button className={classes.nested}>
                             <ListItemIcon>
                                 {
@@ -107,7 +108,7 @@ const SideBar = (props) => {
                 }
                 {
                     secondary_assignment.map((as) => 
-                        <Link to={'/home/assign/'+as[0]} key={as[0]}>
+                        <Link to={'/home/assignment/'+as[0]}>
                             <ListItem button className={classes.nested}>
                             <ListItemIcon>
                                 {

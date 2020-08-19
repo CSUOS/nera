@@ -8,19 +8,6 @@ function Login(){
     const [id,setId]= useState("");
     const [pw,setPw]= useState("");
 
-    // 아래의 함수는 digest("hex")로 대체되었습니다. hashData 함수를 확인해주세요!
-    /*String.prototype.hexEncode = function(){ // string to hex code
-        var hex, i;
-    
-        var result = "";
-        for (i=0; i<this.length; i++) {
-            hex = this.charCodeAt(i).toString(16);
-            result += ("000"+hex).slice(-4);
-        }
-    
-        return result
-    }*/
-
     function hashData(data) {
         return crypto.createHash("sha256")
             .update(Buffer.from(data, "utf8").toString('base64'))
@@ -96,11 +83,6 @@ function Login(){
             alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
             return;
         }
-
-        /*let response = await axios.post(SERVER_ADDR+'/v1/login', { // get api data
-            userId: "train96",
-            userPw: hashData(hashed_token.data + "962d3b4a8f231a9d9902619e1775648ee8db3ac90966ad013a27bdfa24940f93"),
-        }, { credentials: true }).catch((err)=>alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));*/
         
         let response = await axios.get('/v1/cookieTest', { withCredentials: true }).
             catch((err) => alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));

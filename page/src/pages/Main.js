@@ -10,6 +10,8 @@ import { Grid } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { set } from 'date-fns';
+import { getMajorStr } from '../shared/MajorDictionary';
 
 // jwt 추가
 const jwt = require('jsonwebtoken');
@@ -68,14 +70,9 @@ const useStyles = makeStyles((theme) => ({
 function Main(props) {
   /* drawer 코드 */
   const classes = useStyles();
-  const [open, setOpen] = useState(false); // header와 drawer에 동시 적용되어야하기 때문에 Main에 저장
-  const [user, setUser] = useState({});
-  const [assign, setAssign] = useState([]);
-  const [type, setType] = useState(1);
-  const [sideAssign, setSideAssign] = useState([]);
-  const [homeAssign, setHomeAssign] = useState([]);
-
-  const [contents, setContents] = useState();
+  const [open, setOpen] = useState(true); // header와 drawer에 동시 적용되어야하기 때문에 Main에 저장
+  const [user, setUser] = useState(undefined);
+  const [sideAssign, setSideAssign] = useState(undefined);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -85,69 +82,35 @@ function Main(props) {
     setOpen(false);
   };
 
-  /* using function */
-  const findAssignmentById = (id, asList) => {
-    for (let i = 0; i < asList.length; ++i)
-      if (asList[i]["assignmentId"] === id)
-        return asList[i];
-
-    return undefined;
-  }
-/*
-  async function getUserInfo() {
-    try {
-      let response = await axios.get(SERVER_ADDR+'/v1/userInfo', { withCredentials: true });
-      return response.data;
-    } catch (err) {
-      const status = err.response.status;
-      if (status === 401) {
-        //console.log("사용자 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
-        alert("사용자 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
-      }
-      else if (status === 500) {
-        //console.log("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
-        alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
-      }
-      window.location.href = "/";
-    }
-    return [];
-  }
-*/
-
   function getCookie(name) {
     let value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
     return value? value[2] : null;
   };
 
-  async function getUserInfo(){
+  function getUserInfo(){
     try{
       const access_token = getCookie('access_token');
       const token = jwt.decode(access_token);
 
-      // 사용자의 major (920 => 컴과, 다른 학과는 나중에 추가하기)
+      // 사용자의 major (ex. 920 => 컴과, MajorDictionary.js에 정의되어 있음)
       // type이 1일 때만 setting
       // type이 0이면(교수면) default로 ""
+      token.type = String(token.userNumber)[0] == '1' ? 0 : 1;
       const majorNumber = String(token.userNumber).substring(4,7);
-      if(type===0)
-        return;
-      else if(type===1){
-        switch(majorNumber){
-          case "920" : 
-            token['major'] = "컴퓨터과학부";
-            break;
-          default :
-            token['major'] = "~~~~부";
-        }
-      }
+      if(token.type===0)
+        token.major = "";
+      else if(token.type===1)
+        token.major = getMajorStr(majorNumber);
 
       return token;
     }catch(err){
-      console.log(err);
+      alert(`사용자 정보를 가져오는 중 오류가 발생하였습니다. (${err})`);
+      window.location.href = "/";
     }
   }
 
 
-  async function getAssignmentInfo() {
+  /*function getAssignmentInfo() {
     try {
       let response = await axios.get('/v1/assignment', { withCredentials: true });
       return response.data
@@ -168,8 +131,44 @@ function Main(props) {
       window.location.href = "/";
     }
     return [];
-  }
+  }*/
 
+  useState(() => {
+    setUser(getUserInfo());
+    console.log(user);
+
+    axios.get('/v1/assignment', { withCredentials: true })
+      .then(res => {
+        let assign = res.data;
+        let sAssign = [];
+        for (let i = 0; i < assign.length; i++) {
+          // id: 0, title : 1, state : 2
+          sAssign.push(
+            [
+              assign[i].assignmentId,
+              assign[i].assignmentName,
+              assign[i].assignmentState
+            ]);
+        }
+
+        setSideAssign(sAssign);
+      })
+      .catch(err => {
+        const status = err.response.status;
+        if (status === 400 || status === 401) {
+          alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
+        }
+        else if (status === 404) {
+          alert("과제를 찾을 수 없습니다.");
+        }
+        else if (status === 500) {
+          alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
+        }
+        window.location.href = "/";
+      })
+  }, []);
+
+  /*
   useEffect(() => {
     async function fetchData() {
       setUser(await getUserInfo());
@@ -225,11 +224,10 @@ function Main(props) {
   
   useEffect(()=>{
     function selectComponent(){
-      /* select component from url */
+      /* select component from url 
       
   // url은 http://NERA서버/component/sub/last 순으로 구성되어있음
       const component = props.match.params.component;
-      /*
 
       if (component == undefined) { // '/home' => Home.js
 
@@ -311,42 +309,47 @@ function Main(props) {
           setContents(<Error />);
         }
       }
-*/
     }
     selectComponent();
-  }, [assign]);
+  }, [assign]);*/
 
   /* rendering */
   return (
     <Grid container>
       <CssBaseline />
-      <Header
-        drawerOpen={handleDrawerOpen}
-        open={open}
-        type={type}
-        name={user.userName}
-      />
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <SideBar
-          type={type}
-          drawerClose={handleDrawerClose}
-          assignment_info={sideAssign}
-        />
-      </Drawer>
+
+      {user != undefined &&
+        <Header
+          drawerOpen={handleDrawerOpen}
+          open={open}
+          type={user.type}
+          name={user.userName}
+        />}
+
+      {user != undefined && sideAssign != undefined &&
+        <Drawer
+          className={classes.drawer}
+          variant="persistent"
+          anchor="left"
+          open={open}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <SideBar
+            type={user.type}
+            drawerClose={handleDrawerClose}
+            assignment_info={sideAssign}
+          />
+        </Drawer>}
+
       <Grid
         className={clsx(classes.content, {
           [classes.contentShift]: open,
         }, "margin-top-64", "contents_side")}
       >
-        <Route exact path="/home/:assignment" component={TestHome}/>
+        <Route exact path="/home" component={Home}/>
+        <Route exact path="/home/assignment/:as_id" component={Home}/>
       </Grid>
     </Grid>
   )
