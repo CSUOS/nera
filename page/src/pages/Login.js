@@ -35,7 +35,7 @@ function Login(){
 
     async function hashProcess(){
         try {
-            let hashed_token = await axios.get(SERVER_ADDR+'/v1/token', {}, { withCredentials: true });
+            let hashed_token = await axios.get(SERVER_ADDR+'/v1/token', { withCredentials: true });
 
             if (hashed_token.status == 404) {
                 alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
@@ -87,10 +87,18 @@ function Login(){
         const password = document.querySelector('#userPw');
         setPw(password.value);
     }
+    async function cookieTest(e){
+        let cookie = await axios.get(SERVER_ADDR+'/v1/cookieTest/', { withCredentials: true });
+        console.log(cookie);
+    }
 
     async function loginAsTestAccount(e) {
-        let hashed_token = await axios.get(SERVER_ADDR+'/v1/token', {}, { withCredentials: true });
-        if (hashed_token.status === 404) {
+
+        let hashed_token = await axios.get(
+                            SERVER_ADDR+'/v1/token', { withCredentials: true }
+                            ).catch((err)=>console.log(err));
+
+        if (hashed_token.status == 404) {
             alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
             return;
         }
@@ -99,6 +107,7 @@ function Login(){
             userId: "train96",
             userPw: hashData(hashed_token.data + "962d3b4a8f231a9d9902619e1775648ee8db3ac90966ad013a27bdfa24940f93"),
         }, { credentials: true }).catch((err)=>alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));*/
+        
         let response = await axios.get(SERVER_ADDR+'/v1/cookieTest', { withCredentials: true }).
             catch((err) => alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));
         const status = response.status;

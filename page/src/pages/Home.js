@@ -4,10 +4,10 @@ import {AccountInfo, AssignmentBox} from "../components";
 import { Grid } from '@material-ui/core';
 
 const Home = (props)=>{
-    const {type, user_info, as_info} = props;
+    const {type, userInfo, asInfo} = props;
     let progress_assignment = [];
     let finish_assignment = [];
-    const result = as_info.map((as)=>{
+    const result = asInfo.map((as)=>{
         if(type===0){ // 교수 => 0, 1이 마감 전 0 => 발행전, 1 => 진행 중
             switch(as[3]){
                 case 0:
@@ -41,10 +41,10 @@ const Home = (props)=>{
     return (
         <Grid container direction="column" spacing={24}>
             <AccountInfo 
-                name={user_info.name} 
-                number={user_info.user_number} 
+                name={userInfo.userName} 
+                number={userInfo.userNumber} 
                 type={type} 
-                major = {user_info.major}
+                major = {userInfo.major}
             />
             <Grid container direction="column" className="contents_con">   
                 <Grid className="contents_title"><h6>{type===0?"마감 전 과제":"제출 가능한 과제" // 제목 수정 필요

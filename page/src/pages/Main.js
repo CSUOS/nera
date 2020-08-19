@@ -16,6 +16,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 // 로컬에서 디버그하는 상황 외에는 실제 서버 주소로 설정해야 한다.
 const SERVER_ADDR = "http://localhost:3000"
 
+// jwt 추가
+const jwt = require('jsonwebtoken');
+
 /* style definition => 대부분 css로 옮길 예정 */
 
 const drawerWidth = 300;
@@ -73,6 +76,10 @@ function Main(props) {
   const [open, setOpen] = useState(false); // header와 drawer에 동시 적용되어야하기 때문에 Main에 저장
   const [user, setUser] = useState({});
   const [assign, setAssign] = useState([]);
+  const [type, setType] = useState();
+  const [sideAssign, setSideAssign] = useState([]);
+  const [homeAssign, setHomeAssign] = useState([]);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -89,345 +96,167 @@ function Main(props) {
 
     return undefined;
   }
-
-  // isAbleToMark와 selectAnswers는 일시적으로 사용되지 않을 예정
-  /*const isAbleToMark = (asId, userNumber) => {
-    let submittedCount = 0;
-    for (const ques of assignment[asId].questions)
-      for (const answer of ques.questionAnswer)
-        if (userNumber == answer.userNumber && answer.submitted)
-          ++submittedCount;
-
-    return submittedCount === assignment[asId].questions.length;
-  }
-
-  const selectAnswers = (asId, userNumber) => {
-    let result = JSON.parse(JSON.stringify(assignment[asId]));
-
-    for (let ques of result.questions) {
-      let newAnswers = [];
-
-      for (let answer of ques.question_answer) {
-        if (answer.user_number === userNumber)
-          newAnswers.push(JSON.parse(JSON.stringify(answer)));
-      }
-
-      ques.question_answer = newAnswers;
-    }
-
-    return result;
-  }*/
-
-  /* 지워야 할 부분 (임시 data) */
-
-  // let user_info={
-  //   //"id": 1,
-  //   "name":"우희은",
-  //   "user_number" : "2017920038",
-  //   "type" : 0, // 교수 : 0 , 학생 : 1 // 도출해내야하는 정보
-  //   "major" : "컴퓨터과학부", // 도출해내야하는 정보
-  //   "meta": {
-  //     "create_at": new Date('2020-03-01T11:59:00'),
-  //     "modified_at": new Date('2020-03-01T11:59:00'),
-  //   }
-  // }
-
-  // const type = user_info.type;
-
-  //   // get assignment data from NERA server
-
-  // // [assignment_info의 값 종류]
-  // // 학생일 경우 0: 제출 필요(secondary), 1: 제출 완료(green), 2: 채점 중(primary), 3: 채점 완료(black)
-  // // 교수일 경우 0: 마감 전(green), 1: 마감 후 채점 전(secondary), 2: 마감 후 채점 후(black)
-  // // api 맞춰서 변경해야함
-
-  // const sampleNames = ["가정현", "나정현", "다정현", "라정현", "마정현", "바정현", "사정현"];
-  // const sampleNumbers = [2019920001, 2019920002, 2019920003, 2019920004, 2019920005, 2019920006, 2019920007];
-
-  // let assignment = [
-  //   {
-  //     "assignment_id": 0,
-  //     "professor" : 0,
-  //     "students": JSON.parse(JSON.stringify(sampleNumbers)),
-  //     "assignment_name": "[컴퓨터보안] SHA256 구현",
-  //     "assignment_info": "코드는 반드시 C++로 작성해주세요.",
-  //     "assignment_state": 0,
-  //     "publishingTime" : new Date('2020-08-13T11:59:00'),
-  //     "deadline" : new Date('2020-08-13T11:59:00'),
-  //     "questions": [],
-  //     "meta": {
-  //       "create_at": new Date('2020-08-01T11:59:00'),
-  //       "modified_at": new Date('2020-08-01T11:59:00'),
-  //     }
-  //   },
-  //   {
-  //     "assignment_id": 0,
-  //     "professor" : 0,
-  //     "students": JSON.parse(JSON.stringify(sampleNumbers)),
-  //     "assignment_name": "[컴퓨터보안] SHA256 구현",
-  //     "assignment_info": "코드는 반드시 C++로 작성해주세요.",
-  //     "assignment_state": 0,
-  //     "publishingTime" : new Date('2020-08-13T11:59:00'),
-  //     "deadline" : new Date('2020-08-13T11:59:00'),
-  //     "questions": [],
-  //     "meta": {
-  //       "create_at": new Date('2020-08-01T11:59:00'),
-  //       "modified_at": new Date('2020-08-01T11:59:00'),
-  //     }
-  //   },
-  //   {
-  //     "assignment_id": 0,
-  //     "professor" : 0,
-  //     "students": JSON.parse(JSON.stringify(sampleNumbers)),
-  //     "assignment_name": "[컴퓨터보안] SHA256 구현",
-  //     "assignment_info": "코드는 반드시 C++로 작성해주세요.",
-  //     "assignment_state": 0,
-  //     "publishingTime" : new Date('2020-08-13T11:59:00'),
-  //     "deadline" : new Date('2020-08-13T11:59:00'),
-  //     "questions": [],
-  //     "meta": {
-  //       "create_at": new Date('2020-08-01T11:59:00'),
-  //       "modified_at": new Date('2020-08-01T11:59:00'),
-  //     }
-  //   },
-  //   {
-  //     "assignment_id": 0,
-  //     "professor" : 0,
-  //     "students": JSON.parse(JSON.stringify(sampleNumbers)),
-  //     "assignment_name": "[컴퓨터보안] SHA256 구현",
-  //     "assignment_info": "코드는 반드시 C++로 작성해주세요.",
-  //     "assignment_state": 0,
-  //     "publishingTime" : new Date('2020-08-13T11:59:00'),
-  //     "deadline" : new Date('2020-08-13T11:59:00'),
-  //     "questions": [],
-  //     "meta": {
-  //       "create_at": new Date('2020-08-01T11:59:00'),
-  //       "modified_at": new Date('2020-08-01T11:59:00'),
-  //     }
-  //   }
-  // ];
-
-  // let q = [{
-  //   "question_id": 0,
-  //   "question_content": "SHA에 대해 조사하세요.",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // },
-  // {
-  //   "question_id": 1,
-  //   "question_content": "SHA에 대해 조사하세요.(2)",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // },
-  // {
-  //   "question_id": 2,
-  //   "question_content": "퀵 소트에 대해 조사하세요.",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // },
-  // {
-  //   "question_id": 3,
-  //   "question_content": "C/C++로 퀵 소트를 구현하세요.",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // },
-  // {
-  //   "question_id": 4,
-  //   "question_content": "쉘 소트에 대해 조사하세요.",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // },
-  // {
-  //   "question_id": 5,
-  //   "question_content": "C/C++로 쉘 소트를 구현하세요.",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // },
-  // {
-  //   "question_id": 6,
-  //   "question_content": "힙 소트에 대해 조사하세요.",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // },
-  // {
-  //   "question_id": 7,
-  //   "question_content": "C/C++로 힙 소트를 구현하세요.",
-  //   "full_score": 60,
-  //   "question_answer": [],
-  //   "meta": {
-  //     "create_at": new Date('2020-08-01T11:59:00'),
-  //     "modified_at": new Date('2020-08-01T11:59:00'),
-  //   }
-  // }];
-
-  // for (let i = 0; i < q.length; ++i)
-  // {
-  //   for (let j = 0; j < sampleNames.length; ++j)
-  //   {
-  //     q[i].question_answer.push({
-  //       "user_number": sampleNumbers[j],
-  //       "question_id": assignment[Math.floor(i/2)].assignment_id * 1000 + q[i].question_id,
-  //       "name": sampleNames[j],
-  //       "answer_content": [`${sampleNames[j]}의 ${i%2 + 1}번 문제에 대한 답입니다.`],
-  //       "submitted": (j % 2 == 0 ? true : false),
-  //       "score": Math.floor(q[i].full_score / (j+1) / (i%2 + 1)),
-  //       "meta": {
-  //         "create_at": new Date('2020-08-02T11:59:00'),
-  //         "modified_at": new Date('2020-08-02T11:59:00')
-  //       }
-  //     });
-  //   }
-  //   assignment[Math.floor(i/2)].questions.push(q[i]);
-  // }
-
-  /* 지워야 할 부분 (임시 data) */
-
+/*
   async function getUserInfo() {
     try {
-      let response = await axios.get('http://localhost:3000/v1/userInfo', { withCredentials: true });
+      let response = await axios.get(SERVER_ADDR+'/v1/userInfo', { withCredentials: true });
       return response.data;
     } catch (err) {
       const status = err.response.status;
       if (status === 401) {
-        console.log("사용자 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
-        //alert("사용자 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
+        //console.log("사용자 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
+        alert("사용자 정보를 얻는데 실패하였습니다. 잘못된 요청입니다.");
       }
       else if (status === 500) {
-        console.log("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
-        //alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
+        //console.log("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
+        alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
       }
-      //window.location.href = "/";
+      window.location.href = "/";
     }
-    return undefined;
+    return [];
   }
+*/
+
+  function getCookie(name) {
+    let value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return value? value[2] : null;
+  };
+
+  async function getUserInfo(){
+    try{
+      const access_token = getCookie('access_token');
+      const token = jwt.decode(access_token);
+
+      // 사용자의 major (920 => 컴과, 다른 학과는 나중에 추가하기)
+      // type이 1일 때만 setting
+      // type이 0이면(교수면) default로 ""
+      const majorNumber = String(token.userNumber).substring(4,7);
+      if(type===0)
+        return;
+      else if(type===1){
+        switch(majorNumber){
+          case "920" : 
+            token['major'] = "컴퓨터과학부";
+            break;
+          default :
+            token['major'] = "~~~~부";
+        }
+      }
+
+      return token;
+    }catch(err){
+      console.log(err);
+    }
+  }
+
 
   async function getAssignmentInfo() {
     try {
-      let response = await axios.get('http://localhost:3000/v1/assignment', { withCredentials: true });
+      let response = await axios.get(SERVER_ADDR+'/v1/assignment', { withCredentials: true });
       return response.data
     } catch (err) {
       const status = err.response.status;
       if (status === 400 || status === 401) {
-        console.log("과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})");
-        //alert("과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})");
+        //console.log("과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})");
+        alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
       }
       else if (status === 404) {
-        console.log("과제를 찾을 수 없습니다.");
-       // alert("과제를 찾을 수 없습니다.");
+        //console.log("과제를 찾을 수 없습니다.");
+        alert("과제를 찾을 수 없습니다.");
       }
       else if (status === 500) {
-        console.log("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
-        //alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...")
+        //console.log("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
+        alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
       }
-      //window.location.href = "/";
+      window.location.href = "/";
     }
-    return undefined;
+    return [];
   }
-  const fetchData = async () => {
-    const aaa = await getUserInfo();
-    const bbb = await getAssignmentInfo();
-    setUser(aaa);
-    setAssign(bbb);
-  }
+
   useEffect(() => {
+    async function fetchData() {
+      setUser(await getUserInfo());
+      setAssign(await getAssignmentInfo());
+    }
+
     fetchData();
-  }, [assign.length]);
-  // 개별 component로 넘길 data들 정리
-  // 사용자의 type (교수 0, 학생 1)
-  let type;
-  // SideBar로 넘길 "과제 제목"들
-  let s_assignment = [];
-  // home으로 넘길 정보 정리
-  let home_assignment = [];
-  // await getUserInfo();
-  // await getAssignmentInfo();  
-  let user_info = user;
-  let assignment = assign;
-  // let [user_info, assignment] = await Promise.all(getUserInfo(), getAssignmentInfo());
 
-  type = String(user_info.userNumber).charAt(0) === '1' ? 0 : 1;
+  }, [user.userId]);
+  
+  useEffect(()=>{
+    async function updateType() {
+      // 사용자의 type (교수 0, 학생 1)
+      setType((String(user.userNumber).charAt(0) === '1') ? 0 : 1);
+    }
 
-  for (let i = 0; i < assignment.length; i++) {
-    // id: 0, title : 1, state : 2
-    s_assignment.push(
-      [
-        assignment[i].assignmentId,
-        assignment[i].assignmentName,
-        assignment[i].assignmentState
-      ]);
-  }
+    updateType();
+  }, [user.userNumber]);
 
-  for (let i = 0; i < assignment.length; i++) {
-    home_assignment.push(
-      [
-        assignment[i].assignmentId,
-        assignment[i].deadline,
-        assignment[i].assignmentName,
-        assignment[i].assignmentState,
-        assignment[i].score
-      ]);
-  }
+  useEffect(()=>{
+    async function updateAssignments() {
+      // SideBar로 넘길 "과제 제목"들
+      let sAssign = [];
+      // home으로 넘길 정보 정리
+      let hAssign = [];
+
+      for (let i = 0; i < assign.length; i++) {
+        // id: 0, title : 1, state : 2
+        sAssign.push(
+          [
+            assign[i].assignmentId,
+            assign[i].assignmentName,
+            assign[i].assignmentState
+          ]);
+      }
+
+      for (let i = 0; i < assign.length; i++) {
+        hAssign.push(
+          [
+            assign[i].assignmentId,
+            assign[i].deadline,
+            assign[i].assignmentName,
+            assign[i].assignmentState,
+            assign[i].score
+          ]);
+      }
+
+      setSideAssign(sAssign);
+      setHomeAssign(hAssign);
+    };
+
+    updateAssignments();
+  }, [assign])
+
 
   /* select component from url */
-
   // url은 http://NERA서버/component/sub/last 순으로 구성되어있음
   const component = props.match.params.component;
   const sub = props.match.params.sub;
   const last = props.match.params.last;
 
   let contents;
-
-  console.log(type);
   if (component == undefined) { // '/home' => Home.js
-
+  console.log(type);
     // home component setting
     contents =
       <Home
         type={type}
-        user_info={user_info}
-        as_info={home_assignment}
+        userInfo={user}
+        asInfo={homeAssign}
       />;
   } else { // 'home/' => 여러 컴포넌트로 분리
     if (type === 1) { // 학생이면
       switch (component) {
-        case "assignment": // 'home/assignment' => Assignment.js
-          if (sub != undefined) { // 'home/assignment/:as_id' (as_id가 sub)
+        case "assign": // 'home/assign' => Assignment.js
+          if (sub != undefined) { // 'home/assign/:as_id' (as_id가 sub)
             contents =
               <Assignment
-                info={findAssignmentById(Number(sub), assignment)}
+                info={findAssignmentById(Number(sub), assign)}
               />;
 
-          } else { // 'home/assignment' default page가 없음
+          } else { // 'home/assign' default page가 없음
             // 첫번째 과제 페이지로 redirect
-            window.location.href = "/home/assignment/1";
+            window.location.href = "/home/assign/1";
           }
           break;
         default: // 학생은 현재 Assignment 컴포넌트 말고 다른 컴포넌트가 없음
@@ -435,10 +264,10 @@ function Main(props) {
       }
     } else if (type === 0) { // 교수이면
       switch (component) {
-        case "assignment": // 'home/assignment' => SubmissionStatus.js
+        case "assign": // 'home/assign' => SubmissionStatus.js
           if (sub != undefined) {
-            contents = <SubmissionStatus info={findAssignmentById(Number(sub), assignment)} />;
-          } else { // 'home/assignment' default page가 없음
+            contents = <SubmissionStatus info={findAssignmentById(Number(sub), assign)} />;
+          } else { // 'home/assign' default page가 없음
             contents = <Error></Error>
           }
           break;
@@ -446,7 +275,7 @@ function Main(props) {
         case "setting":
           if (sub == undefined) { // 'home/setting' => Setting.js
             contents = <Setting
-              as_info={assignment}
+              as_info={assign}
             />;
           } else {
             if (sub === "add") { // 'home/setting/add' => SetAssignment.js
@@ -455,7 +284,7 @@ function Main(props) {
               // add가 아닌 Number type이면 해당 id의 과제 설정창 => SetAssignment.js
               contents =
                 <SetAssignment
-                  as_info={findAssignmentById(Number(sub), assignment)}
+                  as_info={findAssignmentById(Number(sub), assign)}
                 />;
             }
           }
@@ -467,7 +296,7 @@ function Main(props) {
           if (sub != undefined && last != undefined)
             // TODO: API와 동기화를 시키면서 isAbleToMark와 selectAnswers를 사용하지 않기로 했으므로, 
             // 그 컴포넌트의 코드를 수정해야 함.
-            contents = <Scoring as_info={assignment} number={Number(last)} />
+            contents = <Scoring as_info={assign} number={Number(last)} />
           else
             contents = <Error />
           break;
@@ -488,10 +317,7 @@ function Main(props) {
     }
   }
 
-
-
   /* rendering */
-
   return (
     <Grid container>
       <CssBaseline />
@@ -499,7 +325,7 @@ function Main(props) {
         drawerOpen={handleDrawerOpen}
         open={open}
         type={type}
-        name={user_info.userName}
+        name={user.userName}
       />
       <Drawer
         className={classes.drawer}
@@ -513,7 +339,7 @@ function Main(props) {
         <SideBar
           type={type}
           drawerClose={handleDrawerClose}
-          assignment_info={s_assignment}
+          assignment_info={sideAssign}
         />
       </Drawer>
       <Grid

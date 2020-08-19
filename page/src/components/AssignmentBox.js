@@ -44,7 +44,7 @@ const AssignmentBox = (props)=>{
   
   return(
     <Paper className="assignment_box">
-      <Link to ={"/home/assignment/"+as_info[0]}>
+      <Link to ={"/home/assign/"+as_info[0]}>
             <Grid className="a_box_header">
               <Grid className="a_box_title">{as_info[2]}</Grid>
               <Grid className={classes.circleSytle}>{state_word}</Grid>
