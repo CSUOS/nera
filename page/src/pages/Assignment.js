@@ -11,7 +11,7 @@ const Assignment = (props)=>{
     const [questions, setQuestions] = useState(undefined);
     const history = useHistory();
 
-    async function getAssignment() {
+    function getAssignment() {
         let assignId = props.match.params.as_id;
         
         axios.get(`/v1/assignment/${assignId}`, { withCredentials: true })
@@ -33,7 +33,7 @@ const Assignment = (props)=>{
             });
     }
 
-    async function getQuestions() {
+    function getQuestions() {
         let assignId = props.match.params.as_id;
         
         axios.get(`/v1/answer/${assignId}`, { withCredentials: true })
