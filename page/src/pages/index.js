@@ -8,6 +8,3 @@ export { default as Error } from './Error';
 export { default as SetAssignment } from './SetAssignment';
 export { default as Scoring } from './Scoring';
 export { default as SetStudentList } from './SetStudentList';
-export { default as Test1 } from './Test1.js';
-export { default as Test2 } from './Test2.js';
-export { default as TestHome } from './TestHome.js';
