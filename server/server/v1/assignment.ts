@@ -69,6 +69,12 @@ router.post('/', async (ctx: Koa.Context) => {
         // 해당 assignmentId에 1을 더해서 assignmentId로 정함
       }
 
+      for (let i = 0; i < body.questions.length; i += 1) {
+        body.questions[i].questionId = i;
+        // body에서 questionId에 대한 정보가 오지 않기때문에 따로 번호를 지정해준다
+        // 0부터 시작
+      }
+
       newAssignment.professorNumber = ctx.user.userNumber;
       // 새로운 과제의 교수 번호는 교수 본인의 userNumber
 
@@ -109,6 +115,12 @@ router.post('/', async (ctx: Koa.Context) => {
       prevAssignment.deadline = body.deadline;
       // 마감 기한 변경
 
+      for (let i = 0; i < body.questions.length; i += 1) {
+        body.questions[i].questionId = i;
+        // body에서 questionId에 대한 정보가 오지 않기때문에 따로 번호를 지정해준다
+        // 0부터 시작
+      }
+
       prevAssignment.questions = body.questions;
       // 문제 목록 변경
 
@@ -141,7 +153,7 @@ router.get('/', async (ctx: Koa.Context) => {
     await Promise.all(
       takeAssignment.map(async (element: any) => {
         const t = element;
-        t.assignmentState = await calState(t, ctx.user).catch((err)=>console.log(err));
+        t.assignmentState = await calState(t, ctx.user);
       }),
     );
 
