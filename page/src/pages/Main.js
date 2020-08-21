@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SideBar, Header } from "../components";
 import { Home, Assignment, Setting, Error, SubmissionStatus, SetAssignment, Scoring, SetStudentList } from "../pages";
+import { getUserInfo } from "../shared/GetUserInfo";
 import "./pages.css";
 import clsx from 'clsx';
 import axios from "axios";
@@ -11,11 +12,7 @@ import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { set } from 'date-fns';
-import { getMajorStr } from '../shared/MajorDictionary';
 import { useHistory } from "react-router-dom";
-
-// jwt 추가
-const jwt = require('jsonwebtoken');
 
 /* style definition => 대부분 css로 옮길 예정 */
 
@@ -84,60 +81,13 @@ function Main(props) {
     setOpen(false);
   };
 
-  function getCookie(name) {
-    let value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-    return value? value[2] : null;
-  };
-
-  function getUserInfo(){
+  useEffect(() => {
     try{
-      const access_token = getCookie('access_token');
-      const token = jwt.decode(access_token);
-
-      // 사용자의 major (ex. 920 => 컴과, MajorDictionary.js에 정의되어 있음)
-      // type이 1일 때만 setting
-      // type이 0이면(교수면) default로 ""
-      token.type = String(token.userNumber)[0] == '1' ? 0 : 1;
-      const majorNumber = String(token.userNumber).substring(4,7);
-      if(token.type===0)
-        token.major = "";
-      else if(token.type===1)
-        token.major = getMajorStr(majorNumber);
-
-      return token;
+      setUser(getUserInfo());
+      console.log(user);
     }catch(err){
-      alert(`사용자 정보를 가져오는 중 오류가 발생하였습니다. (${err})`);
       history.push("/");
     }
-  }
-
-
-  /*function getAssignmentInfo() {
-    try {
-      let response = await axios.get('/v1/assignment', { withCredentials: true });
-      return response.data
-    } catch (err) {
-      const status = err.response.status;
-      if (status === 400 || status === 401) {
-        //console.log("과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})");
-        alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
-      }
-      else if (status === 404) {
-        //console.log("과제를 찾을 수 없습니다.");
-        alert("과제를 찾을 수 없습니다.");
-      }
-      else if (status === 500) {
-        //console.log("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
-        alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
-      }
-      window.location.href = "/";
-    }
-    return [];
-  }*/
-
-  useState(() => {
-    setUser(getUserInfo());
-    console.log(user);
 
     axios.get('/v1/assignment', { withCredentials: true })
       .then(res => {
