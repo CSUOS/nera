@@ -84,7 +84,6 @@ function Main(props) {
   useEffect(() => {
     try{
       setUser(getUserInfo());
-      console.log(user);
     }catch(err){
       history.push("/");
     }
@@ -157,6 +156,7 @@ function Main(props) {
       >
         <Route exact path="/home" component={Home}/>
         <Route exact path="/home/assignment/:as_id" component={Assignment}/>
+        <Route exact path="/home/setting" component={Setting}/>
         <Route exact path="/home/setting/:asId" component={SetAssignment}/>
       </Grid>
     </Grid>
