@@ -34,8 +34,7 @@ function SetAssignment(props){
 
     function getData(){
         const asId = props.match.params.asId;
-
-        if(asId!=undefined){ // 이미 존재하는 과제 설정을 수정하는 페이지
+        if(asId!==undefined && asId!=="add"){ // 이미 존재하는 과제 설정을 수정하는 페이지
             // api로 받아오기
             axios
             .get(`/v1/assignment/${asId}`, { withCredentials: true })
