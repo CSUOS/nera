@@ -9,8 +9,8 @@ const router = new Router();
 router.get('/', async (ctx: Koa.Context) => {
   const env = await config;
   const token = env.rabumsToken;
-  const hashToken = await crypto.createHash('sha256').update(Buffer.from(token, 'utf8').toString('base64')).digest('hex');
   if (!token) { ctx.throw(404, '찾을 수 없음'); }
+  const hashToken = crypto.createHash('sha256').update(Buffer.from(token, 'utf8').toString('base64')).digest('hex');
   ctx.body = hashToken;
 });
 

@@ -3,6 +3,7 @@ import Router from 'koa-router';
 import Bodyparser from 'koa-bodyparser';
 import Cookie from 'koa-cookie';
 import axios from 'axios';
+import crypto from 'crypto';
 
 const router = new Router();
 const jwt = require('jsonwebtoken');
@@ -11,24 +12,37 @@ const { config } = require('../../config');
 router.use(Bodyparser());
 router.use(Cookie());
 
+function hashData(data: any) {
+  return crypto.createHash('sha256')
+    .update(Buffer.from(data, 'utf8').toString('base64'))
+    .digest('hex');
+}
 // 로그인
 router.post('/', async (ctx: Koa.Context) => {
   const { body } = ctx.request;
   const id = body.userId;
   const pw = body.userPw;
-  console.log(body);
   const env = await config;
-  const response = await axios.post(env.rabumsAddr, {
+
+  const check = hashData(hashData(env.rabumsToken) + hashData(hashData('')));
+
+  if (body.userId === '' || body.userPw === check) { ctx.throw(400); }
+  await axios.post(env.rabumsAddr, {
     token: env.rabumsToken,
     userId: id, // train96
     userPw: pw, // 변환된 비밀번호
-  });
-  const accessToken = jwt.sign(response.data, env.accessSecretKey, { expiresIn: '1h' });
-  // jwt 토큰 생성
-
-  ctx.cookies.set('access_token', accessToken, { httpOnly: false, maxAge: 1000 * 60 * 60 });
-  // 토큰을 쿠키로 발급 1000ms * 60 * 60 = 1h
-  ctx.body = response.data; // 확인용
+  })
+    .then((res) => {
+      const accessToken = jwt.sign(res.data, env.accessSecretKey, { expiresIn: '1h' });
+      // jwt 토큰 생성
+      ctx.cookies.set('access_token', accessToken, { httpOnly: false, maxAge: 1000 * 60 * 60 });
+      // 토큰을 쿠키로 발급 1000ms * 60 * 60 = 1h
+      ctx.body = res.data;
+    })
+    .catch((e) => {
+      ctx.status = e.response.status;
+      ctx.body = e.response.data;
+    });
 });
 
 /*
