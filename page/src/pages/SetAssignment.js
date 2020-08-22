@@ -19,6 +19,7 @@ function SetAssignment(props){
     const [endDate, setEndDate] = useState(new Date());
     const [questions, setQuestions] = useState([]);
     const [students, setStudents] = useState([]);
+    const [studentList, setStudentList] = useState({});
     const [renderObject, setRenderObject] = useState([]); // modal에 rendering되는 학생목록 관리
 
     const history = useHistory();
@@ -108,7 +109,7 @@ function SetAssignment(props){
     }
 
     async function deleteStudents(index){
-        // 학생 리스트 추가
+        // 학생 리스트 삭제
         let tmp = renderObject;
         tmp.splice(index,1);
         await setRenderObject(tmp);
@@ -128,7 +129,7 @@ function SetAssignment(props){
         setRenderObject(tmp);
     }
 
-    function saveStudentList(){
+    function saveStudents(){
         // renderObject => students 저장
         setStudents(renderObject);
     }
@@ -136,11 +137,12 @@ function SetAssignment(props){
     async function closePopUp(){
         // modal을 그냥 닫으면 handleClose만 적용되어 student state에 저장 x
         // 저장 버튼을 눌러야 student state에 저장됨
-        await saveStudentList();
+        await saveStudents();
         await handleClose();
     }
 
     function preProcessingData(){
+        // 빈 student textfield가 있으면 없애기
         let tmp = students;
         tmp.map((student, index)=>{
             if(student===undefined){
@@ -151,8 +153,10 @@ function SetAssignment(props){
     }
 
     async function saveAssignmentToDB(){
+        // 과제 수정/생성 API와의 연동
+
         await preProcessingData();
-        axios
+        await axios
         .post('/v1/assignment', {
             students : students,
             assignmentName: "["+lectureName+"]"+assignName,
@@ -161,9 +165,6 @@ function SetAssignment(props){
             deadline: endDate,
             questions: questions
         } , { withCredentials: true })
-        .then(res => {
-            console.log(res);
-        })
         .catch(err=>{
             if(err.response===undefined){
                 alert(`내부 함수 (SetAssignment.js => saveAssignmentToDB()) 문제입니다. 오류 수정 필요.`);
@@ -184,9 +185,55 @@ function SetAssignment(props){
             else if (status === 500) {
                 alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
             }
-            //history.push("/home/setting");
+            history.push("/home/setting");
         });
-        //history.push("/home/setting");
+        history.push("/home/setting");
+    }
+
+    function getStudentList(){
+        axios
+        .get('/v1/student', { withCredentials: true })
+        .then(res => {
+            let tmp = {};
+            res.data.map((list)=>{
+                tmp[list.className]=list.students;
+            })
+            setStudentList(tmp);
+        })
+        .catch(err=>{
+            if(err.response===undefined){
+                alert(`내부 함수 (SetAssignment.js => getStudentList()) 문제입니다. 오류 수정 필요.`);
+            }else{
+                const status = err.response.status;
+                if (status === 400) {
+                    alert(`수강생 목록 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
+                }
+                else if (status === 401) {
+                    alert(`수강생 목록 정보를 얻는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
+                }
+                else if (status === 403) {
+                    alert(`수강생 목록 정보를 얻는데 실패하였습니다. 권한이 없습니다. (${status})`);
+                }
+                else if (status === 404) {
+                    alert(`수강생 목록 정보를 얻는데 실패하였습니다. 수강생 목록을 찾을 수 없습니다. (${status})`);
+                }
+                else if (status === 500) {
+                    alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
+                }
+            }
+            history.push("/home");
+        });
+    }
+
+
+    function renderStudentList(){
+        let result= [];
+        for (const [name, list] of Object.entries(studentList)) {
+            result.push(
+                <Button onClick={()=>setStudents(list)}>{name}</Button>
+            )
+        };
+        return result;
     }
 
     return(
@@ -199,7 +246,7 @@ function SetAssignment(props){
                         subTitle="" />
                 </Grid>
                 <Grid item xs={3}>
-                    <Button type="submit" className="save_button" onClick={saveAssignmentToDB}>저장</Button>
+                    <Button className="save_button" onClick={saveAssignmentToDB}>저장</Button>
                 </Grid>
             </Grid>
             <Grid container item spacing={4} direction="column" className="setting_as_con">
@@ -246,16 +293,20 @@ function SetAssignment(props){
                             className="modal">
                             <Paper className="modal_con">
                                 <Grid container spacing={2} wrap="wrap" className="modal_form">
+                                    <Grid container item  xs={12}>
+                                        <Button onClick={getStudentList}>수강생 목록 불러오기</Button>
+                                        {renderStudentList()}
+                                        <Button className="save_button" onClick={closePopUp}>저장</Button>
+                                    </Grid>
                                     {
                                         renderObject.map((student, index)=>
-                                            <Grid item>
+                                            <Grid item xs={3}>
                                                 <TextField onInput={(e)=>changeStudentField(e, index)} className="popup_student" InputLabelProps={{shrink:true}} label={"학생"+(index+1)} required multiline rows={1} rowsMax={15} defaultValue={student}></TextField>
                                                 <Button onClick={()=>deleteStudents(index)}><ClearIcon/></Button>
                                             </Grid>
                                         )
                                     }
                                     <AddCircleIcon fontSize="large" onClick={addStudents}></AddCircleIcon>
-                                    <Button className="save_button" onClick={closePopUp}>저장</Button>
                                 </Grid>
                             </Paper>
                         </Modal>
