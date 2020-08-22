@@ -126,7 +126,7 @@ const Home = (props)=>{
         return (<div></div>)
     else
         return (
-            <Grid container direction="column" spacing={24}>
+            <Grid container direction="column">
                 <AccountInfo
                     name={user.userName}
                     number={user.userNumber}
