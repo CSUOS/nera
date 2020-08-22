@@ -40,8 +40,14 @@ a:hover{
 }
 
 .save_component{
-    margin: 15px;
+    margin-right: 20px;
     align-self: center;
+}
+
+.save_caption {
+    width: auto;
+    display: block;
+    padding: 0 10px;
 }
 
 .assignment_page_title {
@@ -51,6 +57,10 @@ a:hover{
 .assignment_page_header {
     display: flex;
     flex-wrap: wrap;
+}
+
+.assignment_info {
+    padding: 40px 10px 0px 10px;
 }
 
 .table_root {

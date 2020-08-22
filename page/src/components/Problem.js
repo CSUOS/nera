@@ -1,13 +1,17 @@
 import { Grid, TextField } from '@material-ui/core';
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 const Problem = (props) => {
-    const [text, setText] = React.useState(props.info.answerContent);
+    const [text, setText] = React.useState("");
+
+    useEffect(()=>{
+        setText(props.info.answerContent);
+    }, [JSON.stringify(props.info)]);
     
-    const handleTextChange = (value) => {
-        setText(value);
-        props.onEdit(text, props.info.questionId);
+    const handleTextChange = (event) => {
+        setText(event.target.value);
+        props.onEdit(event.target.value, props.info.questionId);
     }
 
     return (
@@ -27,7 +31,8 @@ const Problem = (props) => {
                 rows={1}
                 rowsMax={10000}
                 value={text}
-                onChange={handleTextChange}>
+                onChange={handleTextChange}
+                disabled={props.info.assignmentState !== 1}>
             </TextField>
         </Grid>
     );
