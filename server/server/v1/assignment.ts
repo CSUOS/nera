@@ -24,6 +24,11 @@ async function calState(assignment: any, userInfo: any) {
   if (String(userInfo.userNumber).charAt(0) === '1') { return 2; }
   const answer = await AnswerPaperModel
     .findOne({ userNumber: userInfo.userNumber, assignmentId: assignment.assignmentId }).exec();
+
+  if (answer == null) {
+    return 2;
+  }
+
   for (let i = 0; i < answer.answers.length; i += 1) {
     if (answer.answers[i].score === -1 || !answer) {
       return 2; // 마감됨
@@ -159,6 +164,7 @@ router.get('/', async (ctx: Koa.Context) => {
 
     ctx.body = takeAssignment;
   } catch (error) {
+    console.log(error);
     ctx.status = error.status;
     ctx.body = error;
   }
