@@ -148,7 +148,8 @@ router.get('/', async (ctx: Koa.Context) => {
     takeAssignment = await AssignmentModel.find({ students: ctx.user.userNumber }).exec();
     // 사용자가 학생일 경우
   }
-  if (Array.isArray(takeAssignment) && takeAssignment.length === 0) { ctx.throw(404, '과제 없음'); }
+  if (takeAssignment === undefined) { ctx.throw(404, '과제 없음'); }
+
   takeAssignment.map(async (element: typeof assignmentArray) => {
     const t = element;
     t.assignmentState = await calState(t, ctx.user);

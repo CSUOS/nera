@@ -9,6 +9,7 @@ import Test from './v1/cookieTest'; // 테스트용 쿠키 발급
 import Assignment from './v1/assignment';
 import Token from './v1/token';
 import UserInfo from './v1/userInfo';
+import AuthCheck from './v1/authCheck';
 
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
@@ -41,17 +42,19 @@ login.use('/v1/cookieTest', Test.routes());
 login.use('/v1/token', Token.routes());
 
 // 로그인이 필요한 api
+/*
 router.use('/v1/answer', Answer.routes());
 router.use('/v1/student', Student.routes());
 router.use('/v1/assignment', Assignment.routes());
 router.use('/v1/logout', Logout.routes());
 router.use('/v1/userInfo', UserInfo.routes());
-
+*/
+router.use('/v1', AuthCheck.routes());
 app.use(Logger());
 
 app.use(dbMiddleware);
 app.use(login.routes());
-app.use(jwtMiddleware);
+// app.use(jwtMiddleware);
 app.use(router.routes());
 
 app.use(serve(`${__dirname}/../build`));
