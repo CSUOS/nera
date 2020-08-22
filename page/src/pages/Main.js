@@ -150,7 +150,8 @@ function Main(props) {
         </Drawer>}
 
       <Grid
-        className={clsx(classes.content, {
+        className={clsx(classes.content,
+          classes.appBarShift, {
           [classes.contentShift]: open,
         }, "margin-top-64", "contents_side")}
       >
