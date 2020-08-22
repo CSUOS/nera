@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Paper } from '@material-ui/core';
 import {PageInfo} from '../components';
-import { getUserInfo } from "../shared/GetUserInfo";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 
@@ -15,7 +14,6 @@ import { green } from '@material-ui/core/colors';
 
 function Setting(){
     const [assignmentList, setAList] = useState([]);
-    const [assignmentBox, setABox] = useState(<div></div>);
     const history = useHistory();
     
     function setAssignmentList(){
@@ -35,6 +33,9 @@ function Setting(){
             setAList(list);
         })
         .catch(err => {
+            if(err.response===undefined){
+                alert(`내부 함수 (SetAssignment.js => saveAssignmentList()) 문제입니다. 오류 수정 필요.`);
+            }
             const status = err.response.status;
             if (status === 400 || status === 401) {
             alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
