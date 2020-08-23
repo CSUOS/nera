@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
 const SideBar = (props) => {
     const classes = useStyles();
     const {type, drawerClose, assignment_info} = props;
-    console.log(props)
 
     let primary_assignment = [];
     let secondary_assignment = [];

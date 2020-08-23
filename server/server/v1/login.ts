@@ -7,33 +7,42 @@ import crypto from 'crypto';
 
 const router = new Router();
 const jwt = require('jsonwebtoken');
-const secret = require('../../server');
+const { config } = require('../../config');
 
 router.use(Bodyparser());
 router.use(Cookie());
 
+function hashData(data: any) {
+  return crypto.createHash('sha256')
+    .update(Buffer.from(data, 'utf8').toString('base64'))
+    .digest('hex');
+}
 // 로그인
 router.post('/', async (ctx: Koa.Context) => {
   const { body } = ctx.request;
   const id = body.userId;
   const pw = body.userPw;
-  try {
-    const response = await axios.post(secret.env.rabumsAddr, {
-      token: secret.env.rabumsToken,
-      userId: id, // train96
-      userPw: pw, // 변환된 비밀번호
-    });
-    const accessToken = jwt.sign(response.data, secret.env.accessSecretKey, { expiresIn: '1h' });
-    // jwt 토큰 생성
+  const env = await config;
 
-    ctx.cookies.set('access_token', accessToken, { httpOnly: false, maxAge: 1000 * 60 * 60 });
-    // 토큰을 쿠키로 발급 1000ms * 60 * 60 = 1h
-    ctx.body = response.data; // 확인용
-  } catch (error) {
-    console.log(error);
-    ctx.status = error.response.status;
-    ctx.body = error;
-  }
+  const check = hashData(hashData(env.rabumsToken) + hashData(hashData('')));
+
+  if (body.userId === '' || body.userPw === check) { ctx.throw(400); }
+  await axios.post(env.rabumsAddr, {
+    token: env.rabumsToken,
+    userId: id, // train96
+    userPw: pw, // 변환된 비밀번호
+  })
+    .then((res) => {
+      const accessToken = jwt.sign(res.data, env.accessSecretKey, { expiresIn: '1h' });
+      // jwt 토큰 생성
+      ctx.cookies.set('access_token', accessToken, { httpOnly: false, maxAge: 1000 * 60 * 60 });
+      // 토큰을 쿠키로 발급 1000ms * 60 * 60 = 1h
+      ctx.body = res.data;
+    })
+    .catch((e) => {
+      ctx.status = e.response.status;
+      ctx.body = e.response.data;
+    });
 });
 
 /*
@@ -41,6 +50,5 @@ router.post('/', async (ctx: Koa.Context) => {
 * NERA 토큰과 같이 RABUMS 서버와 통신
 * 로그인 성공시 유저 정보와 관련된 토큰 발급
 */
-// 로그아웃
 
 export = router

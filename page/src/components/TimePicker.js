@@ -9,14 +9,14 @@ import {
 } from '@material-ui/pickers';
 
 export default function TimePicker(props) {
-  const [dataContent, setDateContent] = useState(<div></div>);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
   useEffect(()=>{
-    setStartDate(Date(props.startDate));
-    setEndDate(Date(props.endDate));
-  }, [props.startDate, props.endDate]);
+    setStartDate(props.startDate);
+    setEndDate(props.endDate);
+    console.log(props.startDate);
+  }, []);
 
   const handleStartDateChange = (date) => {
     if(date.getTime()<=endDate.getTime()){
