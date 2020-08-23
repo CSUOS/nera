@@ -121,43 +121,46 @@ function Main(props) {
 
   /* rendering */
   return (
-    <Grid container>
+    <Grid container direction="column">
       <CssBaseline />
-
-      {user != undefined &&
-        <Header
-          drawerOpen={handleDrawerOpen}
-          open={open}
-          type={user.type}
-          name={user.userName}
-        />}
-
-      {user != undefined && sideAssign != undefined &&
-        <Drawer
-          className={classes.drawer}
-          variant="persistent"
-          anchor="left"
-          open={open}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <SideBar
+      <Grid item>
+        {user != undefined &&
+          <Header
+            drawerOpen={handleDrawerOpen}
+            open={open}
             type={user.type}
-            drawerClose={handleDrawerClose}
-            assignment_info={sideAssign}
-          />
-        </Drawer>}
-
-      <Grid
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        }, "margin-top-64", "contents_side")}
-      >
-        <Route exact path="/home" component={Home}/>
-        <Route exact path="/home/assignment/:as_id" component={Assignment}/>
-        <Route exact path="/home/setting" component={Setting}/>
-        <Route exact path="/home/setting/:asId" component={SetAssignment}/>
+            name={user.userName}
+          />}
+      </Grid>
+      <Grid container item>
+        <Grid item>
+          {user != undefined && sideAssign != undefined &&
+            <Drawer
+              className={classes.drawer}
+              variant="persistent"
+              anchor="left"
+              open={open}
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+            >
+              <SideBar
+                type={user.type}
+                drawerClose={handleDrawerClose}
+                assignment_info={sideAssign}
+              />
+            </Drawer>}
+        </Grid>
+        <Grid
+          className={clsx(classes.content, {
+            [classes.contentShift]: open,
+          }, "margin-top-64", "contents_side")}
+        >
+          <Route exact path="/home" component={Home}/>
+          <Route exact path="/home/assignment/:as_id" component={Assignment}/>
+          <Route exact path="/home/setting" component={Setting}/>
+          <Route exact path="/home/setting/:asId" component={SetAssignment}/>
+        </Grid>
       </Grid>
     </Grid>
   )
