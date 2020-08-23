@@ -9,8 +9,8 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ClearIcon from '@material-ui/icons/Clear';
 import Modal from '@material-ui/core/Modal';
 
-
 function SetAssignment(props){
+    const [update, forceUpdate] = useState(false); // rendering update용
     const [open, setOpen] = useState(false); // modal 관리
     const [assignInfo, setAssignInfo] = useState("");
     const [lectureName, setLecture] = useState("");
@@ -46,10 +46,12 @@ function SetAssignment(props){
 
 
      // if you click modal's outside => just handleClose();
-     // if you click modal's + button => addStudents();
-     // if you click modal's x button => deleteStudents();
+     // if you click modal's + button => addStudent();
+     // if you click modal's x button => deleteStudent();
      // if you modify modal's textfield => changeStudentField();
      // if you click modal's save button => closePopUp();
+     // if you modify quetions's textfield => changeQuestionField();
+     // if you click top left save button => saveAssignmentToDB();
 
     const handleOpen = () => {
         setOpen(true);
@@ -58,11 +60,12 @@ function SetAssignment(props){
         setOpen(false);
     };
 
+        // function 
 
     function getData(){
+        // 과제 목록 불러오기 api
         const asId = props.match.params.asId; // url의 과제id에 해당하는 정보 불러오기
-        if(asId!==undefined && asId!=="add"){ // 이미 존재하는 과제 설정을 수정하는 페이지
-            // api로 받아오기
+        if(asId!==undefined && asId!=="add"){ // 이미 존재하는 과제 설정을 수정하는 페이지일 때
             axios
             .get(`/v1/assignment/${asId}`, { withCredentials: true })
             .then(res => {
@@ -99,30 +102,28 @@ function SetAssignment(props){
         }
     }
     
-    async function addStudents(){
+    async function addStudent(){
         // 학생 리스트 추가
         let tmp = renderObject;
         tmp.push(undefined);
         await setRenderObject(tmp);
-        await handleClose();
-        await handleOpen();
+        await forceUpdate(!update);
     }
 
-    async function deleteStudents(index){
+    async function deleteStudent(index){
         // 학생 리스트 삭제
         let tmp = renderObject;
         tmp.splice(index,1);
         await setRenderObject(tmp);
-        await handleClose();
-        await handleOpen();
+        await forceUpdate(!update)
     }
 
     function changeStudentField(e, index){
-        // testfield가 바뀔 때마다 renderObject 갱신
+        // textfield가 바뀔 때마다 renderObject 갱신
         let tmp = renderObject;
-        let tmp_number = Number(e.target.value);
-        if(tmp_number!==NaN){
-            tmp[index] = tmp_number;
+        let number = Number(e.target.value);
+        if(number!==NaN){
+            tmp[index] = number;
         }else{
             tmp[index] = undefined;
         }
@@ -135,7 +136,8 @@ function SetAssignment(props){
     }
 
     async function closePopUp(){
-        // modal을 그냥 닫으면 handleClose만 적용되어 student state에 저장 x
+        // modal을 그냥 닫으면 handleClose만 적용되어 
+        // student state에 저장 x, renderObject state에만 저장 o
         // 저장 버튼을 눌러야 student state에 저장됨
         await saveStudents();
         await handleClose();
@@ -191,6 +193,7 @@ function SetAssignment(props){
     }
 
     function getStudentList(){
+        // 수강생 목록 불러오기 api
         axios
         .get('/v1/student', { withCredentials: true })
         .then(res => {
@@ -225,8 +228,8 @@ function SetAssignment(props){
         });
     }
 
-
     function renderStudentList(){
+        // 수강생 목록 띄우기
         let result= [];
         for (const [name, list] of Object.entries(studentList)) {
             result.push(
@@ -235,6 +238,51 @@ function SetAssignment(props){
         };
         return result;
     }
+
+    async function addQuestion(){
+        // 새로운 과제 추가
+        const newQuestion = {
+            questionId : questions.length,
+            questionContent : "",
+            fullScore : undefined,
+        };
+
+        let tmp = questions;
+        tmp.push(newQuestion);
+        await setQuestions(tmp);
+        await forceUpdate(!update);
+    }
+
+    async function changeQuestionField(e, index, type){
+        // textfield가 바뀔 때마다 Question 갱신
+
+        let tmp = questions;
+
+        if(type==0){ // 문제 설명 갱신
+            const description = e.target.value;
+            tmp[index].questionContent = description;
+        }else{ // 배점 갱신
+            const score = Number(e.target.value);
+            if(score!==NaN){
+                tmp[index].fullScore = score;
+            }else{
+                tmp[index].fullScore = undefined;
+            }
+        }
+
+        await setQuestions(tmp);
+        await forceUpdate(!update);
+    }
+
+    async function deleteQuestion(index){
+        // 문제 삭제
+        let tmp = questions;
+        tmp.splice(index,1);
+        await setQuestions(tmp);
+        await forceUpdate(!update)
+    }
+
+        // function 
 
     return(
         <Grid container spacing={6} direction="column">
@@ -268,16 +316,22 @@ function SetAssignment(props){
                         <Grid item>
                             <Typography variant="h6">문제</Typography>
                         </Grid>
-                        <Grid container item spacing={2} direction="row" wrap="wrap">
+                        <Grid container spacing={2} item direction="column">
                             {
                                 questions.map((question, index)=>
-                                    <Grid item>
-                                        <Typography>문제 #{index+1}</Typography>
-                                        <TextField InputLabelProps={{shrink:true}} label="문제 설명" required multiline rows={1} rowsMax={10000} defaultValue={question.questionContent}></TextField>
-                                        <TextField InputLabelProps={{shrink:true}} label="배점" required multiline rows={1} rowsMax={10} defaultValue={question.fullScore}></TextField>
+                                    <Grid container item direction="column">
+                                        <Grid container item>
+                                            <Typography>문제 #{index+1}</Typography>
+                                            <Button onClick={()=>deleteQuestion(index)}><ClearIcon/></Button>
+                                        </Grid>
+                                        <Grid container item>
+                                            <TextField onInput={(e)=>changeQuestionField(e, index, 0)} InputLabelProps={{shrink:true}} label="문제 설명" required multiline rows={1} rowsMax={10000} defaultValue={question.questionContent}></TextField>
+                                            <TextField onInput={(e)=>changeQuestionField(e, index, 1)} InputLabelProps={{shrink:true}} label="배점" required multiline rows={1} rowsMax={10} defaultValue={question.fullScore}></TextField>
+                                        </Grid>
                                     </Grid>
                                 )
                             }
+                            <AddCircleIcon className="add_button" fontSize="large" onClick={addQuestion}></AddCircleIcon>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -300,13 +354,13 @@ function SetAssignment(props){
                                     </Grid>
                                     {
                                         renderObject.map((student, index)=>
-                                            <Grid item xs={3}>
+                                            <Grid container item xs={4} wrap="nowrap" alignItems="center">
                                                 <TextField onInput={(e)=>changeStudentField(e, index)} className="popup_student" InputLabelProps={{shrink:true}} label={"학생"+(index+1)} required multiline rows={1} rowsMax={15} defaultValue={student}></TextField>
-                                                <Button onClick={()=>deleteStudents(index)}><ClearIcon/></Button>
+                                                <Button onClick={()=>deleteStudent(index)}><ClearIcon/></Button>
                                             </Grid>
                                         )
                                     }
-                                    <AddCircleIcon fontSize="large" onClick={addStudents}></AddCircleIcon>
+                                    <AddCircleIcon className="add_button" fontSize="large" onClick={addStudent}></AddCircleIcon>
                                 </Grid>
                             </Paper>
                         </Modal>

@@ -148,6 +148,7 @@ a:hover{
 .modal_con{
     margin: 20px;
     padding: 10px;
+    max-width: 50%;
 }
 
 .scoring_bottom {
@@ -171,4 +172,9 @@ a:hover{
 }
 .login_container>div{
     margin: 10px;
+}
+
+/* button */
+.add_button{
+    cursor: pointer;
 }
