@@ -82,7 +82,7 @@ function SetAssignment(props){
             })
             .catch(err=>{
                 if(err.response===undefined){
-                    alert(`내부 함수 (SetAssignment.js => getDate()) 문제입니다. 오류 수정 필요.`);
+                    alert(`내부 함수 (SetAssignment.js => getData()) 문제입니다. 오류 수정 필요.`);
                 }
                 const status = err.response.status;
                 if (status === 400) {

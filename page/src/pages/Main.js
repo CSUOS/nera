@@ -160,6 +160,7 @@ function Main(props) {
           <Route exact path="/home/assignment/:as_id" component={Assignment}/>
           <Route exact path="/home/setting" component={Setting}/>
           <Route exact path="/home/setting/:asId" component={SetAssignment}/>
+          <Route exact path="/home/setList" component={SetStudentList}/>
         </Grid>
       </Grid>
     </Grid>
