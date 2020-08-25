@@ -29,7 +29,6 @@ function SetAssignment(props){
         // 처음 페이지를 불러올 때
         async function fetchData() {
             await getData();
-            console.log(startDate);
         }
 
         fetchData();
@@ -279,9 +278,29 @@ function SetAssignment(props){
         let tmp = questions;
         tmp.splice(index,1);
         await setQuestions(tmp);
-        await forceUpdate(!update)
+        await forceUpdate(!update);
     }
 
+    async function changeLectureField(e){
+        // textfield가 바뀔 때마다 lectureName 갱신
+
+        await setLecture(e.target.value);
+        await forceUpdate(!update);
+    }
+
+    async function changeAssignNameField(e){
+        // textfield가 바뀔 때마다 assignmentname 갱신
+
+        await setAssignName(e.target.value);
+        await forceUpdate(!update);
+    }
+
+    async function changeAssignInfoField(e){
+        // textfield가 바뀔 때마다 Description 갱신
+
+        await setAssignInfo(e.target.value);
+        await forceUpdate(!update);
+    }
         // function 
 
     return(
@@ -299,8 +318,8 @@ function SetAssignment(props){
             </Grid>
             <Grid container item spacing={4} direction="column" className="setting_as_con">
                 <Grid container item direction="row">
-                    <Grid xs={6}><TextField InputLabelProps={{shrink:true}} label="강의명" required multiline rows={1} rowsMax={10000} defaultValue={lectureName}></TextField></Grid>
-                    <Grid xs={6}><TextField InputLabelProps={{shrink:true}} label="과제명" required multiline rows={1} rowsMax={10000} defaultValue={assignName}></TextField></Grid>
+                    <Grid xs={6}><TextField onInput={(e)=>changeLectureField(e)} InputLabelProps={{shrink:true}} label="강의명" required multiline rows={1} rowsMax={10000} defaultValue={lectureName}></TextField></Grid>
+                    <Grid xs={6}><TextField onInput={(e)=>changeAssignNameField(e)} InputLabelProps={{shrink:true}} label="과제명" required multiline rows={1} rowsMax={10000} defaultValue={assignName}></TextField></Grid>
                 </Grid>
                 <Grid item>
                     <TimePicker
@@ -309,7 +328,7 @@ function SetAssignment(props){
                     />
                 </Grid>
                 <Grid container item direction="row">
-                    <Grid xs={6}><TextField InputLabelProps={{shrink:true}} label="과제 설명" required multiline rows={1} rowsMax={10000} defaultValue={assignInfo}></TextField></Grid>
+                    <Grid xs={6}><TextField  onInput={(e)=>changeAssignInfoField(e)} InputLabelProps={{shrink:true}} label="과제 설명" required multiline rows={1} rowsMax={10000} defaultValue={assignInfo}></TextField></Grid>
                 </Grid>
                 <Grid container item direction="row">
                     <Grid container spacing={1} xs={12}>
