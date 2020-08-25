@@ -1,13 +1,10 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component } from 'react';
 import { AssignmentInfo } from "../components";
 import PropTypes from 'prop-types';
 
 import { Grid, Paper, TableSortLabel } from '@material-ui/core';
 import { TableRow, TableBody, IconButton, Table, TableHead, TableContainer, TablePagination, TableCell } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
-import axios from "axios";
-import { useHistory } from "react-router-dom";
-import { rejects } from 'assert';
 
 const compareElements = (a, b, orderBy) => {
     if (a[orderBy] < b[orderBy])
@@ -87,8 +84,8 @@ const SubmittedRow = (props) => {
     return (
         <TableRow>
             <TableCell>{props.userNumber}</TableCell>
+            <TableCell>{props.name}</TableCell>
             <TableCell>{getLastSaveDate()}</TableCell>
-            <TableCell>{props.filled}</TableCell>
             <TableCell>{props.score}</TableCell>
             <TableCell>
                 <IconButton aria-label="채점 페이지로" size="small" href={`/home/scoring/${props.asId}/${props.userNumber}`}>
@@ -106,9 +103,6 @@ const SubmittedTable = (props) => {
     const [order, setOrder] = React.useState("asc");
 
     const calcAverageScore = () => {
-        if (props.rowData.length == 0)
-            return 0;
-
         let sum = 0
         for (const row of props.rowData)
             sum += row.score;
@@ -137,13 +131,13 @@ const SubmittedTable = (props) => {
             "allowSorting" : true
         },
         {
-            "id": "time",
-            "label": "제출한 시간",
+            "id": "name",
+            "label": "이름",
             "allowSorting" : true
         },
         {
-            "id": "filled",
-            "label": "작성한 문제 수",
+            "id": "time",
+            "label": "제출한 시간",
             "allowSorting" : true
         },
         {
@@ -178,7 +172,6 @@ const SubmittedTable = (props) => {
                                 userNumber={row.userNumber} 
                                 name={row.name} 
                                 time={row.time} 
-                                filled={row.filled}
                                 score={row.score}></SubmittedRow>
                         ))}
                     </TableBody>
@@ -200,7 +193,8 @@ const SubmittedTable = (props) => {
 const NotSubmittedRow = (props) => {
     return (
         <TableRow>
-            {Object.keys(props).map(key => <TableCell>{props[key]}</TableCell>)}
+            <TableCell>{props.userNumber}</TableCell>
+            <TableCell>{props.name}</TableCell>
         </TableRow>
     );
 }
@@ -231,6 +225,11 @@ const NotSubmittedTable = (props) => {
             "id": "userNumber",
             "label": "학번",
             "allowSorting" : true
+        },
+        {
+            "id": "name",
+            "label": "이름",
+            "allowSorting" : true
         }
     ];
 
@@ -248,7 +247,7 @@ const NotSubmittedTable = (props) => {
                         {sortRows(props.rowData, order, orderBy)
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row) => (
-                            <NotSubmittedRow userNumber={row.userNumber}></NotSubmittedRow>
+                            <NotSubmittedRow userNumber={row.userNumber} name={row.name}></NotSubmittedRow>
                         ))}
                     </TableBody>
                 </Table>
@@ -267,167 +266,79 @@ const NotSubmittedTable = (props) => {
 }
 
 const SubmissionStatus = (props) => {
-    const [info, setInfo] = useState(undefined);
-    const [infoDate, setInfoDate] = useState(undefined);
-    const [answersDict, setAnswersDict] = useState(undefined);
-    const [answersDictDate, setAnswersDictDate] = useState(undefined);
-    const [submitted, setSubmitted] = useState(undefined);
-    const [notSubmitted, setNotSubmitted] = useState(undefined);
-    const history = useHistory();
+    
+    const getLatestModified = (ansArray) => {
+        let result = ansArray[0].meta.modified_at;
 
-    const getSumOfScores = (ansArray) => {
-        let result = 0;
-
-        for (let i = 0; i < ansArray.length; ++i) {
-            if (ansArray[i].score === -1)
-                continue;
-            result += ansArray[i].score;
-        }
+        for (let i = 1; i < ansArray.length; ++i)
+            if (result < ansArray[i].meta.modified_at)
+                result = ansArray[i].meta.modified_at;
         
         return result;
     }
 
-    const getAssignment = () => {
-        let assignId = props.match.params.asId;
+    const getSumOfScores = (ansArray) => {
+        let result = 0;
 
-        axios.get(`/v1/assignment/${assignId}`, { withCredentials: true })
-            .then(res => {
-                console.log(res);
-                setInfo(res.data);
-                setInfoDate(new Date());
-            })
-            .catch(err => {
-                const status = err.response.status;
-                if (status === 400 || status === 401) {
-                    alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
-                }
-                else if (status === 404) {
-                    alert("과제를 찾을 수 없습니다.");
-                }
-                else if (status === 500) {
-                    alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
-                }
-                history.push("/home");
-            });
+        for (let i = 0; i < ansArray.length; ++i)
+            result += ansArray[i].score;
+        
+        return result;
     }
 
-    const getAnswers = () => {
-        if (info === undefined)
-            return;
+    let submittedData = []
+    let notSubmittedData = []
+    let answerDict = {}
+    
+    for (const num of props.info.students)
+        answerDict[num] = []
 
-        let assignId = props.match.params.asId;
-
-        let promises = [];
-        console.log(info)
-        for (let stuNum of info.students) {
-            let prom = axios.get(`/v1/answer/${assignId}/${stuNum}`, { withCredentials: true })
-                .catch(err => {
-                    if (err.response.status === 404) {
-                        // 단순히 입력한 답안이 없는 경우이므로 오류는 아님.
-                        return {
-                            "data" : {
-                                "userNumber": stuNum,
-                                "answers": [],
-                                "meta": {
-                                    "createAt": undefined,
-                                    "modifiedAt": undefined
-                            
-                                }
-                            }
-                        }
-                    }
-                    else rejects(err);
-                });
-                
-            promises.push(prom);
-        }
-
-        Promise.all(promises)
-            .then(arrOfRes => {
-                let dict = {}
-                for (const res of arrOfRes)
-                    dict[res.data.userNumber] = res.data;
-                setAnswersDict(dict);
-                setAnswersDictDate(new Date());
-            })
-            .catch(err => {
-                const status = err.response.status;
-                if (status === 400) {
-                    alert(`답안 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
-                }
-                else if (status === 401) {
-                    alert(`답안 정보를 얻는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
-                }
-                else if (status === 403) {
-                    alert(`답안 정보를 얻는데 실패하였습니다. 권한이 없습니다. (${status})`);
-                }
-                else {
-                    alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
-                }
-
-                history.push("/home");
+    for (const ques of props.info.questions)
+        for (const answer of ques.question_answer)
+            answerDict[answer.user_number].push(answer);
+    
+    for (const [num, ansArray] of Object.entries(answerDict))
+    {
+        let submittedCount = 0;
+        for (const answer of ansArray)
+            if (answer.submitted)
+                ++submittedCount;
+        
+        if (submittedCount == props.info.questions.length)
+        {
+            submittedData.push({
+                userNumber: num,
+                name: ansArray[0].name,
+                time: getLatestModified(ansArray),
+                score: getSumOfScores(ansArray)
             });
+        }
+        else
+        {
+            notSubmittedData.push({
+                userNumber: num,
+                name: ansArray[0].name
+            });
+        }
     }
 
-    useEffect(() => {
-        setSubmitted(undefined);
-        setNotSubmitted(undefined);
-        getAssignment();
-    }, [props.match.params.asId]);
+    return (
+        <Grid container direction="column" spacing={24}>
+            <AssignmentInfo title={props.info["assignment_name"]} deadline={props.info["deadline"]} />
 
-    useEffect(() => {
-        getAnswers();
-    }, [infoDate]);
-
-    useEffect(() => {
-        let submittedData = [];
-        let notSubmittedData = [];
-
-        for (const number in answersDict) {
-            let filledCount = 0;
-            console.log(answersDict[number])
-            for (const answer of answersDict[number].answers)
-                if (answer.answerContent)
-                    ++filledCount;
-
-            if (filledCount > 0) {
-                submittedData.push({
-                    userNumber: number,
-                    time: new Date(answersDict[number].meta.modifiedAt),
-                    filled: filledCount,
-                    score: getSumOfScores(answersDict[number].answers)
-                });
-            } else {
-                notSubmittedData.push({
-                    userNumber: number,
-                });
-            }
-
-            setSubmitted(submittedData);
-            setNotSubmitted(notSubmittedData);
-        }
-    }, [answersDictDate]);
-
-    if (submitted === undefined || notSubmitted === undefined)
-        return (<div></div>);
-    else 
-        return (
-            <Grid container direction="column" spacing={24}>
-                <AssignmentInfo title={info.assignmentName} deadline={info.deadline} />
-
-                <Grid container direction="column" className="contents_con">
-                    <Grid className="contents_title"><h6>제출한 수강생</h6></Grid>
-                    <SubmittedTable asId={info.assignmentId} rowData={submitted}></SubmittedTable>
-                </Grid>
-                <Grid container direction="column" className="contents_con">
-                    <Grid className="contents_title"><h6>제출하지 않은 수강생</h6></Grid>
-                    <NotSubmittedTable asId={info.assignmentId} rowData={notSubmitted}></NotSubmittedTable>
-                </Grid>
+            <Grid container direction="column" className="contents_con">
+                <Grid className="contents_title"><h6>제출한 수강생</h6></Grid>
+                <SubmittedTable asId={props.info["assignment_id"]} rowData={submittedData}></SubmittedTable>
             </Grid>
-        );
+            <Grid container direction="column" className="contents_con">
+                <Grid className="contents_title"><h6>제출하지 않은 수강생</h6></Grid>
+                <NotSubmittedTable asId={props.info["assignment_id"]} rowData={notSubmittedData}></NotSubmittedTable>
+            </Grid>
+        </Grid>
+    );
 }
 
-/*SubmissionStatus.defaultProps = {
+SubmissionStatus.defaultProps = {
     info: PropTypes.shape({
         "assignment_id": PropTypes.number,
         "assignment_name": PropTypes.string,
@@ -463,6 +374,6 @@ const SubmissionStatus = (props) => {
             "modified_at": PropTypes.instanceOf(Date)
         }
     })
-}*/
+}
 
 export default SubmissionStatus;
