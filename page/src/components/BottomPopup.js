@@ -17,6 +17,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import WarningIcon from '@material-ui/icons/Warning';
 import { withStyles } from '@material-ui/core/styles';
+import { useHistory } from "react-router-dom";
 
 const variantIcon = {
     success: CheckCircleIcon,
@@ -135,7 +136,8 @@ class BottomPopup extends React.Component {
             return;
         }
 
-        window.location.href = this.props.link;
+        let history = useHistory();
+        history.push(this.props.link);
         this.setState({ open: false });
     };
 

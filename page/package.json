@@ -15,16 +15,17 @@
     "axois": "0.0.1-security",
     "classnames": "^2.2.6",
     "date-fns": "^2.15.0",
+    "jsonwebtoken": "^8.5.1",
     "react": "^16.13.1",
     "react-cookie": "^4.0.3",
     "react-dom": "^16.13.1",
     "react-materialui-notifications": "^0.5.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^3.4.3",
     "sha256": "^0.2.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set PORT=3001 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:nowatch": "react-scripts test --watchAll=false --passWithNoTests",
@@ -59,5 +60,5 @@
       "@babel/plugin-proposal-class-properties"
     ]
   },
-  "proxy": "http://localhost:3001"
+  "proxy": "http://localhost:3000"
 }

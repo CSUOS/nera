@@ -17,5 +17,5 @@ export const metaData = {
   // 수정 날짜
   modifiedAt: { type: Date, default: getCurrentDate() },
 };
-
+export const isNumber = (value: any) => !Number.isNaN(Number(value));
 export default Mongoose;

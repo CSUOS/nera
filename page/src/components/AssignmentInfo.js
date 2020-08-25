@@ -3,27 +3,28 @@ import { PageInfo } from ".";
 import PropTypes from 'prop-types';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 
-class AssignmentInfo extends Component {
+const AssignmentInfo = (props) => {
+    let { deadline, score, title } = props;
+    deadline = new Date(deadline);
 
-    getSubTitle = () => {
-        let deadlineString = this.props.deadline.getFullYear() + "-" 
-                         + (this.props.deadline.getMonth()+1 <= 9 ? "0" : "") + (this.props.deadline.getMonth()+1) + "-"
-                         + (this.props.deadline.getDate() <= 9 ? "0" : "") + this.props.deadline.getDate() + " "
-                         + (this.props.deadline.getHours() <= 9 ? "0" : "") + this.props.deadline.getHours() + ":"
-                         + (this.props.deadline.getMinutes() <= 9 ? "0" : "") + this.props.deadline.getMinutes()
+    const getSubTitle = () => {
+        let deadlineString = deadline.getFullYear() + "-" 
+                         + (deadline.getMonth()+1 <= 9 ? "0" : "") + (deadline.getMonth()+1) + "-"
+                         + (deadline.getDate() <= 9 ? "0" : "") + deadline.getDate() + " "
+                         + (deadline.getHours() <= 9 ? "0" : "") + deadline.getHours() + ":"
+                         + (deadline.getMinutes() <= 9 ? "0" : "") + deadline.getMinutes()
 
-        if (isNaN(this.props.score))
+        if (isNaN(score))
             return deadlineString + " 마감"
     }
 
-    render() {
-        return (
-            <PageInfo className="assignment_info"
-                icon={AssignmentIcon}
-                mainTitle={this.props.title}
-                subTitle={this.getSubTitle()} />
-        );
-    }
+
+    return (
+        <PageInfo className="assignment_info"
+            icon={AssignmentIcon}
+            mainTitle={title}
+            subTitle={getSubTitle()} />
+    );
 }
 
 AssignmentInfo.propTypes = {
