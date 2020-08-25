@@ -12,6 +12,7 @@ import Modal from '@material-ui/core/Modal';
 function SetAssignment(props){
     const [update, forceUpdate] = useState(false); // rendering update용
     const [open, setOpen] = useState(false); // modal 관리
+    const [assignId, setAssignId] = useState(-1);
     const [assignInfo, setAssignInfo] = useState("");
     const [lectureName, setLecture] = useState("");
     const [assignName, setAssignName] = useState("");
@@ -69,6 +70,7 @@ function SetAssignment(props){
             .get(`/v1/assignment/${asId}`, { withCredentials: true })
             .then(res => {
                 const data = res.data;
+                setAssignId(data.assignmentId);
                 setAssignInfo(data.assignmentInfo);
                 let tmp = data.assignmentName.split('[');
                 tmp = tmp[1].split(']');
@@ -159,6 +161,7 @@ function SetAssignment(props){
         await preProcessingData();
         await axios
         .post('/v1/assignment', {
+            assignmentId : assignId,
             students : students,
             assignmentName: "["+lectureName+"]"+assignName,
             assignmentInfo: assignInfo,

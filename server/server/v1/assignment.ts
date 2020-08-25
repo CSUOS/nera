@@ -14,6 +14,7 @@ router.use(Bodyparser());
 router.use(Cookie());
 
 async function calState(assignment: typeof AssignmentModel, user: typeof userInfo) {
+
   const now = getCurrentDate().getTime();
   if ((now - assignment.publishingTime.getTime()) < 0) {
     return 0; // 공개전
@@ -35,12 +36,14 @@ async function calState(assignment: typeof AssignmentModel, user: typeof userInf
     }
   }
   return 3; // 채점완료
+  
 }
 
 router.post('/', async (ctx: Koa.Context) => {
   // 과제 생성 api
   const { body } = ctx.request;
   // 유저가 보낸 데이터
+  console.log(body);
 
   if (ctx.role !== '1') { ctx.throw(403, '권한 없음'); }
   // User가 교수가 아닌 경우
