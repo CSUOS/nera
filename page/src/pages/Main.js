@@ -152,8 +152,9 @@ function Main(props) {
             </Drawer>}
         </Grid>
         <Grid
-          className={clsx(classes.content, {
-            [classes.contentShift]: open,
+          className={clsx(classes.content, 
+            classes.appBarShift, 
+            {[classes.contentShift]: open,
           }, "margin-top-64", "contents_side")}
         >
           <Route exact path="/home" component={Home}/>
