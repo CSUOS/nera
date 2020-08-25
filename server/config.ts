@@ -47,7 +47,7 @@ exports.jwtMiddleware = async (ctx: Koa.Context, next: Function) => {
       const freshToken = jwt.sign(user, secretKey, { expiresIn: '1h' });
       // 새 토큰
 
-      ctx.cookies.set('access_token', freshToken, { httpOnly: false, maxAge: 1000 * 60 * 60 });
+      ctx.cookies.set('access_token', freshToken, { httpOnly: false });
       // api 요청시마다 쿠키 새로 발급
       ctx.user = decoded; // 유저 정보 update
       ctx.role = String(ctx.user.userNumber).charAt(0); // 권한 update
