@@ -4,9 +4,14 @@ import PropTypes from 'prop-types';
 
 const Problem = (props) => {
     const [text, setText] = React.useState("");
+    const [scoreText, setScoreText] = React.useState("");
 
     useEffect(()=>{
         setText(props.info.answerContent);
+        if (props.info.assignmentState === 3)
+            setScoreText(`${props.info.score}/${props.info.fullScore}점`);
+        else
+            setScoreText(`${props.info.fullScore}점`);
     }, [JSON.stringify(props.info)]);
     
     const handleTextChange = (event) => {
@@ -21,7 +26,7 @@ const Problem = (props) => {
                 <h6 align="left">{props.info.questionContent}</h6>
             </Grid>
 
-            <h6 className="problem_score" align="right">{props.info.fullScore + "점"}</h6>
+            <h6 className="problem_score" align="right">{scoreText}</h6>
             {/*props.image ? <img className="problem_image" src={props.image} alt="Problem Image" /> : null*/}
 
             <TextField

@@ -44,12 +44,6 @@ a:hover{
     align-self: center;
 }
 
-.save_caption {
-    width: auto;
-    display: block;
-    padding: 0 10px;
-}
-
 .assignment_page_title {
     flex-grow: 1;
 }
