@@ -1,9 +1,21 @@
+import Koa from 'koa';
 import app from './server/index';
+import getEnv from './config';
 
-const { db } = require('./server/db');
+const mongoose = require('mongoose');
 
-const port = process.env.PORT || 3000;
+async function mongoConnect() {
+  const secret = await getEnv();
+  mongoose.connect(secret.mongoAddr,
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    () => { console.log('db와 연결되었습니다.'); });
+}
 
-db();
-app.listen(port);
+mongoConnect();
+
+const port = process.env.PORT || 3001;
+
 console.info(`Listening to http://0.0.0.0:${port}`);
+const server = app.listen(port);
+
+export default server;

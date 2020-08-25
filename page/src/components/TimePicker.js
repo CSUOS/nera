@@ -1,5 +1,5 @@
 import 'date-fns';
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -9,14 +9,10 @@ import {
 } from '@material-ui/pickers';
 
 export default function TimePicker(props) {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-
-  useEffect(()=>{
-    setStartDate(props.startDate);
-    setEndDate(props.endDate);
-    console.log(props.startDate);
-  }, []);
+  const {start_date, end_date} = props;
+  // The first commit of Material-UI
+  const [startDate, setStartDate] = React.useState(new Date(start_date));
+  const [endDate, setEndDate] = React.useState(new Date(end_date));
 
   const handleStartDateChange = (date) => {
     if(date.getTime()<=endDate.getTime()){
@@ -28,7 +24,6 @@ export default function TimePicker(props) {
     }
     setStartDate(date);
   };
-  
   const handleEndDateChange = (date)=>{
     if(date.getTime()>=startDate.getTime()){
       // 해당 날짜 포함으로 고쳐야함

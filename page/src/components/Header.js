@@ -1,7 +1,7 @@
 import React from 'react';
 import LockIcon from '@material-ui/icons/Lock';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, ButtonBase } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import clsx from 'clsx';
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -12,8 +12,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Slide from '@material-ui/core/Slide';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
-import axios from "axios";
-import { useHistory } from "react-router-dom";
 
 const drawerWidth = 300;
 
@@ -65,35 +63,19 @@ const useStyles = makeStyles((theme) => ({
 
   
 function HideOnScroll(props) {
-  const { children, window } = props;
-  const trigger = useScrollTrigger({ target: window ? window() : undefined });
+    const { children, window } = props;
+    const trigger = useScrollTrigger({ target: window ? window() : undefined });
 
-  return (
-    <Slide appear={false} direction="down" in={!trigger}>
-      {children}
-    </Slide>
-  );
+    return (
+        <Slide appear={false} direction="down" in={!trigger}>
+        {children}
+        </Slide>
+    );
 }
 
 const Header =(props)=> {
     const {drawerOpen, open, type, name} = props;
     const classes = useStyles();
-    const history = useHistory();
-
-    function logout() {
-      let doLogout = window.confirm("정말로 로그아웃 하시겠습니까?");
-    
-      if (doLogout) {
-        axios.post('/v1/logout', { withCredentials: true })
-          .then(res => {
-            history.push("/");
-          })
-          .catch(err => {
-            alert("로그아웃을 할 수 없었습니다.");
-            history.push("/");
-          });
-      }
-    }
 
     return(
         <HideOnScroll {...props}>
@@ -119,7 +101,7 @@ const Header =(props)=> {
                     <Grid className="menu_field">
                         <Grid className="header_menu">
                             <ExitToAppIcon/>
-                            <ButtonBase onClick={logout}><p>로그아웃</p></ButtonBase>
+                            <a href="/"><p>로그아웃</p></a>
                         </Grid>
                     </Grid>
                 </Grid>
