@@ -5,12 +5,18 @@ const { config } = require('../config');
 
 async function mongoConnect() { // mongoDB 연결 함수
   const secret = await config;
-  mongoose.connect(secret.testMongo,
-    { useNewUrlParser: true, useUnifiedTopology: true })
+  mongoose.connect(secret.mongoURI,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+      useCreateIndex: true,
+    })
     .then(async () => {
       await mongoose.connection.db.createCollection('answerpapers');
       await mongoose.connection.db.createCollection('groups');
       await mongoose.connection.db.createCollection('assignments');
+      await mongoose.connection.db.createCollection('counters');
       console.log('DB와 연결되었습니다.');
     })
     .catch((e: Error) => {
