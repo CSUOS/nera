@@ -1,5 +1,7 @@
 import Mongoose, { metaData } from './meta';
 
+const AutoIncrement = require('mongoose-sequence')(Mongoose);
+
 const questionSchema = new Mongoose.Schema({
   // 문제 id
   questionId: Number,
@@ -10,7 +12,10 @@ const questionSchema = new Mongoose.Schema({
 });
 const assignmentSchema = new Mongoose.Schema({
   // 과제 id
-  assignmentId: Number,
+  assignmentId: {
+    type: Number,
+    unique: true,
+  },
   // 교수 번호
   professorNumber: Number,
   // 학생 목록
@@ -29,4 +34,5 @@ const assignmentSchema = new Mongoose.Schema({
   meta: metaData,
 });
 
+assignmentSchema.plugin(AutoIncrement, { inc_field: 'assignmentId' });
 exports.AssignmentModel = Mongoose.model('Assignment', assignmentSchema);

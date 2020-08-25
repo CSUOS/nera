@@ -37,6 +37,7 @@
     "mikro-orm": "^3.6.15",
     "mongodb": "^3.6.0",
     "mongoose": "^5.9.27",
+    "mongoose-sequence": "^5.2.2",
     "node-vault": "^0.9.20"
   },
   "devDependencies": {
