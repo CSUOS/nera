@@ -7,7 +7,12 @@ async function mongoConnect() { // mongoDB 연결 함수
   const secret = await config;
   mongoose.connect(secret.testMongo,
     { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => { console.log('db와 연결되었습니다.'); })
+    .then(async () => {
+      await mongoose.connection.db.createCollection('answerpapers');
+      await mongoose.connection.db.createCollection('groups');
+      await mongoose.connection.db.createCollection('assignments');
+      console.log('DB와 연결되었습니다.');
+    })
     .catch((e: Error) => {
       throw (e);
     });
