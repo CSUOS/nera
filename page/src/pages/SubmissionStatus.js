@@ -288,7 +288,7 @@ const SubmissionStatus = (props) => {
     }
 
     const getAssignment = () => {
-        let assignId = props.match.params.as_id;
+        let assignId = props.match.params.asId;
 
         axios.get(`/v1/assignment/${assignId}`, { withCredentials: true })
             .then(res => {
@@ -315,7 +315,7 @@ const SubmissionStatus = (props) => {
         if (info === undefined)
             return;
 
-        let assignId = props.match.params.as_id;
+        let assignId = props.match.params.asId;
 
         let promises = [];
         console.log(info)
@@ -373,7 +373,7 @@ const SubmissionStatus = (props) => {
         setSubmitted(undefined);
         setNotSubmitted(undefined);
         getAssignment();
-    }, [props.match.params.as_id]);
+    }, [props.match.params.asId]);
 
     useEffect(() => {
         getAnswers();
