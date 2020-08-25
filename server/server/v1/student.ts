@@ -23,16 +23,11 @@ router.post('/', async (ctx: Koa.Context) => {
   if (body.className === undefined || body.students === undefined) { ctx.throw(400, '잘못된 요청'); }
   // 요청에 className이나 학생 목록이 없는 경우
 
-  const prevGroup = await GroupModel
-    .findOne({ professorNumber: ctx.user.userNumber, className: body.className }).exec();
-    // 이전에 생성한 그룹이 있는지 탐색
-
-  if (prevGroup === null) {
+  if (body.groupId === -1) {
   // 이전에 생성한 그룹이 없으면
 
     const newGroup = new GroupModel();
     // 새로운 그룹 생성
-
     newGroup.professorNumber = ctx.user.userNumber;
     // 새 그룹의 교수 번호는 교수 본인의 userNumber
 
@@ -41,24 +36,17 @@ router.post('/', async (ctx: Koa.Context) => {
 
     newGroup.students = body.students;
     // 새 그룹의 학생 목록
-
-    const maxId = await GroupModel.findOne({}).sort({ groupId: -1 }).exec();
-    // 가장 큰 groupId를 가진 데이터를 가져옴
-
-    if (maxId === null) {
-      newGroup.groupId = 0;
-      // 데이터가 없으면 groupId를 0으로
-    } else {
-      newGroup.groupId = maxId.groupId + 1;
-      // 데이터가 있으면 해당 groupId에 1을 더해서 groupId로 정함
-    }
     await newGroup.save();
     console.log('수강생 목록 생성 완료');
     // DB에 저장
     ctx.body = newGroup; // 확인용
   } else {
-    // 이전에 생성한 그룹이 있으면
-
+    // 그룹 수정 api
+    if (!isNumber(body.groupId)) { ctx.throw(400, '잘못된 요청'); }
+    const prevGroup = await GroupModel
+      .findOne({ professorNumber: ctx.user.userNumber, groupId: body.groupId }).exec();
+    // 이전에 생성한 그룹이 있는지 탐색
+    if (prevGroup === null) { ctx.throw(404, '해당 그룹 없음'); }
     prevGroup.students = body.students;
     // 수강생 목록 변경
 

@@ -14,7 +14,6 @@ router.use(Bodyparser());
 router.use(Cookie());
 
 async function calState(assignment: typeof AssignmentModel, user: typeof userInfo) {
-
   const now = getCurrentDate().getTime();
   if ((now - assignment.publishingTime.getTime()) < 0) {
     return 0; // 공개전
@@ -22,11 +21,13 @@ async function calState(assignment: typeof AssignmentModel, user: typeof userInf
   if ((now - assignment.deadline.getTime()) < 0) {
     return 1; // 진행중
   }
-  //---------
+
   if (String(user.userNumber).charAt(0) === '1') { return 2; }
+
   const answer = await AnswerPaperModel
     .findOne({ userNumber: user.userNumber, assignmentId: assignment.assignmentId }).exec();
-  if (answer == null) {
+
+  if (answer === null) {
     return 2;
   }
 
@@ -36,15 +37,13 @@ async function calState(assignment: typeof AssignmentModel, user: typeof userInf
     }
   }
   return 3; // 채점완료
-  
 }
 
 router.post('/', async (ctx: Koa.Context) => {
   // 과제 생성 api
   const { body } = ctx.request;
   // 유저가 보낸 데이터
-  console.log(body);
-
+  console.log(body.assignmentId);
   if (ctx.role !== '1') { ctx.throw(403, '권한 없음'); }
   // User가 교수가 아닌 경우
 
@@ -53,28 +52,9 @@ router.post('/', async (ctx: Koa.Context) => {
     || body.questions === undefined) { ctx.throw(400, '잘못된 요청'); }
   // 요청에 학생 목록, 과제이름, 발행시간, 마감기한, 문제가 없는 경우
 
-  const prevAssignment = await AssignmentModel
-    .findOne({ professorNumber: ctx.user.userNumber, assignmentName: body.assignmentName })
-    .exec();
-    // 이전에 생성한 과제가 있는지 교수 본인의 userNumber와 과제 이름으로 탐색
-
-  if (prevAssignment === null) {
+  if (body.assignmentId === -1) {
     const newAssignment = new AssignmentModel();
     // 새로운 과제 생성
-
-    const maxId = await AssignmentModel.findOne({}).sort({ assignmentId: -1 }).exec();
-    // 가장 큰 assignmentId를 가진 데이터를 가져옴
-
-    if (maxId === null) {
-      // 데이터가 없으면
-
-      newAssignment.assignmentId = 0;
-      // assignmentId를 0으로
-    } else {
-      // 데이터가 있으면
-      newAssignment.assignmentId = maxId.assignmentId + 1;
-      // 해당 assignmentId에 1을 더해서 assignmentId로 정함
-    }
 
     for (let i = 0; i < body.questions.length; i += 1) {
       body.questions[i].questionId = i;
@@ -103,12 +83,20 @@ router.post('/', async (ctx: Koa.Context) => {
     newAssignment.questions = body.questions;
     // 새로운 과제의 문제
 
-    await newAssignment.save().then(() => console.log('assignment create 완료'));
+    await newAssignment.save();
+    console.log('assignment create 완료');
     // DB에 저장
 
     ctx.body = newAssignment; // 확인용
   } else {
-    // 이전에 생성한 같은 이름의 과제가 있으면
+    // 수정 api
+    if (!isNumber(body.assignmentId)) { ctx.throw(400, '잘못된 요청'); }
+    const prevAssignment = await AssignmentModel
+      .findOne({ professorNumber: ctx.user.userNumber, assignmentId: body.assignmentId })
+      .exec();
+    // 이전에 생성한 과제가 있는지 교수 본인의 userNumber와 과제 이름으로 탐색
+
+    if (prevAssignment === null) { ctx.throw(404, '해당 과제 없음'); }
 
     prevAssignment.students = body.students;
     // 학생 목록 변경
@@ -134,7 +122,8 @@ router.post('/', async (ctx: Koa.Context) => {
     prevAssignment.meta.modifiedAt = getCurrentDate();
     // 수정 날짜 변경
 
-    await prevAssignment.save().then(() => console.log('assignment update 완료'));
+    await prevAssignment.save();
+    console.log('assignment update 완료');
     // DB에 저장
 
     ctx.body = prevAssignment; // 확인용
@@ -151,12 +140,13 @@ router.get('/', async (ctx: Koa.Context) => {
     takeAssignment = await AssignmentModel.find({ students: ctx.user.userNumber }).exec();
     // 사용자가 학생일 경우
   }
+
   if (takeAssignment === undefined) { ctx.throw(404, '과제 없음'); }
 
-  takeAssignment.map(async (element: typeof assignmentArray) => {
+  await Promise.all(takeAssignment.map(async (element: typeof assignmentArray) => {
     const t = element;
     t.assignmentState = await calState(t, ctx.user);
-  });
+  }));
 
   ctx.body = takeAssignment;
 });
