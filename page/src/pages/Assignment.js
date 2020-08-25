@@ -31,8 +31,7 @@ const Assignment = (props) => {
     const history = useHistory();
 
     function getAssignment() {
-        console.log("getting assignment...");
-        let assignId = props.match.params.as_id;
+        let assignId = props.match.params.asId;
 
         axios.get(`/v1/assignment/${assignId}`, { withCredentials: true })
             .then(res => {
@@ -52,12 +51,10 @@ const Assignment = (props) => {
                 }
                 history.push("/home");
             });
-        console.log("finished getting assignment");
     }
 
     function getAnswers() {
-        console.log("getting answers...");
-        let assignId = props.match.params.as_id;
+        let assignId = props.match.params.asId;
 
         axios.get(`/v1/answer/${assignId}`, { withCredentials: true })
             .then(res => {
@@ -69,7 +66,6 @@ const Assignment = (props) => {
                 setAnswersDate(new Date());
             })
             .catch(err => {
-                console.log(err);
                 const status = err.response.status;
                 if (status === 400) {
                     alert(`답안 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
@@ -97,7 +93,6 @@ const Assignment = (props) => {
                     history.push("/home");
                 }
             });
-        console.log("finished getting answers");
     }
 
     function getMarkedScore(qId) {
@@ -111,7 +106,6 @@ const Assignment = (props) => {
     }
 
     function initQuestions() {
-        console.log("initializing questions...");
         if (info === undefined)
             return;
 
@@ -141,7 +135,6 @@ const Assignment = (props) => {
         } catch (err) {
             console.log(err);
         }
-        console.log("finished initializing questions");
     }
 
     function handleAnswerChange(text, qId) {
@@ -172,7 +165,7 @@ const Assignment = (props) => {
 
         setStatusStyle({...statusCaptionStyle, color: "blue"});
         setStatus("답안 저장 중...");
-        let assignId = props.match.params.as_id;
+        let assignId = props.match.params.asId;
         axios.post(`/v1/answer/${assignId}`, reqBody, { withCredentials: true })
             .then(res => {
                 setModifiedDate(new Date());
@@ -218,7 +211,7 @@ const Assignment = (props) => {
     useEffect(() => {
         setQuestions(undefined);
         getAssignment();
-    }, [props.match.params.as_id]);
+    }, [props.match.params.asId]);
 
     useEffect(() => {
         getAnswers();
