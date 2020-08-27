@@ -39,7 +39,7 @@ function SetStudentList(props){
                     alert(`수강생 정보를 얻는데 실패하였습니다. 권한이 없습니다. (${status})`);
                 }
                 else if (status === 404) {
-                    return;
+                    alert(`수강생 정보를 얻는데 실패하였습니다. 수강생 목록을 찾을 수 없습니다. (${status})`);
                 }
                 else if (status === 500) {
                     alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
