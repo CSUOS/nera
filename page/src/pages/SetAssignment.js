@@ -66,7 +66,7 @@ function SetAssignment(props){
         // function 
 
     function getData(){
-        // 과제 목록 불러오기 api
+        // 과제 정보 불러오기 api
         const asId = props.match.params.asId; // url의 과제id에 해당하는 정보 불러오기
         if(asId!==undefined && asId!=="add"){ // 이미 존재하는 과제 설정을 수정하는 페이지일 때
             axios
@@ -96,7 +96,7 @@ function SetAssignment(props){
                     alert(`과제 정보를 얻는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
                 }
                 else if (status === 404) {
-                    alert(`과제 정보를 얻는데 실패하였습니다. 과제를 찾을 수 없습니다. (${status})`);
+                    return;
                 }
                 else if (status === 500) {
                     alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
@@ -226,7 +226,7 @@ function SetAssignment(props){
                     alert(`수강생 목록 정보를 얻는데 실패하였습니다. 권한이 없습니다. (${status})`);
                 }
                 else if (status === 404) {
-                    alert(`수강생 목록 정보를 얻는데 실패하였습니다. 수강생 목록을 찾을 수 없습니다. (${status})`);
+                    return;
                 }
                 else if (status === 500) {
                     alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");

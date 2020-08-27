@@ -41,7 +41,7 @@ function Setting(){
             alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
             }
             else if (status === 404) {
-            alert("과제를 찾을 수 없습니다.");
+                return;
             }
             else if (status === 500) {
             alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
