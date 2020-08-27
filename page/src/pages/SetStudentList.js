@@ -3,6 +3,7 @@ import { Grid, Paper, TextField, Button } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import { PageInfo } from '../components';
 import axios from "axios";
+import './pages.css';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -13,7 +14,7 @@ function SetStudentList(props){
     const [open, setOpen] = useState(false);
     const [group, setGroup] = useState([]);
     const [selected, setSelected] = useState(-1);
-    const [selectedGroup, setSelGroup] = useState({"students":[undefined], "className":"", "groupId":undefined});
+    const [selectedGroup, setSelGroup] = useState({"students":[undefined], "className":"", "groupId":-1});
     
     useEffect(()=>{
         function getData(){
@@ -76,7 +77,8 @@ function SetStudentList(props){
         await axios
         .post('/v1/student',{
             className: selectedGroup.className,
-            students : selectedGroup.students
+            students : selectedGroup.students,
+            groupId : selectedGroup.groupId
         }, { withCredentials: true })
         .then(res => {
             console.log(res)
@@ -98,7 +100,7 @@ function SetStudentList(props){
             else if (status === 500) {
                 alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
             }
-            //history.push("/home");
+            //history.push("/home/setList");
         });
         await selToGroup();
         await handleClose();
@@ -180,7 +182,7 @@ function SetStudentList(props){
     async function addSelGroup(){
         // 새로운 과제 세팅
         await setSelected(-1);
-        await setSelGroup({"students":[undefined], "className":"", "groupId":undefined});
+        await setSelGroup({"students":[undefined], "className":"", "groupId":-1});
         await forceUpdate(!update);
         await handleOpen();
     }
