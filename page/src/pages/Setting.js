@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Paper } from '@material-ui/core';
+import { Grid, Paper, Button } from '@material-ui/core';
 import {PageInfo} from '../components';
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
@@ -7,6 +7,7 @@ import axios from "axios";
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Typography } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import ClearIcon from '@material-ui/icons/Clear';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { green } from '@material-ui/core/colors';
 
@@ -16,6 +17,29 @@ function Setting(){
     const [assignmentList, setAList] = useState([]);
     const history = useHistory();
     
+    async function deleteAssignment(id){
+        await axios
+        .delete(`/v1/assignment/${id}`, { withCredentials: true })
+        .catch(err=>{
+            if(err.response===undefined){
+                alert(`내부 함수 (Setting.js => deleteAssignment()) 문제입니다. 오류 수정 필요.`);
+            }else{
+                const status = err.response.status;
+                if (status === 401) {
+                    alert(`과제를 삭제하는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
+                }
+                else if (status === 403) {
+                    alert(`과제를 삭제하는데 실패하였습니다. 권한이 없습니다. (${status})`);
+                }
+                else if (status === 500) {
+                    alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
+                }
+            }
+            //history.push("/home");
+        });
+        await setAssignmentList();
+    }
+
     function setAssignmentList(){
         axios.get('/v1/assignment', { withCredentials: true })
         .then(res => {
@@ -72,16 +96,23 @@ function Setting(){
                 icon = <FiberManualRecordIcon/>;
         }
         return(
-            <Link to={"/home/setting/"+as.assignmentId} className="s_assignment_box">
-                <Paper>
-                    <Grid container>
-                    {icon}
-                    <Typography>
-                        {as.assignmentName} ({stateWord})
-                    </Typography>
-                    </Grid>
-                </Paper>
-            </Link>
+            <Grid container item>
+                <Grid item>
+                    <Link to={"/home/setting/"+as.assignmentId} className="s_assignment_box">
+                        <Paper>
+                            <Grid container>
+                            {icon}
+                            <Typography>
+                                {as.assignmentName} ({stateWord})
+                            </Typography>
+                            </Grid>
+                        </Paper>
+                    </Link>
+                </Grid>
+                <Grid item>
+                    <Button onClick={()=>deleteAssignment(as.assignmentId)}><ClearIcon/></Button>
+                </Grid>
+            </Grid>
         );
     }
 
