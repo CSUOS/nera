@@ -8,39 +8,58 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-export default function TimePicker(props) {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+function TimePicker(props) {
+  const [start, setStart] = useState();
+  const [end, setEnd] = useState();
+  const {setStartDate, setEndDate} = props;
 
   useEffect(()=>{
-    setStartDate(props.startDate);
-    setEndDate(props.endDate);
-    console.log(props.startDate);
+    setStart(new Date(props.startDate));
+    setEnd(new Date(props.endDate));
+    
   }, []);
 
-  const handleStartDateChange = (date) => {
-    if(date.getTime()<=endDate.getTime()){
-      // 해당 날짜 포함으로 고쳐야함
+  const handleStartChange = (date) => {
+    if(checkCorrect(date,end)){
+      setStart(date);
       setStartDate(date);
     }else{
       alert("발행날짜가 마감날짜보다 이후일 수 없습니다.");
-      setStartDate(startDate);
+      setStart(start);
     }
-    setStartDate(date);
-  };
+  }
   
-  const handleEndDateChange = (date)=>{
-    if(date.getTime()>=startDate.getTime()){
-      // 해당 날짜 포함으로 고쳐야함
+  const handleEndChange = (date)=>{
+    if(checkCorrect(start,date)){
+      setEnd(date);
       setEndDate(date);
     }else{
       alert("마감날짜가 발행날짜보다 이전일 수 없습니다.");
-      setEndDate(endDate);
+      setEnd(end);
     }
   }
 
+  const checkCorrect = (date1, date2)=>{
+    if(date1.getTime()<=date2.getTime()){ // 시작 날짜가 마감 날짜 전이라면
+      return true;
+    }else if(date1.getYear()==date2.getYear()){ // 시간까지 따지지 않고, 같은 일자라면
+      if(date1.getMonth()==date2.getMonth()){
+        if(date1.getDay()==date2.getDay())
+          return true;
+        else
+          return false;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  }
+  
   return (
     <Grid container direction="row">
+      {
+      (start!==undefined && end !== undefined)?
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Grid xs={6}>
           <KeyboardDatePicker
@@ -50,8 +69,8 @@ export default function TimePicker(props) {
             margin="normal"
             id="date-picker-dialog"
             label="과제 시작 날짜"
-            value={startDate}
-            onChange={handleStartDateChange}
+            value={start}
+            onChange={handleStartChange}
             KeyboardButtonProps={{
               'aria-label': 'change date',
             }}
@@ -65,14 +84,18 @@ export default function TimePicker(props) {
             margin="normal"
             id="date-picker-dialog"
             label="과제 마감 날짜"
-            value={endDate}
-            onChange={handleEndDateChange}
+            value={end}
+            onChange={handleEndChange}
             KeyboardButtonProps={{
               'aria-label': 'change date',
             }}
           />
         </Grid>
       </MuiPickersUtilsProvider>
+      :null
+      }
     </Grid>
   );
 }
+
+export default TimePicker;

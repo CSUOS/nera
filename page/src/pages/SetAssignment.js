@@ -18,9 +18,9 @@ function SetAssignment(props){
     const [assignInfo, setAssignInfo] = useState("");
     const [lectureName, setLecture] = useState("");
     const [assignName, setAssignName] = useState("");
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
-    const [modifiedDate, setModifiedDate] = useState(undefined);
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+    const [modifiedDate, setModifiedDate] = useState();
     const [questions, setQuestions] = useState([]);
     const [students, setStudents] = useState([]);
     const [studentList, setStudentList] = useState({});
@@ -79,8 +79,8 @@ function SetAssignment(props){
                 tmp = tmp[1].split(']');
                 setLecture(tmp[0]);
                 setAssignName(tmp[1]);
-                setStartDate(new Date(data.publishingTime)); 
-                setEndDate(new Date(data.deadline));
+                setStartDate(data.publishingTime); 
+                setEndDate(data.deadline);
                 setQuestions(data.questions);
                 setStudents(data.students);
             })
@@ -103,6 +103,9 @@ function SetAssignment(props){
                 }
                 //history.push("/home");
             });
+        }else{ // 새로운 과제를 추가하는 페이지일 때
+            setStartDate(new Date());
+            setEndDate(new Date());
         }
     }
     
@@ -329,10 +332,15 @@ function SetAssignment(props){
                     <Grid xs={6}><TextField onInput={(e)=>changeAssignNameField(e)} InputLabelProps={{shrink:true}} label="과제명" required multiline rows={1} rowsMax={10000} defaultValue={assignName}></TextField></Grid>
                 </Grid>
                 <Grid item>
-                    <TimePicker
-                        startDate = {startDate}
-                        endDate = {endDate}
-                    />
+                    {(startDate!==undefined && endDate!=undefined)?
+                        <TimePicker
+                            startDate = {startDate}
+                            endDate = {endDate}
+                            setStartDate = {setStartDate}
+                            setEndDate = {setEndDate}
+                        />
+                        :"Please wait..."
+                    }
                 </Grid>
                 <Grid container item direction="row">
                     <Grid xs={6}><TextField  onInput={(e)=>changeAssignInfoField(e)} InputLabelProps={{shrink:true}} label="과제 설명" required multiline rows={1} rowsMax={10000} defaultValue={assignInfo}></TextField></Grid>
