@@ -3,6 +3,8 @@ import { Grid, Paper, TextField, Typography, Button } from '@material-ui/core';
 import { PageInfo, TimePicker } from '../components';
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import './pages.css';
+import { modifiedDateToString } from '../shared/DateToString.js';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -18,6 +20,7 @@ function SetAssignment(props){
     const [assignName, setAssignName] = useState("");
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
+    const [modifiedDate, setModifiedDate] = useState(undefined);
     const [questions, setQuestions] = useState([]);
     const [students, setStudents] = useState([]);
     const [studentList, setStudentList] = useState({});
@@ -76,8 +79,8 @@ function SetAssignment(props){
                 tmp = tmp[1].split(']');
                 setLecture(tmp[0]);
                 setAssignName(tmp[1]);
-                setStartDate(data.publishingTime); 
-                setEndDate(data.deadline); 
+                setStartDate(new Date(data.publishingTime)); 
+                setEndDate(new Date(data.deadline));
                 setQuestions(data.questions);
                 setStudents(data.students);
             })
@@ -191,7 +194,7 @@ function SetAssignment(props){
             }
             history.push("/home/setting");
         });
-        history.push("/home/setting");
+        setModifiedDate(new Date()); 
     }
 
     function getStudentList(){
@@ -316,6 +319,7 @@ function SetAssignment(props){
                         subTitle="" />
                 </Grid>
                 <Grid item xs={3}>
+                    <Typography>{modifiedDateToString(modifiedDate)}</Typography>
                     <Button className="save_button" onClick={saveAssignmentToDB}>저장</Button>
                 </Grid>
             </Grid>

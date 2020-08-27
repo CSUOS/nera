@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AssignmentInfo, Problem } from "../components";
 import { Route } from 'react-router-dom';
+import { modifiedDateToString } from '../shared/DateToString.js';
 
 import { Button, Grid, Typography } from '@material-ui/core';
 import axios from "axios";
@@ -194,18 +195,6 @@ const Assignment = (props) => {
                 setStatusStyle({...statusCaptionStyle, color: "red"});
                 setStatus("답안 저장 필요");
             });
-    }
-
-    function modifiedDateToString(date) {
-        if (date === undefined)
-            return "저장 기록 없음";
-
-        let dateStr = date.getFullYear() + "-" 
-                    + (date.getMonth()+1 <= 9 ? "0" : "") + (date.getMonth()+1) + "-"
-                    + (date.getDate() <= 9 ? "0" : "") + date.getDate() + " "
-                    + (date.getHours() <= 9 ? "0" : "") + date.getHours() + ":"
-                    + (date.getMinutes() <= 9 ? "0" : "") + date.getMinutes();
-        return dateStr + "에 저장함";
     }
 
     useEffect(() => {
