@@ -20,7 +20,8 @@ function TimePicker(props) {
 
   const startDayChange = (date) => {
     let tmp = new Date(date);
-    tmp.setTime(startDate.getTime());
+    tmp.setHours(startDate.getHours());
+    tmp.setMinutes(startDate.getMinutes());
     if(checkCorrect(tmp,endDate)){
       setStartDate(tmp);
       setPublishingTime(tmp);
@@ -44,7 +45,8 @@ function TimePicker(props) {
 
   const endDayChange = (date) => {
     let tmp = new Date(date);
-    tmp.setTime(endDate.getTime());
+    tmp.setHours(endDate.getHours());
+    tmp.setMinutes(endDate.getMinutes());
     if(checkCorrect(startDate,tmp)){
       setEndDate(tmp);
       setDeadline(tmp);
@@ -112,7 +114,7 @@ function TimePicker(props) {
               variant="inline"
               format="MM/dd/yyyy"
               margin="normal"
-              id="date-picker-dialog"
+              id="start_day_picker"
               label="과제 시작 날짜"
               value={startDate}
               onChange={startDayChange}
@@ -123,7 +125,7 @@ function TimePicker(props) {
           </Grid>
           <Grid item xs={3}>
             <TextField
-              id="time"
+              id="start_time_picker"
               label="시작 시각"
               type="time"
               defaultValue={timeFormat(startDate)}
@@ -139,7 +141,7 @@ function TimePicker(props) {
               variant="inline"
               format="MM/dd/yyyy"
               margin="normal"
-              id="date-picker-dialog"
+              id="end_day_picker"
               label="과제 마감 날짜"
               value={endDate}
               onChange={endDayChange}
@@ -150,7 +152,7 @@ function TimePicker(props) {
           </Grid>
           <Grid item xs={3}>
             <TextField
-              id="time"
+              id="end_time_picker"
               label="마감 시각"
               type="time"
               defaultValue={timeFormat(endDate)}
