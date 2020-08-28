@@ -118,7 +118,8 @@ router.post('/:assignmentId/:userNumber', async (ctx: Koa.Context) => {
     studentAnswerPaper.answers[a].score = s.score;
     // 답안의 점수를 그 객체의 점수로 변경
   }
-  studentAnswerPaper.save().then(() => '채점 완료');
+  await studentAnswerPaper.save();
+  console.log('채점 완료');
   // DB에 저장
   ctx.body = studentAnswerPaper; // 확인용
 });
