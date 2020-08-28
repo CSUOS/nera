@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AssignmentInfo, Problem } from "../components";
+import { AssignmentInfo, Problem, Loading } from "../components";
 import { Route } from 'react-router-dom';
 import { modifiedDateToString } from '../shared/DateToString.js';
 
@@ -211,7 +211,7 @@ const Assignment = (props) => {
     }, [answersDate]);
 
     if (questions === undefined)
-        return (<div></div>);
+        return (<Loading status="과제 정보를 가져오는 중..."></Loading>);
     else
         return (
             <Grid container direction="column">
