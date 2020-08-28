@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {AccountInfo, AssignmentBox} from "../components";
+import {AccountInfo, AssignmentBox, Loading} from "../components";
 import { Link } from 'react-router-dom';
 import { getMajorStr } from '../shared/MajorDictionary';
 
@@ -123,7 +123,7 @@ const Home = (props)=>{
 
     // state가 아직 로드되지 않았다면 렌더링 안 함.
     if (PAssignment === undefined || FAssignment === undefined)
-        return (<div></div>)
+        return (<Loading status="과제 정보를 가져오는 중..."></Loading>)
     else
         return (
             <Grid container direction="column">
