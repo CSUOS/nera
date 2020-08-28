@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { SideBar, Header, Loading } from "../components";
+import { Grid, Button } from '@material-ui/core';
 import { Home, Assignment, Setting, Error, SubmissionStatus, SetAssignment, Scoring, SetStudentList } from "../pages";
 import { getUserInfo } from "../shared/GetUserInfo";
 import "./pages.css";
 import clsx from 'clsx';
 import axios from "axios";
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
-import { Grid } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { set } from 'date-fns';
 import { useHistory } from "react-router-dom";
 
 /* style definition => 대부분 css로 옮길 예정 */
@@ -87,7 +86,10 @@ function Main(props) {
     }catch(err){
       history.push("/");
     }
+    setSideBarAssignment();
+  }, []);
 
+  function setSideBarAssignment(){
     axios.get('/v1/assignment', { withCredentials: true })
       .then(res => {
         let assign = res.data;
@@ -120,7 +122,7 @@ function Main(props) {
         }
         history.push("/");
       })
-  }, []);
+  }
 
   /* rendering */
   if (user == undefined || sideAssign == undefined)
@@ -157,7 +159,8 @@ function Main(props) {
                 <SideBar
                   type={user.type}
                   drawerClose={handleDrawerClose}
-                  assignment_info={sideAssign}
+                  assignmentInfo={sideAssign}
+                  setSideBarAssignment = {setSideBarAssignment}
                 />
               </Drawer>
             </Grid>
