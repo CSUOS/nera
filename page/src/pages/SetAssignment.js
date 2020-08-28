@@ -18,8 +18,8 @@ function SetAssignment(props){
     const [assignInfo, setAssignInfo] = useState("");
     const [lectureName, setLecture] = useState("");
     const [assignName, setAssignName] = useState("");
-    const [startDate, setStartDate] = useState();
-    const [endDate, setEndDate] = useState();
+    const [publishingTime, setPublishingTime] = useState();
+    const [deadline, setDeadline] = useState();
     const [modifiedDate, setModifiedDate] = useState();
     const [questions, setQuestions] = useState([]);
     const [students, setStudents] = useState([]);
@@ -79,8 +79,8 @@ function SetAssignment(props){
                 tmp = tmp[1].split(']');
                 setLecture(tmp[0]);
                 setAssignName(tmp[1]);
-                setStartDate(data.publishingTime); 
-                setEndDate(data.deadline);
+                setPublishingTime(data.publishingTime); 
+                setDeadline(data.deadline);
                 setQuestions(data.questions);
                 setStudents(data.students);
             })
@@ -104,8 +104,8 @@ function SetAssignment(props){
                 //history.push("/home");
             });
         }else{ // 새로운 과제를 추가하는 페이지일 때
-            setStartDate(new Date());
-            setEndDate(new Date());
+            setPublishingTime(new Date());
+            setDeadline(new Date());
         }
     }
     
@@ -171,8 +171,8 @@ function SetAssignment(props){
             students : students,
             assignmentName: "["+lectureName+"]"+assignName,
             assignmentInfo: assignInfo,
-            publishingTime: startDate,
-            deadline: endDate,
+            publishingTime: publishingTime,
+            deadline: deadline,
             questions: questions
         } , { withCredentials: true })
         .catch(err=>{
@@ -332,12 +332,12 @@ function SetAssignment(props){
                     <Grid xs={6}><TextField onInput={(e)=>changeAssignNameField(e)} InputLabelProps={{shrink:true}} label="과제명" required multiline rows={1} rowsMax={10000} defaultValue={assignName}></TextField></Grid>
                 </Grid>
                 <Grid item>
-                    {(startDate!==undefined && endDate!=undefined)?
+                    {(publishingTime!==undefined && deadline!=undefined)?
                         <TimePicker
-                            startDate = {startDate}
-                            endDate = {endDate}
-                            setStartDate = {setStartDate}
-                            setEndDate = {setEndDate}
+                            publishingTime = {publishingTime}
+                            deadline = {deadline}
+                            setPublishingTime = {setPublishingTime}
+                            setDeadline = {setDeadline}
                         />
                         :"Please wait..."
                     }
