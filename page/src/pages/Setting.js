@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Paper, Button } from '@material-ui/core';
+import { Grid, Paper, Button, Typography} from '@material-ui/core';
 import {PageInfo} from '../components';
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 
 import SettingsIcon from '@material-ui/icons/Settings';
-import { Typography } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ClearIcon from '@material-ui/icons/Clear';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
@@ -130,12 +129,16 @@ function Setting(){
                 icon={SettingsIcon}
                 mainTitle="과제관리"
                 subTitle="" />
-            <Grid>
-                <Grid className="s_assignment_rootbox">
+            <Grid container>
+                <Grid container item>
                     {
-                        assignmentList.map((as)=> getAssignmentBox(as))
+                        assignmentList.length==0?
+                        <Grid item>
+                            <Typography variant="h6">과제가 없습니다.<br/>생성해주세요!</Typography>
+                        </Grid>
+                        :assignmentList.map((as)=> getAssignmentBox(as))
                     }
-                    <Grid>
+                    <Grid item>
                         <Link to="/home/setting/add">
                             <AddCircleIcon fontSize="large"/>
                         </Link>

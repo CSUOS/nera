@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Paper, TextField, Button } from '@material-ui/core';
+import { Grid, Paper, TextField, Button, Typography } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import { PageInfo } from '../components';
 import axios from "axios";
@@ -211,7 +211,11 @@ function SetStudentList(props){
                 subTitle="" />
             <Grid container wrap="wrap" alignItems="center">
                 {
-                    group.map((gr, index)=>(
+                    group.length==0?
+                    <Grid>
+                        <Typography variang="h6">수강생 목록이 없습니다.<br/>생성해주세요!</Typography>
+                    </Grid>
+                    :group.map((gr, index)=>(
                         <Grid flex="3" className="student_list_con">
                             <Paper>
                                 <Button onClick={() => selectGroup(gr, index)}>{gr.className}</Button>
