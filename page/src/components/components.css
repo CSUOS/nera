@@ -1,5 +1,16 @@
 /* public */
 
+/* loading */
+.loading {
+    padding: 1rem;
+}
+
+.loading_contents {
+    height: 200;
+    display: "flex";
+    flex-direction: column;
+    justify-content: center;
+}
 
 /* side_bar */
 

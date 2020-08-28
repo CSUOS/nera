@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import { AssignmentInfo } from "../components";
+import { AssignmentInfo, Loading } from "../components";
 import PropTypes from 'prop-types';
 
 import { Grid, Paper, TableSortLabel } from '@material-ui/core';
@@ -409,10 +409,10 @@ const SubmissionStatus = (props) => {
     }, [answersDictDate]);
 
     if (submitted === undefined || notSubmitted === undefined)
-        return (<div></div>);
+        return (<Loading status="학생 답안 정보를 불러오는 중..."></Loading>);
     else 
         return (
-            <Grid container direction="column" spacing={24}>
+            <Grid container direction="column">
                 <AssignmentInfo title={info.assignmentName} deadline={info.deadline} />
 
                 <Grid container direction="column" className="contents_con">
