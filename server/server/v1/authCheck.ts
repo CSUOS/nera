@@ -6,7 +6,7 @@ import Student from './student';
 import Assignment from './assignment';
 import UserInfo from './userInfo';
 
-const { jwtMiddleware } = require('../../config');
+const { jwtMiddleware } = require('../auth');
 
 const router = new Router();
 
