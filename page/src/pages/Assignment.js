@@ -139,8 +139,6 @@ const Assignment = (props) => {
     }
 
     function handleAnswerChange(text, qId) {
-        console.log(`changed in ${qId}: ${text}`);
-
         let currModified = modifiedAnswers;
         currModified[qId] = text;
         setModifiedAnswers(currModified);

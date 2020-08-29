@@ -74,6 +74,8 @@ SortableTableHead.propTypes = {
 };
 
 const SubmittedRow = (props) => {
+    const history = useHistory();
+
     const getLastSaveDate = () => {
         let timeString = props.time.getFullYear() + "-" 
                          + (props.time.getMonth()+1 <= 9 ? "0" : "") + (props.time.getMonth()+1) + "-"
@@ -84,6 +86,10 @@ const SubmittedRow = (props) => {
         return timeString;
     }
 
+    const movePage = () => {
+        history.push(`/home/scoring/${props.asId}/${props.userNumber}`);
+    }
+
     return (
         <TableRow>
             <TableCell>{props.userNumber}</TableCell>
@@ -91,7 +97,7 @@ const SubmittedRow = (props) => {
             <TableCell>{props.filled}</TableCell>
             <TableCell>{props.score}</TableCell>
             <TableCell>
-                <IconButton aria-label="채점 페이지로" size="small" href={`/home/scoring/${props.asId}/${props.userNumber}`}>
+                <IconButton aria-label="채점 페이지로" size="small" onClick={movePage}>
                     <CreateIcon></CreateIcon>
                 </IconButton>
             </TableCell>
