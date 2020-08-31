@@ -142,8 +142,9 @@ const Assignment = (props) => {
         let currModified = modifiedAnswers;
         currModified[qId] = text;
         setModifiedAnswers(currModified);
-
-        if (status !== "답안 저장 필요" && answers.find(ans => ans.questionId == qId).answerContent != text) {
+        
+        let found = questions.find(ques => ques.questionId == qId);
+        if (status !== "답안 저장 필요" && found && found.answerContent != text) {
             setStatusStyle({ ...statusCaptionStyle, color: "red" });
             setStatus("답안 저장 필요");
         }
