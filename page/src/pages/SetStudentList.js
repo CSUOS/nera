@@ -240,9 +240,9 @@ function SetStudentList(props){
                         <Grid container>
                             <Grid container item alignItems="center">
                                 {selected==-1?
-                                    <TextField label="목록 이름" required onInput={(e)=>changeListName(e)} rows={1} rowsMax={10000} className="modal_input_field" defaultValue={selectedGroup["className"]}></TextField>
+                                    <TextField label="목록 이름" required onInput={(e)=>changeListName(e)} rows={1} rowsMax={10000} className="modal_input_field" value={selectedGroup["className"]}></TextField>
                                     :
-                                    <TextField label="목록 이름" required disabled="true" rows={1} rowsMax={10000} className="modal_input_field" defaultValue={selectedGroup["className"]}></TextField>
+                                    <TextField label="목록 이름" required disabled="true" rows={1} rowsMax={10000} className="modal_input_field" value={selectedGroup["className"]}></TextField>
                                 }
                                 <Button className="save_button" onClick={()=>saveModalGroup()}>저장</Button>
                             </Grid>
@@ -251,7 +251,7 @@ function SetStudentList(props){
                                     
                                     selectedGroup["students"].map((student, index)=>
                                         <Grid item>
-                                            <TextField label={"학생"+(index+1)} rows={1} rowsMax={10000} onInput={(e)=>changeListStudent(e, index)} className="modal_input_field" defaultValue={student}></TextField>
+                                            <TextField label={"학생"+(index+1)} rows={1} rowsMax={10000} onInput={(e)=>changeListStudent(e, index)} className="modal_input_field" value={student}></TextField>
                                         </Grid>
                                     )
                                     

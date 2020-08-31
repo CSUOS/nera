@@ -328,8 +328,8 @@ function SetAssignment(props){
             </Grid>
             <Grid container item spacing={4} direction="column" className="setting_as_con">
                 <Grid container item direction="row">
-                    <Grid xs={6}><TextField onInput={(e)=>changeLectureField(e)} InputLabelProps={{shrink:true}} label="강의명" required multiline rows={1} rowsMax={10000} defaultValue={lectureName}></TextField></Grid>
-                    <Grid xs={6}><TextField onInput={(e)=>changeAssignNameField(e)} InputLabelProps={{shrink:true}} label="과제명" required multiline rows={1} rowsMax={10000} defaultValue={assignName}></TextField></Grid>
+                    <Grid xs={6}><TextField onInput={(e)=>changeLectureField(e)} InputLabelProps={{shrink:true}} label="강의명" required multiline rows={1} rowsMax={10000} value={lectureName}></TextField></Grid>
+                    <Grid xs={6}><TextField onInput={(e)=>changeAssignNameField(e)} InputLabelProps={{shrink:true}} label="과제명" required multiline rows={1} rowsMax={10000} value={assignName}></TextField></Grid>
                 </Grid>
                 <Grid item>
                     {(publishingTime!==undefined && deadline!=undefined)?
@@ -343,7 +343,7 @@ function SetAssignment(props){
                     }
                 </Grid>
                 <Grid container item direction="row">
-                    <Grid xs={6}><TextField  onInput={(e)=>changeAssignInfoField(e)} InputLabelProps={{shrink:true}} label="과제 설명" required multiline rows={1} rowsMax={10000} defaultValue={assignInfo}></TextField></Grid>
+                    <Grid xs={6}><TextField  onInput={(e)=>changeAssignInfoField(e)} InputLabelProps={{shrink:true}} label="과제 설명" required multiline rows={1} rowsMax={10000} value={assignInfo}></TextField></Grid>
                 </Grid>
                 <Grid container item direction="row">
                     <Grid container spacing={1} xs={12}>
@@ -359,8 +359,8 @@ function SetAssignment(props){
                                             <Button onClick={()=>deleteQuestion(index)}><ClearIcon/></Button>
                                         </Grid>
                                         <Grid container item>
-                                            <TextField onInput={(e)=>changeQuestionField(e, index, 0)} InputLabelProps={{shrink:true}} label="문제 설명" required multiline rows={1} rowsMax={10000} defaultValue={question.questionContent}></TextField>
-                                            <TextField onInput={(e)=>changeQuestionField(e, index, 1)} InputLabelProps={{shrink:true}} label="배점" required multiline rows={1} rowsMax={10} defaultValue={question.fullScore}></TextField>
+                                            <TextField onInput={(e)=>changeQuestionField(e, index, 0)} InputLabelProps={{shrink:true}} label="문제 설명" required multiline rows={1} rowsMax={10000} value={question.questionContent}></TextField>
+                                            <TextField onInput={(e)=>changeQuestionField(e, index, 1)} InputLabelProps={{shrink:true}} label="배점" required multiline rows={1} rowsMax={10} value={question.fullScore}></TextField>
                                         </Grid>
                                     </Grid>
                                 )
@@ -389,7 +389,7 @@ function SetAssignment(props){
                                     {
                                         renderObject.map((student, index)=>
                                             <Grid container item xs={4} wrap="nowrap" alignItems="center">
-                                                <TextField onInput={(e)=>changeStudentField(e, index)} className="popup_student" InputLabelProps={{shrink:true}} label={"학생"+(index+1)} required multiline rows={1} rowsMax={15} defaultValue={student}></TextField>
+                                                <TextField onInput={(e)=>changeStudentField(e, index)} className="popup_student" InputLabelProps={{shrink:true}} label={"학생"+(index+1)} required multiline rows={1} rowsMax={15} value={student}></TextField>
                                                 <Button onClick={()=>deleteStudent(index)}><ClearIcon/></Button>
                                             </Grid>
                                         )
