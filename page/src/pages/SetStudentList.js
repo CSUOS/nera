@@ -17,36 +17,6 @@ function SetStudentList(props){
     const [selectedGroup, setSelGroup] = useState({"students":[undefined], "className":"", "groupId":-1});
     
     useEffect(()=>{
-        function getData(){
-            // 수강생 그룹 목록 불러오기 api
-            axios
-            .get('/v1/student', { withCredentials: true })
-            .then(res => {
-                setGroup(res.data);
-            })
-            .catch(err=>{
-                if(err.response===undefined){
-                    alert(`내부 함수 (SetStudentList.js => getData()) 문제입니다. 오류 수정 필요.`);
-                }
-                const status = err.response.status;
-                if (status === 400) {
-                    alert(`수강생 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
-                }
-                else if (status === 401) {
-                    alert(`수강생 정보를 얻는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
-                }
-                else if (status === 403) {
-                    alert(`수강생 정보를 얻는데 실패하였습니다. 권한이 없습니다. (${status})`);
-                }
-                else if (status === 404) {
-                    return;
-                }
-                else if (status === 500) {
-                    alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
-                }
-                //history.push("/home");
-            });
-        }
         getData();
     },[]);
     
@@ -68,6 +38,37 @@ function SetStudentList(props){
         // 빈 칸 빼고 업데이트 api 
     };
         // function
+
+    function getData(){
+        // 수강생 그룹 목록 불러오기 api
+        axios
+        .get('/v1/student', { withCredentials: true })
+        .then(res => {
+            setGroup(res.data);
+        })
+        .catch(err=>{
+            if(err.response===undefined){
+                alert(`내부 함수 (SetStudentList.js => getData()) 문제입니다. 오류 수정 필요.`);
+            }
+            const status = err.response.status;
+            if (status === 400) {
+                alert(`수강생 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
+            }
+            else if (status === 401) {
+                alert(`수강생 정보를 얻는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
+            }
+            else if (status === 403) {
+                alert(`수강생 정보를 얻는데 실패하였습니다. 권한이 없습니다. (${status})`);
+            }
+            else if (status === 404) {
+                return;
+            }
+            else if (status === 500) {
+                alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
+            }
+            //history.push("/home");
+        });
+    }
 
     async function saveModalGroup(){
         // modal에서 저장 버튼을 눌렀을 때
@@ -105,6 +106,7 @@ function SetStudentList(props){
         await selToGroup();
         await handleClose();
         await forceUpdate(!update);
+        await getData();
     }
 
     async function selectGroup(group, index){
