@@ -40,8 +40,12 @@ a:hover{
 }
 
 .save_component{
-    margin: 15px;
+    margin-right: 20px;
     align-self: center;
+}
+
+.assignment_info_container {
+    display: block;
 }
 
 .assignment_page_title {
@@ -51,6 +55,9 @@ a:hover{
 .assignment_page_header {
     display: flex;
     flex-wrap: wrap;
+}
+
+.assignment_info {
 }
 
 .table_root {
@@ -148,6 +155,7 @@ a:hover{
 .modal_con{
     margin: 20px;
     padding: 10px;
+    max-width: 50%;
 }
 
 .scoring_bottom {
@@ -171,4 +179,9 @@ a:hover{
 }
 .login_container>div{
     margin: 10px;
+}
+
+/* button */
+.add_button{
+    cursor: pointer;
 }

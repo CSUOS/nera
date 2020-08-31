@@ -11,7 +11,7 @@
 1. `master`를 제외한 나머지 `branch`에서는 자유롭게 커밋 (`fork`도 가능)
 2. `master`랑 `merge`하려면 `pull request` (이하 PR) 넣기
 3. 본인을 제외한 나머지 멤버가 변경내용 검토후 `merge` 
-   1. Squash&merge, Rebase가 아닌 일반 merge 사용할 것
+   1. Squash&merge, Rebase가 아닌 일반 merge 사용할것
 
 
 
@@ -32,7 +32,7 @@ server
 
 ## DEV환경 구축
 
-본 프로젝트는 `yarn`을 사용하는것을 전제로 진행하고 있습니다.
+본 프로젝트는 `yarn`을 사용하는것을 전재로 진행하고 있습니다.
 
 각 프로젝트 폴더에 들어가서 `yarn`입력으로 필요 모듈을 설치한 후 아래 명령어를 사용하시면 됩니다.
 
@@ -48,6 +48,6 @@ server
 
 `yarn start`: `prod`서버 시작.
 
-`yarn dev`: `dev`서버 시작. (파일변경 감지 시 자동 재시작)
+`yarn dev`: `dev`서버 시작. (파일변경 감지시 자동 재시작)
 
 `yarn test`: 유닛테스트 실행

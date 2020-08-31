@@ -1,8 +1,13 @@
 import Mongoose, { metaData } from './meta';
 
+const AutoIncrement = require('mongoose-sequence')(Mongoose);
+
 const groupSchema = new Mongoose.Schema({
+  groupId: {
+    type: Number,
+    default: 0,
+  },
   // 그룹 id
-  groupId: Number,
   // 강의 이름
   className: String,
   // 교수 번호
@@ -11,4 +16,6 @@ const groupSchema = new Mongoose.Schema({
   students: [Number],
   meta: metaData,
 });
+
+groupSchema.plugin(AutoIncrement, { inc_field: 'groupId' });
 exports.GroupModel = Mongoose.model('Group', groupSchema);

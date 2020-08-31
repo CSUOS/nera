@@ -2,12 +2,13 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import "./components.css";
 
+import { Divider, ListSubheader, Grid, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import { Divider, ListSubheader, Grid } from '@material-ui/core';
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import IconButton from '@material-ui/core/IconButton';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -29,13 +30,13 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 const SideBar = (props) => {
-    const classes = useStyles();
-    const {type, drawerClose, assignment_info} = props;
+    const classes = useStyles();    
+    const {type, drawerClose, assignmentInfo, setSideBarAssignment} = props;
 
     let primary_assignment = [];
     let secondary_assignment = [];
 
-    assignment_info.map((as)=>{
+    assignmentInfo.map((as)=>{
         if(type===0){ // 교수 => 0만 마감 전
             switch(as[2]){
                 case 0:
@@ -69,10 +70,11 @@ const SideBar = (props) => {
     return (
         <Grid className="side_bar">
             <Grid className={clsx(classes.drawerHeader,"sideBar_header")}>
-                <Link to="/home"><Grid className="NERA"><a href="#"><h1>NERA</h1></a></Grid></Link>
+                <Link to="/home"><Grid className="NERA"><h1>NERA</h1></Grid></Link>
                 <IconButton onClick={drawerClose}>
                     <ChevronLeftIcon />
                 </IconButton>
+                <Button onClick={setSideBarAssignment}><RefreshIcon/></Button>
             </Grid>
             <Divider />
 
