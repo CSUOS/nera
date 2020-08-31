@@ -22,7 +22,9 @@ router.post('/', async (ctx: Koa.Context) => {
 
   if (body.className === undefined || body.students === undefined) { ctx.throw(400, '잘못된 요청'); }
   // 요청에 className이나 학생 목록이 없는 경우
-
+  body.students.forEach((s: number) => {
+    if (!isNumber(s)) { ctx.throw(400, '잘못된 요청'); }
+  });
   if (body.groupId === -1) {
   // 이전에 생성한 그룹이 없으면
 
