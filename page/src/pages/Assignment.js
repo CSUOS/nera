@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { AssignmentInfo, Problem, Loading } from "../components";
+import { AssignmentInfo, Problem, Loading, MarkdownViewer, MarkdownEditor } from "../components";
 import { Route } from 'react-router-dom';
 import { modifiedDateToString } from '../shared/DateToString.js';
 
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Button, Grid, Typography, Divider } from '@material-ui/core';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
@@ -80,7 +80,7 @@ const Assignment = (props) => {
                 else if (status === 404) {
                     // 단순히 입력한 답안이 없는 경우이므로 오류는 아님.
                     setModifiedDate(undefined);
-                    setStatus("변경사항 없음");
+                    setStatus("변경 사항 없음");
                     setStatusStyle(statusCaptionStyle);
                     setModifiedAnswers({});
                     setAnswers([]);
@@ -143,8 +143,10 @@ const Assignment = (props) => {
         currModified[qId] = text;
         setModifiedAnswers(currModified);
 
-        setStatusStyle({...statusCaptionStyle, color: "red"});
-        setStatus("답안 저장 필요");
+        if (status !== "답안 저장 필요" && answers.find(ans => ans.questionId == qId).answerContent != text) {
+            setStatusStyle({ ...statusCaptionStyle, color: "red" });
+            setStatus("답안 저장 필요");
+        }
     }
 
     function saveAnswers() {
@@ -196,7 +198,15 @@ const Assignment = (props) => {
     }
 
     useEffect(() => {
+        setInfo(undefined);
+        setInfoDate(undefined);
+        setAnswers(undefined);
+        setAnswersDate(undefined);
         setQuestions(undefined);
+        setModifiedDate(undefined);
+        setStatus(undefined);
+        setStatusStyle(undefined);
+        setModifiedAnswers(undefined);
         getAssignment();
     }, [props.match.params.asId]);
 
@@ -231,8 +241,9 @@ const Assignment = (props) => {
                 </Grid>
 
                 {info.assignmentState === 1 || info.assignmentState === 3 ? (
-                    <div>
-                        <Typography variant="body1" className="assignment_info" children={info.assignmentInfo}></Typography>
+                    <div className="assignment_info_container">
+                        <MarkdownViewer source={info.assignmentInfo}/>
+                        <Divider className="editor_caption_divider" orientation="horizontal"></Divider>
                         {questions.map(ques => <Problem info={ques} onEdit={handleAnswerChange} />)}
                     </div>
                 ) :

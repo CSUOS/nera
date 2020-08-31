@@ -44,6 +44,10 @@ a:hover{
     align-self: center;
 }
 
+.assignment_info_container {
+    display: block;
+}
+
 .assignment_page_title {
     flex-grow: 1;
 }
@@ -54,7 +58,6 @@ a:hover{
 }
 
 .assignment_info {
-    padding: 40px 10px 0px 10px;
 }
 
 .table_root {

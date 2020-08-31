@@ -18,10 +18,6 @@ article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{ /
 display:block;
 }
 
-ol, ul, li{/*ul, li 목록 스타일 초기화*/
-list-style:none;
-}
-
 a{/*a 태그 초기화*/
 margin:0;
 padding:0;
