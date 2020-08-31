@@ -22,7 +22,8 @@
     "react-materialui-notifications": "^0.5.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3",
-    "sha256": "^0.2.0"
+    "sha256": "^0.2.0",
+    "xlsx": "^0.16.6"
   },
   "scripts": {
     "start": "set PORT=3001 && react-scripts start",

@@ -3,6 +3,7 @@ import { Grid, Paper, TextField, Button, Typography } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import { PageInfo } from '../components';
 import axios from "axios";
+import XLSX from 'xlsx';
 import './pages.css';
 
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -15,7 +16,28 @@ function SetStudentList(props){
     const [group, setGroup] = useState([]);
     const [selected, setSelected] = useState(-1);
     const [selectedGroup, setSelGroup] = useState({"students":[undefined], "className":"", "groupId":-1});
-    
+    const onChange = (e) => {
+        const f = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = async (ex) => {
+            const bstr = ex.target.result;
+            const wb = XLSX.read(bstr, {type:'binary'});
+            /* Get first worksheet */
+            const wsname = wb.SheetNames[0];
+            const ws = wb.Sheets[wsname];
+            /* Convert array of arrays */
+            const data = XLSX.utils.sheet_to_json(ws);
+            /* Update state */
+            let tmp = selectedGroup;
+            data.map((s) => {
+                if (isNaN(s['학번'])) { alert('학번은 숫자로 입력해주세요.')};
+                tmp.students.push(s['학번']);
+            });
+            await setSelGroup(tmp);
+            await forceUpdate(!update);
+        }
+        reader.readAsBinaryString(f);
+    }
     useEffect(()=>{
         function getData(){
             // 수강생 그룹 목록 불러오기 api
@@ -246,17 +268,22 @@ function SetStudentList(props){
                                 }
                                 <Button className="save_button" onClick={()=>saveModalGroup()}>저장</Button>
                             </Grid>
-                            <Grid container item alignItems="center" wrap="wrap">
+                            <Grid container item alignItems="center">
                                 { // selected group state의 students 배열 표시
-                                    
+                                    /*
                                     selectedGroup["students"].map((student, index)=>
                                         <Grid item>
                                             <TextField label={"학생"+(index+1)} rows={1} rowsMax={10000} onInput={(e)=>changeListStudent(e, index)} className="modal_input_field" value={student}></TextField>
                                         </Grid>
                                     )
-                                    
+                                    */
+                                   selectedGroup["students"].map((student, index)=>
+                                        <Grid item>
+                                            <div className="s_list">{student}</div>
+                                        </Grid>
+                                    )
                                 }
-                                <AddCircleIcon className="add_button" onClick={addStudent}/>
+                                <input type="file" onChange={onChange.bind(this)}/>
                             </Grid>
                         </Grid>
                     </Paper>

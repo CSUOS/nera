@@ -152,7 +152,7 @@ a:hover{
 .modal_con{
     margin: 20px;
     padding: 10px;
-    max-width: 50%;
+    max-width: 30%;
 }
 
 .scoring_bottom {
@@ -181,4 +181,9 @@ a:hover{
 /* button */
 .add_button{
     cursor: pointer;
+}
+
+.s_list{
+    margin: 3px;
+    background: red;
 }
