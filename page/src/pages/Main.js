@@ -173,11 +173,10 @@ function Main(props) {
                 }, "margin-top-64", "contents_side")}
             >
               <Route exact path="/home" component={Home} />
-              <Route exact path="/home/assignment/:asId" component={user.type === 1 ? Assignment : SubmissionStatus} />
+              <Route exact path="/home/assignment/:asId" component={user.type === 1 ? Assignment : Scoring} />
               <Route exact path="/home/setting" component={Setting} />
               <Route exact path="/home/setting/:asId" component={SetAssignment} />
               <Route exact path="/home/setList" component={SetStudentList} />
-              <Route exact path="/home/scoring/:asId/:userNumber" component={Scoring} />
             </Grid>
 
           </Grid>

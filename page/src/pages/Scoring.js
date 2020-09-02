@@ -1,57 +1,28 @@
 import React, { Component, useEffect, useState } from 'react';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid, IconButton, Button, Typography, TextField, FormControl, Input, InputAdornment } from '@material-ui/core';
-import { PageInfo, Loading } from '../components';
+import { PageInfo, Loading, ScoreStats, QuestionSelector, StudentSelector } from "../components";
 
-import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import { Box, Grid, Paper } from '@material-ui/core';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         display: 'flex',
-//         flexWrap: 'wrap',
-//     },
-//     margin: {
-//         margin: theme.spacing(1),
-//     },
-//     withoutLabel: {
-//         marginTop: theme.spacing(3),
-//     },
-//     textField: {
-//         width: '25ch',
-//     },
-// }));
+import { rejects } from 'assert';
 
 const Scoring = (props) => {
-    const dateCaptionStyle = {
-        width: "auto",
-        display: "block",
-        padding: "0 10px"
-    };
-
-    const statusCaptionStyle = {
-        width: "auto",
-        display: "block",
-        padding: "0 10px"
-    };
-
-    const [assignInfo, setAssignInfo] = useState(undefined);
-    const [answers, setAnswers] = useState(undefined);
-    const [fetchDate, setFetchDate] = useState(undefined);
-    const [questions, setQuestions] = useState(undefined);
-    const [page, setPage] = useState(undefined);
+    const [assign, setAssign] = useState(undefined);
+    const [assignDate, setAssignDate] = useState(undefined);
+    const [answersDict, setAnswersDict] = useState(undefined);
+    const [answersDictDate, setAnswersDictDate] = useState(undefined);
+    const [selectedQues, setSelectedQues] = useState(undefined);
     const history = useHistory();
 
-    function getAssignment() {
+    const getAssignment = () => {
         let assignId = props.match.params.asId;
 
         axios.get(`/v1/assignment/${assignId}`, { withCredentials: true })
             .then(res => {
-                setAssignInfo(res.data);
+                console.log(res);
+                setAssign(res.data);
+                setAssignDate(new Date());
             })
             .catch(err => {
                 const status = err.response.status;
@@ -68,15 +39,43 @@ const Scoring = (props) => {
             });
     }
 
-    function getAnswers() {
-        let assignId = props.match.params.asId;
-        let userNumber = props.match.params.userNumber;
+    const getAnswers = () => {
+        if (assign === undefined)
+            return;
 
-        axios.get(`/v1/answer/${assignId}/${userNumber}`, { withCredentials: true })
-            .then(res => {
-                setAnswers(res.data.answers);
-                setPage(0);
-                setFetchDate(new Date());
+        let assignId = props.match.params.asId;
+        let promises = [];
+
+        for (let stuNum of assign.students) {
+            let prom = axios.get(`/v1/answer/${assignId}/${stuNum}`, { withCredentials: true })
+                .catch(err => {
+                    if (err.response.status === 404) {
+                        // 단순히 입력한 답안이 없는 경우이므로 오류는 아님.
+                        return {
+                            "data": {
+                                "userNumber": stuNum,
+                                "answers": [],
+                                "meta": {
+                                    "createAt": undefined,
+                                    "modifiedAt": undefined
+
+                                }
+                            }
+                        }
+                    }
+                    else rejects(err);
+                });
+
+            promises.push(prom);
+        }
+
+        Promise.all(promises)
+            .then(arrOfRes => {
+                let dict = {}
+                for (const res of arrOfRes)
+                    dict[res.data.userNumber] = res.data;
+                setAnswersDict(dict);
+                setAnswersDictDate(new Date());
             })
             .catch(err => {
                 const status = err.response.status;
@@ -89,185 +88,66 @@ const Scoring = (props) => {
                 else if (status === 403) {
                     alert(`답안 정보를 얻는데 실패하였습니다. 권한이 없습니다. (${status})`);
                 }
-                else if (status === 404) {
-                    // 단순히 입력한 답안이 없는 경우이므로 오류는 아님.
-                    setAnswers([]);
-                    setPage(0);
-                    setFetchDate(new Date());
-                }
-                else if (status === 500) {
+                else {
                     alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
                 }
 
-                if (status !== 404) {
-                    history.push("/home");
-                }
+                history.push("/home");
             });
     }
 
-    function getMarkedScore(qId) {
-        let found = answers.filter(answer => answer.questionId == qId);
-        if (found.length > 0) {
-            if (found[0].score === -1)
-                return 0;
-            return found[0].score;
-        }
-        return 0;
-    }
-
-    function initQuestions() {
-        if (assignInfo === undefined)
-            return;
-
-        try {
-            let quesArr = [];
-            let number = 1;
-
-            for (const ques of assignInfo.questions) {
-                let processed = {};
-                processed.questionId = ques.questionId;
-                processed.questionNumber = number++;
-                processed.questionContent = ques.questionContent;
-                processed.fullScore = ques.fullScore;
-                processed.score = getMarkedScore(ques.questionId);
-                processed.assignmentState = assignInfo.assignmentState;
-
-                const found = answers.filter(answer => answer.questionId == ques.questionId);
-                if (found.length > 0)
-                    processed.answerContent = found[0].answerContent;
-                else
-                    processed.answerContent = "";
-
-                quesArr.push(processed);
-            }
-
-            setQuestions(quesArr);
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    function initPageContent() {
-        console.log(page);
-    }
-
     useEffect(() => {
+        setAssign(undefined);
+        setAnswersDict(undefined);
+        setSelectedQues(undefined);
         getAssignment();
+    }, [props.match.params.asId]);
+
+    useEffect(() => {
         getAnswers();
-    }, [props.match.params.asId, props.match.params.userNumber]);
+    }, [assignDate]);
 
-    useEffect(() => {
-        initQuestions();
-    }, [fetchDate]);
-
-    useEffect(() => {
-        initPageContent();
-    }, [page]);
-
-    const ableToGoPrev = () => {
-        return page >= 1;
+    function getSubTitle() {
+        const deadline = new Date(assign.deadline);
+        let deadlineString = deadline.getFullYear() + "-" 
+                         + (deadline.getMonth()+1 <= 9 ? "0" : "") + (deadline.getMonth()+1) + "-"
+                         + (deadline.getDate() <= 9 ? "0" : "") + deadline.getDate() + " "
+                         + (deadline.getHours() <= 9 ? "0" : "") + deadline.getHours() + ":"
+                         + (deadline.getMinutes() <= 9 ? "0" : "") + deadline.getMinutes()
+        return deadlineString + " 마감";
     }
 
-    const ableToGoNext = () => {
-        return page < questions.length-1;
+    function handleQuestionSelectorChanged(selected) {
+        setSelectedQues(selected.length == 0 ? undefined : selected);
     }
 
-    const goPrev = () => {
-        if (ableToGoPrev()) {
-            const currentPage = page;
-            setPage(currentPage-1);
-        }
-    }
-
-    const goNext = () => {
-        if (ableToGoNext()) {
-            const currentPage = page;
-            setPage(currentPage+1);
-        }
-    }
-
-    if (questions === undefined)
-        return (<Loading status="답안 정보를 가져오는 중..."></Loading>);
+    if (assign === undefined || answersDictDate === undefined)
+        return <Loading status="과제 및 답안 정보를 불러오는 중..."></Loading>
     else
         return (
-            <div className="scoring_container">
-                <Grid className="scoring_page_header">
-                    <Grid className="scoring_page_title">
-                        <PageInfo className="scoring_info"
-                            icon={FormatListNumberedIcon}
-                            mainTitle={`${props.match.params.userNumber}의 답안`}
-                            subTitle={`${assignInfo.assignmentName}`}/>
-                    </Grid>
-                    <Grid className="save_container">
-                        <Grid container direction="row" alignItems="flex-start" justify="flex-end">
-                            <Grid container direction="column">
-                                <Grid item direction="column" alignItems="flex-start" justify="flex-end">
-                                    <Typography variant="caption" align="right" style={dateCaptionStyle} children={"날짜"}></Typography>
-                                    <Typography variant="body2" align="right" style={statusCaptionStyle} children={"상태"}></Typography>
-                                </Grid>
-                                <Button className="save_component" variant="contained">저장</Button>
-                                {/* <FormControl className={clsx(classes.margin, classes.withoutLabel, classes.textField)}>
-                                <Input
-                                    value={scoreText}
-                                    onChange={handleScoreTextChange}
-                                    endAdornment={<InputAdornment position="end">/{fullScoreText}점</InputAdornment>}>
-                                </Input>
-                            </FormControl> */}
-                            </Grid>
+            <Grid container direction="column">
+                <PageInfo className="assignment_info"
+                    icon={AssignmentIcon}
+                    mainTitle={assign.assignmentName}
+                    subTitle={getSubTitle()} />
+
+                <Grid container direction="column" className="contents_con">
+                    <Grid className="contents_title"><h6>점수 통계</h6></Grid>
+                    <ScoreStats className="score_stats" assign={assign} answersDict={answersDict}></ScoreStats>
+                </Grid>
+                <Grid container direction="column" className="contents_con">
+                    <Grid className="contents_title"><h6>답안 채점하기</h6></Grid>
+                    <Grid container spacing={3} direction="row" wrap="wrap" alignItems="center">
+                        <Grid item xs>
+                            <QuestionSelector assign={assign} onChange={handleQuestionSelectorChanged}></QuestionSelector>
+                        </Grid>
+                        <Grid item xs>
+                            <StudentSelector assign={assign} answersDict={answersDict} selectedQues={selectedQues}></StudentSelector>
                         </Grid>
                     </Grid>
                 </Grid>
-
-                {/* <UserAnswer number={page + 1} info={questions[page]}></UserAnswer> */}
-
-                <div className="scoring_bottom">
-                    <IconButton aria-label="이전 문제" size="medium" onClick={goPrev} disabled={!ableToGoPrev()}>
-                        <ArrowBackIcon></ArrowBackIcon>
-                    </IconButton>
-                    <IconButton aria-label="다음 문제" size="medium" onClick={goNext} disabled={!ableToGoNext()}>
-                        <ArrowForwardIcon></ArrowForwardIcon>
-                    </IconButton>
-                </div>
-            </div>
-        )
+            </Grid>
+        );
 }
-
-/*Scoring.defaultProps = {
-    info: PropTypes.shape({
-        "assignment_id": PropTypes.number,
-        "assignment_name": PropTypes.string,
-        "deadline": PropTypes.instanceOf(Date),
-        "assignment_state": PropTypes.number,
-        "assignment_info": PropTypes.string,
-        "full_score": PropTypes.number,
-        "score": PropTypes.number,
-        "students": PropTypes.arrayOf(PropTypes.number),
-        "questions": PropTypes.arrayOf(PropTypes.shape({
-            "question_id": PropTypes.number,
-            "question_content": PropTypes.string,
-            "full_score": PropTypes.number,
-            "question_answer": PropTypes.arrayOf(PropTypes.shape({
-                "user_number": PropTypes.number,
-                "question_id": PropTypes.number,
-                "name": PropTypes.string,
-                "answer_content": PropTypes.arrayOf(PropTypes.string),
-                "submitted": PropTypes.bool,
-                "score": PropTypes.number,
-                "meta": {
-                    "create_at": PropTypes.instanceOf(Date),
-                    "modified_at": PropTypes.instanceOf(Date)
-                }
-            })),
-            "meta": {
-                "create_at": PropTypes.instanceOf(Date),
-                "modified_at": PropTypes.instanceOf(Date)
-            }
-        })),
-        "meta": {
-            "create_at": PropTypes.instanceOf(Date),
-            "modified_at": PropTypes.instanceOf(Date)
-        }
-    })
-}*/
 
 export default Scoring;
