@@ -228,7 +228,6 @@ function QuestionSelector(props) {
             }
             setRows(rowData);
         } catch (err) {
-            console.log(err);
             setError(true);
         }
     }, [props.assign, props.answersDict, props.selectedQues]);

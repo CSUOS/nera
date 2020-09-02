@@ -25,8 +25,11 @@ const Scoring = (props) => {
                 setAssignDate(new Date());
             })
             .catch(err => {
-                const status = err.response.status;
-                if (status === 400 || status === 401) {
+                const status = err?.response?.status;
+                if (status === undefined) {
+                    alert("예기치 못한 예외가 발생하였습니다.\n"+JSON.stringify(err));
+                }
+                else if (status === 400 || status === 401) {
                     alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
                 }
                 else if (status === 404) {
@@ -49,7 +52,12 @@ const Scoring = (props) => {
         for (let stuNum of assign.students) {
             let prom = axios.get(`/v1/answer/${assignId}/${stuNum}`, { withCredentials: true })
                 .catch(err => {
-                    if (err.response.status === 404) {
+                    const status = err?.response?.status;
+                    if (status === undefined) {
+                        alert("예기치 못한 예외가 발생하였습니다.\n" + JSON.stringify(err));
+                        history.push('/home');
+                    }
+                    else if (status === 404) {
                         // 단순히 입력한 답안이 없는 경우이므로 오류는 아님.
                         return {
                             "data": {
@@ -78,8 +86,11 @@ const Scoring = (props) => {
                 setAnswersDictDate(new Date());
             })
             .catch(err => {
-                const status = err.response.status;
-                if (status === 400) {
+                const status = err?.response?.status;
+                if (status === undefined) {
+                    alert("예기치 못한 예외가 발생하였습니다.\n"+JSON.stringify(err));
+                }
+                else if (status === 400) {
                     alert(`답안 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
                 }
                 else if (status === 401) {

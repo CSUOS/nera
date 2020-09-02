@@ -36,25 +36,28 @@ function Login(){
         
     }
 
-    async function setLoginData(e){ // pw 암호화 및 api data 받기
+    async function setLoginData(e) { // pw 암호화 및 api data 받기
         let hashed_pw = await hashProcess();
         await axios.post('/v1/login', { // get api data
             userId: id,
             userPw: hashed_pw,
         }, { withCredentials: true })
-        .then(() => {
-            window.location.href = "/home";
-        })
-        .catch((err)=>{
-            const status = err.response.status;
-            if(status == 400){
-                alert("아이디, 패스워드가 기입되었는지 다시 한 번 확인해주세요.");
-            }else if(status == 403){
-                alert("아이디, 패스워드가 정확히 기입되었는지 다시 한 번 확인해주세요.");
-            }else if(status == 500){
-                alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
-            }
-        });
+            .then(() => {
+                window.location.href = "/home";
+            })
+            .catch((err) => {
+                const status = err?.response?.status;
+                if (status === undefined) {
+                    alert("예기치 못한 예외가 발생하였습니다.\n" + JSON.stringify(err));
+                }
+                else if (status == 400) {
+                    alert("아이디, 패스워드가 기입되었는지 다시 한 번 확인해주세요.");
+                } else if (status == 403) {
+                    alert("아이디, 패스워드가 정확히 기입되었는지 다시 한 번 확인해주세요.");
+                } else if (status == 500) {
+                    alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
+                }
+            });
     }
 
     function changeId(){

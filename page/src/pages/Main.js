@@ -107,11 +107,11 @@ function Main(props) {
         setSideAssign(sAssign);
       })
       .catch(err => {
-        if(err.response==undefined){
-          alert(`내부 함수 (Main.js => useEffect()) 문제입니다. 오류 수정 필요.`);
+        const status = err?.response?.status;
+        if (status === undefined) {
+          alert("예기치 못한 예외가 발생하였습니다.\n" + JSON.stringify(err));
         }
-        const status = err.response.status;
-        if (status === 400 || status === 401) {
+        else if (status === 400 || status === 401) {
           alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
         }
         else if (status === 404) {
