@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { AssignmentInfo, Problem, Loading, MarkdownViewer, MarkdownEditor } from "../components";
-import { Route } from 'react-router-dom';
+import { PageInfo, Problem, Loading, MarkdownViewer, MarkdownEditor } from "../components";
 import { modifiedDateToString } from '../shared/DateToString.js';
 
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import { Button, Grid, Typography, Divider } from '@material-ui/core';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -198,6 +198,16 @@ const Assignment = (props) => {
             });
     }
 
+    function getSubTitle(){
+        const deadline = new Date(info.deadline);
+        let deadlineString = deadline.getFullYear() + "-" 
+                         + (deadline.getMonth()+1 <= 9 ? "0" : "") + (deadline.getMonth()+1) + "-"
+                         + (deadline.getDate() <= 9 ? "0" : "") + deadline.getDate() + " "
+                         + (deadline.getHours() <= 9 ? "0" : "") + deadline.getHours() + ":"
+                         + (deadline.getMinutes() <= 9 ? "0" : "") + deadline.getMinutes()
+        return deadlineString + " 마감";
+    }
+
     useEffect(() => {
         setInfo(undefined);
         setInfoDate(undefined);
@@ -226,7 +236,10 @@ const Assignment = (props) => {
             <Grid container direction="column">
                 <Grid className="assignment_page_header">
                     <Grid className="assignment_page_title">
-                        <AssignmentInfo title={info.assignmentName} deadline={info.deadline}></AssignmentInfo>
+                        <PageInfo className="assignment_info"
+                            icon={AssignmentIcon}
+                            mainTitle={info.assignmentName}
+                            subTitle={getSubTitle()} />
                     </Grid>
 
                     {info.assignmentState === 1 &&

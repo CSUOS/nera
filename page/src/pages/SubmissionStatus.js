@@ -1,7 +1,8 @@
-import React, { Component, useEffect, useState } from 'react';
-import { AssignmentInfo, Loading } from "../components";
+import React, { useEffect, useState } from 'react';
+import { PageInfo, Loading } from "../components";
 import PropTypes from 'prop-types';
 
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import { Grid, Paper, TableSortLabel } from '@material-ui/core';
 import { TableRow, TableBody, IconButton, Table, TableHead, TableContainer, TablePagination, TableCell } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
@@ -374,6 +375,16 @@ const SubmissionStatus = (props) => {
                 history.push("/home");
             });
     }
+    
+    const getSubTitle = ()=>{
+        const deadline = new Date(info.deadline);
+        let deadlineString = deadline.getFullYear() + "-" 
+                         + (deadline.getMonth()+1 <= 9 ? "0" : "") + (deadline.getMonth()+1) + "-"
+                         + (deadline.getDate() <= 9 ? "0" : "") + deadline.getDate() + " "
+                         + (deadline.getHours() <= 9 ? "0" : "") + deadline.getHours() + ":"
+                         + (deadline.getMinutes() <= 9 ? "0" : "") + deadline.getMinutes()
+        return deadlineString + " 마감";
+    }
 
     useEffect(() => {
         setSubmitted(undefined);
@@ -419,8 +430,10 @@ const SubmissionStatus = (props) => {
     else 
         return (
             <Grid container direction="column">
-                <AssignmentInfo title={info.assignmentName} deadline={info.deadline} />
-
+                <PageInfo className="assignment_info"
+                    icon={AssignmentIcon}
+                    mainTitle={info.assignmentName}
+                    subTitle={getSubTitle()} />
                 <Grid container direction="column" className="contents_con">
                     <Grid className="contents_title"><h6>제출한 수강생</h6></Grid>
                     <SubmittedTable asId={info.assignmentId} rowData={submitted}></SubmittedTable>

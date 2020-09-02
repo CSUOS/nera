@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {AccountInfo, AssignmentBox, Loading} from "../components";
-import { Link } from 'react-router-dom';
+import {PageInfo, AssignmentBox, Loading} from "../components";
 import { getMajorStr } from '../shared/MajorDictionary';
 
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { Grid } from '@material-ui/core';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -41,6 +41,13 @@ const Home = (props)=>{
             alert(`사용자 정보를 가져오는 중 오류가 발생하였습니다. (${err})`);
             history.push("/");
         }
+    }
+
+    function getSubTitle() {
+        if (user.type === 0)
+            return `교수 / ${user.userNumber}`;
+        else
+            return `학생 / ${user.userNumber} / ${user.major}`;
     }
 
     useEffect(() => {
@@ -127,11 +134,10 @@ const Home = (props)=>{
     else
         return (
             <Grid container direction="column">
-                <AccountInfo
-                    name={user.userName}
-                    number={user.userNumber}
-                    type={user.type}
-                    major={user.major}
+                <PageInfo className="account_info"
+                    icon={AccountCircleIcon}
+                    mainTitle={user.userName}
+                    subTitle={getSubTitle()}
                 />
                 <Grid container direction="column" className="contents_con">
                     <Grid className="contents_title"><h6>{user.type === 0 ? "마감 전 과제" : "제출 가능한 과제" // 제목 수정 필요

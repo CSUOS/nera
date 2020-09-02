@@ -2,8 +2,9 @@ import React, { Component, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, IconButton, Button, Typography, TextField, FormControl, Input, InputAdornment } from '@material-ui/core';
-import { ScoringInfo, Loading } from '../components';
-import PropTypes from 'prop-types';
+import { PageInfo, Loading } from '../components';
+
+import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import axios from "axios";
@@ -192,7 +193,10 @@ const Scoring = (props) => {
             <div className="scoring_container">
                 <Grid className="scoring_page_header">
                     <Grid className="scoring_page_title">
-                        <ScoringInfo userNumber={props.match.params.userNumber} asName={assignInfo.assignmentName}></ScoringInfo>
+                        <PageInfo className="scoring_info"
+                            icon={FormatListNumberedIcon}
+                            mainTitle={`${props.match.params.userNumber}의 답안`}
+                            subTitle={`${assignInfo.assignmentName}`}/>
                     </Grid>
                     <Grid className="save_container">
                         <Grid container direction="row" alignItems="flex-start" justify="flex-end">
