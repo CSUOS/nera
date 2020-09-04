@@ -2,6 +2,7 @@ import Koa from 'koa';
 
 const mongoose = require('mongoose');
 const { config } = require('../config');
+const { collectionInfo } = require('./type');
 
 async function mongoConnect() { // mongoDB 연결 함수
   const secret = await config;
@@ -13,10 +14,23 @@ async function mongoConnect() { // mongoDB 연결 함수
       useCreateIndex: true,
     })
     .then(async () => {
-      await mongoose.connection.db.createCollection('answerpapers');
-      await mongoose.connection.db.createCollection('groups');
-      await mongoose.connection.db.createCollection('assignments');
-      await mongoose.connection.db.createCollection('counters');
+      const collections = await mongoose.connection.db.listCollections().toArray();
+      let check = collections.findIndex((coll: typeof collectionInfo) => coll.name === 'answerpapers');
+      if (check === -1) {
+        await mongoose.connection.db.createCollection('answerpapers');
+      }
+      check = collections.findIndex((coll: typeof collectionInfo) => coll.name === 'groups');
+      if (check === -1) {
+        await mongoose.connection.db.createCollection('groups');
+      }
+      check = collections.findIndex((coll: typeof collectionInfo) => coll.name === 'assignments');
+      if (check === -1) {
+        await mongoose.connection.db.createCollection('assignments');
+      }
+      check = collections.findIndex((coll: typeof collectionInfo) => coll.name === 'counters');
+      if (check === -1) {
+        await mongoose.connection.db.createCollection('counters');
+      }
       console.log('DB와 연결되었습니다.');
     })
     .catch((e: Error) => {
