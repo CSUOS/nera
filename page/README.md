@@ -1,44 +1,80 @@
-# Page 폴더 관련사항 정리
+<p align="center">
+      <h1 align="center">Frontend 문서</h2>
+	  <p align="center">
+    	<a href="https://github.com/CSUOS/nera/issues">Report Bug</a>
+  	  </p>
+</p>
 
-## React 구동법
+[v1.0.0]
 
-page 폴더가 현재 작업 디렉토리인 채로 `npm start`나 `yarn start` 명령 실행
+# 목차
 
-
-
-## 흐름 정리
-
-1. index.js => index.html
-
-   public의 index.html 내에 있는 id가 root인 div에 index.js의 render가 작용함
-
-2. Root.js => index.js
-
-   src의 client 디렉토리에 있는 Root.js가 index.js에서 컴포넌트로 호출됨
-
-3. App.js => Root.js
-
-   Root.js는 src의 shared 디렉토리에 있는 App.js를 컴포넌트로 호출
-
-4. Login, Main.js => App.js
-
-   App.js는 각 페이지로 가는 라우트를 설정하는 컴포넌트
-
-   주소에 따라 각각의 컴포넌트 호출
-
-5. Header, SideBar, Home, Assignment, Error, Setting.js, SubmissionStatus.js, Scoring.js => Main.js
-
-   Main.js는 Header와 SideBar 그리고 메인 컨텐츠 영역으로 구성되어있음
-   
-   => 메인 컨텐츠 영역은 url에 따라 pages의 컴포넌트들로 바뀜
-   
-6. components의 js => pages의 js
-
-   각 컴포넌트들은 페이지들에서 쓰이며, 쓰이는 대로 호출됨
+* [페이지 실행](##페이지-실행)
+* [디렉토리 구조](##디렉토리-구조)
+* [라우팅 구조](##라우팅 구조)
 
 
 
-## 폴더 정리
+<h2 id="page_start">페이지 실행</h2>
+
+page 디렉토리에서 다음의 명령어로 실행
+
+```
+yarn start (또는 npm start)
+```
+
+
+
+## 디렉토리 구조
+
+* public
+  * css
+    * [material.css](####material.css)
+    * [reset.js](####reset.js)
+* src
+  * client
+    * [Root.js](####Root.js)
+  * components
+    * [index.js](####index.js)
+    * [AccountInfo.js](####AccountInfo.js)
+    * [AssignmentBox.js](####AssignmnetBox.js)
+    * [BottomPopup.js](####BottomPopup.js)
+    * [Header.js](####Header.js)
+    * [Loading.js](####Loading.js)
+    * [MarkdownEditor.js](####MarkdownEditor.js)
+    * [MarkdownViewer.js](####MarkdownViewer.js)
+    * [PageInfo.js](####PageInfo.js)
+    * [PartBox.js](####PartBox.js)
+    * [PartInfo.js](####PartInfo.js)
+    * [Problem.js](####Problem.js)
+    * [ScoringInfo.js](####ScoringInfo.js)
+    * [SetQuestion.js](####SetQuestion.js)
+    * [SideBar.js](####SideBar.js)
+    * [TimePicker.js](####TimePicker.js)
+    * [UserAnswer.js](####UserAnswer.js)
+    * [UseRequest.js](####UseRequest.js)
+    * [components.css](####components.css)
+  * pages
+    * [index.js](####index.js)
+    * [Error.js](####Error.js)
+    * [Home.js](####Home.js)
+    * [Login.js](####Login.js)
+    * [Main.js](####Main.js)
+    * [Scoring.js](####Scoring.js)
+    * [SetAssignment.js](####SetAssignment.js)
+    * [SetStudentList.js](####SetStudentList.js)
+    * [Setting.js](####Setting.js)
+    * [SubmissionStatus.js](####SubmissionStatus.js)
+    * [pages.css](####pages.css)
+  * shared
+    * [App.js](####App.js)
+    * [DateToString.js](####DateToString.js)
+    * [GetUserInfo.js](####GetUserInfo.js)
+    * [MajorDictionary.js](####MajorDictionary.js)
+
+------
+
+### 디렉토리 정보
 
 * public
 
@@ -64,39 +100,153 @@ page 폴더가 현재 작업 디렉토리인 채로 `npm start`나 `yarn start` 
 
     라우트를 담당하는 App.js를 담아두는 디렉토리
 
-  
-
-css 파일들은 page 별로 따로, components는 하나의 파일로 관리
-
-> page의 공통된 css는 *pages.css* 에서 관리
-
-material 라이브러리의 커스터마이징은 *material.css*에서 관리
 
 
+### 파일 정보
 
-## 페이지 정리
+#### material.css
 
-| url                                                          | 페이지 유형 | 비고           |
-| ------------------------------------------------------------ | ----------- | -------------- |
-| http://localhost:3000/                                       | 로그인      | 버튼 클릭 시 home 페이지로 이동 |
-| http://localhost:3000/home                                   | 메인 페이지 |                |
-| http://localhost:3000/home/assignment/:as_id | 과제 페이지 | type에 따라 컴포넌트가 랜더링 됨<br>학생 : Assignment.js<br>교수: SubmissionStatus.js |
-| http://localhost:3000/home/setting/:as_id | 과제 관리 페이지 | 교수님만 접근 가능 |
-| http://localhost:3000/home/scoring/:as_id/:user_number | 답안 채점 페이지 | 교수님만 접근 가능<br>각 문제에 대한 답안을<br>한 페이지씩 보여줌 |
-|                                              |                  |                |
+ 라이브러리 *material UI*에 대한 수정사항을 담은 css 파일이다.
+
+#### reset.css
+
+(imported at index.html)
+
+ 프로젝트 전체 css의 초기화를 담당하는 파일이다.
+
+#### Root.js
+
+ BrowserRouter를 적용하고 실질적인 루트 컴포넌트 App을 호출하는 역할을 하는 파일이다.
+
+#### index.js 
+
+ pages 폴더와 components 폴더에 하나씩 있다.
+
+ 해당 폴더의 js 파일을 한 데에 모아서 export하기 위해 사용된다. 해당 폴더 이외의 폴더에서 컴포넌트를 사용하기 위해서는 index.js 파일을 통해 모든 컴포넌트에 접근할 수 있다.
+
+#### AssignmentBox.js
+
+ 과제로 이동하는 과제 태그 리스트를 표현하기 위한 컴포넌트이다.
+
+#### BottomPopup.js
+
+ 이벤트를 표시하기 위한 컴포넌트이지만, 아직 사용되지 않았다.
+
+#### Header.js
+
+ 위측 상단 바를 표시하기 위한 컴포넌트이다.
+
+#### Loading.js
+
+ api 연동 및 웹페이지 렌더링 시 대기 상태를 표시하기 위한 컴포넌트이다.
+
+#### MarkdownEditor.js
+
+ 마크다운 에디터와 뷰어를 표시하기 위한 컴포넌트이다.
+
+#### MarkdownViewer.js
+
+ MarkdownEditor.js에서 사용하는 뷰어 컴포넌트이다.
+
+#### PageInfo.js
+
+ 각 페이지에서 해당 페이지를 설명하는 아이콘, 제목, 부제목을 표시하기 위한 컴포넌트이다.
+
+#### Problem.js
 
 
 
-## 데이터 정리
+#### SideBar.js
 
-https://www.notion.so/data-049c77d3a2614f8fa3dde8cd5b580ee4
+ 왼쪽 사이드 메뉴바를 표시하기 위한 컴포넌트이다.
 
- 모든 데이터는 Main.js에서 관리하며 렌더링할 컴포넌트가 필요로 하는 정보를 넘겨주는 식으로 진행함
+#### TimePicker.js
+
+ 과제 일정을 정하기 위한 날짜 선택 달력 컴포넌트이다.
+
+#### UserAnswer.js
+
+ 사용자의 답안을 표시하기 위한 컴포넌트이다.
+
+#### UseRequest.js
+
+ 요청을 받아서 api로 요청을 보낸후, 결과와 에러를 처리하는 컴포넌트이다.
+
+#### components.css
+
+ components 디렉토리의 컴포넌트 css를 통틀어서 관리하는 파일이다.
+
+#### Error.js
+
+ Error가 발생했을 때, 표시되는 페이지이다.
+
+#### Home.js
+
+ 로그인 후 가장 처음 사이트에 접근했을 때 표시되는 페이지로 사용자의 과제 정보가 간단하게 표시되어있다.
+
+#### Login.js
+
+ 처음 사이트에 접근했을 때 표시되는 페이지로 로그인 페이지이다. 로그인하게 되면 Home.js가 표시된다.
+
+#### Main.js
+
+ 사용자에게 드러나는 페이지 그 자체이다. 헤더와 사이드바, 메인 컨텐츠로 이루어져있고 메인 컨텐츠는 접근 url에 따라 각각의 페이지 컴포넌트로 전환된다.
+
+#### Scoring.js
+
+ 교수님이 학생들의 답안을 채점하는 페이지 컴포넌트입니다.
+
+#### SetAssignment.js
+
+ 과제의 세부 사항을 설정하는 페이지 컴포넌트입니다.
+
+#### SetStudentList.js
+
+ 수강생 목록을 관리하는 페이지 컴포넌트입니다.
+
+#### Setting.js
+
+ 사용자에 할당된 과제 목록을 띄워주는 페이지 컴포넌트입니다.
+
+#### SubmissionStatus.js
 
 
 
-## 라이브러리
+#### pages.css
 
-Material-UI 사용
+ pages 디렉토리의 컴포넌트 css를 통틀어서 관리하는 파일이다.
+
+
+
+#### App.js
+
+ Root.js에서 호출되는 컴포넌트로 라우팅을 담당한다. 크게 Login 컴포넌트와 Main 컴포넌트로 라우팅된다.
+
+#### DateToString.js
+
+ Date 객체를 String 형태로 받기 위한 함수 모듈이다.
+
+#### GetUserInfo.js
+
+ cookie의 jwt token을 이용해 사용자 정보를 가져오기 위한 함수 모듈이다.
+
+#### MajorDictionary.js
+
+ 학번에 따른 전공을 추출하기 위한 함수 모듈이다.
+
+
+
+## 라우팅 구조
+
+| url                                                    | 페이지 유형             | 비고                                                         |
+| ------------------------------------------------------ | ----------------------- | ------------------------------------------------------------ |
+| https://nera.csuos.ml/                                 | 로그인                  | Login.js                                                     |
+| https://nera.csuos.ml/home                             | 메인 페이지             | Main.js => Home.js                                           |
+| https://nera.csuos.ml/home/assignment/:as_id           | 과제 페이지             | type에 따라 컴포넌트가 랜더링 됨<br>학생 : Main.js => Assignment.js<br>교수: Main.js => SubmissionStatus.js |
+| https://nera.csuos.ml/home/scoring/:as_id/:user_number | 답안 채점 페이지        | 교수님만 접근 가능<br>각 문제에 대한 답안을<br>한 페이지씩 보여줌 |
+| https://nera.csuos.ml/home/setting                     | 과제 목록 페이지        | 교수님만 접근 가능<br/>Main.js => Setting.js                 |
+| https://nera.csuos.ml/home/setting/:as_id              | 과제 관리 페이지        | 교수님만 접근 가능<br>Main.js => SetAssignment.js            |
+| https://nera.csuos.ml/home/setList                     | 수강생 목록 관리 페이지 | 교수님만 접근 가능<br>Main.js => SetStudentList.js           |
+
 
 
