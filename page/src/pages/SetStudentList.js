@@ -6,15 +6,15 @@ import axios from "axios";
 import './pages.css';
 
 import SettingsIcon from '@material-ui/icons/Settings';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ClearIcon from '@material-ui/icons/Clear';
 
 function SetStudentList(props){
     const [update, forceUpdate] = useState(false); // rendering update용
     const [open, setOpen] = useState(false);
     const [group, setGroup] = useState([]);
-    const [selected, setSelected] = useState(-1);
-    const [selectedGroup, setSelGroup] = useState({"students":[undefined], "className":"", "groupId":-1});
+    const [students, setStudents] = useState([]);
+    const [listName, setListName] = useState("");
+    const [groupId, setGroupId] = useState(-1);
     
     useEffect(()=>{
         getData();
@@ -22,7 +22,7 @@ function SetStudentList(props){
     
      // if you click list's x button => deleteGroup();
      // if you click list => selectGroup();
-     // if you click list + button => addSelGroup();
+     // if you click list '수강생 목록 생성' button => addGroup();
      // if you modify modal's list name => changeListName();
      // if you modify modal's list student => changeListStudent();
      // if you click modal's + button => addStudent();
@@ -35,7 +35,6 @@ function SetStudentList(props){
     
     const handleClose = () => {
         setOpen(false);
-        // 빈 칸 빼고 업데이트 api 
     };
         // function
 
@@ -72,18 +71,32 @@ function SetStudentList(props){
 
     async function saveModalGroup(){
         // modal에서 저장 버튼을 눌렀을 때
-        // 현재 selectedGroup의 내용 저장
-        // group 수정 / 생성 api
+        // 현재 모달의 내용 저장 후,
+        // 다시 수강생 목록 받아오기
+
+        if(!window.confirm('저장 시 목록명을 바꿀 수 없습니다. 저장할까요?'))
+            return;
+
+        await initializeHighlight();
+        let olStudents = isStudentsValid();
+        console.log(olStudents);
+        if(Object.keys(olStudents).length!==0){
+            alert('수강생 학번 중 겹치는 학번이 있습니다.');
+            highlightOverlap(olStudents);
+            return;
+        }
+        
+        if(listName===""){
+            alert('목록 이름이 비어있습니다. 입력해주세요.');
+            return;
+        }
 
         await axios
         .post('/v1/student',{
-            className: selectedGroup.className,
-            students : selectedGroup.students,
-            groupId : selectedGroup.groupId
+            className: listName,
+            students : students,
+            groupId : groupId
         }, { withCredentials: true })
-        .then(res => {
-            console.log(res)
-        })
         .catch(err=>{
             if(err.response===undefined){
                 alert(`내부 함수 (SetStudentList.js => saveModalGroup()) 문제입니다. 오류 수정 필요.`);
@@ -103,45 +116,39 @@ function SetStudentList(props){
             }
             //history.push("/home/setList");
         });
-        await selToGroup();
         await handleClose();
-        await forceUpdate(!update);
         await getData();
+        await forceUpdate(!update);
     }
 
-    async function selectGroup(group, index){
-        await setSelGroup(group);
-        await setSelected(index);
+    async function selectGroup(group){
+        await setStudents(group["students"]);
+        await setListName(group["className"]);
+        await setGroupId(group["groupId"]);
         await handleOpen();
     }
 
     async function changeListName(e){
-        let tmp = selectedGroup;
-
-        tmp.className = e.target.value;
-        await setSelGroup(tmp);
+        await setListName(e.target.value);
         await forceUpdate(!update);
     }
 
     async function changeListStudent(e, index){
-        let tmp = selectedGroup;
-
+        let tmp = students;
         let number = Number(e.target.value);
-        if(number!==NaN){
-            tmp.students[index] = number;
-        }else{
-            tmp.students[index] = undefined;
-        }
+        tmp[index] = isNaN(number)?e.target.value:number;
 
-        await setSelGroup(tmp);
+        await initializeHighlight();
+
+        await setStudents(tmp);
         await forceUpdate(!update);
     }
     
     async function addStudent(){
-        // selected group의 students 배열에 학번 추가
-        let tmp = selectedGroup;
-        tmp.students.push(undefined);
-        await setSelGroup(tmp);
+        // 새로운 학번 추가
+        let tmp = students;
+        tmp.push(undefined);
+        await setStudents(tmp);
         await forceUpdate(!update);
     }
 
@@ -156,7 +163,7 @@ function SetStudentList(props){
             })
             .catch(err=>{
                 if(err.response===undefined){
-                    alert(`내부 함수 (SetStudentList.js => saveModalGroup()) 문제입니다. 오류 수정 필요.`);
+                    alert(`내부 함수 (SetStudentList.js => deleteGroup()) 문제입니다. 오류 수정 필요.`);
                 }
                 const status = err.response.status;
                 if (status === 401) {
@@ -170,37 +177,50 @@ function SetStudentList(props){
                 }
                 //history.push("/home");
             });
-            await deleteSelInGroup(index);
+            await getData();
             await forceUpdate(!update);
         }
     }
 
-        function deleteSelInGroup(index){
-            let tmp = group;
-            tmp.splice(index,1);
-            setGroup(group);
-        }
-
-    async function addSelGroup(){
+    async function addGroup(){
         // 새로운 과제 세팅
-        await setSelected(-1);
-        await setSelGroup({"students":[undefined], "className":"", "groupId":-1});
-        await forceUpdate(!update);
+        await setStudents([]);
+        await setListName("");
+        await setGroupId(-1);
         await handleOpen();
     }
-    
-    function selToGroup(){
-        // selectedGroup => group 반영
-        let tmp = group;
-        if(selected==-1){
-            // 새로운 과제 추가
-            tmp.push(selectedGroup);
-        }else{
-            // 기존에 존재하는 과제 수정
-            tmp[selected] = selectedGroup;
+
+    function isStudentsValid(){
+        let tmp = {}; // key : 학번, value : index
+        let result = {};
+        for(let i=0; i<students.length; i++){
+            if(Object.prototype.hasOwnProperty.call(tmp,students[i])){
+                result[students[i]] = i;
+                continue;
+            }
+            tmp[students[i]]=i;
         }
 
-        setGroup(tmp);
+        return result;
+    }
+
+    function highlightOverlap(olStudents){
+        for(let number in olStudents){ // number : 학번
+            const studentTag = document.getElementById("modal_student"+olStudents[number]);
+            studentTag.style="color:red;"
+        }
+    }
+
+    function initializeHighlight(){
+        let studentsTag = document.getElementsByClassName("modal_students");
+        for(let index in studentsTag){
+            if(index!=="length"){
+                let inputTag = studentsTag[index].children[1].children[0];
+                inputTag.style="";
+            }
+            else
+                break;
+        }
     }
 
         // function 
@@ -211,14 +231,14 @@ function SetStudentList(props){
                 icon={SettingsIcon}
                 mainTitle="수강생 목록 관리"
                 subTitle="" />
-            <Grid container wrap="wrap" alignItems="center">
+            <Grid container wrap="wrap" alignItems="center" spacing="1">
                 {
                     group.length==0?
-                    <Grid>
-                        <Typography variang="h6">수강생 목록이 없습니다.<br/>생성해주세요!</Typography>
+                    <Grid item>
+                        <Typography variant="h6">수강생 목록이 없습니다. 생성해주세요!</Typography>
                     </Grid>
                     :group.map((gr, index)=>(
-                        <Grid flex="3" className="student_list_con">
+                        <Grid item flex="3" className="student_list_con">
                             <Paper>
                                 <Button onClick={() => selectGroup(gr, index)}>{gr.className}</Button>
                                 <Button onClick={() => deleteGroup(index)}><ClearIcon/></Button>
@@ -227,9 +247,9 @@ function SetStudentList(props){
                         )
                     )
                 }
-                <Grid flex="3" className="student_list_con">
+                <Grid item flex="3" className="student_list_con">
                     <Paper>
-                        <AddCircleIcon onClick={()=> addSelGroup()}/>
+                        <Button onClick={()=> addGroup()}>수강생 목록 생성</Button>
                     </Paper>
                 </Grid>
                 <Modal
@@ -241,24 +261,28 @@ function SetStudentList(props){
                     <Paper className="modal_con">
                         <Grid container>
                             <Grid container item alignItems="center">
-                                {selected==-1?
-                                    <TextField label="목록 이름" required onInput={(e)=>changeListName(e)} rows={1} rowsMax={10000} className="modal_input_field" value={selectedGroup["className"]}></TextField>
-                                    :
-                                    <TextField label="목록 이름" required disabled="true" rows={1} rowsMax={10000} className="modal_input_field" value={selectedGroup["className"]}></TextField>
-                                }
+                                <TextField label="목록 이름" disabled={groupId===-1?false:true} required onInput={changeListName} rows={1} rowsMax={10000} className="modal_input_field" value={listName}></TextField>
                                 <Button className="save_button" onClick={()=>saveModalGroup()}>저장</Button>
                             </Grid>
                             <Grid container item alignItems="center" wrap="wrap">
-                                { // selected group state의 students 배열 표시
-                                    
-                                    selectedGroup["students"].map((student, index)=>
+                                {
+                                    students.map((student, index)=>
                                         <Grid item>
-                                            <TextField label={"학생"+(index+1)} rows={1} rowsMax={10000} onInput={(e)=>changeListStudent(e, index)} className="modal_input_field" value={student}></TextField>
+                                            <TextField  label={"학생"+(index+1)} 
+                                                        rows={1} rowsMax={10000} 
+                                                        onInput={(e)=>changeListStudent(e, index)} 
+                                                        className={"modal_students"}
+                                                        id={"modal_student"+index} 
+                                                        value={student}
+                                                        error={typeof(student)==="string"?true:false}
+                                                        helperText="숫자를 입력해주세요."
+                                                        >
+                                            </TextField>
                                         </Grid>
                                     )
                                     
                                 }
-                                <AddCircleIcon className="add_button" onClick={addStudent}/>
+                                <Button class="add_button" onClick={addStudent}>학생 추가</Button>
                             </Grid>
                         </Grid>
                     </Paper>
