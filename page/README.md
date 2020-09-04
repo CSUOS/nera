@@ -26,55 +26,55 @@ yarn start (또는 npm start)
 - public
 
   - css
-    - [material.css](####material.css)
-    - [reset.js](####reset.js)
+    - [material.css](#material.css)
+    - [reset.js](#reset.js)
 
 - src
 
   - client
 
-    - [Root.js](####Root.js)
+    - [Root.js](#Root.js)
 
   - components
 
-    - [index.js](####index.js)
-    - [AssignmentBox.js](####Assignment.js)
-    - [BottomPopup.js](BottomPopup.js)
-    - [Header.js](####Header.js)
-    - [Loading.js](####Loading.js)
-    - [MarkdownEditor.js](####MarkdownEditor.js)
-    - [MarkdownViewer.js](####MarkdownViewer.js)
-    - [PageInfo.js](####PageInfo.js)
-    - [Problem.js](####Problem.js)
-    - [QuestionSelector.js](####QuestionSelector.js)
-    - [ScoreStats.js](####ScoreStats.js)
-    - [SideBar.js](####SideBar.js)
-    - [StudentSelector.js](####StudentSelector.js)
-    - [TimePicker.js](####TimePicker.js)
-    - [UserAnswer.js](####UserAnswer.js)
-    - [UseRequest.js](####UseRequest.js)
-    - [components.css](####components.css)
+    - [index.js](#index.js)
+    - [AssignmentBox.js](#Assignment.js)
+    - [BottomPopup.js](#BottomPopup.js)
+    - [Header.js](#Header.js)
+    - [Loading.js](#Loading.js)
+    - [MarkdownEditor.js](#MarkdownEditor.js)
+    - [MarkdownViewer.js](#MarkdownViewer.js)
+    - [PageInfo.js](#PageInfo.js)
+    - [Problem.js](#Problem.js)
+    - [QuestionSelector.js](#QuestionSelector.js)
+    - [ScoreStats.js](#ScoreStats.js)
+    - [SideBar.js](#SideBar.js)
+    - [StudentSelector.js](#StudentSelector.js)
+    - [TimePicker.js](#TimePicker.js)
+    - [UserAnswer.js](#UserAnswer.js)
+    - [UseRequest.js](#UseRequest.js)
+    - [components.css](#components.css)
 
   - pages
 
-    - [index.js](####index.js)
-    - [Assignment.js](####Assignment.js)
-    - [Error.js](####Error.js)
-    - [Home.js](####Home.js)
-    - [Login.js](####Login.js)
-    - [Main.js](####Main.js)
-    - [Scoring.js](####Scoring.js)
-    - [SetAssignment.js](####SetAssignment.js)
-    - [SetStudentList.js](####SetStudentList.js)
-    - [Setting.js](####Setting.js)
-    - [pages.css](####pages.css)
+    - [index.js](#index.js)
+    - [Assignment.js](#Assignment.js)
+    - [Error.js](#Error.js)
+    - [Home.js](#Home.js)
+    - [Login.js](#Login.js)
+    - [Main.js](#Main.js)
+    - [Scoring.js](#Scoring.js)
+    - [SetAssignment.js](#SetAssignment.js)
+    - [SetStudentList.js](#SetStudentList.js)
+    - [Setting.js](#Setting.js)
+    - [pages.css](#pages.css)
 
   - shared
 
-    - [App.js](####App.js)
-    - [DateToString.js](####DateToString.js)
-    - [GetUserInfo.js](####GetUserInfo.js)
-    - [MajorDictionary.js](####MajorDictionary.js)
+    - [App.js](#App.js)
+    - [DateToString.js](#DateToString.js)
+    - [GetUserInfo.js](#GetUserInfo.js)
+    - [MajorDictionary.js](#MajorDictionary.js)
 
 ---
 
