@@ -8,9 +8,9 @@ const { config } = require('../../config');
 
 const userInfo = {
   _id: 0,
-  userId: 'KingSejong',
-  userName: '세종대왕',
-  userNumber: 1111111111,
+  userId: 'GeneralYi',
+  userName: '이순신',
+  userNumber: 2222222222,
 };
 
 router.get('/', async (ctx: Koa.Context) => {

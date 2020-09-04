@@ -99,7 +99,34 @@ function Login(){
            console.log(response);
         }
     }
-    
+    async function loginAsTestAccountB(e) {
+
+        let hashed_token = await axios.get(
+                            '/v1/token', { withCredentials: true }
+                            ).catch((err)=>console.log(err));
+
+        if (hashed_token.status == 404) {
+            alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
+            return;
+        }
+
+        let response = await axios.get('/v1/cookieTestB', { withCredentials: true }).
+            catch((err) => alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));
+        const status = response.status;
+        const rabumsStatus = response?.data?.message?.slice(response.data.message.length - 3);
+        if(status==400 || rabumsStatus == "400"){
+            alert("아이디, 패스워드가 기입되었는지 다시 한 번 확인해주세요.");
+        }else if(status==403 || rabumsStatus == "403"){
+            alert("아이디, 패스워드가 정확히 기입되었는지 다시 한 번 확인해주세요.");
+        }else if(status==500 || rabumsStatus == "500"){
+            alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
+        }
+        console.log(response.data);
+        if (status == 200 && rabumsStatus == undefined) {
+           window.location.href = "/home";
+           console.log(response);
+        }
+    }
     /* rendering */
 
     return (
@@ -109,7 +136,8 @@ function Login(){
                 <TextField variant="outlined" id="userId" label="id" required rows={1} rowsMax={10} onChange={changeId}></TextField>
                 <TextField variant="outlined" id="userPw" label="password" type="password" required rows={1} rowsMax={10} onChange={changePw}></TextField>
                 <Button onClick={setLoginData}>login</Button>
-                <Button onClick={loginAsTestAccount}>debug</Button>
+                <Button onClick={loginAsTestAccount}>교수모드</Button>
+                <Button onClick={loginAsTestAccountB}>학생모드</Button>
             </Grid>
         </Grid>
     );
