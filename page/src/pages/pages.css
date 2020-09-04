@@ -93,6 +93,11 @@ a:hover{
     width: 100%;
 }
 
+.query_caption {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
 
 /* Setting */
 

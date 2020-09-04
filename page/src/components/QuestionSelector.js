@@ -189,7 +189,6 @@ function QuestionSelector(props) {
         setEmptyRows(rowsPerPage - Math.min(rowsPerPage, props.assign.questions.length - page * rowsPerPage));
         setOrder('asc');
         setOrderBy('questionNumber');
-        setSelected([]);
         setPage(0);
         setRowsPerPage(10);
 
@@ -274,7 +273,7 @@ function QuestionSelector(props) {
                 <TableContainer>
                     <Table
                         aria-labelledby="tableTitle"
-                        size='small'
+                        size="small"
                         aria-label="question table"
                     >
                         <EnhancedTableHead

@@ -125,8 +125,8 @@ function ScoreStatsRow(props) {
                                             <TableCell>{scoreRow.questionId}</TableCell>
                                             <TableCell>
                                                 {scoreRow.marked ?
-                                                    <CheckCircleOutlineIcon style={{ color: green[500] }} /> :
-                                                    <HighlightOffIcon style={{ color: red[500] }} />}
+                                                    <CheckCircleOutlineIcon style={{ color: green[500] }} fontSize="small"/> :
+                                                    <HighlightOffIcon style={{ color: red[500] }} fontSize="small"/>}
                                             </TableCell>
                                             <TableCell>{scoreRow.score}</TableCell>
                                         </TableRow>

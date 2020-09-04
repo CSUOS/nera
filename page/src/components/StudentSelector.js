@@ -77,7 +77,7 @@ function EnhancedTableHead(props) {
                         indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}
-                        inputProps={{ 'aria-label': 'select all questions' }}
+                        inputProps={{ 'aria-label': 'select all students' }}
                     />
                 </TableCell>
                 {headCells.map((headCell) => (
@@ -182,7 +182,6 @@ const useStyles = makeStyles((theme) => ({
 
 function QuestionSelector(props) {
     const classes = useStyles();
-    const [selectedQues, setSelectedQues] = React.useState(undefined);
     const [rows, setRows] = React.useState(undefined);
     const [error, setError] = React.useState(false);
     const [emptyRows, setEmptyRows] = React.useState(0);
@@ -193,38 +192,38 @@ function QuestionSelector(props) {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     useEffect(() => {
-        console.log("in")
-        setSelectedQues(undefined);
         setRows(undefined);
         setError(false);
         setEmptyRows(rowsPerPage - Math.min(rowsPerPage, props.assign.students.length - page * rowsPerPage));
         setOrder('asc');
         setOrderBy('userNumber');
-        setSelected([]);
         setPage(0);
         setRowsPerPage(10);
-
-        if (props.selectedQues === undefined)
-            return;
         
         try {
             let rowData = [];
             for (const userNumber of props.assign.students) {
-                const answers = props.answersDict[userNumber].answers;
-                let submittedCount = 0;
-                let markedCount = 0;
-                for (const questionId of props.selectedQues) {
-                    const ansOfQues = answers.find(ans => ans.questionId === questionId);
-                    if (ansOfQues !== undefined) {
-                        ++submittedCount;
-                        markedCount += (ansOfQues.score === -1 ? 0 : 1);
+                if (props.selectedQues === undefined || props.selectedQues.length == 0) {
+                    rowData.push({
+                        userNumber: userNumber
+                    });
+                } else {
+                    const answers = props.answersDict[userNumber].answers;
+                    let submittedCount = 0;
+                    let markedCount = 0;
+                    for (const questionId of props.selectedQues) {
+                        const ansOfQues = answers.find(ans => ans.questionId === questionId);
+                        if (ansOfQues !== undefined) {
+                            ++submittedCount;
+                            markedCount += (ansOfQues.score === -1 ? 0 : 1);
+                        }
                     }
+                    rowData.push({
+                        userNumber: userNumber,
+                        submitted: submittedCount > 0,
+                        marked: submittedCount == markedCount
+                    });
                 }
-                rowData.push({
-                    userNumber: userNumber,
-                    submitted: submittedCount > 0,
-                    marked: submittedCount == markedCount
-                });
             }
             setRows(rowData);
         } catch (err) {
@@ -242,9 +241,13 @@ function QuestionSelector(props) {
         if (event.target.checked) {
             const newSelecteds = rows.map((n) => n.userNumber);
             setSelected(newSelecteds);
+            if (props.onChange)
+                props.onChange(newSelecteds);
             return;
         }
         setSelected([]);
+        if (props.onChange)
+            props.onChange([]);
     };
 
     const handleClick = (event, userNumber) => {
@@ -265,6 +268,8 @@ function QuestionSelector(props) {
         }
 
         setSelected(newSelected);
+        if (props.onChange)
+            props.onChange(newSelected);
     };
 
     const handleChangePage = (event, newPage) => {
@@ -275,6 +280,15 @@ function QuestionSelector(props) {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+
+    const getIcon = (value) => {
+        if (value === undefined)
+            return "-";
+        else if (value)
+            return <CheckCircleOutlineIcon style={{ color: green[500] }} size="small"/>;
+
+        return <HighlightOffIcon style={{ color: red[500] }} size="small"/>;
+    }
 
     const isSelected = (userNumber) => selected.indexOf(userNumber) !== -1;
 
@@ -289,8 +303,8 @@ function QuestionSelector(props) {
                 <TableContainer>
                     <Table
                         aria-labelledby="tableTitle"
-                        size='small'
-                        aria-label="question table"
+                        size="small"
+                        aria-label="students table"
                     >
                         <EnhancedTableHead
                             classes={classes}
@@ -306,7 +320,7 @@ function QuestionSelector(props) {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.userNumber);
-                                    const labelId = `question-table-checkbox-${index}`;
+                                    const labelId = `student-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
@@ -328,14 +342,10 @@ function QuestionSelector(props) {
                                                 {row.userNumber}
                                             </TableCell>
                                             <TableCell>
-                                                {row.submitted ?
-                                                    <CheckCircleOutlineIcon style={{ color: green[500] }} /> :
-                                                    <HighlightOffIcon style={{ color: red[500] }} />}
+                                                {getIcon(row.submitted)}
                                             </TableCell>
                                             <TableCell>
-                                                {row.marked ?
-                                                    <CheckCircleOutlineIcon style={{ color: green[500] }} /> :
-                                                    <HighlightOffIcon style={{ color: red[500] }} />}
+                                                {getIcon(row.marked)}
                                             </TableCell>
                                         </TableRow>
                                     );
