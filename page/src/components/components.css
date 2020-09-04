@@ -213,6 +213,38 @@
     margin-block-end: 1em;
 }
 
+.markdown_emphasis {
+    font-style: italic;
+}
+
+.markdown_strong {
+    font-weight: bold;
+}
+
+.markdown_link:link {
+    color: red;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.markdown_link:visited {
+    color: green;
+    text-decoration: underline;
+    font-weight: bold;
+}
+  
+.markdown_link:hover {
+    color: hotpink;
+    text-decoration: underline;
+    font-weight: bold;
+}
+  
+.markdown_link:active {
+    color: blue;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
 .markdown_blockquote {
     padding: 0 1em;
     color: #6a737d;
