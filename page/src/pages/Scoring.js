@@ -1,60 +1,35 @@
 import React, { Component, useEffect, useState } from 'react';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid, IconButton, Button, Typography, TextField, FormControl, Input, InputAdornment } from '@material-ui/core';
-import { ScoringInfo, Loading } from '../components';
-import PropTypes from 'prop-types';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import { PageInfo, Loading, ScoreStats, QuestionSelector, StudentSelector, MarkdownViewer, UserAnswer } from "../components";
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import { Box, Grid, Paper, Divider, Typography } from '@material-ui/core';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         display: 'flex',
-//         flexWrap: 'wrap',
-//     },
-//     margin: {
-//         margin: theme.spacing(1),
-//     },
-//     withoutLabel: {
-//         marginTop: theme.spacing(3),
-//     },
-//     textField: {
-//         width: '25ch',
-//     },
-// }));
+import { rejects } from 'assert';
 
 const Scoring = (props) => {
-    const dateCaptionStyle = {
-        width: "auto",
-        display: "block",
-        padding: "0 10px"
-    };
-
-    const statusCaptionStyle = {
-        width: "auto",
-        display: "block",
-        padding: "0 10px"
-    };
-
-    const [assignInfo, setAssignInfo] = useState(undefined);
-    const [answers, setAnswers] = useState(undefined);
-    const [fetchDate, setFetchDate] = useState(undefined);
-    const [questions, setQuestions] = useState(undefined);
-    const [page, setPage] = useState(undefined);
+    const [assign, setAssign] = useState(undefined);
+    const [assignDate, setAssignDate] = useState(undefined);
+    const [answersDict, setAnswersDict] = useState(undefined);
+    const [answersDictDate, setAnswersDictDate] = useState(undefined);
+    const [selectedQues, setSelectedQues] = useState([]);
+    const [selectedStus, setSelectedStus] = useState([]);
     const history = useHistory();
 
-    function getAssignment() {
+    const getAssignment = () => {
         let assignId = props.match.params.asId;
 
         axios.get(`/v1/assignment/${assignId}`, { withCredentials: true })
             .then(res => {
-                setAssignInfo(res.data);
+                console.log(res);
+                setAssign(res.data);
+                setAssignDate(new Date());
             })
             .catch(err => {
-                const status = err.response.status;
-                if (status === 400 || status === 401) {
+                const status = err?.response?.status;
+                if (status === undefined) {
+                    alert("예기치 못한 예외가 발생하였습니다.\n"+JSON.stringify(err));
+                }
+                else if (status === 400 || status === 401) {
                     alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
                 }
                 else if (status === 404) {
@@ -67,19 +42,55 @@ const Scoring = (props) => {
             });
     }
 
-    function getAnswers() {
-        let assignId = props.match.params.asId;
-        let userNumber = props.match.params.userNumber;
+    const getAnswers = () => {
+        if (assign === undefined)
+            return;
 
-        axios.get(`/v1/answer/${assignId}/${userNumber}`, { withCredentials: true })
-            .then(res => {
-                setAnswers(res.data.answers);
-                setPage(0);
-                setFetchDate(new Date());
+        let assignId = props.match.params.asId;
+        let promises = [];
+
+        for (let stuNum of assign.students) {
+            let prom = axios.get(`/v1/answer/${assignId}/${stuNum}`, { withCredentials: true })
+                .catch(err => {
+                    const status = err?.response?.status;
+                    if (status === undefined) {
+                        alert("예기치 못한 예외가 발생하였습니다.\n" + JSON.stringify(err));
+                        history.push('/home');
+                    }
+                    else if (status === 404) {
+                        // 단순히 입력한 답안이 없는 경우이므로 오류는 아님.
+                        return {
+                            "data": {
+                                "userNumber": stuNum,
+                                "answers": [],
+                                "meta": {
+                                    "createAt": undefined,
+                                    "modifiedAt": undefined
+
+                                }
+                            }
+                        }
+                    }
+                    else rejects(err);
+                });
+
+            promises.push(prom);
+        }
+
+        Promise.all(promises)
+            .then(arrOfRes => {
+                let dict = {}
+                for (const res of arrOfRes)
+                    dict[res.data.userNumber] = res.data;
+                setAnswersDict(dict);
+                setAnswersDictDate(new Date());
             })
             .catch(err => {
-                const status = err.response.status;
-                if (status === 400) {
+                const status = err?.response?.status;
+                if (status === undefined) {
+                    alert("예기치 못한 예외가 발생하였습니다.\n"+JSON.stringify(err));
+                }
+                else if (status === 400) {
                     alert(`답안 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
                 }
                 else if (status === 401) {
@@ -88,182 +99,194 @@ const Scoring = (props) => {
                 else if (status === 403) {
                     alert(`답안 정보를 얻는데 실패하였습니다. 권한이 없습니다. (${status})`);
                 }
-                else if (status === 404) {
-                    // 단순히 입력한 답안이 없는 경우이므로 오류는 아님.
-                    setAnswers([]);
-                    setPage(0);
-                    setFetchDate(new Date());
-                }
-                else if (status === 500) {
+                else {
                     alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
                 }
 
-                if (status !== 404) {
-                    history.push("/home");
+                history.push("/home");
+            });
+    }
+
+    useEffect(() => {
+        setAssign(undefined);
+        setAnswersDict(undefined);
+        setSelectedQues([]);
+        setSelectedStus([]);
+        getAssignment();
+    }, [props.match.params.asId]);
+
+    useEffect(() => {
+        getAnswers();
+    }, [assignDate]);
+
+    function getSubTitle() {
+        const deadline = new Date(assign.deadline);
+        let deadlineString = deadline.getFullYear() + "-" 
+                         + (deadline.getMonth()+1 <= 9 ? "0" : "") + (deadline.getMonth()+1) + "-"
+                         + (deadline.getDate() <= 9 ? "0" : "") + deadline.getDate() + " "
+                         + (deadline.getHours() <= 9 ? "0" : "") + deadline.getHours() + ":"
+                         + (deadline.getMinutes() <= 9 ? "0" : "") + deadline.getMinutes()
+        return deadlineString + " 마감";
+    }
+
+    function handleQuestionSelectorChanged(selected) {
+        if (selected.length)
+            setSelectedQues(selected);
+    }
+
+    function handleStudentSelectorChanged(selected) {
+        if (selected.length)
+            setSelectedStus(selected);
+    }
+
+    function arrayToString(arr, unit) {
+        if (arr.length <= 3)
+            return arr.join(", ");
+        else
+            return `${arr.slice(0, 1).join(", ")}를 포함한 ${arr.length}${unit}`;
+    }
+
+    function handleScoreChange(quesId, userNum, score) {
+        console.log(`${quesId}의 점수를 ${score}로 바꿉니다.`);
+
+        let reqBody = {answers: []};
+        for (let ans of answersDict[userNum].answers) {
+            if (ans.questionId === quesId) {
+                reqBody.answers.push({
+                    questionId: quesId,
+                    score: score
+                });
+            } else {
+                reqBody.answers.push({
+                    questionId: ans.questionId,
+                    score: ans.score
+                });
+            }
+        }
+
+        axios.post(`/v1/answer/${assign.assignmentId}/${userNum}`, reqBody, { withCredentials: true })
+            .then(res => {
+                let newAnsDict = JSON.parse(JSON.stringify(answersDict));
+                newAnsDict[userNum].answers.find(ans => ans.questionId === quesId).score = score;
+                console.log(newAnsDict)
+                setAnswersDict(newAnsDict);
+            })
+            .catch(err => {
+                const status = err?.response?.status;
+                if (status === undefined) {
+                    alert("예기치 못한 예외가 발생하였습니다.\n" + JSON.stringify(err));
+                }
+                else if (status === 400) {
+                    alert(`점수를 저장하지 못했습니다. 잘못된 요청입니다. (${status})`);
+                }
+                else if (status === 401) {
+                    alert(`점수를 저장하지 못했습니다. 인증이 실패하였습니다. (${status})`);
+                }
+                else if (status === 403) {
+                    alert(`점수를 저장하지 못했습니다. 권한이 없습니다. (${status})`);
+                }
+                else if (status === 404) {
+                    alert(`점수를 저장하지 못했습니다. 과제를 찾을 수 없습니다. (${status})`);
+                }
+                else if (status === 500) {
+                    alert(`내부 서버 오류입니다. 잠시 후에 다시 시도해주세요... (${status})`);
                 }
             });
     }
 
-    function getMarkedScore(qId) {
-        let found = answers.filter(answer => answer.questionId == qId);
-        if (found.length > 0) {
-            if (found[0].score === -1)
-                return 0;
-            return found[0].score;
-        }
-        return 0;
-    }
-
-    function initQuestions() {
-        if (assignInfo === undefined)
-            return;
-
+    function getQueryResult(ques, stus) {
         try {
-            let quesArr = [];
-            let number = 1;
+            let coms = [];
+            if (ques === undefined || stus === undefined ||
+                ques.length === 0 || stus.length === 0) {
+                coms.push(<Typography variant="h6" className="query_caption">답안을 조회할 문제 목록과 학생 목록을 선택해주세요!</Typography>);
+            } else {
+                ques.sort();
+                stus.sort();
+                coms.push(<Typography variant="h6" className="query_caption">{`${arrayToString(stus, '명')}의 학생이 작성한 답안 중, ${arrayToString(ques, '개')} 문제의 답안을 조회합니다.`}</Typography>);
 
-            for (const ques of assignInfo.questions) {
-                let processed = {};
-                processed.questionId = ques.questionId;
-                processed.questionNumber = number++;
-                processed.questionContent = ques.questionContent;
-                processed.fullScore = ques.fullScore;
-                processed.score = getMarkedScore(ques.questionId);
-                processed.assignmentState = assignInfo.assignmentState;
+                let quesSet = new Set(ques);
+                let questionNumber = 1;
+                for (let q of assign.questions) {
+                    if (quesSet.has(q.questionId)) {
+                        let ansComs = [];
+                        for (const stuNumber of stus) {
+                            let answer = answersDict[stuNumber]?.answers?.find(item => item.questionId === q.questionId);
 
-                const found = answers.filter(answer => answer.questionId == ques.questionId);
-                if (found.length > 0)
-                    processed.answerContent = found[0].answerContent;
-                else
-                    processed.answerContent = "";
+                            if (answer)
+                                ansComs.push(
+                                    <UserAnswer
+                                        score={answer.score}
+                                        fullScore={q.fullScore}
+                                        answerContent={answer.answerContent}
+                                        userNumber={stuNumber}
+                                        questionNumber={questionNumber}
+                                        questionId={q.questionId}
+                                        onChange={handleScoreChange}
+                                    />
+                                );
+                            else
+                                ansComs.push(
+                                    <UserAnswer
+                                        score={-1}
+                                        fullScore={q.fullScore}
+                                        answerContent={undefined}
+                                        userNumber={stuNumber}
+                                        questionNumber={questionNumber}
+                                        questionId={q.questionId}
+                                    />
+                                );
+                        }
 
-                quesArr.push(processed);
+                        coms.push(
+                            <Grid container className="problem_container" direction="column">
+                                <Grid container className="problem_description" direction="row" alignItems="flex-start" justify="flex-start">
+                                    <h6 className="problem_number">{questionNumber + "."}</h6>
+                                    <MarkdownViewer className="problem_description_viewer" source={q.questionContent}></MarkdownViewer>
+                                </Grid>
+                                {ansComs}
+                            </Grid>
+                        );
+                    }
+                    ++questionNumber;
+                }
             }
-
-            setQuestions(quesArr);
+            return coms;
         } catch (err) {
             console.log(err);
+            return <Typography variant="h6" className="query_caption">문제를 조회하는 동안 오류가 발생하였습니다.</Typography>
         }
     }
 
-    function initPageContent() {
-        console.log(page);
-    }
-
-    useEffect(() => {
-        getAssignment();
-        getAnswers();
-    }, [props.match.params.asId, props.match.params.userNumber]);
-
-    useEffect(() => {
-        initQuestions();
-    }, [fetchDate]);
-
-    useEffect(() => {
-        initPageContent();
-    }, [page]);
-
-    const ableToGoPrev = () => {
-        return page >= 1;
-    }
-
-    const ableToGoNext = () => {
-        return page < questions.length-1;
-    }
-
-    const goPrev = () => {
-        if (ableToGoPrev()) {
-            const currentPage = page;
-            setPage(currentPage-1);
-        }
-    }
-
-    const goNext = () => {
-        if (ableToGoNext()) {
-            const currentPage = page;
-            setPage(currentPage+1);
-        }
-    }
-
-    if (questions === undefined)
-        return (<Loading status="답안 정보를 가져오는 중..."></Loading>);
+    if (assign === undefined || answersDictDate === undefined)
+        return <Loading status="과제 및 답안 정보를 불러오는 중..."></Loading>
     else
         return (
-            <div className="scoring_container">
-                <Grid className="scoring_page_header">
-                    <Grid className="scoring_page_title">
-                        <ScoringInfo userNumber={props.match.params.userNumber} asName={assignInfo.assignmentName}></ScoringInfo>
-                    </Grid>
-                    <Grid className="save_container">
-                        <Grid container direction="row" alignItems="flex-start" justify="flex-end">
-                            <Grid container direction="column">
-                                <Grid item direction="column" alignItems="flex-start" justify="flex-end">
-                                    <Typography variant="caption" align="right" style={dateCaptionStyle} children={"날짜"}></Typography>
-                                    <Typography variant="body2" align="right" style={statusCaptionStyle} children={"상태"}></Typography>
-                                </Grid>
-                                <Button className="save_component" variant="contained">저장</Button>
-                                {/* <FormControl className={clsx(classes.margin, classes.withoutLabel, classes.textField)}>
-                                <Input
-                                    value={scoreText}
-                                    onChange={handleScoreTextChange}
-                                    endAdornment={<InputAdornment position="end">/{fullScoreText}점</InputAdornment>}>
-                                </Input>
-                            </FormControl> */}
-                            </Grid>
+            <Grid container direction="column">
+                <PageInfo className="assignment_info"
+                    icon={AssignmentIcon}
+                    mainTitle={assign.assignmentName}
+                    subTitle={getSubTitle()} />
+
+                <Grid container direction="column" className="contents_con">
+                    <Grid className="contents_title"><h6>점수 통계</h6></Grid>
+                    <ScoreStats className="score_stats" assign={assign} answersDict={answersDict}></ScoreStats>
+                </Grid>
+                <Grid container direction="column" className="contents_con">
+                    <Grid className="contents_title"><h6>답안 채점하기</h6></Grid>
+                    <Grid container spacing={3} direction="row" wrap="wrap" alignItems="center">
+                        <Grid item xs>
+                            <QuestionSelector assign={assign} onChange={handleQuestionSelectorChanged}></QuestionSelector>
+                        </Grid>
+                        <Grid item xs>
+                            <StudentSelector assign={assign} answersDict={answersDict} selectedQues={selectedQues} onChange={handleStudentSelectorChanged}></StudentSelector>
                         </Grid>
                     </Grid>
+                    <Divider></Divider>
+                    {getQueryResult(selectedQues, selectedStus)}
                 </Grid>
-
-                {/* <UserAnswer number={page + 1} info={questions[page]}></UserAnswer> */}
-
-                <div className="scoring_bottom">
-                    <IconButton aria-label="이전 문제" size="medium" onClick={goPrev} disabled={!ableToGoPrev()}>
-                        <ArrowBackIcon></ArrowBackIcon>
-                    </IconButton>
-                    <IconButton aria-label="다음 문제" size="medium" onClick={goNext} disabled={!ableToGoNext()}>
-                        <ArrowForwardIcon></ArrowForwardIcon>
-                    </IconButton>
-                </div>
-            </div>
-        )
+            </Grid>
+        );
 }
-
-/*Scoring.defaultProps = {
-    info: PropTypes.shape({
-        "assignment_id": PropTypes.number,
-        "assignment_name": PropTypes.string,
-        "deadline": PropTypes.instanceOf(Date),
-        "assignment_state": PropTypes.number,
-        "assignment_info": PropTypes.string,
-        "full_score": PropTypes.number,
-        "score": PropTypes.number,
-        "students": PropTypes.arrayOf(PropTypes.number),
-        "questions": PropTypes.arrayOf(PropTypes.shape({
-            "question_id": PropTypes.number,
-            "question_content": PropTypes.string,
-            "full_score": PropTypes.number,
-            "question_answer": PropTypes.arrayOf(PropTypes.shape({
-                "user_number": PropTypes.number,
-                "question_id": PropTypes.number,
-                "name": PropTypes.string,
-                "answer_content": PropTypes.arrayOf(PropTypes.string),
-                "submitted": PropTypes.bool,
-                "score": PropTypes.number,
-                "meta": {
-                    "create_at": PropTypes.instanceOf(Date),
-                    "modified_at": PropTypes.instanceOf(Date)
-                }
-            })),
-            "meta": {
-                "create_at": PropTypes.instanceOf(Date),
-                "modified_at": PropTypes.instanceOf(Date)
-            }
-        })),
-        "meta": {
-            "create_at": PropTypes.instanceOf(Date),
-            "modified_at": PropTypes.instanceOf(Date)
-        }
-    })
-}*/
 
 export default Scoring;

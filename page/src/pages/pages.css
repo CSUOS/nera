@@ -57,13 +57,6 @@ a:hover{
     flex-wrap: wrap;
 }
 
-.assignment_info {
-}
-
-.table_root {
-    width: 100%;
-}
-
 .modal{
     position: fixed;
     display: flex;
@@ -96,7 +89,14 @@ a:hover{
     
 }
 
+.score_stats {
+    width: 100%;
+}
 
+.query_caption {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
 
 /* Setting */

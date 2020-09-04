@@ -107,11 +107,11 @@ function Main(props) {
         setSideAssign(sAssign);
       })
       .catch(err => {
-        if(err.response==undefined){
-          alert(`내부 함수 (Main.js => useEffect()) 문제입니다. 오류 수정 필요.`);
+        const status = err?.response?.status;
+        if (status === undefined) {
+          alert("예기치 못한 예외가 발생하였습니다.\n" + JSON.stringify(err));
         }
-        const status = err.response.status;
-        if (status === 400 || status === 401) {
+        else if (status === 400 || status === 401) {
           alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
         }
         else if (status === 404) {
@@ -173,11 +173,10 @@ function Main(props) {
                 }, "margin-top-64", "contents_side")}
             >
               <Route exact path="/home" component={Home} />
-              <Route exact path="/home/assignment/:asId" component={user.type === 1 ? Assignment : SubmissionStatus} />
+              <Route exact path="/home/assignment/:asId" component={user.type === 1 ? Assignment : Scoring} />
               <Route exact path="/home/setting" component={Setting} />
               <Route exact path="/home/setting/:asId" component={SetAssignment} />
               <Route exact path="/home/setList" component={SetStudentList} />
-              <Route exact path="/home/scoring/:asId/:userNumber" component={Scoring} />
             </Grid>
 
           </Grid>
