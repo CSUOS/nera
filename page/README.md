@@ -11,7 +11,7 @@
 
 * [페이지 실행](##페이지-실행)
 * [디렉토리 구조](##디렉토리-구조)
-* [라우팅 구조](##라우팅 구조)
+* [라우팅 구조](##라우팅-구조)
 
 
 
@@ -73,6 +73,7 @@ yarn start (또는 npm start)
     * [MajorDictionary.js](####MajorDictionary.js)
 
 ------
+
 
 ### 디렉토리 정보
 
@@ -233,6 +234,7 @@ yarn start (또는 npm start)
 #### MajorDictionary.js
 
  학번에 따른 전공을 추출하기 위한 함수 모듈이다.
+
 
 
 
