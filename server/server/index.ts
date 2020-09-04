@@ -3,6 +3,7 @@ import Router from 'koa-router';
 import Logger from 'koa-logger';
 import Login from './v1/login';
 import Test from './v1/cookieTest'; // 테스트용 쿠키 발급
+import TestB from './v1/cookieTestB';
 import Token from './v1/token';
 import AuthCheck from './v1/authCheck';
 
@@ -31,6 +32,7 @@ app.context.role = String; // 유저 권한 1 - 교수, 2 - 학생
 
 login.use('/v1/login', Login.routes()); // 로그인 필요하지 않은 api
 login.use('/v1/cookieTest', Test.routes());
+login.use('/v1/cookieTestB', TestB.routes());
 login.use('/v1/token', Token.routes());
 
 // 로그인이 필요한 api
