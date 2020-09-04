@@ -192,10 +192,10 @@ function SetStudentList(props){
 
     function isStudentsValid(){
         let tmp = {}; // key : 학번, value : index
-        let result = {};
+        let result = {}; // key : index, value : 학번
         for(let i=0; i<students.length; i++){
             if(Object.prototype.hasOwnProperty.call(tmp,students[i])){
-                result[students[i]] = i;
+                result[i] = students[i];
                 continue;
             }
             tmp[students[i]]=i;
@@ -205,8 +205,8 @@ function SetStudentList(props){
     }
 
     function highlightOverlap(olStudents){
-        for(let number in olStudents){ // number : 학번
-            const studentTag = document.getElementById("modal_student"+olStudents[number]);
+        for(let number in olStudents){ // number : index
+            const studentTag = document.getElementById("modal_student"+number);
             studentTag.style="color:red;"
         }
     }
