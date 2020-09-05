@@ -30,3 +30,6 @@
 .makeStyles-paper-21:focus{
     outline: none;
 }
+.MuiButton-root{
+    min-width: 0!important;
+}

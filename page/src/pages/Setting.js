@@ -3,9 +3,9 @@ import { Grid, Paper, Button, Typography} from '@material-ui/core';
 import {PageInfo} from '../components';
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
+import './pages.css';
 
 import SettingsIcon from '@material-ui/icons/Settings';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ClearIcon from '@material-ui/icons/Clear';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { green } from '@material-ui/core/colors';
@@ -83,21 +83,19 @@ function Setting(){
             default: return;
         }
 
-        let icon = <FiberManualRecordIcon/>
+        let icon = <FiberManualRecordIcon className="circle_icon"/>
         switch(as.assignmentState){
             case 0:
-                icon = <FiberManualRecordIcon style={{color:green[700]}}/>;
+                icon = <FiberManualRecordIcon className="circle_icon" style={{color:green[700]}}/>;
                 break;
             case 1:
-                icon = <FiberManualRecordIcon color="secondary"/>;
+                icon = <FiberManualRecordIcon className="circle_icon" color="secondary"/>;
                 break;
-            default :
-                icon = <FiberManualRecordIcon/>;
         }
         return(
-            <Grid container item>
-                <Grid item>
-                    <Link to={"/home/setting/"+as.assignmentId} className="s_assignment_box">
+            <Grid container className="box_container" item>
+                <Grid item className="box_content">
+                    <Link to={"/home/setting/"+as.assignmentId} className="box_link">
                         <Paper>
                             <Grid container>
                             {icon}
@@ -108,7 +106,7 @@ function Setting(){
                         </Paper>
                     </Link>
                 </Grid>
-                <Grid item>
+                <Grid item className="box_xbtn">
                     <Button onClick={()=>deleteAssignment(as.assignmentId)}><ClearIcon/></Button>
                 </Grid>
             </Grid>
@@ -128,20 +126,25 @@ function Setting(){
             <PageInfo className="assignment_info"
                 icon={SettingsIcon}
                 mainTitle="과제관리"
-                subTitle="" />
+                subTitle="사용자의 과제 목록을 볼 수 있는 페이지입니다."
+                information="각 과제의 세부 정보를 수정하시려면 과제명을 클릭하세요. 과제를 추가하시려면 '과제 추가'버튼을 눌러주세요."
+                />
             <Grid container>
-                <Grid container item>
-                    {
-                        assignmentList.length==0?
-                        <Grid item>
-                            <Typography variant="h6">과제가 없습니다.<br/>생성해주세요!</Typography>
-                        </Grid>
-                        :assignmentList.map((as)=> getAssignmentBox(as))
-                    }
-                    <Grid item>
-                        <Link to="/home/setting/add">
-                            <AddCircleIcon fontSize="large"/>
-                        </Link>
+                <Grid container direction="column" className="contents_con">
+                    <Grid className="contents_title"><h6>과제 목록</h6></Grid>
+                    <Grid container className="contents box_layout">
+                        {
+                            assignmentList.length===0?
+                            <Grid item>
+                                <Typography variant="h6">과제가 없습니다. 추가해주세요!</Typography>
+                            </Grid>
+                            :assignmentList.map((as)=> getAssignmentBox(as))
+                        }
+                        <Paper className="add_button">
+                            <Link to="/home/setting/add">
+                                <Typography>과제 추가</Typography>
+                            </Link>
+                        </Paper>
                     </Grid>
                 </Grid>
             </Grid>

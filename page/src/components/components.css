@@ -61,7 +61,7 @@
 /* accountinfo */
 
 .page_info{
-    margin:10px;
+    margin:10px 0;
 }
 
 /* PartBox */
@@ -234,4 +234,14 @@
     background: #f6f8fa;
     border-radius: 6px;
     padding: 4px;
+}
+
+/* PageInfo.js */
+.page_information{
+    border-radius: 7px;
+    background-color: lightgray;
+    margin-top:10px!important;
+}
+.page_information p{
+    padding : 15px;
 }

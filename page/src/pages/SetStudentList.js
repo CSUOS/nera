@@ -135,7 +135,7 @@ function SetStudentList(props){
 
     async function changeListStudent(e, index){
         let tmp = students;
-        let number = Number(e.target.value);
+        const number = Number(e.target.value);
         tmp[index] = isNaN(number)?e.target.value:number;
 
         await initializeHighlight();
@@ -230,26 +230,34 @@ function SetStudentList(props){
             <PageInfo className="student_list_info"
                 icon={SettingsIcon}
                 mainTitle="수강생 목록 관리"
-                subTitle="" />
-            <Grid container wrap="wrap" alignItems="center" spacing="1">
+                subTitle="수강생 목록을 추가 / 수정 하는 페이지 입니다." 
+                information="수강생 목록의 세부 정보를 수정하시려면 수강생 목록명을 클릭하세요. 수강생 목록을 추가하시려면 '수강생 목록 추가' 버튼을 눌러주세요."/>
+            <Grid container direction="column" className="contents_con">
+                <Grid className="contents_title"><h6>수강생 목록</h6></Grid>
+                <Grid container wrap="wrap" alignItems="center" className="contents box_layout" >
                 {
                     group.length==0?
                     <Grid item>
                         <Typography variant="h6">수강생 목록이 없습니다. 생성해주세요!</Typography>
                     </Grid>
                     :group.map((gr, index)=>(
-                        <Grid item flex="3" className="student_list_con">
-                            <Paper>
-                                <Button onClick={() => selectGroup(gr, index)}>{gr.className}</Button>
-                                <Button onClick={() => deleteGroup(index)}><ClearIcon/></Button>
-                            </Paper>
+                        <Grid container className="box_container" item>
+                            <Grid item className="box_content">
+                                <Button className="box_button" onClick={()=> selectGroup(gr, index)}>
+                                    <Paper className="box_name">{gr.className}</Paper>
+                                </Button>
+                            </Grid>
+                            <Grid item className="box_xbtn"><Button onClick={() => deleteGroup(index)}><ClearIcon/></Button></Grid>
                         </Grid>
                         )
                     )
                 }
-                <Grid item flex="3" className="student_list_con">
-                    <Paper>
-                        <Button onClick={()=> addGroup()}>수강생 목록 생성</Button>
+                </Grid>
+                <Grid item className="contents_box">
+                    <Paper className="add_button">
+                        <Button onClick={addGroup}>
+                            <Typography>수강생 목록 추가</Typography>
+                        </Button>
                     </Paper>
                 </Grid>
                 <Modal
@@ -267,11 +275,11 @@ function SetStudentList(props){
                             <Grid container item alignItems="center" wrap="wrap">
                                 {
                                     students.map((student, index)=>
-                                        <Grid item>
+                                        <Grid item xs="3">
                                             <TextField  label={"학생"+(index+1)} 
                                                         rows={1} rowsMax={10000} 
                                                         onInput={(e)=>changeListStudent(e, index)} 
-                                                        className={"modal_students"}
+                                                        className={"modal_students modal_input_field"}
                                                         id={"modal_student"+index} 
                                                         value={student}
                                                         error={typeof(student)==="string"?true:false}
@@ -282,7 +290,7 @@ function SetStudentList(props){
                                     )
                                     
                                 }
-                                <Button class="add_button" onClick={addStudent}>학생 추가</Button>
+                                <Button className="add_button" onClick={addStudent}>학생 추가</Button>
                             </Grid>
                         </Grid>
                     </Paper>
