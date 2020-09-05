@@ -9,15 +9,12 @@
 .right_side{
     flex:10;
 }
-
 html, body, #root, #app, #app>div{
     height: 100%;
 }
-
 a:hover{
     color:rgb(60, 60, 60);
 }
-
 .contents_side>div{
     flex-wrap: nowrap!important;
 }
@@ -33,30 +30,30 @@ a:hover{
     border-left: 3px solid rgb(54, 54, 54);
     margin-right: 10px;
 }
-
+.contents_box{
+    margin-right: 10px!important;
+}
 .save_container{
     align-self: right;
     width: max-content;
 }
-
 .save_component{
     margin-right: 20px;
     align-self: center;
 }
-
 .assignment_info_container {
     display: block;
 }
-
 .assignment_page_title {
     flex-grow: 1;
 }
-
 .assignment_page_header {
     display: flex;
     flex-wrap: wrap;
 }
-
+.table_root {
+    width: 100%;
+}
 .modal{
     position: fixed;
     display: flex;
@@ -108,12 +105,17 @@ a:hover{
     flex-direction: column;
     align-items: center;
 }
-.s_assignment_box{
-    width:100%;
-    margin-bottom: 30px;
+.s_assignment_list{
+    margin-bottom: 15px!important;
 }
-.s_assignment_box>*{
-    padding:10px 20px;
+.s_assignment_name{
+    width: 100%;
+    height: 100%;
+    padding: 20px 0;
+}
+.s_x_box{
+    display: flex;
+    align-items: center;
 }
 
 /* SetAssignment */
@@ -127,6 +129,26 @@ a:hover{
 .admin_question_con{
     margin: 10px 0;
 }
+.assignment_saveinfo_con{
+    margin-left: auto;
+}
+.assignment_saveinfo{
+    float: right;
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    align-items: stretch;
+    border: 1px solid lightgray;
+    padding: 10px 15px;
+    border-radius: 7px;
+}
+.setting_as_row .MuiFormControl-root {
+    width:100%;
+}
+.setting_as_row>div {
+    width: 45%;
+    margin-right: 5%;
+}
 
 /* SetStudentList */
 .student_list_con{
@@ -136,13 +158,20 @@ a:hover{
     cursor: pointer;
 }
 .student_list_con button{
-    padding:10px;
+    width: 100%;
+    border: 1px solid #dedede;
 }
 .list_field_con{
     align-items: center;
     display: flex;
     flex-wrap: wrap;
     padding: 20px;
+}
+.invalid_student{
+    color: red!important;
+}
+.circle_icon{
+    margin-right: 5px;
 }
 
 /* modal */
@@ -154,8 +183,8 @@ a:hover{
 }
 .modal_con{
     margin: 20px;
-    padding: 10px;
-    max-width: 50%;
+    padding: 30px;
+    max-width: 70%;
 }
 
 .scoring_bottom {
@@ -183,5 +212,73 @@ a:hover{
 
 /* button */
 .add_button{
-    cursor: pointer;
+    background: rgb(204, 204, 204)!important;
+}
+.add_button:hover{
+    background: rgb(180, 180, 180)!important;
+}
+.x_button{    
+    background: gainsboro!important;
+}
+.x_button:hover{
+    background: rgb(204, 204, 204)!important;
+}
+.add_button, .x_button{
+    width: 130px;
+    text-align: center;
+}
+.add_button p, .x_button p{
+    padding: 10px 0;
+}
+.save_button{
+    background-color: rgb(180, 180, 180)!important;
+}
+.add_button button{
+    width: 100%;
+    padding: 0;
+}
+
+
+
+/*box layout*/
+.box_layout{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.box_container{
+    width: 99%!important;
+    display: flex;
+    margin-bottom: 10px!important;
+}
+
+@media screen and (min-width: 768px) {
+    .box_container{
+        width: 49.5%!important;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .box_container{
+        width: 33%!important;
+    }
+}
+
+.box_content{
+    width: 85%;
+}
+.box_link{
+    width:100%;
+    margin-bottom: 30px;
+}
+.box_link>*{
+    padding: 20px 15px;
+}
+.box_button{
+    width: 100%;
+    padding: 0!important;
+}
+.box_name{
+    width: 100%;
+    padding: 20px 15px;
 }

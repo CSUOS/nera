@@ -104,63 +104,65 @@ function TimePicker(props) {
   }
 
   return (
-    <Grid container direction="row">
+    <Grid container className="setting_as_row" direction="row">
       {
       (startDate!==undefined && endDate!== undefined)?
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <Grid item xs={3}>
-            <KeyboardDatePicker
-              disableToolbar
-              variant="inline"
-              format="MM/dd/yyyy"
-              margin="normal"
-              id="start_day_picker"
-              label="과제 시작 날짜"
-              value={startDate}
-              onChange={startDayChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
-            />
+          <Grid container spacing={1}>
+            <Grid item>
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                format="MM/dd/yyyy"
+                id="start_day_picker"
+                label="과제 시작 날짜"
+                value={startDate}
+                onChange={startDayChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                id="start_time_picker"
+                label="시작 시각"
+                type="time"
+                defaultValue={timeFormat(startDate)}
+                onChange={startClockChange}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={3}>
-            <TextField
-              id="start_time_picker"
-              label="시작 시각"
-              type="time"
-              defaultValue={timeFormat(startDate)}
-              onChange={startClockChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <KeyboardDatePicker
-              disableToolbar
-              variant="inline"
-              format="MM/dd/yyyy"
-              margin="normal"
-              id="end_day_picker"
-              label="과제 마감 날짜"
-              value={endDate}
-              onChange={endDayChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              id="end_time_picker"
-              label="마감 시각"
-              type="time"
-              defaultValue={timeFormat(endDate)}
-              onChange={endClockChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
+          <Grid container spacing={1}>
+            <Grid item>
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                format="MM/dd/yyyy"
+                id="end_day_picker"
+                label="과제 마감 날짜"
+                value={endDate}
+                onChange={endDayChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                id="end_time_picker"
+                label="마감 시각"
+                type="time"
+                defaultValue={timeFormat(endDate)}
+                onChange={endClockChange}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
           </Grid>
         </MuiPickersUtilsProvider>
         :null
