@@ -1,3 +1,5 @@
+import { Binary } from 'mongodb';
+
 exports.env = {
   accessSecretKey: String,
   // access_token 암호화 키값
@@ -67,4 +69,19 @@ exports.jwtInfo = {
   userName: String,
   userNumber: Number,
   userId: String,
+};
+
+exports.collectionInfo = {
+  name: String,
+  type: String,
+  options: Object,
+  info: {
+    readOnly: Boolean,
+    uuid: Binary,
+  },
+  idIndex: {
+    v: Number,
+    key: Object,
+    name: String,
+  },
 };

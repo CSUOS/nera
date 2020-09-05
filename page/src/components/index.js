@@ -10,3 +10,6 @@ export { default as UserAnswer } from './UserAnswer';
 export { default as Loading } from './Loading';
 export { default as MarkdownEditor } from './MarkdownEditor';
 export { default as MarkdownViewer } from './MarkdownViewer';
+export { default as ScoreStats } from './ScoreStats';
+export { default as QuestionSelector } from './QuestionSelector';
+export { default as StudentSelector } from './StudentSelector';

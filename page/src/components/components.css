@@ -146,7 +146,20 @@
 }
 
 .answer_content {
-    padding: 10px;
+    padding: 15px;
+    margin: 10px;
+}
+
+.answer_score {
+    margin: 10px !important;
+}
+
+.score_control {
+    padding: 15px;
+}
+
+.answer_select {
+    min-width: 125px;
 }
 
 /* markdown */
@@ -211,6 +224,38 @@
 
 .markdown_paragraph {
     margin-block-end: 1em;
+}
+
+.markdown_emphasis {
+    font-style: italic;
+}
+
+.markdown_strong {
+    font-weight: bold;
+}
+
+.markdown_link:link {
+    color: red;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.markdown_link:visited {
+    color: green;
+    text-decoration: underline;
+    font-weight: bold;
+}
+  
+.markdown_link:hover {
+    color: hotpink;
+    text-decoration: underline;
+    font-weight: bold;
+}
+  
+.markdown_link:active {
+    color: blue;
+    text-decoration: underline;
+    font-weight: bold;
 }
 
 .markdown_blockquote {

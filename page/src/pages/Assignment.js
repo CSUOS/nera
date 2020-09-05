@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { PageInfo, Problem, Loading, MarkdownViewer, MarkdownEditor } from "../components";
 import { modifiedDateToString } from '../shared/DateToString.js';
 
@@ -6,6 +6,27 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import { Button, Grid, Typography, Divider } from '@material-ui/core';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { Prompt } from 'react-router';
+
+
+function useInterval(callback, delay) {
+    const savedCallback = useRef();
+
+    useEffect(() => {
+        savedCallback.current = callback;
+    }, [callback]);
+
+    useEffect(() => {
+        function tick() {
+            savedCallback.current();
+        }
+        if (delay !== null) {
+            let id = setInterval(tick, delay);
+            return () => clearInterval(id);
+        }
+    }, [delay]);
+}
+
 
 const Assignment = (props) => {
     const dateCaptionStyle = {
@@ -40,8 +61,11 @@ const Assignment = (props) => {
                 setInfoDate(new Date());
             })
             .catch(err => {
-                const status = err.response.status;
-                if (status === 400 || status === 401) {
+                const status = err?.response?.status;
+                if (status === undefined) {
+                    alert("예기치 못한 예외가 발생하였습니다.\n"+JSON.stringify(err));
+                }
+                else if (status === 400 || status === 401) {
                     alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
                 }
                 else if (status === 404) {
@@ -67,8 +91,11 @@ const Assignment = (props) => {
                 setAnswersDate(new Date());
             })
             .catch(err => {
-                const status = err.response.status;
-                if (status === 400) {
+                const status = err?.response?.status;
+                if (status === undefined) {
+                    alert("예기치 못한 예외가 발생하였습니다.\n"+JSON.stringify(err));
+                }
+                else if (status === 400) {
                     alert(`답안 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
                 }
                 else if (status === 401) {
@@ -176,8 +203,11 @@ const Assignment = (props) => {
                 setModifiedAnswers({});
             })
             .catch(err => {
-                const status = err.response.status;
-                if (status === 400) {
+                const status = err?.response?.status;
+                if (status === undefined) {
+                    alert("예기치 못한 예외가 발생하였습니다.\n"+JSON.stringify(err));
+                }
+                else if (status === 400) {
                     alert(`답안을 저장하지 못했습니다. 잘못된 요청입니다. (${status})`);
                 }
                 else if (status === 401) {
@@ -208,6 +238,11 @@ const Assignment = (props) => {
         return deadlineString + " 마감";
     }
 
+    useInterval(() => {
+        if (status === "답안 저장 필요")
+            saveAnswers();
+    }, 5000);
+
     useEffect(() => {
         setInfo(undefined);
         setInfoDate(undefined);
@@ -234,6 +269,7 @@ const Assignment = (props) => {
     else
         return (
             <Grid container direction="column">
+                <Prompt when={status === "답안 저장 필요"} message="아직 과제가 저장되지 않았습니다! 정말로 나가시겠습니까?"></Prompt>
                 <Grid className="assignment_page_header">
                     <Grid className="assignment_page_title">
                         <PageInfo className="assignment_info"

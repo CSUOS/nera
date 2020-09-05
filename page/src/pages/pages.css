@@ -86,7 +86,14 @@ a:hover{
     
 }
 
+.score_stats {
+    width: 100%;
+}
 
+.query_caption {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
 
 /* Setting */
