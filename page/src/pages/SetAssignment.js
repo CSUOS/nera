@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Paper, TextField, Typography, Button } from '@material-ui/core';
-import { PageInfo, TimePicker } from '../components';
+import { PageInfo, TimePicker} from '../components';
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import './pages.css';
@@ -13,7 +13,8 @@ import Modal from '@material-ui/core/Modal';
 
 function SetAssignment(props){
     const [update, forceUpdate] = useState(false); // rendering update용
-    const [open, setOpen] = useState(false); // modal 관리
+    const [qOpen, setQOpen] = useState(false); // question modal 관리
+    const [sOpen, setSOpen] = useState(false); // student list modal 관리
     const [assignId, setAssignId] = useState(-1);
     const [assignInfo, setAssignInfo] = useState("");
     const [lectureName, setLecture] = useState("");
@@ -24,7 +25,11 @@ function SetAssignment(props){
     const [questions, setQuestions] = useState([]);
     const [students, setStudents] = useState([]);
     const [studentList, setStudentList] = useState({});
-    const [renderObject, setRenderObject] = useState([]); // modal에 rendering되는 학생목록 관리
+    // modal에 rendering되는 문제목록 관리
+    const [renderQuestionIndex, setRenderQuestionIndex] = useState(-1); 
+    const [renderQuestionName, setRenderQuestionName] = useState(""); 
+    const [renderQuestionScore, setRenderQuestionScore] = useState(); 
+    const [renderStudent, setRenderStudent] = useState([]); // modal에 rendering되는 학생목록 관리
 
     const history = useHistory();
 
@@ -39,28 +44,41 @@ function SetAssignment(props){
     }, [props.match.params.asId]);
 
     useEffect(()=>{
-        // students가 바뀔 때마다 renderObject에 똑같이 저장
+        // students가 바뀔 때마다 renderStudent에 똑같이 저장
         let tmp = [];
         students.forEach((student)=>{ // 깊은 복사 (값 복사)
             tmp.push(student);
         })
-        setRenderObject(tmp);
+        setRenderStudent(tmp);
     }, [students])
 
 
-     // if you click modal's outside => just handleClose();
-     // if you click modal's + button => addStudent();
-     // if you click modal's x button => deleteStudent();
-     // if you modify modal's textfield => changeStudentField();
-     // if you click modal's save button => closePopUp();
-     // if you modify quetions's textfield => changeQuestionField();
-     // if you click top left save button => saveAssignmentToDB();
+     // if you click question button => questionsHandleOpen();
+     // if you click question +(add) button => addQuestion();
+     // if you click question x(delete) button => deleteQuestion();
+     // if you modify quetion modal textfield => changeRenderQuestion();
+     // if you click quetions modal save button => saveRenderQuestion();
 
-    const handleOpen = () => {
-        setOpen(true);
+     // if you click studentList button => listHandleOpen();
+     // if you click studentList modal get button => getStudentList();
+     // if you click studentList modal list name button => getStudentList();
+
+
+    const questionHandleOpen = (index) => {
+        setQOpen(true);
+        setRenderQuestionIndex(index);
+        setRenderQuestionName(questions[index].questionContent);
+        setRenderQuestionScore(questions[index].fullScore);
     };
-    const handleClose = () => {
-        setOpen(false);
+    const questionHandleClose = () => {
+        setQOpen(false);
+    };
+
+    const listHandleOpen = () => {
+        setSOpen(true);
+    };
+    const listHandleClose = () => {
+        setSOpen(false);
     };
 
         // function 
@@ -111,43 +129,43 @@ function SetAssignment(props){
     
     async function addStudent(){
         // 학생 리스트 추가
-        let tmp = renderObject;
+        let tmp = renderStudent;
         tmp.push(undefined);
-        await setRenderObject(tmp);
+        await setRenderStudent(tmp);
         await forceUpdate(!update);
     }
 
     async function deleteStudent(index){
         // 학생 리스트 삭제
-        let tmp = renderObject;
+        let tmp = renderStudent;
         tmp.splice(index,1);
-        await setRenderObject(tmp);
+        await setRenderStudent(tmp);
         await forceUpdate(!update)
     }
 
     function changeStudentField(e, index){
-        // textfield가 바뀔 때마다 renderObject 갱신
-        let tmp = renderObject;
+        // textfield가 바뀔 때마다 renderStudent 갱신
+        let tmp = renderStudent;
         let number = Number(e.target.value);
         if(number!==NaN){
             tmp[index] = number;
         }else{
             tmp[index] = undefined;
         }
-        setRenderObject(tmp);
+        setRenderStudent(tmp);
     }
 
     function saveStudents(){
-        // renderObject => students 저장
-        setStudents(renderObject);
+        // renderStudent => students 저장
+        setStudents(renderStudent);
     }
 
     async function closePopUp(){
-        // modal을 그냥 닫으면 handleClose만 적용되어 
-        // student state에 저장 x, renderObject state에만 저장 o
+        // modal을 그냥 닫으면 listHandleClose만 적용되어 
+        // student state에 저장 x, renderStudent state에만 저장 o
         // 저장 버튼을 눌러야 student state에 저장됨
         await saveStudents();
-        await handleClose();
+        await listHandleClose();
     }
 
     function preProcessingData(){
@@ -248,37 +266,29 @@ function SetAssignment(props){
     }
 
     async function addQuestion(){
-        // 새로운 과제 추가
+        // 새로운 문제 추가
+        const index = questions.length;
         const newQuestion = {
-            questionId : questions.length,
-            questionContent : "",
+            questionId : index,
+            questionContent : "기본",
             fullScore : undefined,
         };
 
         let tmp = questions;
         tmp.push(newQuestion);
         await setQuestions(tmp);
-        await forceUpdate(!update);
+        await questionHandleOpen(index);
     }
 
-    async function changeQuestionField(e, index, type){
-        // textfield가 바뀔 때마다 Question 갱신
-
-        let tmp = questions;
+    async function changeRenderQuestion(e, type){
+        // textfield가 바뀔 때마다 render state들 갱신
 
         if(type==0){ // 문제 설명 갱신
-            const description = e.target.value;
-            tmp[index].questionContent = description;
+            await setRenderQuestionName(e.target.value);
         }else{ // 배점 갱신
-            const score = Number(e.target.value);
-            if(score!==NaN){
-                tmp[index].fullScore = score;
-            }else{
-                tmp[index].fullScore = undefined;
-            }
+            const number = Number(e.target.value);
+            await setRenderQuestionScore(isNaN(number)?e.target.value:number);
         }
-
-        await setQuestions(tmp);
         await forceUpdate(!update);
     }
 
@@ -286,7 +296,6 @@ function SetAssignment(props){
         // 문제 삭제
         let tmp = questions;
         tmp.splice(index,1);
-        await setQuestions(tmp);
         await forceUpdate(!update);
     }
 
@@ -298,7 +307,7 @@ function SetAssignment(props){
     }
 
     async function changeAssignNameField(e){
-        // textfield가 바뀔 때마다 assignmentname 갱신
+        // textfield가 바뀔 때마다 assignmentName 갱신
 
         await setAssignName(e.target.value);
         await forceUpdate(!update);
@@ -309,6 +318,20 @@ function SetAssignment(props){
 
         await setAssignInfo(e.target.value);
         await forceUpdate(!update);
+    }
+
+    async function saveRenderQuestion(){
+        if(isNaN(renderQuestionScore)){
+            alert('배점에는 제대로 된 숫자를 입력해주세요.');
+            return;
+        }
+        
+        let tmp = questions;
+        tmp[renderQuestionIndex].questionContent = renderQuestionName;
+        tmp[renderQuestionIndex].fullScore = renderQuestionScore;
+
+        await setQuestions(questions);
+        await questionHandleClose();
     }
         // function 
 
@@ -328,8 +351,8 @@ function SetAssignment(props){
             </Grid>
             <Grid container item spacing={4} direction="column" className="setting_as_con">
                 <Grid container item direction="row">
-                    <Grid xs={6}><TextField onInput={(e)=>changeLectureField(e)} InputLabelProps={{shrink:true}} label="강의명" required multiline rows={1} rowsMax={10000} value={lectureName}></TextField></Grid>
-                    <Grid xs={6}><TextField onInput={(e)=>changeAssignNameField(e)} InputLabelProps={{shrink:true}} label="과제명" required multiline rows={1} rowsMax={10000} value={assignName}></TextField></Grid>
+                    <Grid xs={6}><TextField onChange={(e)=>changeLectureField(e)} InputLabelProps={{shrink:true}} label="강의명" required multiline rows={1} rowsMax={10000} value={lectureName}></TextField></Grid>
+                    <Grid xs={6}><TextField onChange={(e)=>changeAssignNameField(e)} InputLabelProps={{shrink:true}} label="과제명" required multiline rows={1} rowsMax={10000} value={assignName}></TextField></Grid>
                 </Grid>
                 <Grid item>
                     {(publishingTime!==undefined && deadline!=undefined)?
@@ -343,7 +366,7 @@ function SetAssignment(props){
                     }
                 </Grid>
                 <Grid container item direction="row">
-                    <Grid xs={6}><TextField  onInput={(e)=>changeAssignInfoField(e)} InputLabelProps={{shrink:true}} label="과제 설명" required multiline rows={1} rowsMax={10000} value={assignInfo}></TextField></Grid>
+                    <Grid xs={6}><TextField onChange={(e)=>changeAssignInfoField(e)} InputLabelProps={{shrink:true}} label="과제 설명" required multiline rows={1} rowsMax={10000} value={assignInfo}></TextField></Grid>
                 </Grid>
                 <Grid container item direction="row">
                     <Grid container spacing={1} xs={12}>
@@ -353,31 +376,48 @@ function SetAssignment(props){
                         <Grid container spacing={2} item direction="column">
                             {
                                 questions.map((question, index)=>
-                                    <Grid container item direction="column">
-                                        <Grid container item>
-                                            <Typography>문제 #{index+1}</Typography>
-                                            <Button onClick={()=>deleteQuestion(index)}><ClearIcon/></Button>
-                                        </Grid>
-                                        <Grid container item>
-                                            <TextField onInput={(e)=>changeQuestionField(e, index, 0)} InputLabelProps={{shrink:true}} label="문제 설명" required multiline rows={1} rowsMax={10000} value={question.questionContent}></TextField>
-                                            <TextField onInput={(e)=>changeQuestionField(e, index, 1)} InputLabelProps={{shrink:true}} label="배점" required multiline rows={1} rowsMax={10} value={question.fullScore}></TextField>
-                                        </Grid>
+                                    <Grid>
+                                        <Button onClick={()=>questionHandleOpen(index)}>{index+1}.{question.questionContent}</Button>
+                                        <Button onClick={()=>deleteQuestion(index)}><ClearIcon/></Button>
                                     </Grid>
                                 )
                             }
+                            <Modal
+                                open={qOpen}
+                                onClose={questionHandleClose}
+                                aria-labelledby="add question to assignment"
+                                aria-describedby="add question to assignment"
+                                className="modal">
+                                <Paper className="modal_con">
+                                    <Grid container spacing={2} wrap="wrap" className="modal_form">
+                                        <TextField onChange={(e)=>changeRenderQuestion(e,0)} InputLabelProps={{shrink:true}} label="문제 설명" required multiline rows={1} rowsMax={10000} value={renderQuestionName}></TextField>
+                                        <TextField 
+                                            onChange={(e)=>changeRenderQuestion(e,1)} 
+                                            InputLabelProps={{shrink:true}} 
+                                            label="배점" required multiline 
+                                            rows={1} rowsMax={10} 
+                                            value={renderQuestionScore}
+                                            error={typeof(renderQuestionScore)==="string"?true:false}
+                                            helperText="숫자를 입력해주세요."
+                                            >
+                                        </TextField>
+                                    </Grid>
+                                    <Button className="save_button" onClick={()=>saveRenderQuestion()}>저장</Button>
+                                </Paper>
+                            </Modal>
                             <AddCircleIcon className="add_button" fontSize="large" onClick={addQuestion}></AddCircleIcon>
                         </Grid>
                     </Grid>
                 </Grid>
                 
                 <Grid container item direction="column">
-                    <Grid><Button onClick={handleOpen}>수강생 목록</Button></Grid>
+                    <Grid><Button onClick={listHandleOpen}>수강생 목록</Button></Grid>
                     <Grid>
                         <Modal
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="add question to assignment"
-                            aria-describedby="add question to assignment"
+                            open={sOpen}
+                            onClose={listHandleClose}
+                            aria-labelledby="add student list to assignment"
+                            aria-describedby="add student list to assignment"
                             className="modal">
                             <Paper className="modal_con">
                                 <Grid container spacing={2} wrap="wrap" className="modal_form">
@@ -387,9 +427,9 @@ function SetAssignment(props){
                                         <Button className="save_button" onClick={closePopUp}>저장</Button>
                                     </Grid>
                                     {
-                                        renderObject.map((student, index)=>
+                                        renderStudent.map((student, index)=>
                                             <Grid container item xs={4} wrap="nowrap" alignItems="center">
-                                                <TextField onInput={(e)=>changeStudentField(e, index)} className="popup_student" InputLabelProps={{shrink:true}} label={"학생"+(index+1)} required multiline rows={1} rowsMax={15} value={student}></TextField>
+                                                <TextField onChange={(e)=>changeStudentField(e, index)} className="popup_student" InputLabelProps={{shrink:true}} label={"학생"+(index+1)} required multiline rows={1} rowsMax={15} value={student}></TextField>
                                                 <Button onClick={()=>deleteStudent(index)}><ClearIcon/></Button>
                                             </Grid>
                                         )
