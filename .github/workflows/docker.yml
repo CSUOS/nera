@@ -37,4 +37,4 @@ jobs:
         tags: latest
         # Comma-delimited list of images to consider as cache sources
         cache_froms: csuos/nera:latest # optional
-        push: ${{ startsWith(github.repository_owner, 'CSUOS') }}
+        push: ${{ startsWith(secrets.DOCKER_ID, 'csuos') }}
