@@ -144,8 +144,8 @@ function Login(){
                 <TextField variant="outlined" id="userId" label="id" required rows={1} rowsMax={10} onChange={changeId}></TextField>
                 <TextField variant="outlined" id="userPw" label="password" type="password" required rows={1} rowsMax={10} onChange={changePw}></TextField>
                 <Button onClick={setLoginData}>login</Button>
-                <Button onClick={loginAsTestAccount}>디버깅용 교수 계정 로그인</Button>
-                <Button onClick={loginAsTestAccountB}>디버깅용 학생 계정 로그인</Button>
+                <Button onClick={loginAsTestAccount}>DEMO LOGIN(Prof)</Button>
+                <Button onClick={loginAsTestAccountB}>DEMO LOGIN(Stud)</Button>
             </Grid>
         </Grid>
     );
