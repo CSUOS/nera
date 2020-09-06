@@ -26,16 +26,15 @@ jobs:
       uses: docker/build-push-action@v1.1.0
       with:
         # Username used to log in to a Docker registry. If not set then no login will occur
-        username: csuos # optional
+        username: ${{ secrets.DOCKER_ID }} # optional
         # Password or personal access token used to log in to a Docker registry. If not set then no login will occur
         password: ${{ secrets.DOCKER_PW }}
         # Docker repository to tag the image with
         repository: csuos/nera
         # Automatically tags the built image with the git reference as per the readme
         tag_with_ref: true # optional
+        tag_with_sha: true 
+        tags: latest
         # Comma-delimited list of images to consider as cache sources
-        cache_froms: csuos/nera:latest# optional
-        # Comma-delimited list of labels to add to the built image
-        labels: builder=github_actions # optional
-        # Adds labels with git repository information to the built image
-        add_git_labels: true # optional
+        cache_froms: csuos/nera:latest # optional
+        push: ${{ startsWith(secrets.DOCKER_ID, 'csuos') }}
