@@ -52,7 +52,10 @@ function Login(){
                 }
                 else if (status == 400) {
                     alert("아이디, 패스워드가 기입되었는지 다시 한 번 확인해주세요.");
-                } else if (status == 403) {
+                } else if (status == 401) {
+                    alert("로그인 서버 토큰에 문제가 발생하였습니다. 잠시만 기다려주세요.")
+                }
+                else if (status == 403) {
                     alert("아이디, 패스워드가 정확히 기입되었는지 다시 한 번 확인해주세요.");
                 } else if (status == 500) {
                     alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
@@ -96,7 +99,6 @@ function Login(){
         }else if(status==500 || rabumsStatus == "500"){
             alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
         }
-        console.log(response.data);
         if (status == 200 && rabumsStatus == undefined) {
            window.location.href = "/home";
            console.log(response);
@@ -119,7 +121,10 @@ function Login(){
         const rabumsStatus = response?.data?.message?.slice(response.data.message.length - 3);
         if(status==400 || rabumsStatus == "400"){
             alert("아이디, 패스워드가 기입되었는지 다시 한 번 확인해주세요.");
-        }else if(status==403 || rabumsStatus == "403"){
+        }else if(status==401 || rabumsStatus == "401"){
+            alert("토큰 없음");
+        }
+        else if(status==403 || rabumsStatus == "403"){
             alert("아이디, 패스워드가 정확히 기입되었는지 다시 한 번 확인해주세요.");
         }else if(status==500 || rabumsStatus == "500"){
             alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
@@ -139,8 +144,8 @@ function Login(){
                 <TextField variant="outlined" id="userId" label="id" required rows={1} rowsMax={10} onChange={changeId}></TextField>
                 <TextField variant="outlined" id="userPw" label="password" type="password" required rows={1} rowsMax={10} onChange={changePw}></TextField>
                 <Button onClick={setLoginData}>login</Button>
-                <Button onClick={loginAsTestAccount}>교수모드</Button>
-                <Button onClick={loginAsTestAccountB}>학생모드</Button>
+                <Button onClick={loginAsTestAccount}>디버깅용 교수 계정 로그인</Button>
+                <Button onClick={loginAsTestAccountB}>디버깅용 학생 계정 로그인</Button>
             </Grid>
         </Grid>
     );
