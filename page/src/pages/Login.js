@@ -77,7 +77,7 @@ function Login(){
         console.log(cookie);
     }
 
-    async function loginAsTestAccount(e) {
+    async function loginAsTestProfessorCookie(e) {
 
         let hashed_token = await axios.get(
                             '/v1/token', { withCredentials: true }
@@ -104,7 +104,7 @@ function Login(){
            console.log(response);
         }
     }
-    async function loginAsTestAccountB(e) {
+    async function loginAsTestStudentCookie(e) {
 
         let hashed_token = await axios.get(
                             '/v1/token', { withCredentials: true }
@@ -144,8 +144,8 @@ function Login(){
                 <TextField variant="outlined" id="userId" label="id" required rows={1} rowsMax={10} onChange={changeId}></TextField>
                 <TextField variant="outlined" id="userPw" label="password" type="password" required rows={1} rowsMax={10} onChange={changePw}></TextField>
                 <Button onClick={setLoginData}>login</Button>
-                <Button onClick={loginAsTestAccount}>DEMO LOGIN(Prof)</Button>
-                <Button onClick={loginAsTestAccountB}>DEMO LOGIN(Stud)</Button>
+                <Button onClick={loginAsTestProfessorCookie}>교수 계정 체험</Button>
+                <Button onClick={loginAsTestStudentCookie}>학생 계정 체험</Button>
             </Grid>
         </Grid>
     );
