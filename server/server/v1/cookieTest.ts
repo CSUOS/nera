@@ -10,7 +10,7 @@ const userInfo = {
   _id: 0,
   userId: 'KingSejong',
   userName: '세종대왕',
-  userNumber: 1111111111,
+  userNumber: 1999999999,
 };
 
 router.get('/', async (ctx: Koa.Context) => {
@@ -21,10 +21,6 @@ router.get('/', async (ctx: Koa.Context) => {
   ctx.user = userInfo;
   ctx.body = ctx.user;
   ctx.role = String(userInfo.userNumber).charAt(0);
-});
-
-router.get('/test', async (ctx: Koa.Context) => {
-  console.log(ctx.role);
 });
 
 export = router
