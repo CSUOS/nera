@@ -33,9 +33,8 @@ jobs:
         repository: csuos/nera
         # Automatically tags the built image with the git reference as per the readme
         tag_with_ref: true # optional
+        tag_with_sha: true 
+        tags: latest
         # Comma-delimited list of images to consider as cache sources
-        cache_froms: csuos/nera:latest# optional
-        # Comma-delimited list of labels to add to the built image
-        labels: builder=github_actions # optional
-        # Adds labels with git repository information to the built image
-        add_git_labels: true # optional
+        cache_froms: csuos/nera:latest # optional
+        push: ${{ startsWith(github.repository_owner, 'CSUOS') }}
