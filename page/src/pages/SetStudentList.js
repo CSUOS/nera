@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Grid, Paper, TextField, Button, Typography } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import { PageInfo } from '../components';
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 import './pages.css';
 
@@ -15,6 +16,7 @@ function SetStudentList(props){
     const [students, setStudents] = useState([]);
     const [listName, setListName] = useState("");
     const [groupId, setGroupId] = useState(-1);
+    const history = useHistory();
     
     useEffect(()=>{
         getData();
@@ -60,12 +62,12 @@ function SetStudentList(props){
                 alert(`수강생 정보를 얻는데 실패하였습니다. 권한이 없습니다. (${status})`);
             }
             else if (status === 404) {
-                return;
+                alert(`수강생 정보를 얻는데 실패하였습니다. 목록을 찾을 수 없습니다. (${status})`);
             }
             else if (status === 500) {
                 alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
             }
-            //history.push("/home");
+            history.push("/home");
         });
     }
 
@@ -152,32 +154,33 @@ function SetStudentList(props){
 
     async function deleteGroup(index){
         // 그룹 삭제
-        const string = "그룹 ["+group[index].className+"] 를 정말로 삭제할까요?";
-        if(window.confirm(string)==true){
-            await axios
-            .delete(`/v1/student/${group[index].groupId}`, { withCredentials: true })
-            .then(res => {
-                console.log(res)
-            })
-            .catch(err=>{
-                if(err.response===undefined){
-                    alert(`내부 함수 (SetStudentList.js => deleteGroup()) 문제입니다. 오류 수정 필요.`);
-                }
-                const status = err.response.status;
-                if (status === 401) {
-                    alert(`수강생 정보를 삭제하는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
-                }
-                else if (status === 403) {
-                    alert(`수강생 정보를 삭제하는데 실패하였습니다. 권한이 없습니다. (${status})`);
-                }
-                else if (status === 500) {
-                    alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
-                }
-                //history.push("/home");
-            });
-            await getData();
-            await forceUpdate(!update);
+        const string = "그룹 \""+group[index].className+"\" 을(를) 정말로 삭제할까요?";
+        if(window.confirm(string)==false){
+            return;
         }
+        await axios
+        .delete(`/v1/student/${group[index].groupId}`, { withCredentials: true })
+        .then(res => {
+            console.log(res)
+        })
+        .catch(err=>{
+            if(err.response===undefined){
+                alert(`내부 함수 (SetStudentList.js => deleteGroup()) 문제입니다. 오류 수정 필요.`);
+            }
+            const status = err.response.status;
+            if (status === 401) {
+                alert(`수강생 정보를 삭제하는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
+            }
+            else if (status === 403) {
+                alert(`수강생 정보를 삭제하는데 실패하였습니다. 권한이 없습니다. (${status})`);
+            }
+            else if (status === 500) {
+                alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
+            }
+            //history.push("/home");
+        });
+        await getData();
+        await forceUpdate(!update);
     }
 
     async function addGroup(){
