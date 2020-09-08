@@ -43,6 +43,7 @@ function Setting(){
             history.push("/home");
         });
         await setAssignmentList();
+        window.location.href = "/home/setting";
     }
 
     function setAssignmentList(){
