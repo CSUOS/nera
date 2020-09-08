@@ -74,10 +74,8 @@ function SetStudentList(props){
         // 현재 모달의 내용 저장 후,
         // 다시 수강생 목록 받아오기
 
-        if(!window.confirm('저장 시 목록명을 바꿀 수 없습니다. 저장할까요?'))
-            return;
-
         await initializeHighlight();
+
         let olStudents = isStudentsValid();
         console.log(olStudents);
         if(Object.keys(olStudents).length!==0){
@@ -205,6 +203,7 @@ function SetStudentList(props){
     }
 
     function highlightOverlap(olStudents){
+        // 번호가 겹치는 학생 표시
         for(let number in olStudents){ // number : index
             const studentTag = document.getElementById("modal_student"+number);
             studentTag.style="color:red;"
@@ -212,6 +211,7 @@ function SetStudentList(props){
     }
 
     function initializeHighlight(){
+        // highlight 없애기 (초기화)
         let studentsTag = document.getElementsByClassName("modal_students");
         for(let index in studentsTag){
             if(index!=="length"){
@@ -269,7 +269,7 @@ function SetStudentList(props){
                     <Paper className="modal_con">
                         <Grid container>
                             <Grid container item alignItems="center">
-                                <TextField label="목록 이름" disabled={groupId===-1?false:true} required onInput={changeListName} rows={1} rowsMax={10000} className="modal_input_field" value={listName}></TextField>
+                                <TextField label="목록 이름" required onInput={changeListName} rows={1} rowsMax={10000} className="modal_input_field" value={listName}></TextField>
                                 <Button className="save_button" onClick={()=>saveModalGroup()}>저장</Button>
                             </Grid>
                             <Grid container item alignItems="center" wrap="wrap">

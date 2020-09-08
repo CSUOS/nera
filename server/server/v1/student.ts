@@ -49,6 +49,10 @@ router.post('/', async (ctx: Koa.Context) => {
       .findOne({ professorNumber: ctx.user.userNumber, groupId: body.groupId }).exec();
     // 이전에 생성한 그룹이 있는지 탐색
     if (prevGroup === null) { ctx.throw(404, '해당 그룹 없음'); }
+
+    prevGroup.className = body.className;
+    // 수강생 목록명 변경
+
     prevGroup.students = body.students;
     // 수강생 목록 변경
 
