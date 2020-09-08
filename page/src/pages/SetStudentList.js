@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Grid, Paper, TextField, Button, Typography } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import { PageInfo } from '../components';
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 import './pages.css';
 
@@ -15,6 +16,7 @@ function SetStudentList(props){
     const [students, setStudents] = useState([]);
     const [listName, setListName] = useState("");
     const [groupId, setGroupId] = useState(-1);
+    const history = useHistory();
     
     useEffect(()=>{
         getData();
@@ -60,12 +62,12 @@ function SetStudentList(props){
                 alert(`수강생 정보를 얻는데 실패하였습니다. 권한이 없습니다. (${status})`);
             }
             else if (status === 404) {
-                return;
+                alert(`수강생 정보를 얻는데 실패하였습니다. 목록을 찾을 수 없습니다. (${status})`);
             }
             else if (status === 500) {
                 alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
             }
-            //history.push("/home");
+            history.push("/home");
         });
     }
 
@@ -74,10 +76,8 @@ function SetStudentList(props){
         // 현재 모달의 내용 저장 후,
         // 다시 수강생 목록 받아오기
 
-        if(!window.confirm('저장 시 목록명을 바꿀 수 없습니다. 저장할까요?'))
-            return;
-
         await initializeHighlight();
+
         let olStudents = isStudentsValid();
         console.log(olStudents);
         if(Object.keys(olStudents).length!==0){
@@ -154,32 +154,33 @@ function SetStudentList(props){
 
     async function deleteGroup(index){
         // 그룹 삭제
-        const string = "그룹 ["+group[index].className+"] 를 정말로 삭제할까요?";
-        if(window.confirm(string)==true){
-            await axios
-            .delete(`/v1/student/${group[index].groupId}`, { withCredentials: true })
-            .then(res => {
-                console.log(res)
-            })
-            .catch(err=>{
-                if(err.response===undefined){
-                    alert(`내부 함수 (SetStudentList.js => deleteGroup()) 문제입니다. 오류 수정 필요.`);
-                }
-                const status = err.response.status;
-                if (status === 401) {
-                    alert(`수강생 정보를 삭제하는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
-                }
-                else if (status === 403) {
-                    alert(`수강생 정보를 삭제하는데 실패하였습니다. 권한이 없습니다. (${status})`);
-                }
-                else if (status === 500) {
-                    alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
-                }
-                //history.push("/home");
-            });
-            await getData();
-            await forceUpdate(!update);
+        const string = "그룹 \""+group[index].className+"\" 을(를) 정말로 삭제할까요?";
+        if(window.confirm(string)==false){
+            return;
         }
+        await axios
+        .delete(`/v1/student/${group[index].groupId}`, { withCredentials: true })
+        .then(res => {
+            console.log(res)
+        })
+        .catch(err=>{
+            if(err.response===undefined){
+                alert(`내부 함수 (SetStudentList.js => deleteGroup()) 문제입니다. 오류 수정 필요.`);
+            }
+            const status = err.response.status;
+            if (status === 401) {
+                alert(`수강생 정보를 삭제하는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
+            }
+            else if (status === 403) {
+                alert(`수강생 정보를 삭제하는데 실패하였습니다. 권한이 없습니다. (${status})`);
+            }
+            else if (status === 500) {
+                alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
+            }
+            //history.push("/home");
+        });
+        await getData();
+        await forceUpdate(!update);
     }
 
     async function addGroup(){
@@ -205,6 +206,7 @@ function SetStudentList(props){
     }
 
     function highlightOverlap(olStudents){
+        // 번호가 겹치는 학생 표시
         for(let number in olStudents){ // number : index
             const studentTag = document.getElementById("modal_student"+number);
             studentTag.style="color:red;"
@@ -212,6 +214,7 @@ function SetStudentList(props){
     }
 
     function initializeHighlight(){
+        // highlight 없애기 (초기화)
         let studentsTag = document.getElementsByClassName("modal_students");
         for(let index in studentsTag){
             if(index!=="length"){
@@ -269,7 +272,7 @@ function SetStudentList(props){
                     <Paper className="modal_con">
                         <Grid container>
                             <Grid container item alignItems="center">
-                                <TextField label="목록 이름" disabled={groupId===-1?false:true} required onInput={changeListName} rows={1} rowsMax={10000} className="modal_input_field" value={listName}></TextField>
+                                <TextField label="목록 이름" required onInput={changeListName} rows={1} rowsMax={10000} className="modal_input_field" value={listName}></TextField>
                                 <Button className="save_button" onClick={()=>saveModalGroup()}>저장</Button>
                             </Grid>
                             <Grid container item alignItems="center" wrap="wrap">

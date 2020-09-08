@@ -16,7 +16,13 @@ function Setting(){
     const [assignmentList, setAList] = useState([]);
     const history = useHistory();
     
-    async function deleteAssignment(id){
+    async function deleteAssignment(id, name){
+
+        const string = "과제 \""+name+"\" 을(를) 정말로 삭제할까요?";
+        if(window.confirm(string)==false){
+            return;
+        }
+
         await axios
         .delete(`/v1/assignment/${id}`, { withCredentials: true })
         .catch(err=>{
@@ -34,7 +40,7 @@ function Setting(){
                     alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
                 }
             }
-            //history.push("/home");
+            history.push("/home");
         });
         await setAssignmentList();
     }
@@ -107,7 +113,7 @@ function Setting(){
                     </Link>
                 </Grid>
                 <Grid item className="box_xbtn">
-                    <Button onClick={()=>deleteAssignment(as.assignmentId)}><ClearIcon/></Button>
+                    <Button onClick={()=>deleteAssignment(as.assignmentId, as.assignmentName)}><ClearIcon/></Button>
                 </Grid>
             </Grid>
         );
