@@ -27,6 +27,7 @@ function SetAssignment(props){
     const [deadline, setDeadline] = useState(); // 마감 시간
     const [questions, setQuestions] = useState([]);
     const [students, setStudents] = useState([]);
+    const [studentsName, setStudentsName] = useState("");
     const [studentList, setStudentList] = useState({});
     // modal state 관리
     const [renderQuestionIndex, setRenderQuestionIndex] = useState(-1); 
@@ -216,10 +217,10 @@ function SetAssignment(props){
         let tmp = renderStudent;
         tmp.splice(index,1);
         await setRenderStudent(tmp);
-        await forceUpdate(!update)
+        await forceUpdate(!update);
     }
 
-    function changeStudentField(e, index){
+    async function changeStudentField(e, index){
         // textfield가 바뀔 때마다 renderStudent 갱신
         let tmp = renderStudent;
         let number = Number(e.target.value);
@@ -228,13 +229,19 @@ function SetAssignment(props){
         }else{
             tmp[index] = undefined;
         }
-        setRenderStudent(tmp);
+        await setRenderStudent(tmp);
+        await forceUpdate(!update);
     }
 
     async function saveStudentList(){
         // renderStudent => students 저장
         await setStudents(renderStudent);
         await listHandleClose();
+    }
+
+    function changeStudentList(name, list){
+        setStudents(list);
+        setStudentsName(name);
     }
 
     function getStudentList(){
@@ -278,7 +285,7 @@ function SetAssignment(props){
         let result= [];
         for (const [name, list] of Object.entries(studentList)) {
             result.push(
-                <Button onClick={()=>setStudents(list)}>{name}</Button>
+                <Button onClick={()=>changeStudentList(name, list)}>{name}</Button>
             )
         };
         return result;
@@ -347,11 +354,11 @@ function SetAssignment(props){
             <Grid container spacing={4} direction="column" className="setting_as_con contents_con">
                 <Grid item className="contents_title"><h6>강의 정보</h6></Grid>
                 <Grid className="setting_as_row" container item direction="row">
-                    <Grid><TextField onChange={(e)=>changeLectureField(e)} InputLabelProps={{shrink:true}} label="강의명" required multiline rows={1} rowsMax={10000} value={lectureName}></TextField></Grid>
-                    <Grid><TextField onChange={(e)=>changeAssignNameField(e)} InputLabelProps={{shrink:true}} label="과제명" required multiline rows={1} rowsMax={10000} value={assignName}></TextField></Grid>
+                    <Grid><TextField onChange={(e)=>changeLectureField(e)} helperText="강의명을 기재해주세요. ex_ 이산수학" InputLabelProps={{shrink:true}} label="강의명" required multiline rows={1} rowsMax={10000} value={lectureName}></TextField></Grid>
+                    <Grid><TextField onChange={(e)=>changeAssignNameField(e)} helperText="과제명을 기재해주세요. 강의명과 함께 발행날짜 이전에 학생들에게 보여집니다*" InputLabelProps={{shrink:true}} label="과제명" required multiline rows={1} rowsMax={10000} value={assignName}></TextField></Grid>
                 </Grid>
                 <Grid className="setting_as_row" container item direction="row">
-                    <Grid xs={12}><TextField variant="outlined" onChange={(e)=>changeAssignInfoField(e)} InputLabelProps={{shrink:true}} label="과제 설명" required multiline rows={1} rowsMax={10000} value={assignInfo}></TextField></Grid>
+                    <Grid xs={12}><TextField variant="outlined" onChange={(e)=>changeAssignInfoField(e)} helperText="자세한 과제 내용과 주의사항을 기재해주세요. 문제는 아래의 문제란에 기재해주세요." InputLabelProps={{shrink:true}} label="과제 설명" required multiline rows={1} rowsMax={10000} value={assignInfo}></TextField></Grid>
                 </Grid>
                 <Grid item>
                     {(publishingTime!==undefined && deadline!=undefined)?
@@ -360,6 +367,8 @@ function SetAssignment(props){
                             deadline = {deadline}
                             setPublishingTime = {setPublishingTime}
                             setDeadline = {setDeadline}
+                            startHelperText="이 시각 이후로 학생들은 과제를 보고 수정할 수 있습니다."
+                            endHelperText="이 시각 이후로 학생들은 과제를 수정할 수 없습니다."
                         />
                         :"Please wait..."
                     }
@@ -383,7 +392,7 @@ function SetAssignment(props){
                         }
                         <Paper className="add_button">
                             <Button onClick={addQuestion}>
-                                <Typography>과제 추가</Typography>
+                                <Typography>문제 추가</Typography>
                             </Button>
                         </Paper>
                         <Modal
@@ -416,9 +425,10 @@ function SetAssignment(props){
                     <Grid className="contents_title"><h6>수강생 목록</h6></Grid>
                     <Paper className="add_button">
                         <Button onClick={listHandleOpen}>
-                            <Typography>수강생 목록</Typography>
+                            <Typography>수강생 목록 수정</Typography>
                         </Button>
                     </Paper>
+                    <Typography>현재 다음 학생들이 과제에 배정되어있습니다. <br></br>{students.map((student)=>student+" ")}</Typography>
                     <Grid>
                         <Modal
                             open={sOpen}
@@ -433,15 +443,22 @@ function SetAssignment(props){
                                         {renderStudentList()}
                                         <Button className="save_button" onClick={saveStudentList}>저장</Button>
                                     </Grid>
-                                    {
-                                        renderStudent.map((student, index)=>
-                                            <Grid container item xs={4} wrap="nowrap" alignItems="center">
-                                                <TextField onChange={(e)=>changeStudentField(e, index)} className="popup_student" InputLabelProps={{shrink:true}} label={"학생"+(index+1)} required multiline rows={1} rowsMax={15} value={student}></TextField>
-                                                <Button onClick={()=>deleteStudent(index)}><ClearIcon/></Button>
-                                            </Grid>
-                                        )
-                                    }
-                                    <AddCircleIcon className="add_button" fontSize="large" onClick={addStudent}></AddCircleIcon>
+                                    
+                                    <Grid container item className="student_box_con">
+                                        {
+                                            renderStudent.map((student, index)=>
+                                                <Grid container item className="student_box" wrap="nowrap" alignItems="center">
+                                                    <TextField onChange={(e)=>changeStudentField(e, index)} className="popup_student" InputLabelProps={{shrink:true}} label={"학생"+(index+1)} required multiline rows={1} rowsMax={15} value={student}></TextField>
+                                                    <Grid item className="box_xbtn"><Button onClick={()=>deleteStudent(index)}><ClearIcon/></Button></Grid>
+                                                </Grid>
+                                            )
+                                        }
+                                        <Paper className="add_button">
+                                            <Button onClick={addStudent}>
+                                                <Typography>수강생 추가</Typography>
+                                            </Button>
+                                        </Paper>
+                                    </Grid>
                                 </Grid>
                             </Paper>
                         </Modal>
