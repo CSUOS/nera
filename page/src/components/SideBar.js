@@ -48,6 +48,8 @@ const SideBar = (props) => {
                 case 2:
                     secondary_assignment.push(as);
                     break;
+                default:
+                    break;
             }
         }else if(type===1){ // 학생 => 0, 1이 마감 전
             switch(as[2]){
@@ -62,6 +64,8 @@ const SideBar = (props) => {
                     break;
                 case 3:
                     secondary_assignment.push(as);
+                    break;
+                default:
                     break;
             }
         }
