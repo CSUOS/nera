@@ -14,14 +14,13 @@ router.use(Bodyparser());
 router.use(Cookie());
 
 async function calState(assignment: typeof AssignmentModel, user: typeof userInfo) {
-  const now = getCurrentDate().getTime();
+  const now = Date.now();
   if ((now - assignment.publishingTime.getTime()) < 0) {
     return 0; // 공개전
   }
   if ((now - assignment.deadline.getTime()) < 0) {
     return 1; // 진행중
   }
-
   if (String(user.userNumber).charAt(0) === '1') { return 2; }
 
   const answer = await AnswerPaperModel
