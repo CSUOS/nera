@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   
 const SideBar = (props) => {
     const classes = useStyles();    
-    const {type, drawerClose, assignmentInfo, setSideBarAssignment} = props;
+    const {type, drawerClose, assignmentInfo} = props;
 
     let primary_assignment = [];
     let secondary_assignment = [];
@@ -74,7 +74,6 @@ const SideBar = (props) => {
                 <IconButton onClick={drawerClose}>
                     <ChevronLeftIcon />
                 </IconButton>
-                <Button onClick={setSideBarAssignment}><RefreshIcon/></Button>
             </Grid>
             <Divider />
 
