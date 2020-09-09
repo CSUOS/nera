@@ -118,6 +118,7 @@ function TimePicker(props) {
                 label="과제 시작 날짜"
                 value={startDate}
                 onChange={startDayChange}
+                helperText={props.startHelperText}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
@@ -146,6 +147,7 @@ function TimePicker(props) {
                 label="과제 마감 날짜"
                 value={endDate}
                 onChange={endDayChange}
+                helperText={props.endHelperText}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
