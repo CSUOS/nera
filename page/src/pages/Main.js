@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SideBar, Header, Loading } from "../components";
-import { Grid, Button } from '@material-ui/core';
-import { Home, Assignment, Setting, Error, SubmissionStatus, SetAssignment, Scoring, SetStudentList } from "../pages";
+import { Grid } from '@material-ui/core';
+import { Home, Assignment, Setting, SetAssignment, Scoring, SetStudentList } from "../pages";
 import { getUserInfo } from "../shared/GetUserInfo";
 import "./pages.css";
 import clsx from 'clsx';
@@ -125,14 +125,14 @@ function Main(props) {
   }
 
   /* rendering */
-  if (user == undefined || sideAssign == undefined)
+  if (user === undefined || sideAssign === undefined)
     return (
         <Loading status="불러오는 중..."></Loading>
     );
   else
   return (
     <Grid container direction="column">
-      {user == undefined || sideAssign == undefined ?
+      {user === undefined || sideAssign === undefined ?
         <Loading status="과제 정보를 가져오는 중..."></Loading>
         :
         <React.Fragment>
