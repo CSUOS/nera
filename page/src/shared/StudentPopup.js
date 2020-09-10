@@ -77,8 +77,17 @@ function StudentPopUp (props){
     async function changeStudent(e, index){
         // textfield가 바뀔 때마다 students 갱신
         let tmp = students;
-        const number = Number(e.target.value);
-        tmp[index] = isNaN(number)?e.target.value:number;
+        if(e.target.value===undefined){
+            //아무것도 없을 경우
+            tmp[index] = undefined;
+        }else {
+            //숫자면 숫자형태로 변형
+            const number = Number(e.target.value);
+            if(isNaN(number)||number===0)
+                tmp[index] = e.target.value;
+            else
+                tmp[index] = number;
+        }
 
         await initializeHighlight();
 
