@@ -4,6 +4,10 @@ import { Grid, Paper, TextField, Button} from '@material-ui/core';
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import PropTypes from 'prop-types';
+import ClearIcon from '@material-ui/icons/Clear';
+
+import '../pages/pages.css';
+import './shared.css'; //shared.css로 옮기기
 
 function StudentPopUp (props){
     const [update, forceUpdate] = useState(false); // rendering update용
@@ -77,8 +81,17 @@ function StudentPopUp (props){
     async function changeStudent(e, index){
         // textfield가 바뀔 때마다 students 갱신
         let tmp = students;
-        const number = Number(e.target.value);
-        tmp[index] = isNaN(number)?e.target.value:number;
+        if(e.target.value===undefined){
+            //아무것도 없을 경우
+            tmp[index] = undefined;
+        }else {
+            //숫자면 숫자형태로 변형
+            const number = Number(e.target.value);
+            if(isNaN(number)||number===0)
+                tmp[index] = e.target.value;
+            else
+                tmp[index] = number;
+        }
 
         await initializeHighlight();
 
@@ -90,6 +103,13 @@ function StudentPopUp (props){
         // 새로운 학번 추가
         let tmp = students;
         tmp.push(undefined);
+        await setStudents(tmp);
+        await forceUpdate(!update);
+    }
+
+    async function deleteStudent(index){
+        let tmp = students;
+        tmp.splice(index,1);
         await setStudents(tmp);
         await forceUpdate(!update);
     }
@@ -219,17 +239,22 @@ function StudentPopUp (props){
                     <Grid container item alignItems="center" wrap="wrap">
                         {
                             students.map((student, index)=>
-                                <Grid item xs="3">
-                                    <TextField  label={"학생"+(index+1)} 
-                                                rows={1}
-                                                onInput={(e)=>changeStudent(e, index)} 
-                                                className={"modal_students modal_input_field"}
-                                                id={"modal_student"+index} 
-                                                value={student}
-                                                error={typeof(student)==="string"?true:false}
-                                                helperText="숫자를 입력해주세요."
-                                                >
-                                    </TextField>
+                                <Grid item className="box_container">
+                                    <Grid item className="box_content">
+                                        <TextField  label={"학생"+(index+1)} 
+                                                    rows={1}
+                                                    onInput={(e)=>changeStudent(e, index)} 
+                                                    className={"modal_students modal_input_field"}
+                                                    id={"modal_student"+index} 
+                                                    value={student}
+                                                    error={typeof(student)==="string"?true:false}
+                                                    helperText="숫자를 입력해주세요."
+                                                    >
+                                        </TextField>
+                                    </Grid>
+                                    <Grid item className="box_xbtn">
+                                        <Button onClick={()=>deleteStudent(index)}><ClearIcon/></Button>
+                                    </Grid>
                                 </Grid>
                             )
                         }
