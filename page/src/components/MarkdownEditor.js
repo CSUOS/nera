@@ -98,7 +98,7 @@ const MarkdownEditor = (props) => {
                             className="editor_input"
                             mode="markdown"
                             theme="textmate"
-                            fontSize={16}
+                            fontSize={18}
                             showPrintMargin={false}
                             minLines={30}
                             maxLines={30}
