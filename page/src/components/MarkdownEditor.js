@@ -55,6 +55,7 @@ class CustomMarkdownMode
 const MarkdownEditor = (props) => {
     const [source, setSource] = useState(undefined);
     const [timer, setTimer] = useState(undefined);
+    const editorDivRef = useRef();
     const editorRef = useRef();
     const viewerRef = useRef();
 
@@ -69,6 +70,8 @@ const MarkdownEditor = (props) => {
         const customMarkDown = new CustomMarkdownMode();
         let session = editorRef.current.editor.getSession();
         session.setMode(customMarkDown);
+        console.log(viewerRef.current.style);
+        viewerRef.current.style.height = `${editorDivRef.current.offsetHeight}px`;
         setTimer(setInterval(updateSource, 250));
     }, []);
 
@@ -89,16 +92,16 @@ const MarkdownEditor = (props) => {
                 <div className="editor_input_container">
                     <Typography variant="caption">Markdown 및 LaTeX 형식</Typography>
                     <Divider className="editor_caption_divider" orientation="horizontal"></Divider>
-                    <div className="editor_input">
+                    <div className="editor_input" ref={editorDivRef}>
                         <AceEditor
                             ref={editorRef}
                             className="editor_input"
                             mode="markdown"
                             theme="textmate"
-                            fontSize={14}
+                            fontSize={18}
                             showPrintMargin={false}
-                            minLines={40}
-                            maxLines={40}
+                            minLines={30}
+                            maxLines={30}
                             showGutter={true}
                             highlightActiveLine={true}
                             wrapEnabled={true}

@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans");
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans+KR");
+
 /* CSS 초기화 */
 html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video{ /*모든 태그 기본값으로 초기화*/
@@ -10,8 +13,9 @@ vertical-align:baseline;
 }
 
 body{/*body 태그의 폰트와 배경, 글자 행간 속성 설정*/
-font-family: Sans-serif, Helvetica;
+font-family: "Noto Sans", "Noto Sans KR", Sans-serif, Helvetica !important;
 line-height:1;
+font-size: 1rem !important
 }
 
 article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{ /*HTML5 태그들이 정상 작동하도록*/
