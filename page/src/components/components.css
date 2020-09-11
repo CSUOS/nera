@@ -183,7 +183,6 @@ header>div{
 .editor_root {
     padding: 0.5rem;
     display: flex;
-    height: 600px;
 }
   
 .editor_input_container {
@@ -196,7 +195,6 @@ header>div{
   
 .editor_input {
     width: 100% !important;
-    overflow: auto;
 }
   
 .editor_viewer_container {
@@ -213,11 +211,7 @@ header>div{
 }
 
 .markdown_viewer {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-        sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    
 }
 
 .markdown_ol {

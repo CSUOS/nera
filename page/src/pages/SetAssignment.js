@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Paper, TextField, Typography, Button } from '@material-ui/core';
-import { PageInfo, TimePicker} from '../components';
+import { PageInfo, TimePicker, SideBar} from '../components';
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import './pages.css';
@@ -228,7 +228,8 @@ function SetAssignment(props){
             }
             history.push("/home/setting");
         });
-        setModifiedDate(new Date()); 
+        setModifiedDate(new Date());
+        window.location.href = "/home/setting";
     }
 
         // function 

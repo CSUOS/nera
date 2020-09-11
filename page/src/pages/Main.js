@@ -136,7 +136,6 @@ function Main(props) {
         <Loading status="과제 정보를 가져오는 중..."></Loading>
         :
         <React.Fragment>
-          <CssBaseline />
           <Grid item>
             <Header
               drawerOpen={handleDrawerOpen}
