@@ -145,10 +145,10 @@ function Main(props) {
               name={user.userName}
             />
           </Grid>
-          <Grid container item>
+          <Grid container item className="drawer_height">
             <Grid item>
               <Drawer
-                className={classes.drawer}
+                className={classes.drawer+ " drawer_con"}
                 variant="persistent"
                 anchor="left"
                 open={open}

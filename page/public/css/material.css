@@ -12,11 +12,6 @@
 .MuiDrawer-paper{
     background-color: rgb(230,230,230) !important;
 }
-#subheader{
-    padding: 0px 0px 0px 20px;
-    background-color: #b9b9b9;
-    color: black;
-}
 .margin-top-64{
     margin-top:64px!important;
 }
