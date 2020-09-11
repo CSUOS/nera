@@ -208,9 +208,49 @@ a:hover{
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #FFF1ED;
 }
+
+.login_paper {
+    max-width: 600px;
+    width: 100%;
+    margin: 1rem;
+    padding: 1rem;
+}
+
+.login_logo {
+    width: 100%;
+    padding: 4rem 6rem 0.5rem 6rem;
+}
+
+.login_subtitle {
+    padding: 0 0 2.5rem 0;
+}
+
+.login_sign {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+}
+
+.login_sign>a {
+    color: #ff844e;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.regiter_sign {
+    padding: 0.5rem 0 0 0;
+}
+
 .login_container>div{
     margin: 10px;
+}
+
+.login_button {
+    width: 60%;
+    margin: 0 0 1rem 0 !important;
 }
 
 /* button */
