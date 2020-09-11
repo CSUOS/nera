@@ -4,7 +4,6 @@ import { Grid, TextField } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
@@ -71,11 +70,11 @@ function TimePicker(props) {
   const checkCorrect = (date1, date2)=>{
     if(date1.getTime()<=date2.getTime()){ // 시작 날짜가 마감 날짜 전이라면
       return true;
-    }else if(date1.getYear()==date2.getYear()){ // second까지 따지지 않고, 시간 대소
-      if(date1.getMonth()==date2.getMonth()){
-        if(date1.getDay()==date2.getDay()){
-          if(date1.getHours()==date2.getHours()){
-            if(date1.getMinutes()==date2.getMinutes()){
+    }else if(date1.getYear()===date2.getYear()){ // second까지 따지지 않고, 시간 대소
+      if(date1.getMonth()===date2.getMonth()){
+        if(date1.getDay()===date2.getDay()){
+          if(date1.getHours()===date2.getHours()){
+            if(date1.getMinutes()===date2.getMinutes()){
               return true;
             }else{
               return false;
@@ -118,6 +117,7 @@ function TimePicker(props) {
                 label="과제 시작 날짜"
                 value={startDate}
                 onChange={startDayChange}
+                helperText={props.startHelperText}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
@@ -146,6 +146,7 @@ function TimePicker(props) {
                 label="과제 마감 날짜"
                 value={endDate}
                 onChange={endDayChange}
+                helperText={props.endHelperText}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}

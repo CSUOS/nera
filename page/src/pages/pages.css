@@ -186,6 +186,9 @@ a:hover{
     padding: 30px;
     max-width: 70%;
 }
+.modal_students{
+    width: 100%;
+}
 
 .scoring_bottom {
     display: flex;
@@ -281,4 +284,11 @@ a:hover{
 .box_name{
     width: 100%;
     padding: 20px 15px;
+}
+.student_box{
+    width: 25%!important;
+    margin-bottom: 20px!important;
+}
+.student_box_con{
+    align-items: center;
 }

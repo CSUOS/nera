@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   
 const SideBar = (props) => {
     const classes = useStyles();    
-    const {type, drawerClose, assignmentInfo, setSideBarAssignment} = props;
+    const {type, drawerClose, assignmentInfo} = props;
 
     let primary_assignment = [];
     let secondary_assignment = [];
@@ -48,6 +48,8 @@ const SideBar = (props) => {
                 case 2:
                     secondary_assignment.push(as);
                     break;
+                default:
+                    break;
             }
         }else if(type===1){ // 학생 => 0, 1이 마감 전
             switch(as[2]){
@@ -63,6 +65,8 @@ const SideBar = (props) => {
                 case 3:
                     secondary_assignment.push(as);
                     break;
+                default:
+                    break;
             }
         }
     })
@@ -74,7 +78,6 @@ const SideBar = (props) => {
                 <IconButton onClick={drawerClose}>
                     <ChevronLeftIcon />
                 </IconButton>
-                <Button onClick={setSideBarAssignment}><RefreshIcon/></Button>
             </Grid>
             <Divider />
 
