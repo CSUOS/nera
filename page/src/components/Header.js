@@ -1,5 +1,4 @@
 import React from 'react';
-import LockIcon from '@material-ui/icons/Lock';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, ButtonBase } from "@material-ui/core";
 import clsx from 'clsx';

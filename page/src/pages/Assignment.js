@@ -171,13 +171,14 @@ const Assignment = (props) => {
         setModifiedAnswers(currModified);
         
         let found = questions.find(ques => ques.questionId == qId);
-        if (status !== "답안 저장 필요" && found && found.answerContent != text) {
+        if (status !== "답안 저장 필요") {
             setStatusStyle({ ...statusCaptionStyle, color: "red" });
             setStatus("답안 저장 필요");
         }
     }
 
     function saveAnswers() {
+        console.log(modifiedAnswers);
         let processed = {};
         for (const ques of questions)
             processed[ques.questionId] = ques.answerContent;
@@ -200,7 +201,6 @@ const Assignment = (props) => {
                 setModifiedDate(new Date());
                 setStatusStyle({...statusCaptionStyle});
                 setStatus("변경 사항 없음");
-                setModifiedAnswers({});
             })
             .catch(err => {
                 const status = err?.response?.status;
@@ -285,7 +285,7 @@ const Assignment = (props) => {
                                 <Typography variant="caption" align="right" style={dateCaptionStyle} children={modifiedDateToString(modifiedDate)}></Typography>
                                 <Typography variant="body2" align="right" style={statusStyle} children={status}></Typography>
                             </Grid>
-                            <Button className="save_component" variant="contained" disabled={Object.keys(modifiedAnswers).length === 0} onClick={saveAnswers}>저장</Button>
+                            <Button className="save_component" variant="contained" onClick={saveAnswers}>저장</Button>
                         </Grid>
                     </Grid>}
                 </Grid>

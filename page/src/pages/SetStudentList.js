@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Paper, TextField, Button, Typography } from '@material-ui/core';
-import Modal from '@material-ui/core/Modal';
+import { Grid, Paper, Button, Typography } from '@material-ui/core';
 import { PageInfo } from '../components';
 import { useHistory } from "react-router-dom";
 import axios from "axios";
@@ -9,6 +8,7 @@ import './pages.css';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import ClearIcon from '@material-ui/icons/Clear';
+import StudentPopup from '../shared/StudentPopup';
 
 function SetStudentList(props){
     const [update, forceUpdate] = useState(false); // rendering update용
@@ -70,30 +70,15 @@ function SetStudentList(props){
         });
     }
 
-    async function saveModalGroup(){
+    async function saveModalGroup(getStudents, getListName){
         // modal에서 저장 버튼을 눌렀을 때
         // 현재 모달의 내용 저장 후,
         // 다시 수강생 목록 받아오기
 
-        await initializeHighlight();
-
-        let olStudents = isStudentsValid();
-        console.log(olStudents);
-        if(Object.keys(olStudents).length!==0){
-            alert('수강생 학번 중 겹치는 학번이 있습니다.');
-            highlightOverlap(olStudents);
-            return;
-        }
-        
-        if(listName===""){
-            alert('목록 이름이 비어있습니다. 입력해주세요.');
-            return;
-        }
-
         await axios
         .post('/v1/student',{
-            className: listName,
-            students : students,
+            className: getListName,
+            students : getStudents,
             groupId : groupId
         }, { withCredentials: true })
         .catch(err=>{
@@ -115,6 +100,7 @@ function SetStudentList(props){
             }
             //history.push("/home/setList");
         });
+
         await handleClose();
         await getData();
         await forceUpdate(!update);
@@ -125,30 +111,6 @@ function SetStudentList(props){
         await setListName(group["className"]);
         await setGroupId(group["groupId"]);
         await handleOpen();
-    }
-
-    async function changeListName(e){
-        await setListName(e.target.value);
-        await forceUpdate(!update);
-    }
-
-    async function changeListStudent(e, index){
-        let tmp = students;
-        const number = Number(e.target.value);
-        tmp[index] = isNaN(number)?e.target.value:number;
-
-        await initializeHighlight();
-
-        await setStudents(tmp);
-        await forceUpdate(!update);
-    }
-    
-    async function addStudent(){
-        // 새로운 학번 추가
-        let tmp = students;
-        tmp.push(undefined);
-        await setStudents(tmp);
-        await forceUpdate(!update);
     }
 
     async function deleteGroup(index){
@@ -190,40 +152,6 @@ function SetStudentList(props){
         await handleOpen();
     }
 
-    function isStudentsValid(){
-        let tmp = {}; // key : 학번, value : index
-        let result = {}; // key : index, value : 학번
-        for(let i=0; i<students.length; i++){
-            if(Object.prototype.hasOwnProperty.call(tmp,students[i])){
-                result[i] = students[i];
-                continue;
-            }
-            tmp[students[i]]=i;
-        }
-
-        return result;
-    }
-
-    function highlightOverlap(olStudents){
-        // 번호가 겹치는 학생 표시
-        for(let number in olStudents){ // number : index
-            const studentTag = document.getElementById("modal_student"+number);
-            studentTag.style="color:red;"
-        }
-    }
-
-    function initializeHighlight(){
-        // highlight 없애기 (초기화)
-        let studentsTag = document.getElementsByClassName("modal_students");
-        for(let index in studentsTag){
-            if(index!=="length"){
-                let inputTag = studentsTag[index].children[1].children[0];
-                inputTag.style="";
-            }
-            else
-                break;
-        }
-    }
 
     function uploadXlsxFile(e) {
         const f = e.target.files[0];
@@ -290,42 +218,14 @@ function SetStudentList(props){
                         </Button>
                     </Paper>
                 </Grid>
-                <Modal
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                    className="modal">
-                    <Paper className="modal_con">
-                        <Grid container>
-                            <Grid container item alignItems="center">
-                                <TextField label="목록 이름" required onInput={changeListName} rows={1} rowsMax={10000} className="modal_input_field" value={listName}></TextField>
-                                <input type="file" name="student_list_xlsx" onChange={uploadXlsxFile.bind(this)}/>
-                                <Button className="save_button" onClick={()=>saveModalGroup()}>저장</Button>
-                            </Grid>
-                            <Grid container item alignItems="center" wrap="wrap">
-                                {
-                                    students.map((student, index)=>
-                                        <Grid item xs="3">
-                                            <TextField  label={"학생"+(index+1)} 
-                                                        rows={1} rowsMax={10000} 
-                                                        onInput={(e)=>changeListStudent(e, index)} 
-                                                        className={"modal_students modal_input_field"}
-                                                        id={"modal_student"+index} 
-                                                        value={student}
-                                                        error={typeof(student)==="string"?true:false}
-                                                        helperText="숫자를 입력해주세요."
-                                                        >
-                                            </TextField>
-                                        </Grid>
-                                    )
-                                
-                                }
-                                <Button className="add_button" onClick={addStudent}>학생 추가</Button>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                </Modal>
+                <StudentPopup
+                    open = {open}
+                    handleClose = {handleClose}
+                    type = "set"
+                    students= {students}
+                    listName = {listName}
+                    saveFunc = {saveModalGroup}
+                />
             </Grid>
         </Grid>
     );

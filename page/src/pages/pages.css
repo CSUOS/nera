@@ -191,6 +191,9 @@ a:hover{
     padding: 30px;
     max-width: 70%;
 }
+.modal_students{
+    width: 100%;
+}
 
 .scoring_bottom {
     display: flex;
