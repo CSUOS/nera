@@ -160,7 +160,6 @@ function Main(props) {
                   type={user.type}
                   drawerClose={handleDrawerClose}
                   assignmentInfo={sideAssign}
-                  setSideBarAssignment = {setSideBarAssignment}
                 />
               </Drawer>
             </Grid>
