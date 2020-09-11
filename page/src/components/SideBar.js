@@ -54,19 +54,17 @@ const SideBar = (props) => {
             console.log(as);
             result.push(
                 <Link to={'/home/assignment/'+as[0]}>
-                    <ListItem button>
-                        <ListItemIcon>
-                            {
-                                type===2?
-                                    <FiberManualRecordIcon color="secondary"/>
-                                    :type===1?
-                                        <FiberManualRecordIcon style={{color:green[700]}}/>
-                                        :type===3?
-                                            <FiberManualRecordIcon color="primary"/>
-                                            :<FiberManualRecordIcon/>
-                            }
-                        </ListItemIcon>
-                        <ListItemText primary={as[1]} />
+                    <ListItem button className="side_bar_list_item">
+                        {
+                            type===2?
+                                <FiberManualRecordIcon color="secondary"/>
+                                :type===1?
+                                    <FiberManualRecordIcon style={{color:green[700]}}/>
+                                    :type===3?
+                                        <FiberManualRecordIcon color="primary"/>
+                                        :<FiberManualRecordIcon/>
+                        }
+                        <ListItemText primary={as[1].length>20?as[1].substring(0,20)+"...":as[1]} />
                     </ListItem>
                 </Link>
             );
@@ -80,17 +78,15 @@ const SideBar = (props) => {
             result.push(
             <Link to={'/home/assignment/'+as[0]}>
                 <ListItem button>
-                    <ListItemIcon>
-                        {
-                            type===1?
-                                <FiberManualRecordIcon color="secondary"/>
-                                :type===3?
-                                    <FiberManualRecordIcon color="primary"/>
-                                    :type===2?
-                                    <FiberManualRecordIcon style={{color:green[700]}}/>
-                                        :<FiberManualRecordIcon/>
-                        }
-                    </ListItemIcon>
+                    {
+                        type===1?
+                            <FiberManualRecordIcon color="secondary"/>
+                            :type===3?
+                                <FiberManualRecordIcon color="primary"/>
+                                :type===2?
+                                <FiberManualRecordIcon style={{color:green[700]}}/>
+                                    :<FiberManualRecordIcon/>
+                    }
                     <ListItemText primary={as[1]} />
                 </ListItem>
             </Link>);
