@@ -167,7 +167,6 @@
 .editor_root {
     padding: 0.5rem;
     display: flex;
-    height: 600px;
 }
   
 .editor_input_container {
@@ -180,7 +179,6 @@
   
 .editor_input {
     width: 100% !important;
-    overflow: auto;
 }
   
 .editor_viewer_container {
