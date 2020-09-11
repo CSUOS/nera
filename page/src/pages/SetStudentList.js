@@ -4,6 +4,7 @@ import Modal from '@material-ui/core/Modal';
 import { PageInfo } from '../components';
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import XLSX from 'xlsx';
 import './pages.css';
 
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -18,9 +19,6 @@ function SetStudentList(props){
     const [groupId, setGroupId] = useState(-1);
     const history = useHistory();
     
-    useEffect(()=>{
-        getData();
-    },[]);
     
      // if you click list's x button => deleteGroup();
      // if you click list => selectGroup();
@@ -47,7 +45,7 @@ function SetStudentList(props){
         .then(res => {
             setGroup(res.data);
         })
-        .catch(err=>{
+        .catch((err)=>{
             if(err.response===undefined){
                 alert(`내부 함수 (SetStudentList.js => getData()) 문제입니다. 오류 수정 필요.`);
             }
@@ -62,6 +60,7 @@ function SetStudentList(props){
                 alert(`수강생 정보를 얻는데 실패하였습니다. 권한이 없습니다. (${status})`);
             }
             else if (status === 404) {
+                setGroup([]);
                 return;
             }
             else if (status === 500) {
@@ -177,7 +176,7 @@ function SetStudentList(props){
             else if (status === 500) {
                 alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
             }
-            //history.push("/home");
+            history.push("/home/setList");
         });
         await getData();
         await forceUpdate(!update);
@@ -226,6 +225,34 @@ function SetStudentList(props){
         }
     }
 
+    function uploadXlsxFile(e) {
+        const f = e.target.files[0];
+
+        const reader = new FileReader();
+        reader.onload = (evt) => { // evt = on_file_select event
+            /* Parse data */
+            const bstr = evt.target.result;
+            const wb = XLSX.read(bstr, {type:'binary'});
+            /* Get first worksheet */
+            const wsname = wb.SheetNames[0];
+            const ws = wb.Sheets[wsname];
+            /* Convert array of arrays */
+            const data = XLSX.utils.sheet_to_json(ws);
+            /* Update state */
+            console.log(data);
+            data.forEach(element => {
+                if(isNaN(element['학번'])) {
+                    alert('학번은 숫자만 입력 가능합니다.');
+                    students = [];
+                    handleClose();
+                }
+                students.push(element['학번']);
+                history.push('/home/setList');
+            });
+            
+        };
+        reader.readAsBinaryString(f);
+    }
         // function 
 
     return(
@@ -273,6 +300,7 @@ function SetStudentList(props){
                         <Grid container>
                             <Grid container item alignItems="center">
                                 <TextField label="목록 이름" required onInput={changeListName} rows={1} rowsMax={10000} className="modal_input_field" value={listName}></TextField>
+                                <input type="file" name="student_list_xlsx" onChange={uploadXlsxFile.bind(this)}/>
                                 <Button className="save_button" onClick={()=>saveModalGroup()}>저장</Button>
                             </Grid>
                             <Grid container item alignItems="center" wrap="wrap">
@@ -291,7 +319,7 @@ function SetStudentList(props){
                                             </TextField>
                                         </Grid>
                                     )
-                                    
+                                
                                 }
                                 <Button className="add_button" onClick={addStudent}>학생 추가</Button>
                             </Grid>
