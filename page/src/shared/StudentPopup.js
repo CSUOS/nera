@@ -207,6 +207,7 @@ function StudentPopUp (props){
 
         if (check != 'csv' && check != 'xlsx') {
             alert('.csv, .xlsx 파일만 등록 가능합니다.');
+            return;
         }
         const reader = new FileReader();
         reader.onload = (evt) => { // evt = on_file_select event
@@ -223,7 +224,6 @@ function StudentPopUp (props){
             data.forEach(element => {
                 if(isNaN(element['학번'])) {
                     alert('학번은 숫자만 입력 가능합니다.');
-                    students = [];
                 }
                 students.push(element['학번']);
                 history.push('/home/setList');
