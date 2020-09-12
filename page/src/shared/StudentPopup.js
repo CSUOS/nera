@@ -3,6 +3,7 @@ import Modal from '@material-ui/core/Modal';
 import { Grid, Paper, TextField, Button} from '@material-ui/core';
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import XLSX from 'xlsx';
 import PropTypes from 'prop-types';
 import ClearIcon from '@material-ui/icons/Clear';
 
@@ -201,7 +202,37 @@ function StudentPopUp (props){
 
         props.saveFunc(students, listName);
     }
+    function uploadXlsxFile(e) {
+        const f = e.target.files[0];
+        const check = f.name.slice(f.name.indexOf(".") + 1).toLowerCase();
 
+        if (check != 'csv' && check != 'xlsx') {
+            alert('.csv, .xlsx 파일만 등록 가능합니다.');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = (evt) => { // evt = on_file_select event
+            /* Parse data */
+            const bstr = evt.target.result;
+            const wb = XLSX.read(bstr, {type:'binary'});
+            /* Get first worksheet */
+            const wsname = wb.SheetNames[0];
+            const ws = wb.Sheets[wsname];
+            /* Convert array of arrays */
+            const data = XLSX.utils.sheet_to_json(ws);
+            /* Update state */
+            console.log(data);
+            data.forEach(element => {
+                if(isNaN(element['학번'])) {
+                    alert('학번은 숫자만 입력 가능합니다.');
+                }
+                students.push(element['학번']);
+                history.push('/home/setList');
+            });
+            
+        };
+        reader.readAsBinaryString(f);
+    }
     // type마다 달라지는 contents
     
     const headerContent = ()=>{
@@ -210,6 +241,7 @@ function StudentPopUp (props){
             return(
                 <Grid container item alignItems="center">
                     <TextField label="목록 이름" required onInput={(e)=>setListName(e.target.value)} rows={1} className="modal_input_field" value={listName}></TextField>
+                    <input type="file" name="student_list_xlsx" onChange={uploadXlsxFile.bind(this)}/>
                     <Button className="save_button" onClick={saveStudentList}>저장</Button>
                 </Grid>
             );
