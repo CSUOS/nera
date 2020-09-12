@@ -6,9 +6,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { Grid } from '@material-ui/core';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-
-// jwt 추가
-const jwt = require('jsonwebtoken');
+import { getUserInfo } from "../shared/GetUserInfo";
 
 const Home = (props)=>{
     const [PAssignment, setPA] = useState(undefined); // progress
@@ -21,28 +19,6 @@ const Home = (props)=>{
         return value ? value[2] : null;
     };
 
-    function getUserInfo() {
-        try {
-            const access_token = getCookie('access_token');
-            const token = jwt.decode(access_token);
-
-            // 사용자의 major (ex. 920 => 컴과, MajorDictionary.js에 정의되어 있음)
-            // type이 1일 때만 setting
-            // type이 0이면(교수면) default로 ""
-            token.type = String(token.userNumber)[0] === '1' ? 0 : 1;
-            const majorNumber = String(token.userNumber).substring(4, 7);
-            if (token.type === 0)
-                token.major = "";
-            else if (token.type === 1)
-                token.major = getMajorStr(majorNumber);
-
-            return token;
-        } catch (err) {
-            alert(`사용자 정보를 가져오는 중 오류가 발생하였습니다. (${err})`);
-            history.push("/");
-        }
-    }
-
     function getSubTitle() {
         if (user.type === 0)
             return `교수 / ${user.userNumber}`;
@@ -51,7 +27,11 @@ const Home = (props)=>{
     }
 
     useEffect(() => {
-        setUser(getUserInfo());
+        try {
+            setUser(getUserInfo());
+        } catch (err) {
+            history.push("/");
+        }
 
         axios.get('/v1/assignment', { withCredentials: true })
             .then(res => {
@@ -85,8 +65,11 @@ const Home = (props)=>{
                 if (status === undefined) {
                     alert("예기치 못한 예외가 발생하였습니다.\n"+JSON.stringify(err));
                 }
-                else if (status === 400 || status === 401) {
+                else if (status === 400) {
                     alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
+                }
+                else if (status === 401) {
+                    history.push("/");
                 }
                 else if (status === 404) {
                     alert("과제를 찾을 수 없습니다.");

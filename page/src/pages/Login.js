@@ -1,19 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import { Grid, TextField, Button, Typography } from '@material-ui/core';
+import { Grid, TextField, Button, Typography, Paper, Link, Checkbox, FormControlLabel, Divider } from '@material-ui/core';
 import crypto from 'crypto';
 import { useHistory } from "react-router-dom";
+import { withCookies, Cookies } from 'react-cookie';
+import { getUserInfo } from "../shared/GetUserInfo";
 
-function Login(){
+function Login(props){
     // id, password
+    const [cookies, setCookies] = useState(props.cookies);
     const [id,setId]= useState("");
     const [pw,setPw]= useState("");
+    const [buttonText, setButtonText] = useState("Login");
+    const [checked, setChecked] = useState(false);
     const history = useHistory();
+
+    function isAlreadyLoggedIn() {
+        try {
+            getUserInfo();
+        } catch (err) {
+            return false;
+        }
+        return true;
+    }
+
+    useEffect(() => {
+        if (isAlreadyLoggedIn())
+            history.replace('/home');
+
+        if (cookies) {
+            let savedId = cookies.get("savedId");
+            if (savedId) {
+                setId(String(savedId));
+                setChecked(true);
+            }
+        } else {
+            setCookies(props.cookies);
+        }
+    }, [props.cookies]);
 
     function hashData(data) {
         return crypto.createHash("sha256")
             .update(Buffer.from(data, "utf8").toString('base64'))
             .digest("hex");
+    }
+
+    function redirectToHome() {
+        if (checked)
+            cookies.set("savedId", id, { path: '/' });
+        else
+            cookies.remove("savedId", { path: '/' });
+
+        
+        history.replace("/home");
     }
 
     async function hashProcess(){
@@ -37,13 +76,14 @@ function Login(){
     }
 
     async function setLoginData(e) { // pw 암호화 및 api data 받기
+        setButtonText("로그인 중...");
         let hashed_pw = await hashProcess();
         await axios.post('/v1/login', { // get api data
             userId: id,
             userPw: hashed_pw,
         }, { withCredentials: true })
             .then(() => {
-                window.location.href = "/home";
+                redirectToHome();
             })
             .catch((err) => {
                 const status = err?.response?.status;
@@ -60,24 +100,21 @@ function Login(){
                 } else if (status == 500) {
                     alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
                 }
+
+                setButtonText("Login");
             });
     }
 
-    function changeId(){
-        const id = document.querySelector('#userId');
-        setId(id.value);
+    function changeId(event){
+        setId(event.target.value);
     }
 
-    function changePw(){
-        const password = document.querySelector('#userPw');
-        setPw(password.value);
-    }
-    async function cookieTest(e){
-        let cookie = await axios.get('/v1/cookieTest/', { withCredentials: true });
-        console.log(cookie);
+    function changePw(event){
+        setPw(event.target.value);
     }
 
     async function loginAsTestProfessorCookie(e) {
+        setButtonText("로그인 중...");
 
         let hashed_token = await axios.get(
                             '/v1/token', { withCredentials: true }
@@ -98,13 +135,14 @@ function Login(){
             alert("아이디, 패스워드가 정확히 기입되었는지 다시 한 번 확인해주세요.");
         }else if(status==500 || rabumsStatus == "500"){
             alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
-        }
-        if (status == 200 && rabumsStatus == undefined) {
-           window.location.href = "/home";
-           console.log(response);
+        } else if (status == 200 && rabumsStatus == undefined) {
+            redirectToHome();
+        } else {
+            setButtonText("Login");
         }
     }
     async function loginAsTestStudentCookie(e) {
+        setButtonText("로그인 중...");
 
         let hashed_token = await axios.get(
                             '/v1/token', { withCredentials: true }
@@ -128,26 +166,63 @@ function Login(){
             alert("아이디, 패스워드가 정확히 기입되었는지 다시 한 번 확인해주세요.");
         }else if(status==500 || rabumsStatus == "500"){
             alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
-        }
-        console.log(response.data);
-        if (status == 200 && rabumsStatus == undefined) {
-           window.location.href = "/home";
-           console.log(response);
+        }else if (status == 200 && rabumsStatus == undefined) {
+            redirectToHome();
+        }else {
+            setButtonText("Login");
         }
     }
+
+    function handleCheckboxChange(event) {
+        setChecked(event.target.checked);
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            setLoginData(undefined);
+            event.preventDefault();
+        }
+    }
+
     /* rendering */
 
     return (
-        <Grid className="Login">
-            <Grid container alignItems="center" justifycontents="center" className="login_container" direction="column">
-                <Typography variant="h5">로그인</Typography>
-                <TextField variant="outlined" id="userId" label="id" required rows={1} rowsMax={10} onChange={changeId}></TextField>
-                <TextField variant="outlined" id="userPw" label="password" type="password" required rows={1} rowsMax={10} onChange={changePw}></TextField>
-                <Button onClick={setLoginData}>login</Button>
-                <Button onClick={loginAsTestProfessorCookie}>교수 계정 체험</Button>
-                <Button onClick={loginAsTestStudentCookie}>학생 계정 체험</Button>
-            </Grid>
-        </Grid>
+        <div className="Login">
+            <Paper elevation={3} className="login_paper">
+                <Grid container alignItems="center" justifycontents="center" className="login_container" direction="column">
+                    <img className="login_logo" src="./img/logo1_1.png"></img>
+                    <Typography className="login_subtitle" variant="caption">서울시립대학교 컴퓨터과학부 과제 제출 플랫폼</Typography>
+
+                    <div className="login_sign">
+                        <Link href="https://rabums.csuos.ml/">RABUMS</Link>
+                        <Typography variant="subtitle1">계정으로 로그인하세요.</Typography>
+                    </div>
+                    <TextField variant="outlined" id="userId" label="RABUMS ID" required rows={1} rowsMax={10} onChange={changeId} onKeyPress={handleKeyPress} value={id}></TextField>
+                    <TextField variant="outlined" id="userPw" label="RABUMS PW" type="password" required rows={1} rowsMax={10} onChange={changePw} onKeyPress={handleKeyPress} value={pw}></TextField>
+                    <FormControlLabel control={
+                            <Checkbox checked={checked} onChange={handleCheckboxChange} color="secondary"></Checkbox>
+                        }
+                        label="아이디 저장"
+                    />
+
+                    <div className="regiter_sign">
+                        <Link href="https://rabums.csuos.ml/register">RABUMS 계정이 없으신가요?</Link>
+                    </div>
+                    <Button className="login_button" size="large" variant="outlined" onClick={setLoginData}>{buttonText}</Button>
+
+                    <div className="login_divider">
+                        <Divider orientation="horizontal" variant="middle"></Divider>
+                    </div>
+
+                    <Typography variant="subtitle2">회원가입하지 않고 체험용 계정으로 로그인할 수 있습니다!</Typography>
+                    
+                    <Grid orientation="row">
+                        <Button className="login_test" variant="outlined" onClick={loginAsTestProfessorCookie}>교수 계정 체험</Button>
+                        <Button className="login_test" variant="outlined" onClick={loginAsTestStudentCookie}>학생 계정 체험</Button>
+                    </Grid>
+                </Grid>
+            </Paper>
+        </div>
     );
 }
-export default Login
+export default withCookies(Login);

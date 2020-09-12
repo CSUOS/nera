@@ -67,8 +67,11 @@ function Setting(){
                 alert(`내부 함수 (SetAssignment.js => saveAssignmentList()) 문제입니다. 오류 수정 필요.`);
             }
             const status = err.response.status;
-            if (status === 400 || status === 401) {
+            if (status === 400) {
             alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
+            }
+            else if (status === 401) {
+                history.push("/");
             }
             else if (status === 404) {
                 return;

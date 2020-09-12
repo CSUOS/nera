@@ -24,7 +24,6 @@ function getUserInfo(){
 
         return token;
     }catch(err){
-        alert(`사용자 정보를 가져오는 중 오류가 발생하였습니다. (${err})`);
         throw err;
     }
 }
