@@ -13,25 +13,42 @@
 }
 
 /* side_bar */
-
-.sideBar_header{
+/**/
+.side_bar_header{
     justify-content: space-between !important;
-    padding: 0px 8px 15px;
-}
-.NERA{
-    padding-left: 10px;
-}
-.NERA h1{
-    margin: 0!important;
+    margin-bottom: 10px;
 }
 .side_bar{
-    background-color: rgb(201, 201, 201);
-    height:100%;
+    background-color: #fff1ed;
     padding: 30px;
 }
+.side_bar_logo{
+    width: 85%;
+}
+.side_bar_close{
+    width: 15%;
+}
+#subheader{
+    padding: 0px 0px 0px 20px;
+    background-color: #374B73;
+    color: white;
+}
+.NERA img{
+    width: 95%;
+}
+.side_bar_list_item svg{
+    margin-right: 5px;
+}
+.drawer_height{
+    height: 100%; /*전체 페이지 height 맞추는 요소 - 절대 삭제 x*/
+}
+.drawer_con>div::-webkit-scrollbar { width: 0 !important } /* 사이드바 스크롤 삭제 */
 
 /* Header */
-
+/**/
+header>div{
+    background-color: #fff1ed;
+}
 .header{
     display: flex;
     justify-content: space-between;
@@ -41,7 +58,6 @@
 }
 .header_menu{
     display: flex;
-    margin-right: 15px;
     align-items: center;
 }
 .header_menu>*{

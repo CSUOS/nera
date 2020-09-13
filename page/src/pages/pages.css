@@ -3,14 +3,8 @@
 #app>div{
     display: flex;
 }
-.side_bar{
-    flex:2;
-}
 .right_side{
     flex:10;
-}
-html, body, #root, #app, #app>div{
-    height: 100%;
 }
 a:hover{
     color:rgb(60, 60, 60);
@@ -55,13 +49,18 @@ a:hover{
     width: 100%;
 }
 .modal{
-    position: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+.modal_con {
+    left: 50%;
+    transform: translate(-50%, 0);
 }
 .modal_con:focus{
     outline:none;
+}
+.modal::-webkit-scrollbar {
+    display: none;
 }
 
 .score_field {
@@ -334,11 +333,4 @@ a:hover{
 .box_name{
     width: 100%;
     padding: 20px 15px;
-}
-.student_box{
-    width: 25%!important;
-    margin-bottom: 20px!important;
-}
-.student_box_con{
-    align-items: center;
 }
