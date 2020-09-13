@@ -27,8 +27,10 @@ const Home = (props)=>{
     }
 
     useEffect(() => {
+        let currUser = undefined;
         try {
-            setUser(getUserInfo());
+            currUser = getUserInfo();
+            setUser(currUser);
         } catch (err) {
             history.push("/");
         }
@@ -37,7 +39,6 @@ const Home = (props)=>{
             .then(res => {
                 let assign = res.data;
                 let pAssign = [], fAssign = [];
-                console.log(assign);
 
                 for (let i = 0; i < assign.length; i++) {
                     switch (assign[i].assignmentState) {
@@ -51,7 +52,7 @@ const Home = (props)=>{
                             break;
 
                         case 3:
-                            if (user.type === 1)
+                            if (currUser.type === 1)
                                 fAssign.push(assign[i]);
                             break;
                     }
@@ -63,7 +64,7 @@ const Home = (props)=>{
             .catch(err => {
                 const status = err?.response?.status;
                 if (status === undefined) {
-                    alert("예기치 못한 예외가 발생하였습니다.\n"+JSON.stringify(err));
+                    alert("과제 정보를 얻는 중 예기치 못한 예외가 발생하였습니다. (Home.js)\n"+JSON.stringify(err));
                 }
                 else if (status === 400) {
                     alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
