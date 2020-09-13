@@ -19,6 +19,9 @@ function SetStudentList(props){
     const [groupId, setGroupId] = useState(-1);
     const history = useHistory();
     
+    useEffect(()=>{
+        getData();
+    },[]);
     
      // if you click list's x button => deleteGroup();
      // if you click list => selectGroup();
