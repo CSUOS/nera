@@ -126,6 +126,7 @@ const Home = (props)=>{
                     icon={AccountCircleIcon}
                     mainTitle={user.userName}
                     subTitle={getSubTitle()}
+                    information="좌측 사이드바 또는 아래 목록에서 확인하려는 과제를 선택하세요."
                 />
                 <Grid container direction="column" className="contents_con">
                     <Grid className="contents_title"><h6>{user.type === 0 ? "마감 전 과제" : "제출 가능한 과제" // 제목 수정 필요
