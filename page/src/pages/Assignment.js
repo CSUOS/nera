@@ -352,7 +352,7 @@ const Assignment = (props) => {
                 <Snackbar
                     open={openSnack}
                     onClose={handleSnackClose}
-                    autoHideDuration={100000}>
+                    autoHideDuration={1000}>
                     <Alert onClose={handleSnackClose} severity="info">수동 저장되었습니다. (1초마다 자동 저장됩니다.)</Alert>
                 </Snackbar>
             </Grid>
