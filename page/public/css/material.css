@@ -9,9 +9,6 @@
 .MuiTypography-root:target, .MuiTreeItem-root.Mui-selected > .MuiTreeItem-content .MuiTreeItem-label{
     background-color: rgb(180, 180, 180) !important;
 }
-.MuiDrawer-paper{
-    background-color: rgb(230,230,230) !important;
-}
 .margin-top-64{
     margin-top:64px!important;
 }

@@ -1,8 +1,3 @@
----
-typora-root-url: img
-typora-copy-images-to: img
----
-
 # NERA 색상
 
 ```
@@ -12,4 +7,4 @@ typora-copy-images-to: img
 회색 : #D6CAC7
 ```
 
-![로고](/로고.PNG)
+![로고](/img/로고.PNG)

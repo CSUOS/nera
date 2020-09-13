@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "global": "^4.4.0",
+    "xlsx": "^0.16.7"
+  }
+}

@@ -19,7 +19,6 @@
     margin-bottom: 10px;
 }
 .side_bar{
-    background-color: #fff1ed;
     padding: 30px;
 }
 .side_bar_logo{
@@ -43,7 +42,10 @@
     height: 100%; /*전체 페이지 height 맞추는 요소 - 절대 삭제 x*/
 }
 .drawer_con>div::-webkit-scrollbar { width: 0 !important } /* 사이드바 스크롤 삭제 */
-
+.drawer_con>div{
+    background-color: #fff1ed;
+    
+}
 /* Header */
 /**/
 header>div{

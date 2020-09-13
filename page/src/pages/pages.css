@@ -1,5 +1,8 @@
 /* pages 공통 요소 css */
 
+html, body, #root, #app{
+    height:100%;
+}
 #app>div{
     display: flex;
 }
