@@ -41,7 +41,8 @@ const Scoring = (props) => {
                 else if (status === 500) {
                     alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
                 }
-                history.push("/home");
+                console.log(err);
+                //history.push("/home");
             });
     }
 
@@ -58,7 +59,8 @@ const Scoring = (props) => {
                     const status = err?.response?.status;
                     if (status === undefined) {
                         alert("답안 정보를 얻는 중 예기치 못한 예외가 발생하였습니다. (Scoring.js)\n" + JSON.stringify(err));
-                        history.push('/home');
+                        console.log(err);
+                        //history.push('/home');
                     }
                     else if (status === 404) {
                         // 단순히 입력한 답안이 없는 경우이므로 오류는 아님.

@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {PageInfo, AssignmentBox, Loading} from "../components";
-import { getMajorStr } from '../shared/MajorDictionary';
+import {useAssignmentState} from '../shared/AssignmentState';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { Grid } from '@material-ui/core';
@@ -13,6 +13,8 @@ const Home = (props)=>{
     const [FAssignment, setFA] = useState(undefined); // finish
     const [user, setUser] = useState(undefined);
     const history = useHistory();
+
+    const asState = useAssignmentState();
 
     function getCookie(name) {
         let value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
@@ -42,16 +44,16 @@ const Home = (props)=>{
 
                 for (let i = 0; i < assign.length; i++) {
                     switch (assign[i].assignmentState) {
-                        case 0:
-                        case 1:
+                        case asState["notReleased"]:
+                        case asState["released"]:
                             pAssign.push(assign[i]);
                             break;
 
-                        case 2:
+                        case asState["scoring"]:
                             fAssign.push(assign[i]);
                             break;
 
-                        case 3:
+                        case asState["done"]:
                             fAssign.push(assign[i]);
                             break;
                     }
@@ -81,39 +83,6 @@ const Home = (props)=>{
                 setFA([]);
             })
     }, []);
-
-        /*
-        const result = asInfo.map((as)=>{
-            if(type===0){ // 교수 => 0, 1이 마감 전 0 => 발행전, 1 => 진행 중
-                switch(as[3]){
-                    case 0:
-                        PAssignment.push(as);
-                        break;
-                    case 1:
-                        PAssignment.push(as);
-                        break;
-                    case 2:
-                        FAssignment.push(as);
-                        break;
-                }
-            }else if(type===1){ // 학생 => 0, 1이 마감 전
-                switch(as[3]){
-                    case 0:
-                        PAssignment.push(as);
-                        break;
-                    case 1:
-                        PAssignment.push(as);
-                        break;
-                    case 2:
-                        FAssignment.push(as);
-                        break;
-                    case 3:
-                        FAssignment.push(as);
-                        break;
-                }
-            }
-        });
-        setPA(asInfo);*/
 
     // state가 아직 로드되지 않았다면 렌더링 안 함.
     if (PAssignment === undefined || FAssignment === undefined)
