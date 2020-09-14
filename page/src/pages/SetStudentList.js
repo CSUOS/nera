@@ -101,7 +101,7 @@ function SetStudentList(props){
             else if (status === 500) {
                 alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
             }
-            //history.push("/home/setList");
+            history.push("/home/setList");
         });
 
         await handleClose();
@@ -178,7 +178,7 @@ function SetStudentList(props){
                     handleClose();
                 }
                 students.push(element['학번']);
-                history.push('/home/setList');
+                //history.push('/home/setList');
             });
             
         };
