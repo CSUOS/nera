@@ -39,6 +39,9 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
   if (assignment === null) { ctx.throw(404, '해당 과제 없음'); }
   // 과제가 없는 경우
 
+  if (assignment.deadline - Date.now() < 0) { ctx.throw(403, '권한 없음'); }
+  // 마감 기한이 지난 경우
+
   const prevAnswer = await AnswerPaperModel
     .findOne({ assignmentId: ctx.params.assignmentId, userNumber: ctx.user.userNumber }).exec();
     // 이전에 작성한 답안이 있는지 탐색
@@ -73,7 +76,7 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
     prevAnswer.answers = body.answers;
     // 현재의 답으로 답안 변경
 
-    prevAnswer.meta.modifiedAt = getCurrentDate();
+    prevAnswer.meta.modifiedAt = Date.now();
     // 수정 날짜 변경
 
     await prevAnswer.save();

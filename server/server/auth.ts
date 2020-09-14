@@ -17,27 +17,25 @@ exports.jwtMiddleware = async (ctx: Koa.Context, next: Function) => {
   let decoded: typeof jwt;
   try {
     decoded = jwt.verify(token, secretKey);
-    if (decoded.exp - Date.now() / 1000 > 0) {
-      // 유효한 토큰이라면
+    // 유효한 토큰이라면
 
-      // 토큰을 디코드
+    // 토큰을 디코드
 
-      const user : typeof jwtInfo = {
-        userId: decoded.userId,
-        userName: decoded.userName,
-        userNumber: decoded.userNumber,
-      };
+    const user : typeof jwtInfo = {
+      userId: decoded.userId,
+      userName: decoded.userName,
+      userNumber: decoded.userNumber,
+    };
       // 디코딩한 정보
-      ctx.user = user;
-      ctx.role = String(user.userNumber).charAt(0);
-      const freshToken = jwt.sign(user, secretKey, { expiresIn: '1h' });
-      // 새 토큰
+    ctx.user = user;
+    ctx.role = String(user.userNumber).charAt(0);
+    const freshToken = jwt.sign(user, secretKey, { expiresIn: '1h' });
+    // 새 토큰
 
-      ctx.cookies.set('access_token', freshToken, { httpOnly: false });
-      // api 요청시마다 쿠키 새로 발급
-      ctx.user = decoded; // 유저 정보 update
-      ctx.role = String(ctx.user.userNumber).charAt(0); // 권한 update
-    }
+    ctx.cookies.set('access_token', freshToken, { httpOnly: false });
+    // api 요청시마다 쿠키 새로 발급
+    ctx.user = decoded; // 유저 정보 update
+    ctx.role = String(ctx.user.userNumber).charAt(0); // 권한 update
   } catch (error) {
     console.log(error);
     ctx.user = { // 에러일 경우 초기화
