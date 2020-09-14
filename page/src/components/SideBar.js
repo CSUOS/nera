@@ -97,7 +97,7 @@ const SideBar = (props) => {
     return (
         <Grid className="side_bar">
             <Grid className={clsx(classes.drawerHeader,"side_bar_header")}>
-                <Link className="side_bar_logo" to="/home"><Grid className="NERA"><img src="./img/logo1.png"/></Grid></Link>
+                <Link className="side_bar_logo" to="/home"><Grid className="NERA"><img src="../img/logo1.png"/></Grid></Link>
                 <Button className="side_bar_close" onClick={drawerClose}><ArrowBackIcon/></Button>
             </Grid>
             <Divider />
