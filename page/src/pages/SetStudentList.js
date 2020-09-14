@@ -181,7 +181,6 @@ function SetStudentList(props){
                     handleClose();
                 }
                 students.push(element['학번']);
-                console.log(err);
                 //history.push('/home/setList');
             });
             
