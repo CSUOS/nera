@@ -29,7 +29,7 @@ exports.jwtMiddleware = async (ctx: Koa.Context, next: Function) => {
       // 디코딩한 정보
     ctx.user = user;
     ctx.role = String(user.userNumber).charAt(0);
-    const freshToken = jwt.sign(user, secretKey, { expiresIn: '1m' });
+    const freshToken = jwt.sign(user, secretKey, { expiresIn: '1h' });
     // 새 토큰
 
     ctx.cookies.set('access_token', freshToken, { httpOnly: false });
