@@ -9,11 +9,18 @@ const UserAnswer = (props) => {
     const [score, setScore] = React.useState(undefined);
     const [scoreItems, setScoreItems] = React.useState(undefined);
 
+    function isFinished() {
+        if (!props.assignmentState)
+            return false;
+
+        return props.assignmentState != 0 && props.assignmentState != 1;
+    }
+
     useEffect(() => {
         setScore(props.score);
         let items = [<MenuItem value={-1}>{"채점 안 됨"}</MenuItem>];
 
-        if (props.answerContent !== undefined) {
+        if (props.answerContent !== undefined && isFinished()) {
             for (let s = 0; s <= props.fullScore; ++s) {
                 items.push(<MenuItem value={s}>{`${s}점`}</MenuItem>);
             }
@@ -30,6 +37,9 @@ const UserAnswer = (props) => {
     }
 
     function handleChange(event) {
+        if (!isFinished())
+            return;
+
         setScore(event.target.value);
         if (props.onChange)
             props.onChange(props.questionId, props.userNumber, event.target.value);
@@ -39,17 +49,31 @@ const UserAnswer = (props) => {
         return <div></div>;
     else
         return (
-            <Paper className="answer_content">
+            <Paper className="answer_content" elevation={4}>
                 <Grid direction="column">
                     <Typography gutterBottom variant="subtitle1">{`${props.userNumber}의 ${props.questionNumber}번 문제 답안`}</Typography>
                     <Divider orientation="horizontal"></Divider>
                     <MarkdownViewer source={props.answerContent ? props.answerContent : "*제출한 답안 없음*"}></MarkdownViewer>
                     <Divider orientation="horizontal"></Divider>
                     <Grid container direction="row" justify="center" alignItems="center" className="score_control">
-                        <Typography className="answer_score">점수</Typography>
-                        <Select className="answer_select" value={score} open={open} onClose={handleClose} onOpen={handleOpen} onChange={handleChange}>
-                            {scoreItems}
-                        </Select>
+                        {isFinished() ?
+                            <React.Fragment>
+                                <Typography className="answer_score">점수</Typography>
+                                <Select
+                                    className="answer_select"
+                                    value={score}
+                                    open={open}
+                                    onClose={handleClose}
+                                    onOpen={handleOpen}
+                                    onChange={handleChange}
+                                >
+                                    {scoreItems}
+                                </Select>
+                            </React.Fragment>
+                            :
+                            <React.Fragment>
+                                <Typography className="answer_score">과제가 아직 마감되지 않았으므로 채점할 수 없습니다.</Typography>
+                            </React.Fragment>}
                     </Grid>
                 </Grid>
             </Paper>
