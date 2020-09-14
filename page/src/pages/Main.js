@@ -83,7 +83,8 @@ function Main(props) {
     try{
       setUser(getUserInfo());
     }catch(err){
-      history.push("/");
+      console.log(err);
+      //history.push("/");
     }
     setSideBarAssignment();
   }, []);
@@ -122,7 +123,8 @@ function Main(props) {
         else if (status === 500) {
           alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
         }
-        history.push("/");
+        console.log(err);
+        //history.push("/");
       })
   }
 

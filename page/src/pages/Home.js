@@ -32,14 +32,14 @@ const Home = (props)=>{
         try {
             setUser(getUserInfo());
         } catch (err) {
-            history.push("/");
+            console.log(err);
+            //history.push("/");
         }
 
         axios.get('/v1/assignment', { withCredentials: true })
             .then(res => {
                 let assign = res.data;
                 let pAssign = [], fAssign = [];
-                console.log(assign);
 
                 for (let i = 0; i < assign.length; i++) {
                     switch (assign[i].assignmentState) {
@@ -78,7 +78,8 @@ const Home = (props)=>{
                 else if (status === 500) {
                     alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
                 }
-                history.push("/");
+                console.log(err);
+                //history.push("/");
             })
     }, []);
 
