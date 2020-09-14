@@ -52,8 +52,7 @@ const Home = (props)=>{
                             break;
 
                         case 3:
-                            if (currUser.type === 1)
-                                fAssign.push(assign[i]);
+                            fAssign.push(assign[i]);
                             break;
                     }
                 }
