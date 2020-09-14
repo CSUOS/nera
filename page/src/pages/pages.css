@@ -30,14 +30,6 @@ a:hover{
 .contents_box{
     margin-right: 10px!important;
 }
-.save_container{
-    align-self: right;
-    width: max-content;
-}
-.save_component{
-    margin-right: 20px;
-    align-self: center;
-}
 .assignment_info_container {
     display: block;
 }
@@ -48,6 +40,11 @@ a:hover{
     display: flex;
     flex-wrap: wrap;
 }
+
+.assignment_md_info {
+    padding: 30px 10px 30px 10px;
+}
+
 .table_root {
     width: 100%;
 }
@@ -336,4 +333,20 @@ a:hover{
 .box_name{
     width: 100%;
     padding: 20px 15px;
+}
+
+.assignment_md_info>a:link {
+    color: red;
+}
+
+.assignment_md_info>a:visited {
+    color: green;
+}
+  
+.assignment_md_info>a:hover {
+    color: hotpink;
+}
+  
+.assignment_md_info>a:active {
+    color: blue;
 }

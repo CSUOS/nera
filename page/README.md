@@ -47,6 +47,7 @@ yarn start (또는 npm start)
     - PageInfo.js
     - Problem.js
     - QuestionSelector.js
+    - SaveSnackbar.js
     - ScoreStats.js
     - SideBar.js
     - StudentSelector.js
@@ -161,6 +162,10 @@ api 연동 및 웹페이지 렌더링 시 대기 상태를 표시하기 위한 �
 #### QuestionSelector.js
 
 Scoring.js에서 사용되는 컴포넌트로 특정 과제의 문제 목록을 표 형식으로 보여주고, 여러 행을 사용자가 선택할 수 있다.
+
+#### SaveSnackbar.js
+
+Assignment.js 페이지에서 사용되는 컴포넌트로, 페이지의 우측 하단에 저장 버튼과 저장한 시간 등을 표시한다.
 
 #### ScoreStats.js
 
