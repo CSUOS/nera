@@ -159,6 +159,9 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         marginBottom: theme.spacing(2),
     },
+    table: {
+        minWidth: "500px",
+    },
     visuallyHidden: {
         border: 0,
         clip: 'rect(0 0 0 0)',
@@ -263,15 +266,16 @@ function QuestionSelector(props) {
         return <Typography variant="h6" align="center">문제 정보를 가져올 수 없었습니다.</Typography>;
     else if (rows === undefined)
         return (
-            <Paper className={classes.paper}>
+            <Paper className={classes.paper} elevation={3}>
                 <Loading status="문제 정보를 가져오는 중..."></Loading>
             </Paper>);
     else
         return (
-            <Paper className={classes.paper}>
+            <Paper className={classes.paper} elevation={3}>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
                     <Table
+                        className={classes.table}
                         aria-labelledby="tableTitle"
                         size="small"
                         aria-label="question table"

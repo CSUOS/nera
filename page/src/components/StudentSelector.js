@@ -167,6 +167,9 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         marginBottom: theme.spacing(2),
     },
+    table: {
+        minWidth: "500px",
+    },
     visuallyHidden: {
         border: 0,
         clip: 'rect(0 0 0 0)',
@@ -298,10 +301,11 @@ function QuestionSelector(props) {
         return <Typography variant="h6" align="center">채점할 문제들을 먼저 선택해주세요!</Typography>;
     else
         return (
-            <Paper className={classes.paper}>
+            <Paper className={classes.paper} elevation={3}>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
                     <Table
+                        className={classes.table}
                         aria-labelledby="tableTitle"
                         size="small"
                         aria-label="students table"

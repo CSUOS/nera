@@ -2,6 +2,7 @@ import React, { Component, useEffect, useState } from 'react';
 import { PageInfo, Loading, ScoreStats, QuestionSelector, StudentSelector, MarkdownViewer, UserAnswer } from "../components";
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { Box, Grid, Paper, Divider, Typography } from '@material-ui/core';
+import InfoIcon from '@material-ui/icons/Info';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { rejects } from 'assert';
@@ -150,8 +151,6 @@ const Scoring = (props) => {
     }
 
     function handleScoreChange(quesId, userNum, score) {
-        console.log(`${quesId}의 점수를 ${score}로 바꿉니다.`);
-
         let reqBody = {answers: []};
         for (let ans of answersDict[userNum].answers) {
             if (ans.questionId === quesId) {
@@ -219,6 +218,7 @@ const Scoring = (props) => {
                             if (answer)
                                 ansComs.push(
                                     <UserAnswer
+                                        assignmentState={assign.assignmentState}
                                         score={answer.score}
                                         fullScore={q.fullScore}
                                         answerContent={answer.answerContent}
@@ -231,6 +231,7 @@ const Scoring = (props) => {
                             else
                                 ansComs.push(
                                     <UserAnswer
+                                        assignmentState={assign.assignmentState}
                                         score={-1}
                                         fullScore={q.fullScore}
                                         answerContent={undefined}
@@ -269,14 +270,29 @@ const Scoring = (props) => {
                 <PageInfo className="assignment_info"
                     icon={AssignmentIcon}
                     mainTitle={assign.assignmentName}
-                    subTitle={getSubTitle()} />
+                    subTitle={getSubTitle()} 
+                    information="학생들의 답안 제출 현황을 확인하고 과제가 마감되었다면 학생들의 답안들을 채점할 수 있습니다."/>
 
                 <Grid container direction="column" className="contents_con">
                     <Grid className="contents_title"><h6>점수 통계</h6></Grid>
-                    <ScoreStats className="score_stats" assign={assign} answersDict={answersDict}></ScoreStats>
+
+                    <Grid container item direction="row" spacing={4} className="page_additional_info" alignItems="center">
+                        <InfoIcon color="primary" />
+                        '채점 완료 여부'는 그 학생이 제출한 답안들을 모두 채점하였느냐를 의미합니다.
+                    </Grid>
+
+                    <Grid item xs>
+                        <ScoreStats className="score_stats" assign={assign} answersDict={answersDict}></ScoreStats>
+                    </Grid>
                 </Grid>
                 <Grid container direction="column" className="contents_con">
-                    <Grid className="contents_title"><h6>답안 채점하기</h6></Grid>
+                    <Grid className="contents_title"><h6>답안 확인 및 채점</h6></Grid>
+
+                    <Grid container item direction="row" spacing={4} className="page_additional_info" alignItems="center">
+                        <InfoIcon color="primary" />
+                        아래 두 표에서 확인하려는 문제의 목록과, 확인하려는 학생의 목록을 각각 선택하면 이에 해당하는 모든 답안이 쿼리되어 아래에 나열됩니다. 그리고 각각에 대한 점수를 부여할 수 있으며 변경사항은 자동 저장됩니다.
+                    </Grid>
+
                     <Grid container spacing={3} direction="row" wrap="wrap" alignItems="center">
                         <Grid item xs>
                             <QuestionSelector assign={assign} onChange={handleQuestionSelectorChanged}></QuestionSelector>

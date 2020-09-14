@@ -249,7 +249,19 @@ function SetAssignment(props){
                     <Grid><TextField onChange={(e)=>changeAssignNameField(e)} helperText="과제명을 기재해주세요. 강의명과 함께 발행날짜 이전에 학생들에게 보여집니다*" InputLabelProps={{shrink:true}} label="과제명" required multiline rowsMax={2} value={assignName}></TextField></Grid>
                 </Grid>
                 <Grid className="setting_as_row" container item direction="row">
-                    <Grid xs={12}><TextField variant="outlined" onChange={(e)=>changeAssignInfoField(e)} helperText="자세한 과제 내용과 주의사항을 기재해주세요. 문제는 아래의 문제란에 기재해주세요." InputLabelProps={{shrink:true}} label="과제 설명" required multiline rowsMax={10000} value={assignInfo}></TextField></Grid>
+                    <Grid xs={12}>
+                        <TextField 
+                            variant="outlined" 
+                            onChange={(e)=>changeAssignInfoField(e)} 
+                            helperText="자세한 과제 내용과 주의사항을 기재해주세요. 문제는 아래의 문제란에 기재해주세요." 
+                            InputLabelProps={{shrink:true}} 
+                            label="과제 설명" 
+                            required 
+                            multiline 
+                            rowsMax={10000} 
+                            value={assignInfo}
+                        ></TextField>
+                    </Grid>
                 </Grid>
                 <Grid item>
                     {(publishingTime!==undefined && deadline!==undefined)?
