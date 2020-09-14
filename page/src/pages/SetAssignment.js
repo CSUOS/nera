@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Paper, TextField, Typography, Button } from '@material-ui/core';
-import { PageInfo, TimePicker, SideBar} from '../components';
+import { PageInfo, TimePicker, SideBar, MarkdownEditor, MarkdownViewer } from '../components';
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import './pages.css';
@@ -9,7 +9,9 @@ import Modal from '@material-ui/core/Modal';
 import { modifiedDateToString } from '../shared/DateToString';
 import StudentPopup from '../shared/StudentPopup';
 import ClearIcon from '@material-ui/icons/Clear';
+import InfoIcon from '@material-ui/icons/Info';
 import SettingsIcon from '@material-ui/icons/Settings';
+import { max } from 'date-fns';
 
 function SetAssignment(props){
     const [update, forceUpdate] = useState(false); // rendering update용
@@ -22,6 +24,7 @@ function SetAssignment(props){
     const [assignId, setAssignId] = useState(-1);
     const [assignName, setAssignName] = useState("");
     const [assignInfo, setAssignInfo] = useState("");
+    const [initAssignInfo, setInitAssignInfo] = useState("");
     const [modifiedDate, setModifiedDate] = useState(); // 저장 시간
     const [publishingTime, setPublishingTime] = useState(); // 발행 시간
     const [deadline, setDeadline] = useState(); // 마감 시간
@@ -30,6 +33,7 @@ function SetAssignment(props){
     // modal state 관리
     const [renderQuestionIndex, setRenderQuestionIndex] = useState(-1); 
     const [renderQuestionName, setRenderQuestionName] = useState(""); 
+    const [initRenderQuestionName, setInitRenderQuestionName] = useState("");
     const [renderQuestionScore, setRenderQuestionScore] = useState(); 
 
     const history = useHistory();
@@ -55,6 +59,7 @@ function SetAssignment(props){
         setQOpen(true);
         setRenderQuestionIndex(index);
         setRenderQuestionName(questions[index].questionContent);
+        setInitRenderQuestionName(questions[index].questionContent);
         setRenderQuestionScore(questions[index].fullScore);
     };
     const questionHandleClose = () => {
@@ -81,6 +86,7 @@ function SetAssignment(props){
                 const data = res.data;
                 setAssignId(data.assignmentId);
                 setAssignInfo(data.assignmentInfo);
+                setInitAssignInfo(data.assignmentInfo);
                 let tmp = data.assignmentName.split('[');
                 tmp = tmp[1].split(']');
                 setLecture(tmp[0]);
@@ -121,31 +127,35 @@ function SetAssignment(props){
         // textfield가 바뀔 때마다 lectureName 갱신
 
         await setLecture(e.target.value);
-        await forceUpdate(!update);
+        // await forceUpdate(!update);
     }
 
     async function changeAssignNameField(e){
         // textfield가 바뀔 때마다 assignmentName 갱신
 
         await setAssignName(e.target.value);
-        await forceUpdate(!update);
+        // await forceUpdate(!update);
     }
 
-    async function changeAssignInfoField(e){
-        // textfield가 바뀔 때마다 Description 갱신
+    async function changeAssignInfoField(value){
+        // MarkdownEditor가 바뀔 때마다 Description 갱신
 
-        await setAssignInfo(e.target.value);
-        await forceUpdate(!update);
+        await setAssignInfo(value);
+        // await forceUpdate(!update);
     }
 
     
     async function addQuestion(){
+        let maxQuesId = 0;
+        for (const ques of questions)
+            maxQuesId = Math.max(maxQuesId, ques.questionId);
+
         // 새로운 문제 추가
         const index = questions.length;
         const newQuestion = {
-            questionId : index,
+            questionId : maxQuesId+1,
             questionContent : "기본",
-            fullScore : undefined,
+            fullScore : 0,
         };
 
         let tmp = questions;
@@ -154,22 +164,23 @@ function SetAssignment(props){
         await questionHandleOpen(index);
     }
 
-    async function changeRenderQuestion(e, type){
+    async function changeRenderQuestion(value, type){
         // textfield가 바뀔 때마다 render state들 갱신
 
         if(type===0){ // 문제 설명 갱신
-            await setRenderQuestionName(e.target.value);
+            await setRenderQuestionName(value);
         }else{ // 배점 갱신
-            const number = Number(e.target.value);
-            await setRenderQuestionScore(isNaN(number)?e.target.value:number);
+            const number = Number(value);
+            await setRenderQuestionScore(isNaN(number)?value:number);
         }
-        await forceUpdate(!update);
+        // await forceUpdate(!update);
     }
 
     async function deleteQuestion(index){
         // 문제 삭제
         let tmp = questions;
         tmp.splice(index,1);
+        setQuestions(tmp);
         await forceUpdate(!update);
     }
 
@@ -248,20 +259,21 @@ function SetAssignment(props){
                     <Grid><TextField onChange={(e)=>changeLectureField(e)} helperText="강의명을 기재해주세요. ex_ 이산수학" InputLabelProps={{shrink:true}} label="강의명" required multiline rowsMax={2} value={lectureName}></TextField></Grid>
                     <Grid><TextField onChange={(e)=>changeAssignNameField(e)} helperText="과제명을 기재해주세요. 강의명과 함께 발행날짜 이전에 학생들에게 보여집니다*" InputLabelProps={{shrink:true}} label="과제명" required multiline rowsMax={2} value={assignName}></TextField></Grid>
                 </Grid>
-                <Grid className="setting_as_row" container item direction="row">
+
+                <Grid item className="contents_title"><h6>과제 설명</h6></Grid>
+                <Grid container item direction="row">
                     <Grid xs={12}>
-                        <TextField 
-                            variant="outlined" 
-                            onChange={(e)=>changeAssignInfoField(e)} 
-                            helperText="자세한 과제 내용과 주의사항을 기재해주세요. 문제는 아래의 문제란에 기재해주세요." 
-                            InputLabelProps={{shrink:true}} 
-                            label="과제 설명" 
-                            required 
-                            multiline 
-                            rowsMax={10000} 
-                            value={assignInfo}
-                        ></TextField>
+                        <MarkdownEditor 
+                            onChange={changeAssignInfoField} 
+                            contents={initAssignInfo}
+                            lines={20}
+                        ></MarkdownEditor>
                     </Grid>
+                </Grid>
+
+                <Grid container item direction="row" alignItems="center">
+                    <InfoIcon color="primary"/>
+                    위의 과제 설명란에 자세한 과제 내용과 주의사항을 기재해주세요. 문제는 아래의 문제란에 기재해주세요.
                 </Grid>
                 <Grid item>
                     {(publishingTime!==undefined && deadline!==undefined)?
@@ -284,7 +296,15 @@ function SetAssignment(props){
                                 <Grid container className="box_container" item>
                                     <Grid item className="box_content">
                                         <Button className="box_button" onClick={()=>questionHandleOpen(index)}>
-                                            <Paper className="box_name">{index+1}.{question.questionContent}</Paper>
+                                            <Paper className="box_name">
+                                                <Grid container className="problem_container" direction="column">
+                                                    <Grid container className="problem_description" direction="row" alignItems="flex-start" justify="flex-start">
+                                                        <h6 className="problem_number">{(index + 1) + "."}</h6>
+                                                        <MarkdownViewer className="problem_description_viewer" source={question.questionContent}></MarkdownViewer>
+                                                    </Grid>
+                                                    <h6 className="problem_score" align="right">{question.fullScore + "점"}</h6>
+                                                </Grid>
+                                            </Paper>
                                         </Button>
                                     </Grid>
                                     <Grid item className="box_xbtn">
@@ -305,18 +325,20 @@ function SetAssignment(props){
                             aria-describedby="add question to assignment"
                             className="modal">
                             <Paper className="modal_con">
-                                <Grid container spacing={2} wrap="wrap" className="modal_form">
-                                    <TextField onChange={(e)=>changeRenderQuestion(e,0)} InputLabelProps={{shrink:true}} label="문제 설명" required multiline rows={1} rowsMax={10000} value={renderQuestionName}></TextField>
+                                <Grid container spacing={2} direction="column" className="modal_form">
+                                    <MarkdownEditor
+                                        onChange={(value) => changeRenderQuestion(value,0)}
+                                        contents={initRenderQuestionName}
+                                    ></MarkdownEditor>
                                     <TextField 
-                                        onChange={(e)=>changeRenderQuestion(e,1)} 
+                                        onChange={(e)=>changeRenderQuestion(e.target.value,1)} 
                                         InputLabelProps={{shrink:true}} 
                                         label="배점" required multiline 
                                         rows={1} rowsMax={10} 
                                         value={renderQuestionScore}
                                         error={typeof(renderQuestionScore)==="string"?true:false}
                                         helperText="숫자를 입력해주세요."
-                                        >
-                                    </TextField>
+                                    ></TextField>
                                 </Grid>
                                 <Button className="save_button" onClick={()=>saveRenderQuestion()}>저장</Button>
                             </Paper>
