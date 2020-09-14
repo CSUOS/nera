@@ -169,7 +169,29 @@ const headCells = [
     }
 ];
 
+const useStyles = makeStyles((theme) => ({
+    paper: {
+        width: '100%',
+        marginBottom: theme.spacing(2),
+    },
+    table: {
+        minWidth: "800px",
+    },
+    visuallyHidden: {
+        border: 0,
+        clip: 'rect(0 0 0 0)',
+        height: 1,
+        margin: -1,
+        overflow: 'hidden',
+        padding: 0,
+        position: 'absolute',
+        top: 20,
+        width: 1,
+    },
+}));
+
 function ScoreStats(props) {
+    const classes = useStyles();
     const [rows, setRows] = useState(undefined);
     const [error, setError] = useState(false);
     const [page, setPage] = React.useState(0);
@@ -191,6 +213,16 @@ function ScoreStats(props) {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+
+    const getAverage = (rowData) => {
+        if (rowData.length == 0)
+            return 0;
+
+        let sum = 0;
+        for (const row of rowData)
+            sum += row.scoreSum;
+        return sum / rowData.length;
+    }
 
     useEffect(() => {
         setRows(undefined);
@@ -248,10 +280,12 @@ function ScoreStats(props) {
     else if (rows === undefined)
         return <Loading status="데이터를 준비하는 중..."></Loading>
     return (
-        <Paper>
+        <Paper className={classes.paper} elevation={3}>
             <TableContainer component={Paper}>
-                <Table aria-label="score stats table" size="small">
+                <Table className={classes.table} aria-label="score stats table" size="small">
+                    <caption>{`평균 점수는 ${getAverage(rows)}`}점 입니다.</caption>
                     <SortableTableHead
+                        classes={classes}
                         headCells={headCells}
                         onRequestSort={handleRequestSort}
                         order={order}

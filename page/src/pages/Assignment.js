@@ -342,7 +342,7 @@ const Assignment = (props) => {
                     />}
                 </Grid>
 
-                <Grid container item direction="row" spacing={4} className="assignment_md_info" alignItems="center">
+                <Grid container item direction="row" spacing={4} className="page_additional_info" alignItems="center">
                     <InfoIcon color="primary"/>
                     &nbsp;Markdown 문법에 대한 정보는&nbsp; <a href="https://www.markdownguide.org/basic-syntax/">여기에서,</a>
                     &nbsp;LaTeX(KaTeX) 문법에 대한 정보는&nbsp;<a href="https://katex.org/docs/supported.html">여기에서</a>&nbsp;확인할 수 있으며,&nbsp;
