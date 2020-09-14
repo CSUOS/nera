@@ -18,8 +18,8 @@ const MarkdownViewer = props => {
             break: (props) => <br></br>,
             paragraph: (props) => <p className="markdown_paragraph">{props.children}</p>,
             emphasis: (props) => <em className="markdown_emphasis">{props.children}</em>,
-            link: (props) => <a className="markdown_link" href={props.href}>{props.children}</a>,
-            linkReference: (props) => <a className="markdown_link" href={props.href}>{props.children}</a>,
+            link: (props) => props.href ? <a className="markdown_link" href={props.href}>{props.children}</a> : <strong className="markdown_strong">(주소가 없는 링크는 만들 수 없습니다.)</strong>,
+            linkReference: (props) => props.href ? <a className="markdown_link" href={props.href}>{props.children}</a> : <strong className="markdown_strong">(주소가 없는 링크는 만들 수 없습니다.)</strong>,
             strong: (props) => <strong className="markdown_strong">{props.children}</strong>,
             delete: (props) => <del>{props.children}</del>,
             list: (props) => props.start ? <ol className="markdown_ol">{props.children}</ol> : <ul className="markdown_ul">{props.children}</ul>,
@@ -52,7 +52,8 @@ const MarkdownViewer = props => {
             },
             inlineCode: (props) => <code className="markdown_inline_code">{props.value}</code>,
             math: (props) => <BlockMath>{props.value}</BlockMath>,
-            inlineMath: (props) => <InlineMath>{props.value}</InlineMath>
+            inlineMath: (props) => <InlineMath>{props.value}</InlineMath>,
+            html: (props) => <strong className="markdown_strong">(HTML 태그는 사용할 수 없습니다.)</strong>
         }
     };
 

@@ -29,8 +29,10 @@ const Home = (props)=>{
     }
 
     useEffect(() => {
+        let currUser = undefined;
         try {
-            setUser(getUserInfo());
+            currUser = getUserInfo();
+            setUser(currUser);
         } catch (err) {
             console.log(err);
             //history.push("/");
@@ -64,7 +66,7 @@ const Home = (props)=>{
             .catch(err => {
                 const status = err?.response?.status;
                 if (status === undefined) {
-                    alert("예기치 못한 예외가 발생하였습니다.\n"+JSON.stringify(err));
+                    alert("과제 정보를 얻는 중 예기치 못한 예외가 발생하였습니다. (Home.js)\n"+JSON.stringify(err));
                 }
                 else if (status === 400) {
                     alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
@@ -80,6 +82,8 @@ const Home = (props)=>{
                 }
                 console.log(err);
                 //history.push("/");
+                setPA([]);
+                setFA([]);
             })
     }, []);
 
@@ -93,6 +97,7 @@ const Home = (props)=>{
                     icon={AccountCircleIcon}
                     mainTitle={user.userName}
                     subTitle={getSubTitle()}
+                    information="좌측 사이드바 또는 아래 목록에서 확인하려는 과제를 선택하세요."
                 />
                 <Grid container direction="column" className="contents_con">
                     <Grid className="contents_title"><h6>{user.type === 0 ? "마감 전 과제" : "제출 가능한 과제" // 제목 수정 필요

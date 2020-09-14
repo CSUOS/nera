@@ -1,4 +1,4 @@
-import { Grid, TextField, Divider } from '@material-ui/core';
+import { Grid, TextField, Divider, Paper, Typography } from '@material-ui/core';
 import React, { Component, useEffect } from 'react';
 import { MarkdownViewer, MarkdownEditor } from '.';
 import PropTypes from 'prop-types';
@@ -10,7 +10,7 @@ const Problem = (props) => {
     useEffect(()=>{
         setInitialText(props.info.answerContent);
         if (props.info.assignmentState === 3)
-            setScoreText(`${props.info.score}/${props.info.fullScore}점`);
+            setScoreText(`${props.info.score === -1 ? 0 : props.info.score}/${props.info.fullScore}점`);
         else
             setScoreText(`${props.info.fullScore}점`);
     }, [JSON.stringify(props.info)]);
@@ -27,7 +27,18 @@ const Problem = (props) => {
             </Grid>
 
             <h6 className="problem_score" align="right">{scoreText}</h6>
-            <MarkdownEditor onChange={handleTextChange} contents={initialText}></MarkdownEditor>
+
+            {props.info.assignmentState === 1 ? 
+                <MarkdownEditor onChange={handleTextChange} contents={initialText}></MarkdownEditor> 
+                : 
+                <Paper className="answer_content">
+                    <Grid direction="column">
+                    <Typography gutterBottom variant="subtitle1">제출하였던 답안</Typography>
+                    <Divider orientation="horizontal"></Divider>
+                    <MarkdownViewer source={initialText ? initialText : "*제출한 답안 없음*"}></MarkdownViewer>
+                </Grid>
+                </Paper>
+            }
         </Grid>
     );
 }

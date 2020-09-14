@@ -70,7 +70,6 @@ const MarkdownEditor = (props) => {
         const customMarkDown = new CustomMarkdownMode();
         let session = editorRef.current.editor.getSession();
         session.setMode(customMarkDown);
-        console.log(viewerRef.current.style);
         viewerRef.current.style.height = `${editorDivRef.current.offsetHeight}px`;
         setTimer(setInterval(updateSource, 250));
     }, []);
@@ -78,10 +77,13 @@ const MarkdownEditor = (props) => {
     useEffect(() => {
         setSource(props.contents === undefined ? "" : props.contents);
         let session = editorRef.current.editor.getSession();
+        viewerRef.current.style.height = `${editorDivRef.current.offsetHeight}px`;
         session.setValue(props.contents === undefined ? "" : props.contents);
     }, [props.contents]);
 
     function handleTextChange(value) {
+        let session = editorRef.current.editor.getSession();
+        viewerRef.current.style.height = `${editorDivRef.current.offsetHeight}px`;
         if (props.onChange)
             props.onChange(value);
     }
