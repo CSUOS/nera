@@ -34,8 +34,7 @@ const Home = (props)=>{
             currUser = getUserInfo();
             setUser(currUser);
         } catch (err) {
-            console.log(err);
-            //history.push("/");
+            history.push("/");
         }
 
         axios.get('/v1/assignment', { withCredentials: true })
@@ -80,8 +79,6 @@ const Home = (props)=>{
                 else if (status === 500) {
                     alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
                 }
-                console.log(err);
-                //history.push("/");
                 setPA([]);
                 setFA([]);
             })

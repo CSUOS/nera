@@ -108,8 +108,7 @@ const Scoring = (props) => {
                     alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
                 }
 
-                console.log(err);
-                //history.push("/home");
+                history.push("/home");
             });
     }
 

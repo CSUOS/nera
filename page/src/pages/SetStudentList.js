@@ -69,8 +69,7 @@ function SetStudentList(props){
             else if (status === 500) {
                 alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
             }
-            console.log(err);
-            //history.push("/home");
+            history.push("/home");
         });
     }
 
@@ -102,8 +101,7 @@ function SetStudentList(props){
             else if (status === 500) {
                 alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
             }
-            console.log(err);
-            //history.push("/home/setList");
+            history.push("/home/setList");
         });
 
         await handleClose();
@@ -143,8 +141,7 @@ function SetStudentList(props){
             else if (status === 500) {
                 alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
             }
-            console.log(err);
-            //history.push("/home/setList");
+            history.push("/home/setList");
         });
         await getData();
         await forceUpdate(!update);
