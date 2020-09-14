@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import "./components.css";
+import {useAssignmentState} from '../shared/AssignmentState';
 
 import { Divider, ListSubheader, Grid, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,7 +9,6 @@ import clsx from 'clsx';
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
@@ -27,6 +27,8 @@ const SideBar = (props) => {
     const {type, drawerClose, assignmentInfo} = props;
     const [update, forceUpdate] = useState(false); // rendering update용
     const [assignmentClass, setAsClass] = useState([[],[],[],[]]); 
+
+    const asState = useAssignmentState();
     
     useEffect(()=>{
         function preProcessingAssign(){
@@ -56,11 +58,11 @@ const SideBar = (props) => {
                 <Link to={'/home/assignment/'+as[0]}>
                     <ListItem button className="side_bar_list_item">
                         {
-                            type===2?
+                            type===asState["scoring"]?
                                 <FiberManualRecordIcon color="secondary"/>
-                                :type===1?
+                                :type===asState["released"]?
                                     <FiberManualRecordIcon style={{color:green[700]}}/>
-                                    :type===3?
+                                    :type===asState["done"]?
                                         <FiberManualRecordIcon color="primary"/>
                                         :<FiberManualRecordIcon/>
                         }
@@ -79,11 +81,11 @@ const SideBar = (props) => {
             <Link to={'/home/assignment/'+as[0]}>
                 <ListItem button>
                     {
-                        type===1?
+                        type===asState["released"]?
                             <FiberManualRecordIcon color="secondary"/>
-                            :type===3?
+                            :type===asState["done"]?
                                 <FiberManualRecordIcon color="primary"/>
-                                :type===2?
+                                :type===asState["scoring"]?
                                 <FiberManualRecordIcon style={{color:green[700]}}/>
                                     :<FiberManualRecordIcon/>
                     }
@@ -97,7 +99,7 @@ const SideBar = (props) => {
     return (
         <Grid className="side_bar">
             <Grid className={clsx(classes.drawerHeader,"side_bar_header")}>
-                <Link className="side_bar_logo" to="/home"><Grid className="NERA"><img src="./img/logo1.png"/></Grid></Link>
+                <Link className="side_bar_logo" to="/home"><Grid className="NERA"><img src="/img/logo1.png"/></Grid></Link>
                 <Button className="side_bar_close" onClick={drawerClose}><ArrowBackIcon/></Button>
             </Grid>
             <Divider />

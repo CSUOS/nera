@@ -10,7 +10,6 @@ import { Route } from 'react-router-dom';
 
 import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import { useHistory } from "react-router-dom";
 
 /* style definition => 대부분 css로 옮길 예정 */
