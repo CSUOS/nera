@@ -31,6 +31,15 @@ function useInterval(callback, delay) {
     }, [delay]);
 }
 
+function useEvent(event, handler, passive=false) {
+    useEffect(() => {
+        window.addEventListener(event, handler, passive);
+  
+        return function cleanup() {
+            window.removeEventListener(event, handler);
+        };
+    });
+}  
 
 const Assignment = (props) => {
     const dateCaptionStyle = {
@@ -264,8 +273,12 @@ const Assignment = (props) => {
     }, 1000);
 
     function handleKeyPress(event) {
+        if (info.assignmentState !== 1)
+            return;
+
         if ((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey)  && event.keyCode == 83) {
             setOpenSnack(true);
+            saveAnswers();
             event.preventDefault();
             return false;
         } else {
@@ -273,12 +286,7 @@ const Assignment = (props) => {
         }
     }
 
-    useEffect(() => {
-        document.addEventListener("keydown", handleKeyPress);
-        return () => {
-            document.removeEventListener("keydown", handleKeyPress);
-        }
-    }, [])
+    useEvent("keydown", handleKeyPress);
 
     useEffect(() => {
         setInfo(undefined);
