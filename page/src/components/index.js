@@ -1,7 +1,7 @@
 export { default as SideBar } from './SideBar';
 export { default as Header } from './Header';
 export { default as PageInfo } from './PageInfo';
-export { default as BottomPopup } from './BottomPopup';
+export { default as SaveSnackbar } from './SaveSnackbar';
 export { default as AssignmentBox } from './AssignmentBox';
 export { default as Problem } from './Problem';
 export { default as TimePicker } from './TimePicker';

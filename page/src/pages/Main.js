@@ -109,7 +109,7 @@ function Main(props) {
       .catch(err => {
         const status = err?.response?.status;
         if (status === undefined) {
-          alert("예기치 못한 예외가 발생하였습니다.\n" + JSON.stringify(err));
+          alert("과제 정보를 얻는 중 예기치 못한 예외가 발생하였습니다. (Main.js)\n" + JSON.stringify(err));
         }
         else if (status === 400) {
           alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
@@ -123,7 +123,7 @@ function Main(props) {
         else if (status === 500) {
           alert("내부 서버 오류입니다. 잠시 후에 다시 시도해주세요...");
         }
-        history.push("/");
+        setSideAssign([]);
       })
   }
 

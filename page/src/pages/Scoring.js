@@ -27,7 +27,7 @@ const Scoring = (props) => {
             .catch(err => {
                 const status = err?.response?.status;
                 if (status === undefined) {
-                    alert("예기치 못한 예외가 발생하였습니다.\n"+JSON.stringify(err));
+                    alert("과제 정보를 얻는 중 예기치 못한 예외가 발생하였습니다. (Scoring.js)\n"+JSON.stringify(err));
                 }
                 else if (status === 400) {
                     alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
@@ -57,7 +57,7 @@ const Scoring = (props) => {
                 .catch(err => {
                     const status = err?.response?.status;
                     if (status === undefined) {
-                        alert("예기치 못한 예외가 발생하였습니다.\n" + JSON.stringify(err));
+                        alert("답안 정보를 얻는 중 예기치 못한 예외가 발생하였습니다. (Scoring.js)\n" + JSON.stringify(err));
                         history.push('/home');
                     }
                     else if (status === 404) {
@@ -91,7 +91,7 @@ const Scoring = (props) => {
             .catch(err => {
                 const status = err?.response?.status;
                 if (status === undefined) {
-                    alert("예기치 못한 예외가 발생하였습니다.\n"+JSON.stringify(err));
+                    alert("답안 정보를 얻는 중 예기치 못한 예외가 발생하였습니다. (Scoring.js)\n"+JSON.stringify(err));
                 }
                 else if (status === 400) {
                     alert(`답안 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
@@ -177,7 +177,7 @@ const Scoring = (props) => {
             .catch(err => {
                 const status = err?.response?.status;
                 if (status === undefined) {
-                    alert("예기치 못한 예외가 발생하였습니다.\n" + JSON.stringify(err));
+                    alert("답안 정보를 저장하는 중 예기치 못한 예외가 발생하였습니다. (Scoring.js)\n" + JSON.stringify(err));
                 }
                 else if (status === 400) {
                     alert(`점수를 저장하지 못했습니다. 잘못된 요청입니다. (${status})`);

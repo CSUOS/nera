@@ -45,6 +45,7 @@ exports.jwtMiddleware = async (ctx: Koa.Context, next: Function) => {
       userName: '',
       userNumber: 0,
     };
+    ctx.throw(401, '인증 실패');
   }
   return next();
 };

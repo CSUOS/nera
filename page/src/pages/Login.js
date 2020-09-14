@@ -88,7 +88,7 @@ function Login(props){
             .catch((err) => {
                 const status = err?.response?.status;
                 if (status === undefined) {
-                    alert("예기치 못한 예외가 발생하였습니다.\n" + JSON.stringify(err));
+                    alert("로그인 하는 중 예기치 못한 예외가 발생하였습니다.\n" + JSON.stringify(err));
                 }
                 else if (status == 400) {
                     alert("아이디, 패스워드가 기입되었는지 다시 한 번 확인해주세요.");
