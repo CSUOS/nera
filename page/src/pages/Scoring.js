@@ -174,6 +174,8 @@ const Scoring = (props) => {
                 newAnsDict[userNum].answers.find(ans => ans.questionId === quesId).score = score;
                 console.log(newAnsDict)
                 setAnswersDict(newAnsDict);
+                if (props.onUpdate)
+                    props.onUpdate();
             })
             .catch(err => {
                 const status = err?.response?.status;
