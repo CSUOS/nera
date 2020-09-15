@@ -21,7 +21,19 @@ async function calState(assignment: typeof AssignmentModel, user: typeof userInf
   if ((now - assignment.deadline.getTime()) < 0) {
     return 1; // 진행중
   }
-  if (String(user.userNumber).charAt(0) === '1') { return 2; }
+  if (String(user.userNumber).charAt(0) === '1') {
+    const answers = await AnswerPaperModel
+      .find({ professorNumber: user.userNumber, assignmentId: assignment.assignmentId }).exec();
+    if (answers === undefined) { return 2; }
+    for (let j = 0; j < answers.length; j += 1) {
+      for (let i = 0; i < answers[j].answers.length; i += 1) {
+        if (answers[j].answers[i].score === -1) {
+          return 2; // 마감됨
+        }
+      }
+    }
+    return 3;
+  }
 
   const answer = await AnswerPaperModel
     .findOne({ userNumber: user.userNumber, assignmentId: assignment.assignmentId }).exec();
@@ -42,7 +54,7 @@ router.post('/', async (ctx: Koa.Context) => {
   // 과제 생성 api
   const { body } = ctx.request;
   // 유저가 보낸 데이터
-  console.log(body.assignmentId);
+  console.log(body);
   if (ctx.role !== '1') { ctx.throw(403, '권한 없음'); }
   // User가 교수가 아닌 경우
 
@@ -96,6 +108,8 @@ router.post('/', async (ctx: Koa.Context) => {
     // 이전에 생성한 과제가 있는지 교수 본인의 userNumber와 과제 이름으로 탐색
 
     if (prevAssignment === null) { ctx.throw(404, '해당 과제 없음'); }
+    prevAssignment.assignmentName = body.assignmentName;
+    // 과제 이름 변경
 
     prevAssignment.students = body.students;
     // 학생 목록 변경
@@ -145,6 +159,7 @@ router.get('/', async (ctx: Koa.Context) => {
   await Promise.all(takeAssignment.map(async (element: typeof assignmentArray) => {
     const t = element;
     t.assignmentState = await calState(t, ctx.user);
+    console.log(t.assignmentState);
   }));
 
   ctx.body = takeAssignment;
