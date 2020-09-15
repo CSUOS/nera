@@ -31,8 +31,7 @@ const Home = (props)=>{
     useEffect(() => {
         let currUser = undefined;
         try {
-            currUser = getUserInfo();
-            setUser(currUser);
+            setUser(getUserInfo());
         } catch (err) {
             history.push("/");
         }
@@ -71,6 +70,8 @@ const Home = (props)=>{
                     alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
                 }
                 else if (status === 401) {
+                    alert(`토큰이 유효하지 않습니다. (${status})`);
+                    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
                     history.push("/");
                 }
                 else if (status === 404) {
@@ -82,6 +83,7 @@ const Home = (props)=>{
                 setPA([]);
                 setFA([]);
             })
+        
     }, []);
 
     // state가 아직 로드되지 않았다면 렌더링 안 함.
