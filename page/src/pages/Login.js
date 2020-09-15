@@ -92,12 +92,9 @@ function Login(props){
                 }
                 else if (status == 400) {
                     alert("아이디, 패스워드가 기입되었는지 다시 한 번 확인해주세요.");
-                } else if (status == 401) {
-                    alert("로그인 서버 토큰에 문제가 발생하였습니다. 잠시만 기다려주세요.")
-                }
-                else if (status == 403) {
+                }else if (status == 403) {
                     alert("아이디, 패스워드가 정확히 기입되었는지 다시 한 번 확인해주세요.");
-                } else if (status == 500) {
+                }else if (status == 500) {
                     alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
                 }
 
