@@ -21,7 +21,19 @@ async function calState(assignment: typeof AssignmentModel, user: typeof userInf
   if ((now - assignment.deadline.getTime()) < 0) {
     return 1; // 진행중
   }
-  if (String(user.userNumber).charAt(0) === '1') { return 2; }
+  if (String(user.userNumber).charAt(0) === '1') {
+    const answers = await AnswerPaperModel
+      .find({ professorNumber: user.userNumber, assignmentId: assignment.assignmentId }).exec();
+    if (answers === undefined) { return 2; }
+    for (let j = 0; j < answers.length; j += 1) {
+      for (let i = 0; i < answers[j].answers.length; i += 1) {
+        if (answers[j].answers[i].score === -1) {
+          return 2; // 마감됨
+        }
+      }
+    }
+    return 3;
+  }
 
   const answer = await AnswerPaperModel
     .findOne({ userNumber: user.userNumber, assignmentId: assignment.assignmentId }).exec();
@@ -145,6 +157,7 @@ router.get('/', async (ctx: Koa.Context) => {
   await Promise.all(takeAssignment.map(async (element: typeof assignmentArray) => {
     const t = element;
     t.assignmentState = await calState(t, ctx.user);
+    console.log(t.assignmentState);
   }));
 
   ctx.body = takeAssignment;
