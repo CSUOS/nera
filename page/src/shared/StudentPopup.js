@@ -121,7 +121,7 @@ function StudentPopUp (props){
     function preProcessingStudentData(){
         // 데이터 전처리
         let tmp = students;
-        let returnString = "";
+        let returnString="";
         
         if(listName===""){
             return "목록 이름이 비어있습니다. 입력해주세요.";
