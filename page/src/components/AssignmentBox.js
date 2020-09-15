@@ -6,6 +6,8 @@ import {Link} from 'react-router-dom';
 import { Grid, Paper } from '@material-ui/core';
 
 const AssignmentBox = (props)=>{
+  const asState = useAssignmentState();
+
   const {type, as_info} = props;
   const state = as_info.assignmentState;
   const date = new Date(as_info.deadline);

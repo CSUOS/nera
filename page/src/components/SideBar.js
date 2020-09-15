@@ -23,24 +23,29 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 const SideBar = (props) => {
-    const classes = useStyles();    
-    const {type, drawerClose, assignmentInfo} = props;
+    const classes = useStyles();
+    const {type, drawerClose} = props;
+    const [assignmentInfo, setAsInfo] = useState(props.assignmentInfo);
     const [update, forceUpdate] = useState(false); // rendering update용
     const [assignmentClass, setAsClass] = useState([[],[],[],[]]); 
 
     const asState = useAssignmentState();
     
     useEffect(()=>{
+        setAsInfo(props.assignmentInfo);
+    },[props.assignmentInfo]);
+
+    useEffect(() => {
         function preProcessingAssign(){
+            let newAsClass = [[],[],[],[]];
             assignmentInfo.map((as)=>{
-                let tmp = assignmentClass;
-                tmp[as[2]].push(as);
-                setAsClass(tmp);
-            })
+                newAsClass[as[2]].push(as);
+            });
+            setAsClass(newAsClass);
         };
 
         preProcessingAssign();
-    },[])
+    }, [assignmentInfo]);
 
     useEffect(()=>{
         forceUpdate(!update);
