@@ -118,8 +118,9 @@ function SetAssignment(props){
                 history.push("/home/setting");
             });
         }else{ // 새로운 과제를 추가하는 페이지일 때
-            setPublishingTime(new Date());
-            setDeadline(new Date());
+            const date = new Date();
+            setPublishingTime(date);
+            setDeadline(date);
         }
     }
         
@@ -221,18 +222,21 @@ function SetAssignment(props){
     }
 
     function preProcessingAssignmentData(){
-        if(lectureName===undefined){
+        if(lectureName===undefined)
             return "강의명이 없습니다. 강의명을 작성해주세요.";
-        }
-        if(assignName===undefined){
+
+        if(assignName===undefined)
             return "과제명이 없습니다. 과제명을 작성해주세요.";
-        }
-        if(questions.length===0){
+
+        if(publishingTime-deadline===0)
+            return "과제 시작 시각과 마감 시각이 같습니다. 수정해주세요.";
+
+        if(questions.length===0)
             return "문제가 없습니다. 문제를 생성해주세요.";
-        }
-        if(students.length===0){
+        
+        if(students.length===0)
             return "수강생이 없습니다. 수강생을 추가해주세요.";
-        }
+        
 
         return "";
     }
