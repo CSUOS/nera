@@ -105,8 +105,9 @@ function SetAssignment(props){
                     alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
                 }
                 else if (status === 401) {
+                    alert(`토큰이 유효하지 않습니다. (${status})`);
+                    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
                     history.push("/");
-                    //alert(`과제 정보를 얻는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
                 }
                 else if (status === 404) {
                     alert(`과제 정보를 얻는데 실패하였습니다. 과제를 찾을 수 없습니다. (${status})`);
@@ -227,7 +228,9 @@ function SetAssignment(props){
                 alert(`과제 정보를 저장하는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
             }
             else if (status === 401) {
-                alert(`과제 정보를 저장하는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
+                alert(`토큰이 유효하지 않습니다. (${status})`);
+                document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+                history.push("/");
             }
             else if (status === 403) {
                 alert(`과제 정보를 저장하는데 실패하였습니다. 권한이 없습니다. (${status})`);
