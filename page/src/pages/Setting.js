@@ -4,6 +4,7 @@ import {PageInfo} from '../components';
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import './pages.css';
+import {useAssignmentState} from '../shared/AssignmentState';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -15,6 +16,8 @@ import { green } from '@material-ui/core/colors';
 function Setting(){
     const [assignmentList, setAList] = useState([]);
     const history = useHistory();
+
+    const asState = useAssignmentState();
     
     async function deleteAssignment(id, name){
 
@@ -91,21 +94,30 @@ function Setting(){
         let stateWord = "error";
 
         switch(as.assignmentState){
-            case 0: stateWord="마감 전"; break;
-            case 1: stateWord="채점 전"; break;
-            case 2: stateWord="채점 완료"; break;
+            case asState["notReleased"]: stateWord="발행 전"; break;
+            case asState["released"]: stateWord="발행됨"; break;
+            case asState["scoring"]: stateWord="채점 필요"; break;
+            case asState["done"]: stateWord="채점 완료"; break;
             default: return;
         }
 
         let icon = <FiberManualRecordIcon className="circle_icon"/>
         switch(as.assignmentState){
-            case 0:
-                icon = <FiberManualRecordIcon className="circle_icon" style={{color:green[700]}}/>;
+            case asState["notReleased"]:
+                icon = <FiberManualRecordIcon/>;
                 break;
-            case 1:
-                icon = <FiberManualRecordIcon className="circle_icon" color="secondary"/>;
+            case asState["released"]:
+                icon = <FiberManualRecordIcon style={{color:green[700]}}/>;
                 break;
+            case asState["scoring"]:
+                icon = <FiberManualRecordIcon color="secondary"/>;
+                break;
+            case asState["done"]:
+                icon = <FiberManualRecordIcon color="primary"/>;
+                break;
+            default : return;
         }
+
         return(
             <Grid container className="box_container" item>
                 <Grid item className="box_content">
