@@ -54,7 +54,7 @@ router.post('/', async (ctx: Koa.Context) => {
   // 과제 생성 api
   const { body } = ctx.request;
   // 유저가 보낸 데이터
-  console.log(body.assignmentId);
+  console.log(body);
   if (ctx.role !== '1') { ctx.throw(403, '권한 없음'); }
   // User가 교수가 아닌 경우
 
@@ -108,6 +108,8 @@ router.post('/', async (ctx: Koa.Context) => {
     // 이전에 생성한 과제가 있는지 교수 본인의 userNumber와 과제 이름으로 탐색
 
     if (prevAssignment === null) { ctx.throw(404, '해당 과제 없음'); }
+    prevAssignment.assignmentName = body.assignmentName;
+    // 과제 이름 변경
 
     prevAssignment.students = body.students;
     // 학생 목록 변경
