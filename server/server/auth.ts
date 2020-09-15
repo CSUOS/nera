@@ -37,13 +37,11 @@ exports.jwtMiddleware = async (ctx: Koa.Context, next: Function) => {
     ctx.user = decoded; // 유저 정보 update
     ctx.role = String(ctx.user.userNumber).charAt(0); // 권한 update
   } catch (error) {
-    console.log(error);
     ctx.user = { // 에러일 경우 초기화
       userId: '',
       userName: '',
       userNumber: 0,
     };
-    ctx.cookies.set('access_token');
     ctx.throw(401, '인증 실패');
   }
   return next();
