@@ -20,8 +20,6 @@ const AssignmentBox = (props)=>{
   let color="black";
   let state_word = "error";
 
-  const asState = useAssignmentState();
-
   if(type===0){
     switch(state){
       case asState["notReleased"]: state_word="공개 전"; color = "black"; break; // 검
