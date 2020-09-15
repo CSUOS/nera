@@ -89,6 +89,7 @@ function Main(props) {
   }, []);
 
   function setSideBarAssignment(){
+    console.log("entered");
     axios.get('/v1/assignment', { withCredentials: true })
       .then(res => {
         let assign = res.data;
@@ -175,7 +176,11 @@ function Main(props) {
                 }, "margin-top-64", "contents_side")}
             >
               <Route exact path="/home" component={Home} />
-              <Route exact path="/home/assignment/:asId" component={user.type === 1 ? Assignment : Scoring} />
+              <Route exact path="/home/assignment/:asId" 
+                render={user.type === 1 ? 
+                  ({match}) => <Assignment match={match}></Assignment> : 
+                  ({match}) => <Scoring match={match} onUpdate={setSideBarAssignment}></Scoring>} 
+              />
               <Route exact path="/home/setting" component={Setting} />
               <Route exact path="/home/setting/:asId" component={SetAssignment} />
               <Route exact path="/home/setList" component={SetStudentList} />

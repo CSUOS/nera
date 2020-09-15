@@ -1,10 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import {useAssignmentState} from '../shared/AssignmentState';
 
 import {Link} from 'react-router-dom';
 import { Grid, Paper } from '@material-ui/core';
 
 const AssignmentBox = (props)=>{
+  const asState = useAssignmentState();
+
   const {type, as_info} = props;
   const state = as_info.assignmentState;
   const date = new Date(as_info.deadline);
@@ -19,16 +22,17 @@ const AssignmentBox = (props)=>{
 
   if(type===0){
     switch(state){
-      case 0: state_word="공개 전"; color = "rgb(56, 142, 60)"; break;
-      case 1: state_word="진행 중"; color = "#f50057"; break;
-      case 2: state_word="마감 됨"; color = "black"; break;
+      case asState["notReleased"]: state_word="공개 전"; color = "rgb(56, 142, 60)"; break;
+      case asState["released"]: state_word="진행 중"; color = "#f50057"; break;
+      case asState["scoring"]: state_word="마감 됨"; color = "#3f51b5"; break;
+      case asState["done"]: state_word="채점 완료"; color = "black"; break;
     }
   }else if(type===1){
     switch(state){
-      case 0: state_word="공개 전"; color = "#f50057"; break;
-      case 1: state_word="제출 필요"; color = "rgb(56, 142, 60)"; break;
-      case 2: state_word="채점 중"; color = "#3f51b5"; break;
-      case 3: state_word="채점 완료"; color = "black"; break;
+      case asState["notReleased"]: state_word="공개 전"; color = "#f50057"; break;
+      case asState["released"]: state_word="제출 필요"; color = "rgb(56, 142, 60)"; break;
+      case asState["scoring"]: state_word="채점 중"; color = "#3f51b5"; break;
+      case asState["done"]: state_word="채점 완료"; color = "black"; break;
     }
   }
   const useStyles = makeStyles((theme) => ({
