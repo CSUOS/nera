@@ -204,6 +204,7 @@ function StudentPopUp (props){
     }
     function uploadXlsxFile(e) {
         const f = e.target.files[0];
+        if (f === undefined) return;
         const check = f.name.slice(f.name.indexOf(".") + 1).toLowerCase();
 
         if (check != 'csv' && check != 'xlsx') {
