@@ -229,7 +229,10 @@ function SetAssignment(props){
             return "과제명이 없습니다. 과제명을 작성해주세요.";
 
         if(publishingTime-deadline===0)
-            return "과제 시작 시각과 마감 시각이 같습니다. 수정해주세요.";
+            return "과제 시작 시각과 마감 시각이 같습니다.";
+
+        if(deadline-Date.now()<0)
+            return "과제 마감 시각이 현재보다 이전입니다.";
 
         if(questions.length===0)
             return "문제가 없습니다. 문제를 생성해주세요.";
