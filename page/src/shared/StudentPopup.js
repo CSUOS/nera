@@ -193,10 +193,9 @@ function StudentPopUp (props){
     async function saveStudentList(){
         await initializeHighlight();
         
-        const errMessage = await preProcessingStudentData();
-        console.log(errMessage);
-        if(errMessage!==""){
-            alert(errMessage);
+        const errorMessage = await preProcessingStudentData();
+        if(errorMessage!==""){
+            alert(errorMessage);
             return;
         }
 
@@ -247,7 +246,6 @@ function StudentPopUp (props){
             // 수강생 목록 조회
             return(
                 <Grid container item alignItems="center">
-                    <TextField label="목록 이름" required onInput={(e)=>setListName(e.target.value)} rows={1} className="modal_input_field" value={listName}></TextField>
                     <Button onClick={getStudentList}>수강생 목록 불러오기</Button>
                     {renderStudentList()}
                     <Button className="save_button" onClick={saveStudentList}>저장</Button>
@@ -273,6 +271,7 @@ function StudentPopUp (props){
                                 <Grid item className="box_container">
                                     <Grid item className="box_content">
                                         <TextField  label={"학생"+(index+1)} 
+                                                    InputLabelProps={{ shrink: true }}
                                                     rows={1}
                                                     onInput={(e)=>changeStudent(e, index)} 
                                                     className={"modal_students modal_input_field"}

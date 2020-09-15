@@ -57,7 +57,9 @@ function SetStudentList(props){
                 alert(`수강생 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
             }
             else if (status === 401) {
-                alert(`수강생 정보를 얻는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
+                alert(`토큰이 유효하지 않습니다. (${status})`);
+                document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+                history.push("/");
             }
             else if (status === 403) {
                 alert(`수강생 정보를 얻는데 실패하였습니다. 권한이 없습니다. (${status})`);
@@ -93,7 +95,9 @@ function SetStudentList(props){
                 alert(`수강생 정보를 저장하는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
             }
             else if (status === 401) {
-                alert(`수강생 정보를 저장하는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
+                alert(`토큰이 유효하지 않습니다. (${status})`);
+                document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+                history.push("/");
             }
             else if (status === 403) {
                 alert(`수강생 정보를 저장하는데 실패하였습니다. 권한이 없습니다. (${status})`);
@@ -133,7 +137,9 @@ function SetStudentList(props){
             }
             const status = err.response.status;
             if (status === 401) {
-                alert(`수강생 정보를 삭제하는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
+                alert(`토큰이 유효하지 않습니다. (${status})`);
+                document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+                history.push("/");
             }
             else if (status === 403) {
                 alert(`수강생 정보를 삭제하는데 실패하였습니다. 권한이 없습니다. (${status})`);

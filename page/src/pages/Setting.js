@@ -4,6 +4,7 @@ import {PageInfo} from '../components';
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import './pages.css';
+import {useAssignmentState} from '../shared/AssignmentState';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -15,6 +16,8 @@ import { green } from '@material-ui/core/colors';
 function Setting(){
     const [assignmentList, setAList] = useState([]);
     const history = useHistory();
+
+    const asState = useAssignmentState();
     
     async function deleteAssignment(id, name){
 
@@ -31,7 +34,9 @@ function Setting(){
             }else{
                 const status = err.response.status;
                 if (status === 401) {
-                    alert(`과제를 삭제하는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
+                    alert(`토큰이 유효하지 않습니다. (${status})`);
+                    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+                    history.push("/");
                 }
                 else if (status === 403) {
                     alert(`과제를 삭제하는데 실패하였습니다. 권한이 없습니다. (${status})`);
@@ -71,6 +76,8 @@ function Setting(){
             alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
             }
             else if (status === 401) {
+                alert(`토큰이 유효하지 않습니다. (${status})`);
+                document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
                 history.push("/");
             }
             else if (status === 404) {
@@ -87,21 +94,30 @@ function Setting(){
         let stateWord = "error";
 
         switch(as.assignmentState){
-            case 0: stateWord="마감 전"; break;
-            case 1: stateWord="채점 전"; break;
-            case 2: stateWord="채점 완료"; break;
+            case asState["notReleased"]: stateWord="발행 전"; break;
+            case asState["released"]: stateWord="발행됨"; break;
+            case asState["scoring"]: stateWord="채점 필요"; break;
+            case asState["done"]: stateWord="채점 완료"; break;
             default: return;
         }
 
         let icon = <FiberManualRecordIcon className="circle_icon"/>
         switch(as.assignmentState){
-            case 0:
-                icon = <FiberManualRecordIcon className="circle_icon" style={{color:green[700]}}/>;
+            case asState["notReleased"]:
+                icon = <FiberManualRecordIcon/>;
                 break;
-            case 1:
-                icon = <FiberManualRecordIcon className="circle_icon" color="secondary"/>;
+            case asState["released"]:
+                icon = <FiberManualRecordIcon style={{color:green[700]}}/>;
                 break;
+            case asState["scoring"]:
+                icon = <FiberManualRecordIcon color="secondary"/>;
+                break;
+            case asState["done"]:
+                icon = <FiberManualRecordIcon color="primary"/>;
+                break;
+            default : return;
         }
+
         return(
             <Grid container className="box_container" item>
                 <Grid item className="box_content">
