@@ -118,6 +118,7 @@ function TimePicker(props) {
                 value={startDate}
                 onChange={startDayChange}
                 helperText={props.startHelperText}
+                required
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
@@ -130,6 +131,7 @@ function TimePicker(props) {
                 type="time"
                 defaultValue={timeFormat(startDate)}
                 onChange={startClockChange}
+                required
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -147,6 +149,7 @@ function TimePicker(props) {
                 value={endDate}
                 onChange={endDayChange}
                 helperText={props.endHelperText}
+                required
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
@@ -159,6 +162,7 @@ function TimePicker(props) {
                 type="time"
                 defaultValue={timeFormat(endDate)}
                 onChange={endClockChange}
+                required
                 InputLabelProps={{
                   shrink: true,
                 }}

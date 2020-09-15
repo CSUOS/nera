@@ -193,10 +193,9 @@ function StudentPopUp (props){
     async function saveStudentList(){
         await initializeHighlight();
         
-        const errMessage = await preProcessingStudentData();
-        console.log(errMessage);
-        if(errMessage!==""){
-            alert(errMessage);
+        const errorMessage = await preProcessingStudentData();
+        if(errorMessage!==""){
+            alert(errorMessage);
             return;
         }
 

@@ -51,9 +51,7 @@ const SideBar = (props) => {
 
     function getProfessorMenu(type){
         let result = [];
-        console.log(assignmentClass);
         assignmentClass[type].map((as)=>{
-            console.log(as);
             result.push(
                 <Link to={'/home/assignment/'+as[0]}>
                     <ListItem button className="side_bar_list_item">
@@ -71,7 +69,6 @@ const SideBar = (props) => {
                 </Link>
             );
         });
-        console.log(result);
         return result;
     }
     function getStudentMenu(type){
