@@ -119,7 +119,7 @@ function SetStudentList(props){
     async function deleteGroup(index){
         // 그룹 삭제
         const string = "그룹 \""+group[index].className+"\" 을(를) 정말로 삭제할까요?";
-        if(window.confirm(string)==false){
+        if(window.confirm(string)===false){
             return;
         }
         await axios
@@ -197,7 +197,7 @@ function SetStudentList(props){
                 <Grid className="contents_title"><h6>수강생 목록</h6></Grid>
                 <Grid container wrap="wrap" alignItems="center" className="contents box_layout" >
                 {
-                    group.length==0?
+                    group.length===0?
                     <Grid item>
                         <Typography variant="h6">수강생 목록이 없습니다. 생성해주세요!</Typography>
                     </Grid>

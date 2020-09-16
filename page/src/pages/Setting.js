@@ -19,7 +19,7 @@ function Setting(){
     async function deleteAssignment(id, name){
 
         const string = "과제 \""+name+"\" 을(를) 정말로 삭제할까요?";
-        if(window.confirm(string)==false){
+        if(window.confirm(string)===false){
             return;
         }
 

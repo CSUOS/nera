@@ -203,7 +203,7 @@ function QuestionSelector(props) {
         try {
             let rowData = [];
             for (const userNumber of props.assign.students) {
-                if (props.selectedQues === undefined || props.selectedQues.length == 0) {
+                if (props.selectedQues === undefined || props.selectedQues.length === 0) {
                     rowData.push({
                         userNumber: userNumber
                     });
@@ -221,7 +221,7 @@ function QuestionSelector(props) {
                     rowData.push({
                         userNumber: userNumber,
                         submitted: submittedCount > 0,
-                        marked: submittedCount == markedCount
+                        marked: submittedCount === markedCount
                     });
                 }
             }

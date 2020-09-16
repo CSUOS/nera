@@ -141,7 +141,7 @@ const Assignment = (props) => {
     }
 
     function getMarkedScore(qId) {
-        let found = answers.filter(answer => answer.questionId == qId);
+        let found = answers.filter(answer => answer.questionId === qId);
         if (found.length > 0) {
             if (found[0].score === -1)
                 return 0;
@@ -167,7 +167,7 @@ const Assignment = (props) => {
                 processed.score = getMarkedScore(ques.questionId);
                 processed.assignmentState = info.assignmentState;
 
-                const found = answers.filter(answer => answer.questionId == ques.questionId);
+                const found = answers.filter(answer => answer.questionId === ques.questionId);
                 if (found.length > 0)
                     processed.answerContent = found[0].answerContent;
                 else
@@ -187,7 +187,7 @@ const Assignment = (props) => {
         currModified[qId] = text;
         setModifiedAnswers(currModified);
         
-        let found = questions.find(ques => ques.questionId == qId);
+        let found = questions.find(ques => ques.questionId === qId);
         if (status !== "답안 저장 필요") {
             setStatusStyle({ ...statusCaptionStyle, color: "red" });
             setStatus("답안 저장 필요");
@@ -276,7 +276,7 @@ const Assignment = (props) => {
         if (info.assignmentState !== 1)
             return;
 
-        if ((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey)  && event.keyCode == 83) {
+        if ((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey)  && event.keyCode === 83) {
             setOpenSnack(true);
             saveAnswers();
             event.preventDefault();
