@@ -10,7 +10,6 @@ import { Route } from 'react-router-dom';
 
 import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import { useHistory } from "react-router-dom";
 
 /* style definition => 대부분 css로 옮길 예정 */
@@ -90,6 +89,7 @@ function Main(props) {
   }, []);
 
   function setSideBarAssignment(){
+    console.log("entered");
     axios.get('/v1/assignment', { withCredentials: true })
       .then(res => {
         let assign = res.data;
@@ -115,6 +115,8 @@ function Main(props) {
           alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
         }
         else if (status === 401) {
+          alert(`토큰이 유효하지 않습니다. (${status})`);
+          document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
           history.push("/");
         }
         else if (status === 404) {
@@ -174,7 +176,11 @@ function Main(props) {
                 }, "margin-top-64", "contents_side")}
             >
               <Route exact path="/home" component={Home} />
-              <Route exact path="/home/assignment/:asId" component={user.type === 1 ? Assignment : Scoring} />
+              <Route exact path="/home/assignment/:asId" 
+                render={user.type === 1 ? 
+                  ({match}) => <Assignment match={match}></Assignment> : 
+                  ({match}) => <Scoring match={match} onUpdate={setSideBarAssignment}></Scoring>} 
+              />
               <Route exact path="/home/setting" component={Setting} />
               <Route exact path="/home/setting/:asId" component={SetAssignment} />
               <Route exact path="/home/setList" component={SetStudentList} />

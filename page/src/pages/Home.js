@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {PageInfo, AssignmentBox, Loading} from "../components";
-import { getMajorStr } from '../shared/MajorDictionary';
+import {useAssignmentState} from '../shared/AssignmentState';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { Grid } from '@material-ui/core';
@@ -13,6 +13,8 @@ const Home = (props)=>{
     const [FAssignment, setFA] = useState(undefined); // finish
     const [user, setUser] = useState(undefined);
     const history = useHistory();
+
+    const asState = useAssignmentState();
 
     function getCookie(name) {
         let value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
@@ -29,8 +31,7 @@ const Home = (props)=>{
     useEffect(() => {
         let currUser = undefined;
         try {
-            currUser = getUserInfo();
-            setUser(currUser);
+            setUser(getUserInfo());
         } catch (err) {
             history.push("/");
         }
@@ -42,18 +43,17 @@ const Home = (props)=>{
 
                 for (let i = 0; i < assign.length; i++) {
                     switch (assign[i].assignmentState) {
-                        case 0:
-                        case 1:
+                        case asState["notReleased"]:
+                        case asState["released"]:
                             pAssign.push(assign[i]);
                             break;
 
-                        case 2:
+                        case asState["scoring"]:
                             fAssign.push(assign[i]);
                             break;
 
-                        case 3:
-                            if (currUser.type === 1)
-                                fAssign.push(assign[i]);
+                        case asState["done"]:
+                            fAssign.push(assign[i]);
                             break;
                     }
                 }
@@ -70,6 +70,8 @@ const Home = (props)=>{
                     alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
                 }
                 else if (status === 401) {
+                    alert(`토큰이 유효하지 않습니다. (${status})`);
+                    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
                     history.push("/");
                 }
                 else if (status === 404) {
@@ -81,40 +83,8 @@ const Home = (props)=>{
                 setPA([]);
                 setFA([]);
             })
+        
     }, []);
-
-        /*
-        const result = asInfo.map((as)=>{
-            if(type===0){ // 교수 => 0, 1이 마감 전 0 => 발행전, 1 => 진행 중
-                switch(as[3]){
-                    case 0:
-                        PAssignment.push(as);
-                        break;
-                    case 1:
-                        PAssignment.push(as);
-                        break;
-                    case 2:
-                        FAssignment.push(as);
-                        break;
-                }
-            }else if(type===1){ // 학생 => 0, 1이 마감 전
-                switch(as[3]){
-                    case 0:
-                        PAssignment.push(as);
-                        break;
-                    case 1:
-                        PAssignment.push(as);
-                        break;
-                    case 2:
-                        FAssignment.push(as);
-                        break;
-                    case 3:
-                        FAssignment.push(as);
-                        break;
-                }
-            }
-        });
-        setPA(asInfo);*/
 
     // state가 아직 로드되지 않았다면 렌더링 안 함.
     if (PAssignment === undefined || FAssignment === undefined)

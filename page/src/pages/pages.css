@@ -41,7 +41,7 @@ a:hover{
     flex-wrap: wrap;
 }
 
-.assignment_md_info {
+.page_additional_info {
     padding: 30px 10px 30px 10px;
 }
 
@@ -220,7 +220,7 @@ a:hover{
 
 .login_logo {
     width: 100%;
-    padding: 4rem 6rem 0.5rem 6rem;
+    padding: 4rem 20% 0.5rem;
 }
 
 .login_subtitle {

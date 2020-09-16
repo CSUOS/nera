@@ -121,7 +121,7 @@ function StudentPopUp (props){
     function preProcessingStudentData(){
         // 데이터 전처리
         let tmp = students;
-        let returnString = "";
+        let returnString="";
         
         if(listName===""){
             return "목록 이름이 비어있습니다. 입력해주세요.";
@@ -193,10 +193,9 @@ function StudentPopUp (props){
     async function saveStudentList(){
         await initializeHighlight();
         
-        const errMessage = await preProcessingStudentData();
-        console.log(errMessage);
-        if(errMessage!==""){
-            alert(errMessage);
+        const errorMessage = await preProcessingStudentData();
+        if(errorMessage!==""){
+            alert(errorMessage);
             return;
         }
 
@@ -204,6 +203,7 @@ function StudentPopUp (props){
     }
     function uploadXlsxFile(e) {
         const f = e.target.files[0];
+        if (f === undefined) return;
         const check = f.name.slice(f.name.indexOf(".") + 1).toLowerCase();
 
         if (check !== 'csv' && check !== 'xlsx') {
@@ -223,9 +223,6 @@ function StudentPopUp (props){
             /* Update state */
             console.log(data);
             data.forEach(element => {
-                if(isNaN(element['학번'])) {
-                    alert('학번은 숫자만 입력 가능합니다.');
-                }
                 students.push(element['학번']);
                 history.push('/home/setList');
             });
@@ -249,7 +246,6 @@ function StudentPopUp (props){
             // 수강생 목록 조회
             return(
                 <Grid container item alignItems="center">
-                    <TextField label="목록 이름" required onInput={(e)=>setListName(e.target.value)} rows={1} className="modal_input_field" value={listName}></TextField>
                     <Button onClick={getStudentList}>수강생 목록 불러오기</Button>
                     {renderStudentList()}
                     <Button className="save_button" onClick={saveStudentList}>저장</Button>
@@ -275,6 +271,7 @@ function StudentPopUp (props){
                                 <Grid item className="box_container">
                                     <Grid item className="box_content">
                                         <TextField  label={"학생"+(index+1)} 
+                                                    InputLabelProps={{ shrink: true }}
                                                     rows={1}
                                                     onInput={(e)=>changeStudent(e, index)} 
                                                     className={"modal_students modal_input_field"}

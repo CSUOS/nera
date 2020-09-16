@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Paper, TextField, Typography, Button } from '@material-ui/core';
-import { PageInfo, TimePicker, SideBar} from '../components';
+import { PageInfo, TimePicker, SideBar, MarkdownEditor, MarkdownViewer } from '../components';
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import './pages.css';
@@ -9,7 +9,9 @@ import Modal from '@material-ui/core/Modal';
 import { modifiedDateToString } from '../shared/DateToString';
 import StudentPopup from '../shared/StudentPopup';
 import ClearIcon from '@material-ui/icons/Clear';
+import InfoIcon from '@material-ui/icons/Info';
 import SettingsIcon from '@material-ui/icons/Settings';
+import { max } from 'date-fns';
 
 function SetAssignment(props){
     const [update, forceUpdate] = useState(false); // rendering update용
@@ -17,11 +19,12 @@ function SetAssignment(props){
     const [sOpen, setSOpen] = useState(false); // student list modal 관리
 
     // 강의 정보
-    const [lectureName, setLecture] = useState("");
+    const [lectureName, setLecture] = useState();
     // 과제 정보
     const [assignId, setAssignId] = useState(-1);
-    const [assignName, setAssignName] = useState("");
-    const [assignInfo, setAssignInfo] = useState("");
+    const [assignName, setAssignName] = useState();
+    const [assignInfo, setAssignInfo] = useState();
+    const [initAssignInfo, setInitAssignInfo] = useState();
     const [modifiedDate, setModifiedDate] = useState(); // 저장 시간
     const [publishingTime, setPublishingTime] = useState(); // 발행 시간
     const [deadline, setDeadline] = useState(); // 마감 시간
@@ -29,7 +32,8 @@ function SetAssignment(props){
     const [students, setStudents] = useState([]);
     // modal state 관리
     const [renderQuestionIndex, setRenderQuestionIndex] = useState(-1); 
-    const [renderQuestionName, setRenderQuestionName] = useState(""); 
+    const [renderQuestionContents, setRenderQuestionContents] = useState(); 
+    const [initRenderQuestionContents, setInitRenderQuestionContents] = useState();
     const [renderQuestionScore, setRenderQuestionScore] = useState(); 
 
     const history = useHistory();
@@ -54,7 +58,8 @@ function SetAssignment(props){
     const questionHandleOpen = (index) => {
         setQOpen(true);
         setRenderQuestionIndex(index);
-        setRenderQuestionName(questions[index].questionContent);
+        setRenderQuestionContents(questions[index].questionContent);
+        setInitRenderQuestionContents(questions[index].questionContent);
         setRenderQuestionScore(questions[index].fullScore);
     };
     const questionHandleClose = () => {
@@ -81,6 +86,7 @@ function SetAssignment(props){
                 const data = res.data;
                 setAssignId(data.assignmentId);
                 setAssignInfo(data.assignmentInfo);
+                setInitAssignInfo(data.assignmentInfo);
                 let tmp = data.assignmentName.split('[');
                 tmp = tmp[1].split(']');
                 setLecture(tmp[0]);
@@ -99,8 +105,9 @@ function SetAssignment(props){
                     alert(`과제 정보를 얻는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
                 }
                 else if (status === 401) {
+                    alert(`토큰이 유효하지 않습니다. (${status})`);
+                    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
                     history.push("/");
-                    //alert(`과제 정보를 얻는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
                 }
                 else if (status === 404) {
                     alert(`과제 정보를 얻는데 실패하였습니다. 과제를 찾을 수 없습니다. (${status})`);
@@ -111,8 +118,9 @@ function SetAssignment(props){
                 history.push("/home/setting");
             });
         }else{ // 새로운 과제를 추가하는 페이지일 때
-            setPublishingTime(new Date());
-            setDeadline(new Date());
+            const date = new Date();
+            setPublishingTime(date);
+            setDeadline(date);
         }
     }
         
@@ -121,31 +129,35 @@ function SetAssignment(props){
         // textfield가 바뀔 때마다 lectureName 갱신
 
         await setLecture(e.target.value);
-        await forceUpdate(!update);
+        // await forceUpdate(!update);
     }
 
     async function changeAssignNameField(e){
         // textfield가 바뀔 때마다 assignmentName 갱신
 
         await setAssignName(e.target.value);
-        await forceUpdate(!update);
+        // await forceUpdate(!update);
     }
 
-    async function changeAssignInfoField(e){
-        // textfield가 바뀔 때마다 Description 갱신
+    async function changeAssignInfoField(value){
+        // MarkdownEditor가 바뀔 때마다 Description 갱신
 
-        await setAssignInfo(e.target.value);
-        await forceUpdate(!update);
+        await setAssignInfo(value);
+        // await forceUpdate(!update);
     }
 
     
     async function addQuestion(){
+        let maxQuesId = 0;
+        for (const ques of questions)
+            maxQuesId = Math.max(maxQuesId, ques.questionId);
+
         // 새로운 문제 추가
         const index = questions.length;
         const newQuestion = {
-            questionId : index,
-            questionContent : "기본",
-            fullScore : undefined,
+            questionId : maxQuesId+1,
+            questionContent : undefined,
+            fullScore : 0,
         };
 
         let tmp = questions;
@@ -154,33 +166,48 @@ function SetAssignment(props){
         await questionHandleOpen(index);
     }
 
-    async function changeRenderQuestion(e, type){
+    async function changeRenderQuestion(value, type){
         // textfield가 바뀔 때마다 render state들 갱신
 
         if(type===0){ // 문제 설명 갱신
-            await setRenderQuestionName(e.target.value);
+            await setRenderQuestionContents(value);
         }else{ // 배점 갱신
-            const number = Number(e.target.value);
-            await setRenderQuestionScore(isNaN(number)?e.target.value:number);
+            const number = Number(value);
+            await setRenderQuestionScore(isNaN(number)?value:number);
         }
-        await forceUpdate(!update);
+        // await forceUpdate(!update);
     }
 
     async function deleteQuestion(index){
         // 문제 삭제
         let tmp = questions;
         tmp.splice(index,1);
+        setQuestions(tmp);
         await forceUpdate(!update);
     }
 
+    function preProcessingQuestionData(){
+        if(renderQuestionContents===undefined || renderQuestionContents === "")
+            return "문제 내용이 없습니다.";
+
+        if(isNaN(renderQuestionScore))
+            return "배점이 숫자가 아닙니다.";
+
+        if(renderQuestionScore<0 || renderQuestionScore>100)
+            return "배점이 0 ~ 100 범위를 벗어납니다.";
+
+        return "";
+    }
+
     async function saveRenderQuestion(){
-        if(isNaN(renderQuestionScore)){
-            alert('배점에는 제대로 된 숫자를 입력해주세요.');
+        const errorMessage = await preProcessingQuestionData();
+        if(errorMessage!==""){
+            alert(errorMessage);
             return;
         }
 
         let tmp = questions;
-        tmp[renderQuestionIndex].questionContent = renderQuestionName;
+        tmp[renderQuestionIndex].questionContent = renderQuestionContents;
         tmp[renderQuestionIndex].fullScore = renderQuestionScore;
 
         await setQuestions(questions);
@@ -194,8 +221,37 @@ function SetAssignment(props){
         await listHandleClose();
     }
 
+    function preProcessingAssignmentData(){
+        if(lectureName===undefined)
+            return "강의명이 없습니다. 강의명을 작성해주세요.";
+
+        if(assignName===undefined)
+            return "과제명이 없습니다. 과제명을 작성해주세요.";
+
+        if(publishingTime-deadline===0)
+            return "과제 시작 시각과 마감 시각이 같습니다.";
+
+        if(deadline-Date.now()<0)
+            return "과제 마감 시각이 현재보다 이전입니다.";
+
+        if(questions.length===0)
+            return "문제가 없습니다. 문제를 생성해주세요.";
+        
+        if(students.length===0)
+            return "수강생이 없습니다. 수강생을 추가해주세요.";
+        
+
+        return "";
+    }
+
     async function saveAssignmentToDB(){
         // 과제 수정/생성 API와의 연동
+
+        const errMessage = await preProcessingAssignmentData();
+        if(errMessage!==""){
+            alert(errMessage);
+            return;
+        }
 
         await axios
         .post('/v1/assignment', {
@@ -216,7 +272,9 @@ function SetAssignment(props){
                 alert(`과제 정보를 저장하는데 실패하였습니다. 잘못된 요청입니다. (${status})`);
             }
             else if (status === 401) {
-                alert(`과제 정보를 저장하는데 실패하였습니다. 인증이 실패하였습니다. (${status})`);
+                alert(`토큰이 유효하지 않습니다. (${status})`);
+                document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+                history.push("/");
             }
             else if (status === 403) {
                 alert(`과제 정보를 저장하는데 실패하였습니다. 권한이 없습니다. (${status})`);
@@ -248,8 +306,21 @@ function SetAssignment(props){
                     <Grid><TextField onChange={(e)=>changeLectureField(e)} helperText="강의명을 기재해주세요. ex_ 이산수학" InputLabelProps={{shrink:true}} label="강의명" required multiline rowsMax={2} value={lectureName}></TextField></Grid>
                     <Grid><TextField onChange={(e)=>changeAssignNameField(e)} helperText="과제명을 기재해주세요. 강의명과 함께 발행날짜 이전에 학생들에게 보여집니다*" InputLabelProps={{shrink:true}} label="과제명" required multiline rowsMax={2} value={assignName}></TextField></Grid>
                 </Grid>
-                <Grid className="setting_as_row" container item direction="row">
-                    <Grid xs={12}><TextField variant="outlined" onChange={(e)=>changeAssignInfoField(e)} helperText="자세한 과제 내용과 주의사항을 기재해주세요. 문제는 아래의 문제란에 기재해주세요." InputLabelProps={{shrink:true}} label="과제 설명" required multiline rowsMax={10000} value={assignInfo}></TextField></Grid>
+
+                <Grid item className="contents_title"><h6>과제 설명</h6></Grid>
+                <Grid container item direction="row">
+                    <Grid xs={12}>
+                        <MarkdownEditor 
+                            onChange={changeAssignInfoField} 
+                            contents={initAssignInfo}
+                            lines={20}
+                        ></MarkdownEditor>
+                    </Grid>
+                </Grid>
+
+                <Grid container item direction="row" alignItems="center">
+                    <InfoIcon color="primary"/>
+                    위의 과제 설명란에 자세한 과제 내용과 주의사항을 기재해주세요. 개별 문제는 아래의 문제란에 기재해주세요.
                 </Grid>
                 <Grid item>
                     {(publishingTime!==undefined && deadline!==undefined)?
@@ -272,7 +343,15 @@ function SetAssignment(props){
                                 <Grid container className="box_container" item>
                                     <Grid item className="box_content">
                                         <Button className="box_button" onClick={()=>questionHandleOpen(index)}>
-                                            <Paper className="box_name">{index+1}.{question.questionContent}</Paper>
+                                            <Paper className="box_name">
+                                                <Grid container className="problem_container" direction="column">
+                                                    <Grid container className="problem_description" direction="row" alignItems="flex-start" justify="flex-start">
+                                                        <h6 className="problem_number">{(index + 1) + "."}</h6>
+                                                        <MarkdownViewer className="problem_description_viewer" source={question.questionContent}></MarkdownViewer>
+                                                    </Grid>
+                                                    <h6 className="problem_score" align="right">{question.fullScore + "점"}</h6>
+                                                </Grid>
+                                            </Paper>
                                         </Button>
                                     </Grid>
                                     <Grid item className="box_xbtn">
@@ -293,18 +372,20 @@ function SetAssignment(props){
                             aria-describedby="add question to assignment"
                             className="modal">
                             <Paper className="modal_con">
-                                <Grid container spacing={2} wrap="wrap" className="modal_form">
-                                    <TextField onChange={(e)=>changeRenderQuestion(e,0)} InputLabelProps={{shrink:true}} label="문제 설명" required multiline rows={1} rowsMax={10000} value={renderQuestionName}></TextField>
+                                <Grid container spacing={2} direction="column" className="modal_form">
+                                    <MarkdownEditor
+                                        onChange={(value) => changeRenderQuestion(value,0)}
+                                        contents={initRenderQuestionContents}
+                                    ></MarkdownEditor>
                                     <TextField 
-                                        onChange={(e)=>changeRenderQuestion(e,1)} 
+                                        onChange={(e)=>changeRenderQuestion(e.target.value,1)} 
                                         InputLabelProps={{shrink:true}} 
                                         label="배점" required multiline 
                                         rows={1} rowsMax={10} 
                                         value={renderQuestionScore}
                                         error={typeof(renderQuestionScore)==="string"?true:false}
                                         helperText="숫자를 입력해주세요."
-                                        >
-                                    </TextField>
+                                    ></TextField>
                                 </Grid>
                                 <Button className="save_button" onClick={()=>saveRenderQuestion()}>저장</Button>
                             </Paper>

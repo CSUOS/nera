@@ -77,12 +77,11 @@ const MarkdownEditor = (props) => {
     useEffect(() => {
         setSource(props.contents === undefined ? "" : props.contents);
         let session = editorRef.current.editor.getSession();
-        viewerRef.current.style.height = `${editorDivRef.current.offsetHeight}px`;
         session.setValue(props.contents === undefined ? "" : props.contents);
+        viewerRef.current.style.height = `${editorDivRef.current.offsetHeight}px`;
     }, [props.contents]);
 
     function handleTextChange(value) {
-        let session = editorRef.current.editor.getSession();
         viewerRef.current.style.height = `${editorDivRef.current.offsetHeight}px`;
         if (props.onChange)
             props.onChange(value);
@@ -102,8 +101,8 @@ const MarkdownEditor = (props) => {
                             theme="textmate"
                             fontSize={18}
                             showPrintMargin={false}
-                            minLines={30}
-                            maxLines={30}
+                            minLines={props.lines ? props.lines : 30}
+                            maxLines={props.lines ? props.lines : 30}
                             showGutter={true}
                             highlightActiveLine={true}
                             wrapEnabled={true}
