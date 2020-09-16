@@ -13,7 +13,7 @@ const UserAnswer = (props) => {
         if (!props.assignmentState)
             return false;
 
-        return props.assignmentState != 0 && props.assignmentState != 1;
+        return props.assignmentState !== 0 && props.assignmentState !== 1;
     }
 
     useEffect(() => {
