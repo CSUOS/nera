@@ -59,7 +59,7 @@ function Login(props){
         try {
             let hashed_token = await axios.get('/v1/token', { withCredentials: true });
 
-            if (hashed_token.status == 404) {
+            if (hashed_token.status === 404) {
                 alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
                 return;
             }
@@ -90,11 +90,11 @@ function Login(props){
                 if (status === undefined) {
                     alert("로그인 하는 중 예기치 못한 예외가 발생하였습니다.\n" + JSON.stringify(err));
                 }
-                else if (status == 400) {
+                else if (status === 400) {
                     alert("아이디, 패스워드가 기입되었는지 다시 한 번 확인해주세요.");
-                }else if (status == 403) {
+                }else if (status === 403) {
                     alert("아이디, 패스워드가 정확히 기입되었는지 다시 한 번 확인해주세요.");
-                }else if (status == 500) {
+                }else if (status === 500) {
                     alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
                 }
 
@@ -117,7 +117,7 @@ function Login(props){
                             '/v1/token', { withCredentials: true }
                             ).catch((err)=>console.log(err));
 
-        if (hashed_token.status == 404) {
+        if (hashed_token.status === 404) {
             alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
             return;
         }
@@ -126,13 +126,13 @@ function Login(props){
             catch((err) => alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));
         const status = response.status;
         const rabumsStatus = response?.data?.message?.slice(response.data.message.length - 3);
-        if(status==400 || rabumsStatus == "400"){
+        if(status===400 || rabumsStatus === "400"){
             alert("아이디, 패스워드가 기입되었는지 다시 한 번 확인해주세요.");
-        }else if(status==403 || rabumsStatus == "403"){
+        }else if(status===403 || rabumsStatus === "403"){
             alert("아이디, 패스워드가 정확히 기입되었는지 다시 한 번 확인해주세요.");
-        }else if(status==500 || rabumsStatus == "500"){
+        }else if(status===500 || rabumsStatus === "500"){
             alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
-        } else if (status == 200 && rabumsStatus == undefined) {
+        } else if (status === 200 && rabumsStatus === undefined) {
             redirectToHome();
         } else {
             setButtonText("Login");
@@ -145,7 +145,7 @@ function Login(props){
                             '/v1/token', { withCredentials: true }
                             ).catch((err)=>console.log(err));
 
-        if (hashed_token.status == 404) {
+        if (hashed_token.status === 404) {
             alert("내부 서버 오류로 token을 찾을 수 없습니다. 로그인을 다시 시도해주세요.");
             return;
         }
@@ -154,16 +154,16 @@ function Login(props){
             catch((err) => alert("예기치 못한 오류가 발생하였습니다.\n추가 정보: " + err));
         const status = response.status;
         const rabumsStatus = response?.data?.message?.slice(response.data.message.length - 3);
-        if(status==400 || rabumsStatus == "400"){
+        if(status===400 || rabumsStatus === "400"){
             alert("아이디, 패스워드가 기입되었는지 다시 한 번 확인해주세요.");
-        }else if(status==401 || rabumsStatus == "401"){
+        }else if(status===401 || rabumsStatus === "401"){
             alert("토큰 없음");
         }
-        else if(status==403 || rabumsStatus == "403"){
+        else if(status===403 || rabumsStatus === "403"){
             alert("아이디, 패스워드가 정확히 기입되었는지 다시 한 번 확인해주세요.");
-        }else if(status==500 || rabumsStatus == "500"){
+        }else if(status===500 || rabumsStatus === "500"){
             alert("내부 서버 오류입니다. 잠시만 기다려주세요.");
-        }else if (status == 200 && rabumsStatus == undefined) {
+        }else if (status === 200 && rabumsStatus === undefined) {
             redirectToHome();
         }else {
             setButtonText("Login");

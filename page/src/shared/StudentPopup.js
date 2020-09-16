@@ -206,7 +206,7 @@ function StudentPopUp (props){
         if (f === undefined) return;
         const check = f.name.slice(f.name.indexOf(".") + 1).toLowerCase();
 
-        if (check != 'csv' && check != 'xlsx') {
+        if (check !== 'csv' && check !== 'xlsx') {
             alert('.csv, .xlsx 파일만 등록 가능합니다.');
             return;
         }
@@ -233,7 +233,7 @@ function StudentPopUp (props){
     // type마다 달라지는 contents
     
     const headerContent = ()=>{
-        if(props.type=="set"){
+        if(props.type==="set"){
             // 수강생 목록 생성
             return(
                 <Grid container item alignItems="center">
@@ -242,7 +242,7 @@ function StudentPopUp (props){
                     <Button className="save_button" onClick={saveStudentList}>저장</Button>
                 </Grid>
             );
-        }else if(props.type=="get"){
+        }else if(props.type==="get"){
             // 수강생 목록 조회
             return(
                 <Grid container item alignItems="center">

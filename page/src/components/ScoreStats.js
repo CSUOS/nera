@@ -215,7 +215,7 @@ function ScoreStats(props) {
     };
 
     const getAverage = (rowData) => {
-        if (rowData.length == 0)
+        if (rowData.length === 0)
             return 0;
 
         let sum = 0;
