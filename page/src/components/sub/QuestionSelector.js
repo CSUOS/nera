@@ -1,23 +1,10 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+
+import { Table, TableHead, TableBody, TableCell, TableContainer, TablePagination, TableRow, TableSortLabel, Toolbar, Typography, Paper, Checkbox}  from '@material-ui/core';
 import { lighten, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import { green, red } from '@material-ui/core/colors';
-import { Loading } from '.';
+import { Loading } from '../';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -47,19 +34,14 @@ function stableSort(array, comparator) {
 
 const headCells = [
     { 
-        id: 'userNumber',
+        id: 'questionNumber',
         disablePadding: true, 
-        label: '학번' 
+        label: '문제 번호' 
     },
     { 
-        id: 'submitted',
+        id: 'questionId',
         disablePadding: false, 
-        label: '답안을 하나 이상 제출함' 
-    },
-    { 
-        id: 'marked',
-        disablePadding: false, 
-        label: '채점을 완료함' 
+        label: '문제 ID' 
     }
 ];
 
@@ -77,7 +59,7 @@ function EnhancedTableHead(props) {
                         indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}
-                        inputProps={{ 'aria-label': 'select all students' }}
+                        inputProps={{ 'aria-label': 'select all questions' }}
                     />
                 </TableCell>
                 {headCells.map((headCell) => (
@@ -147,11 +129,11 @@ const EnhancedTableToolbar = (props) => {
         >
             {numSelected > 0 ? (
                 <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-                    {numSelected}명의 학생을 선택함
+                    {numSelected}개의 문제를 선택함
                 </Typography>
             ) : (
                     <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-                        채점할 학생 선택
+                        채점할 문제 선택
                     </Typography>
                 )}
         </Toolbar>
@@ -189,7 +171,7 @@ function QuestionSelector(props) {
     const [error, setError] = React.useState(false);
     const [emptyRows, setEmptyRows] = React.useState(0);
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('userNumber');
+    const [orderBy, setOrderBy] = React.useState('questionNumber');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -197,42 +179,26 @@ function QuestionSelector(props) {
     useEffect(() => {
         setRows(undefined);
         setError(false);
-        setEmptyRows(rowsPerPage - Math.min(rowsPerPage, props.assign.students.length - page * rowsPerPage));
+        setEmptyRows(rowsPerPage - Math.min(rowsPerPage, props.assign.questions.length - page * rowsPerPage));
         setOrder('asc');
-        setOrderBy('userNumber');
+        setOrderBy('questionNumber');
         setPage(0);
         setRowsPerPage(10);
-        
+
         try {
+            let questionNumber = 1;
             let rowData = [];
-            for (const userNumber of props.assign.students) {
-                if (props.selectedQues === undefined || props.selectedQues.length === 0) {
-                    rowData.push({
-                        userNumber: userNumber
-                    });
-                } else {
-                    const answers = props.answersDict[userNumber].answers;
-                    let submittedCount = 0;
-                    let markedCount = 0;
-                    for (const questionId of props.selectedQues) {
-                        const ansOfQues = answers.find(ans => ans.questionId === questionId);
-                        if (ansOfQues !== undefined) {
-                            ++submittedCount;
-                            markedCount += (ansOfQues.score === -1 ? 0 : 1);
-                        }
-                    }
-                    rowData.push({
-                        userNumber: userNumber,
-                        submitted: submittedCount > 0,
-                        marked: submittedCount === markedCount
-                    });
-                }
+            for (const question of props.assign.questions) {
+                rowData.push({
+                    questionNumber: questionNumber++,
+                    questionId: question.questionId
+                });
             }
             setRows(rowData);
         } catch (err) {
             setError(true);
         }
-    }, [props.assign, props.answersDict, props.selectedQues]);
+    }, [props.assign]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -242,7 +208,7 @@ function QuestionSelector(props) {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.userNumber);
+            const newSelecteds = rows.map((n) => n.questionId);
             setSelected(newSelecteds);
             if (props.onChange)
                 props.onChange(newSelecteds);
@@ -253,12 +219,12 @@ function QuestionSelector(props) {
             props.onChange([]);
     };
 
-    const handleClick = (event, userNumber) => {
-        const selectedIndex = selected.indexOf(userNumber);
+    const handleClick = (event, questionId) => {
+        const selectedIndex = selected.indexOf(questionId);
         let newSelected = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, userNumber);
+            newSelected = newSelected.concat(selected, questionId);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -284,21 +250,15 @@ function QuestionSelector(props) {
         setPage(0);
     };
 
-    const getIcon = (value) => {
-        if (value === undefined)
-            return "-";
-        else if (value)
-            return <CheckCircleOutlineIcon style={{ color: green[500] }} size="small"/>;
-
-        return <HighlightOffIcon style={{ color: red[500] }} size="small"/>;
-    }
-
-    const isSelected = (userNumber) => selected.indexOf(userNumber) !== -1;
+    const isSelected = (questionId) => selected.indexOf(questionId) !== -1;
 
     if (error)
-        return <Typography variant="h6" align="center">답안 정보를 가져올 수 없었습니다.</Typography>;
+        return <Typography variant="h6" align="center">문제 정보를 가져올 수 없었습니다.</Typography>;
     else if (rows === undefined)
-        return <Typography variant="h6" align="center">채점할 문제들을 먼저 선택해주세요!</Typography>;
+        return (
+            <Paper className={classes.paper} elevation={3}>
+                <Loading status="문제 정보를 가져오는 중..."></Loading>
+            </Paper>);
     else
         return (
             <Paper className={classes.paper} elevation={3}>
@@ -308,7 +268,7 @@ function QuestionSelector(props) {
                         className={classes.table}
                         aria-labelledby="tableTitle"
                         size="small"
-                        aria-label="students table"
+                        aria-label="question table"
                     >
                         <EnhancedTableHead
                             classes={classes}
@@ -323,17 +283,17 @@ function QuestionSelector(props) {
                             {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.userNumber);
-                                    const labelId = `student-table-checkbox-${index}`;
+                                    const isItemSelected = isSelected(row.questionId);
+                                    const labelId = `question-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.userNumber)}
+                                            onClick={(event) => handleClick(event, row.questionId)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.userNumber}
+                                            key={row.questionId}
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">
@@ -343,14 +303,9 @@ function QuestionSelector(props) {
                                                 />
                                             </TableCell>
                                             <TableCell component="th" id={labelId} scope="row" padding="none">
-                                                {row.userNumber}
+                                                {row.questionNumber}
                                             </TableCell>
-                                            <TableCell>
-                                                {getIcon(row.submitted)}
-                                            </TableCell>
-                                            <TableCell>
-                                                {getIcon(row.marked)}
-                                            </TableCell>
+                                            <TableCell>{row.questionId}</TableCell>
                                         </TableRow>
                                     );
                                 })}

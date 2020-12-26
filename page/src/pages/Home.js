@@ -1,12 +1,13 @@
-import React, {useEffect, useState, useContext} from 'react';
-import {PageInfo, AssignmentBox, Loading} from "../components";
-import {useAssignmentState} from '../shared/AssignmentState';
+import React, { useEffect, useState, useContext } from 'react';
+import { PageInfo, AssignmentBox, Loading } from "../components";
+import { useAssignmentState } from '../function/AssignmentState';
+import { getUserInfo } from "../function/GetUserInfo";
+
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { Grid } from '@material-ui/core';
-import axios from "axios";
-import { useHistory } from "react-router-dom";
-import { getUserInfo } from "../shared/GetUserInfo";
 
 const Home = (props)=>{
     const [PAssignment, setPA] = useState(undefined); // progress

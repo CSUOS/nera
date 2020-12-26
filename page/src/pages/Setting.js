@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Paper, Button, Typography} from '@material-ui/core';
-import {PageInfo} from '../components';
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
-import './pages.css';
-import {useAssignmentState} from '../shared/AssignmentState';
 
+import { PageInfo } from '../components';
+import { useAssignmentState } from '../function/AssignmentState';
+
+import { Grid, Paper, Button, Typography } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ClearIcon from '@material-ui/icons/Clear';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';

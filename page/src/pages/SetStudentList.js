@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Paper, Button, Typography } from '@material-ui/core';
-import { PageInfo } from '../components';
+import { PageInfo, StudentPopup } from '../components';
+
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import XLSX from 'xlsx';
-import './pages.css';
 
+import { Grid, Paper, Button, Typography } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ClearIcon from '@material-ui/icons/Clear';
-import StudentPopup from '../shared/StudentPopup';
 
 function SetStudentList(props){
     const [update, forceUpdate] = useState(false); // rendering update용

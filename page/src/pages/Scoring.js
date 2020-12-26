@@ -1,11 +1,13 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PageInfo, Loading, ScoreStats, QuestionSelector, StudentSelector, MarkdownViewer, UserAnswer } from "../components";
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import { Box, Grid, Paper, Divider, Typography } from '@material-ui/core';
-import InfoIcon from '@material-ui/icons/Info';
+
 import axios from "axios";
-import { useHistory } from "react-router-dom";
 import { rejects } from 'assert';
+import { useHistory } from "react-router-dom";
+
+import InfoIcon from '@material-ui/icons/Info';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import { Grid, Divider, Typography } from '@material-ui/core';
 
 const Scoring = (props) => {
     const [assign, setAssign] = useState(undefined);

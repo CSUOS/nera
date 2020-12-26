@@ -1,17 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import { Grid, Paper, TextField, Typography, Button } from '@material-ui/core';
-import { PageInfo, TimePicker, SideBar, MarkdownEditor, MarkdownViewer } from '../components';
+import React, { useState, useEffect } from 'react';
+import { PageInfo, TimePicker, MarkdownEditor, MarkdownViewer, StudentPopup } from '../components';
+import { modifiedDateToString } from '../function/DateToString';
+
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import './pages.css';
-import Modal from '@material-ui/core/Modal';
 
-import { modifiedDateToString } from '../shared/DateToString';
-import StudentPopup from '../shared/StudentPopup';
+import { Grid, Paper, Modal, TextField, Typography, Button } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import InfoIcon from '@material-ui/icons/Info';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { max } from 'date-fns';
 
 function SetAssignment(props){
     const [update, forceUpdate] = useState(false); // rendering update용

@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Modal from '@material-ui/core/Modal';
-import { Grid, Paper, TextField, Button} from '@material-ui/core';
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import XLSX from 'xlsx';
 import PropTypes from 'prop-types';
-import ClearIcon from '@material-ui/icons/Clear';
 
-import '../pages/pages.css';
-import './shared.css'; //shared.css로 옮기기
+import { Grid, Modal, Paper, TextField, Button} from '@material-ui/core';
+import ClearIcon from '@material-ui/icons/Clear';
 
 function StudentPopUp (props){
     const [update, forceUpdate] = useState(false); // rendering update용

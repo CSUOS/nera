@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { PageInfo, Problem, Loading, MarkdownViewer, MarkdownEditor, SaveSnackbar } from "../components";
-import { modifiedDateToString } from '../shared/DateToString.js';
+import { modifiedDateToString } from '../function/DateToString.js';
+
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+import { Prompt } from 'react-router';
+
 import MuiAlert from '@material-ui/lab/Alert';
 import InfoIcon from '@material-ui/icons/Info';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { Button, Grid, Typography, Divider, Snackbar, Slide } from '@material-ui/core';
-import axios from "axios";
-import { useHistory } from "react-router-dom";
-import { Prompt } from 'react-router';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
