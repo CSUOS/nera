@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { SideBar, Header, Loading } from "../components";
-import { Grid } from '@material-ui/core';
 import { Home, Assignment, Setting, SetAssignment, Scoring, SetStudentList } from "../pages";
-import { getUserInfo } from "../shared/GetUserInfo";
-import "./pages.css";
+import { getUserInfo } from "../function/GetUserInfo";
+
 import clsx from 'clsx';
 import axios from "axios";
-import { Route } from 'react-router-dom';
 
-import Drawer from '@material-ui/core/Drawer';
+import { Grid, Drawer } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from "react-router-dom";
+import { Route, useHistory } from "react-router-dom";
 
 /* style definition => 대부분 css로 옮길 예정 */
 
@@ -29,36 +27,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  hide: {
-    display: 'none',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(4),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: -drawerWidth,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
-  },
+  }
 }));
 
 

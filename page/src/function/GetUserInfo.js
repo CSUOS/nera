@@ -1,11 +1,11 @@
-import { getMajorStr } from '../shared/MajorDictionary';
+import { getMajorStr } from './MajorDictionary';
 
 function getCookie(name) {
     let value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
     return value? value[2] : null;
 };
 
-function getUserInfo(){
+export function getUserInfo(){
     const jwt = require('jsonwebtoken');
 
     try{
@@ -27,6 +27,4 @@ function getUserInfo(){
         throw err;
     }
 }
-
-export {getUserInfo};
     

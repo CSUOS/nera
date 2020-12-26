@@ -1,8 +1,7 @@
+import React, { useEffect } from 'react';
+import { MarkdownViewer } from '../';
+
 import { Grid, Typography, Paper, Divider, FormControl, MenuItem, InputLabel, Select, FormControlLabel, Box } from '@material-ui/core';
-import React, { Component, useEffect } from 'react';
-import { MarkdownViewer } from '.';
-import { makeStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
 
 const UserAnswer = (props) => {
     const [open, setOpen] = React.useState(false);

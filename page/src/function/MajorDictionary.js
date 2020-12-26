@@ -53,12 +53,10 @@ const majorDict = {
     /*융합전공학부 정보 없음*/
 };
 
-function getMajorStr(majorNumber) {
+export function getMajorStr(majorNumber) {
     majorNumber = Number(majorNumber);
     if (majorNumber in majorDict)
         return majorDict[majorNumber];
     else
         return "학과 정보 없음";
 }
-
-export { getMajorStr };

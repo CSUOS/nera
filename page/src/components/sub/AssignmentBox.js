@@ -1,8 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import {useAssignmentState} from '../shared/AssignmentState';
+import { Link } from 'react-router-dom';
 
-import {Link} from 'react-router-dom';
+import { useAssignmentState } from '../../function/AssignmentState';
+
+import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Paper } from '@material-ui/core';
 
 const AssignmentBox = (props)=>{

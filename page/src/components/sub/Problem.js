@@ -1,7 +1,7 @@
-import { Grid, TextField, Divider, Paper, Typography } from '@material-ui/core';
-import React, { Component, useEffect } from 'react';
-import { MarkdownViewer, MarkdownEditor } from '.';
-import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
+
+import { MarkdownViewer, MarkdownEditor } from '../';
+import { Grid, Divider, Paper, Typography } from '@material-ui/core';
 
 const Problem = (props) => {
     const [initialText, setInitialText] = React.useState("");

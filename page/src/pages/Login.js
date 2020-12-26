@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
 import { Grid, TextField, Button, Typography, Paper, Link, Checkbox, FormControlLabel, Divider } from '@material-ui/core';
+import { getUserInfo } from "../function/GetUserInfo";
+
+import axios from "axios";
 import crypto from 'crypto';
 import { useHistory } from "react-router-dom";
-import { withCookies, Cookies } from 'react-cookie';
-import { getUserInfo } from "../shared/GetUserInfo";
+import { withCookies } from 'react-cookie';
 
 function Login(props){
     // id, password

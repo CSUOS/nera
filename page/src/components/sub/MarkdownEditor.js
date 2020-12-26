@@ -1,7 +1,9 @@
-import React, { useEffect, useState, useRef, createRef, useReducer } from 'react';
-import { Paper, Grid, Typography, Divider, TextField, FilledInput } from '@material-ui/core';
-import MarkdownViewer from './MarkdownViewer';
+import React, { useEffect, useState, useRef } from 'react';
 import AceEditor from 'react-ace';
+
+import { Paper, Grid, Typography, Divider } from '@material-ui/core';
+
+import MarkdownViewer from './MarkdownViewer';
 
 import "ace-builds/src-noconflict/mode-markdown";
 import "ace-builds/src-noconflict/mode-latex";

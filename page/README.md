@@ -27,39 +27,37 @@ yarn start (또는 npm start)
 
   - css
     - material.css
-    - reset.js
+    - reset.css
 
 - src
 
   - client
 
     - Root.js
-
-  - components
-
-    - index.js
-    - AssignmentBox.js
+- components
+  - main
+  - Header.js
+      - SideBar.js
+    - shared
     - BottomPopup.js
-    - Header.js
-    - Loading.js
-    - MarkdownEditor.js
-    - MarkdownViewer.js
-    - PageInfo.js
-    - Problem.js
-    - QuestionSelector.js
-    - SaveSnackbar.js
-    - ScoreStats.js
-    - SideBar.js
-    - StudentSelector.js
-    - TimePicker.js
-    - UserAnswer.js
-    - UseRequest.js
-    - components.css
-
-  - pages
-
-    - index.js
-    - Assignment.js
+      - Loading.js
+      - PageInfo.js
+      - TimePicker.js
+      - UseRequest.js
+    - sub
+    - AssignmentBox.js
+      - MarkdownEditor.js
+      - MarkdownViewer.js
+      - Problem.js
+      - QuestionSelector.js
+      - SaveSnackbar.js
+      - ScoreStats.js
+      - StudentSelector.js
+      - UserAnswer.js
+  - index.js
+- pages
+  
+  - Assignment.js
     - Error.js
     - Home.js
     - Login.js
@@ -68,14 +66,17 @@ yarn start (또는 npm start)
     - SetAssignment.js
     - SetStudentList.js
     - Setting.js
-    - pages.css
-
-  - shared
-
-    - App.js
-    - DateToString.js
+    - index.js
+  - function
+    - AssignmentState.js
+  - DateToString.js
     - GetUserInfo.js
-    - MajorDictionary.js
+  - MajorDictionary.js
+  - shared
+  
+    - App.js
+    - components.css
+    - pages.css
 
 ---
 
@@ -95,14 +96,30 @@ yarn start (또는 npm start)
 
   - components
 
-    여러 페이지에서 공통적으로 쓰이는 컴포넌트 요소들을 담아두는 디렉토리
+    세부 구성요소를 만드는 컴포넌트 요소들을 담아두는 디렉토리
 
+    * main
+
+      페이지의 한 부분을 구성하는 컴포넌트 요소
+
+    * shared
+
+      여러 페이지에서 공유하는 컴포넌트 요소
+  
+    * sub
+  
+      한 페이지의 세부 구성 요소
+  
+  * function
+  
+    여러 페이지에서 함께 사용하는 함수
+  
   - pages
-
+  
     구현된 페이지들을 담아두는 디렉토리
-
+  
   - shared
-
+  
     라우트를 담당하는 App.js를 담아두는 디렉토리
 
 ### 파일 정보
@@ -261,3 +278,4 @@ cookie의 jwt token을 이용해 사용자 정보를 가져오기 위한 함수 
 | https://nera.csuos.ml/home/setting           | 과제 목록 페이지        | 교수님만 접근 가능<br/>Main.js => Setting.js                                                       |
 | https://nera.csuos.ml/home/setting/:as_id    | 과제 관리 페이지        | 교수님만 접근 가능<br>Main.js => SetAssignment.js                                                  |
 | https://nera.csuos.ml/home/setList           | 수강생 목록 관리 페이지 | 교수님만 접근 가능<br>Main.js => SetStudentList.js                                                 |
+
