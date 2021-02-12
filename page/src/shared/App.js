@@ -6,16 +6,16 @@ import './components.css';
 
 
 class App extends Component {
-    render() {
-        return (
-            <div id="app">
-                <Switch>
-                    <Route exact path="/" component={Login}/>
-                    <Route path="/home" component={Main}/>
-                    <Redirect path="*" to="/"/>
-                </Switch>
-            </div>
-        );
-    }
+	render() {
+		return (
+			<div id="app">
+				<Switch>
+					<Route exact path="/" component={Login}/>
+					<Route path="/home" component={Main}/>
+					<Redirect path="*" to="/"/>
+				</Switch>
+			</div>
+		);
+	}
 }
 export default App;

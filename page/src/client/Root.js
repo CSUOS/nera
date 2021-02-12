@@ -5,19 +5,19 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { CookiesProvider } from 'react-cookie';
 
 const theme = createMuiTheme({
-    typography: {
-        fontFamily: "inherit"
-    }
+	typography: {
+		fontFamily: "inherit"
+	}
 })
 
 const Root = () => (
-    <BrowserRouter>
-        <CookiesProvider>
-            <MuiThemeProvider theme={theme}>
-                <App />
-            </MuiThemeProvider>
-        </CookiesProvider>
-    </BrowserRouter>
+	<BrowserRouter>
+		<CookiesProvider>
+			<MuiThemeProvider theme={theme}>
+				<App />
+			</MuiThemeProvider>
+		</CookiesProvider>
+	</BrowserRouter>
 );
 
 export default Root;
