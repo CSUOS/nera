@@ -5,8 +5,8 @@ const { config } = require('../config');
 const { collectionInfo } = require('./type');
 
 async function mongoConnect() { // mongoDB 연결 함수
-  const secret = await config;
-  mongoose.connect(secret.mongoURI,
+  // const secret = await config;
+  mongoose.connect("mongodb://root:root@localhost:27017/admin",//secret.mongoURI,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,

@@ -49,7 +49,7 @@ const UserAnswer = (props) => {
 	else
 		return (
 			<Paper className="answer_content" elevation={4}>
-				<Grid direction="column">
+				<Grid container direction="column">
 					<Typography gutterBottom variant="subtitle1">{`${props.userNumber}의 ${props.questionNumber}번 문제 답안`}</Typography>
 					<Divider orientation="horizontal"></Divider>
 					<MarkdownViewer source={props.answerContent ? props.answerContent : "*제출한 답안 없음*"}></MarkdownViewer>

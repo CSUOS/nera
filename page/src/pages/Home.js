@@ -104,6 +104,7 @@ const Home = (props)=>{
 					}</h6></Grid>
 					<Grid className="assignment_rootbox">
 						{
+							/*
 							PAssignment.map((as) =>
 								<AssignmentBox
 									type={user.type}
@@ -111,6 +112,7 @@ const Home = (props)=>{
 									key={as[2]}
 								/>
 							)
+							*/
 						}
 					</Grid>
 				</Grid>
@@ -118,13 +120,14 @@ const Home = (props)=>{
 					<Grid className="contents_title"><h6>마감된 과제</h6></Grid>
 					<Grid className="assignment_rootbox">
 						{
+							/*
 							FAssignment.map((as) =>
 								<AssignmentBox
 									type={user.type}
 									as_info={as}
 									key={as[2]}
 								/>
-							)
+							)*/
 						}
 					</Grid>
 				</Grid>

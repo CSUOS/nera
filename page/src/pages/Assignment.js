@@ -147,16 +147,19 @@ const Assignment = (props) => {
 	}
 
 	function getMarkedScore(qId) {
+		// id가 같은 question이 있을 수 있나 고민해봐야함
 		let found = answers.filter(answer => answer.questionId === qId);
 		if (found.length > 0) {
 			if (found[0].score === -1)
 				return 0;
 			return found[0].score;
 		}
+		// question에 answer가 없으면 score를 0으로 세팅, score가 -1이면(채점이 완료되지 않은 경우) 0으로 세팅, 있으면 그대로 내보내기
 		return 0;
 	}
 
 	function initQuestions() {
+		// 받아온 question과 answer를 조합하여 새로운 구조체 만든 후 question state에 저장
 		if (info === undefined)
 			return;
 
@@ -192,7 +195,7 @@ const Assignment = (props) => {
 		let currModified = modifiedAnswers;
 		currModified[qId] = text;
 		setModifiedAnswers(currModified);
-        
+
 		let found = questions.find(ques => ques.questionId === qId);
 		if (status !== "답안 저장 필요") {
 			setStatusStyle({ ...statusCaptionStyle, color: "red" });

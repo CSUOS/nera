@@ -10,8 +10,8 @@ const AssignmentBox = (props)=>{
 	const asState = useAssignmentState();
 
 	const {type, asInfo} = props;
-	const state = asInfo.assignmentState;
-	const date = new Date(asInfo.deadline);
+	const state = 1;
+	const date = new Date();
 	const deadline = date.getFullYear() + "-" 
                 + (date.getMonth()+1 <= 9 ? "0" : "") + (date.getMonth()+1) + "-"
                 + (date.getDate() <= 9 ? "0" : "") + date.getDate() + " "
