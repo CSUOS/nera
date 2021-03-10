@@ -1,0 +1,39 @@
+.MuiAppBar-root{
+	width: inherit!important;
+}
+.MuiButton-containedPrimary{
+	background-color: $navy!important;
+	&:hover{
+		background-color: #4a618f!important;
+	}
+}
+.MuiButton-containedSecondary{
+	background-color: $red-pink!important;
+	&:hover{
+		background-color: #d37f7f!important;
+	}
+}
+.MuiCheckbox-colorPrimary{
+	color: $navy!important;
+}
+.MuiCheckbox-colorSecondary{
+	color: $red-pink!important;
+}
+.MuiSvgIcon-colorPrimary{
+	color: $navy!important;
+}
+.MuiBadge-colorSecondary{
+	background-color: $red-pink!important;
+}
+.MuiInput-underline::after{
+	border-bottom: 2px solid $navy!important;
+}
+.MuiFormLabel-root.Mui-focused{
+	color: $navy!important;
+}
+.MuiOutlinedInput-notchedOutline{
+	border-color: gray!important;
+}
+.MuiFormLabel-asterisk{
+	display: none;
+}

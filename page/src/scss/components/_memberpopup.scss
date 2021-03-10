@@ -1,0 +1,125 @@
+.group-modal-con{
+	@include mobile{
+		width: 95%;
+		margin-top: 1vh;
+	}
+	&>div{
+		padding-bottom: 1rem;
+		border-bottom: 1px solid lightgray;
+		margin-bottom: 2rem;
+		&:last-of-type{
+			padding: 0;
+			margin: 0;
+			border: none;
+		}
+	}
+	.contents-title{
+		&>div{
+			display: flex;
+			align-items: center;
+			margin-bottom: 1rem;
+			&:first-of-type{
+				justify-content: space-between;
+			}
+		}
+		button{
+			margin-right: 10px;
+			&.x-btn{
+				margin-right: 0;
+				padding: 6px;
+				&.x-btn1{
+					display:none;
+				}
+			}
+		}
+		@include mobile{
+			flex-direction: column;
+			justify-content: initial;
+			align-items: initial;
+			.x-btn1{
+				display: flex!important;
+			}
+			.x-btn2{
+				display: none;
+			}
+		}
+	}
+	.get-group-con{
+		&>div{
+			margin-bottom: 1rem;
+		}
+		.file-upload{
+			display: none;
+		}
+		.group-con{
+			padding-top : 1rem;
+			button{
+				margin: 0 5px 5px 0;
+			}
+		}
+		.group-btn-con{
+			p{
+				margin: 0 10px;
+				font-size: 0.9rem;
+				color: gray;
+			}
+			.example{
+				@include mobile{
+					margin-top: 1rem; 
+				}
+			}
+		}
+		@include mobile{
+			button, label{
+				margin-bottom: 1rem;
+			}
+		}
+	}
+	.set-group-con{
+		padding: 1rem 0;
+		.group-name-field{
+			margin-bottom: 1rem;
+			width: 80%;
+			p{
+				margin-right: 5px;
+			}
+		}
+		.member-con{
+			margin-top: 1rem;
+			.student-container{
+				width: 150px;
+				margin: 0 1rem 1rem 0;
+				@include mobile{
+					width: 100%!important;
+				}
+			}
+			button{
+				position: absolute;
+				right: 1em;
+				top: 0;
+				@include mobile{
+					right: 0;
+				}
+			}
+		}
+	}
+}
+
+
+.img-modal{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	.img-con{
+		width: 30%;
+		height: auto;
+		padding: 1rem;
+		&:focus{
+			outline:none;
+		}
+		img{
+			width: 100%;
+			padding: 1rem 0;
+		}
+	}
+}

@@ -1,0 +1,16 @@
+.score_stats {
+    width: 100%;
+}
+
+.score_stats_table {
+    min-width: 800px;
+    @include mobile {
+        width: 100%;
+    }
+}
+
+.score_stats_table th {
+    @include mobile {
+        padding: 1vw;
+    }
+}

@@ -84,9 +84,11 @@ router.get('/', async (ctx: Koa.Context) => {
   // User가 교수가 아닌 경우
   const groups = await GroupModel.find({ professorNumber: ctx.user.userNumber }).exec();
   // 본인의 userNumber가 교수 번호로 들어가 있는 그룹 목록 탐색
-  if (groups.length === 0) { ctx.throw(404, '찾을 수 없음'); }
-  // 없을 경우 에러
-
+  /*
+    없어도 에러 아님 (희은)
+    if (groups.length === 0) { ctx.throw(404, '찾을 수 없음'); }
+    // 없을 경우 에러
+  */
   ctx.body = groups;
 });
 

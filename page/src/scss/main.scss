@@ -1,0 +1,36 @@
+// base
+@import './base/mixin';
+@import './base/variable';
+@import './base/material';
+@import './base/reset';
+@import './base/common';
+
+// components
+@import './components/layout';
+@import './components/sidebar';
+@import './components/header';
+@import './components/pageinfo';
+@import './components/assignmentbox';
+@import './components/scorestats';
+@import './components//useranswer';
+@import './components/memberpopup';
+@import './components/studentquestion';
+@import './components/markdown';
+@import './components/savesnackbar';
+@import './components/timepicker';
+@import './components/questionpopup';
+
+// pages
+@import './pages/admin.scss';
+@import './pages/login.scss';
+@import './pages/main.scss';
+@import './pages/profassignment.scss';
+@import './pages/assignment.scss';
+@import './pages/setmember.scss';
+@import './pages/setassignment.scss';
+@import './pages/setting.scss';
+@import './pages/error.scss';
+
+* {
+	font-family: "Noto Sans", "Noto Sans KR", Sans-serif, Helvetica !important;
+}

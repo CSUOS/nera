@@ -1,0 +1,52 @@
+.page_additional_info {
+    flex-wrap: nowrap !important;
+    line-height: 1.8;
+    padding: 10px 0;
+    font-size: 16px;
+    margin-bottom: 20px !important;
+    @include mobile {
+        padding: 3vw 1vw;
+        font-size: 3vw;
+        margin-bottom: 2vw !important;
+    }
+
+    & svg {
+        margin-right: 10px;
+        @include mobile {
+            margin-right: 2vw;
+        }
+    }
+
+    & p {
+        line-height: 1.8;
+    }
+
+}
+.query_caption {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.problem_description {
+    padding: 10px;
+    width: 100%;
+}
+
+.problem_description_viewer {
+    flex-grow: 1;
+}
+
+.selector_container {
+    @include mobile {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.question_selector table{
+    min-width: 500px;
+    @include mobile {
+        min-width: initial;
+        width: 100%;
+    }
+}

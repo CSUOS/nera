@@ -1,0 +1,31 @@
+#page-con{
+	display: flex;
+	height: 100vh;
+	&>div{
+		overflow-y: scroll;
+		&::-webkit-scrollbar {
+			display: none;
+		}
+	}
+	#wrap{
+		display: flex;
+		flex-direction: column;
+		flex-shrink: 1;
+		width: 100%;
+		.back-margin{
+			z-index: -1;
+		}
+		.content-wrap{
+			padding: 1rem 5rem;
+			@include mobile {
+				width: 95vw;
+				margin: 0 auto;
+				padding: 1rem;
+			}
+		}
+	}
+	.mobile-check{
+		width: 100vw;
+		position: fixed;
+	}
+}

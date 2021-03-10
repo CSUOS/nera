@@ -1,7 +1,8 @@
+import { logger } from '../config';
 import Koa from 'koa';
 
 const jwt = require('jsonwebtoken');
-const { config } = require('../config');
+// const { config } = require('../config');
 const { jwtInfo } = require('./type');
 
 exports.jwtMiddleware = async (ctx: Koa.Context, next: Function) => {
@@ -11,8 +12,8 @@ exports.jwtMiddleware = async (ctx: Koa.Context, next: Function) => {
     ctx.throw(401, '인증 실패');
     // 토큰이 없을 경우 인증 실패
   }
-  const env = await config;
-  const secretKey = env.accessSecretKey;
+  // const env = await config;
+  const secretKey = 'env.accessSecretKey';
   // Vault 에 저장된 로그인 토큰 암호화 키
   let decoded: typeof jwt;
   try {
@@ -28,6 +29,7 @@ exports.jwtMiddleware = async (ctx: Koa.Context, next: Function) => {
     };
       // 디코딩한 정보
     ctx.user = user;
+    logger.info(`Request by userNumber : ${user.userNumber}`); // logging
     ctx.role = String(user.userNumber).charAt(0);
     const freshToken = jwt.sign(user, secretKey, { expiresIn: '1h' });
     // 새 토큰

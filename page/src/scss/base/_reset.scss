@@ -1,0 +1,25 @@
+*{
+	box-sizing: border-box;
+	position: relative;
+	padding: 0;
+    margin: 0;
+}
+html, body, #root{
+	width: 100vw;
+    height: 100vh;
+}
+button{
+	background-color: transparent;
+	border: none;
+    &:hover, &:active, &:focus{
+        outline: none;
+    }
+}
+a{
+    &:hover, &:active, &:focus{
+        text-decoration: none;
+    }
+}
+p{
+    line-height: 140%;
+}

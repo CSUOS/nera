@@ -1,0 +1,10 @@
+export { default as Login } from './Login';
+export { default as Main } from './Main';
+export { default as Assignment } from './Assignment';
+export { default as ProfAssignment } from './ProfAssignment';
+export { default as Setting } from './Setting';
+export { default as SetAssign } from './SetAssign';
+export { default as SetAssignment } from './SetAssignment';
+export { default as SetMember } from './SetMember';
+export { default as Error } from './Error';
+export { default as Admin } from './Admin';

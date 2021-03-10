@@ -1,0 +1,25 @@
+.admin-form-con{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	&>div{
+		width: 50%;
+		padding: 2rem;
+		border-radius: 1rem;
+		border: 1px solid lightgray;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		@include mobile{
+			width: 90%;
+		}
+		&>div:first-of-type{
+			margin-bottom: 1rem;
+		}
+		.MuiTextField-root{
+			width: 100%;
+		}
+	}
+}

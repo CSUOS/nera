@@ -1,0 +1,53 @@
+.problem-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-bottom: 3rem;
+    border-bottom: 1px dotted gray;
+    &>div{
+        padding: 1rem;
+        width: 100%;
+    }
+    .p-title{
+        display: flex;
+        align-items: flex-end;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-bottom: 2px solid lightgray;
+        p{
+            margin-left: 0.5rem;
+            font-size: 1rem;
+            font-weight: 100;
+        }
+    }
+    .problem-question{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    .problem-answer{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        form, div{
+            width: 100%;
+        }
+    }
+    .viewer{
+        width: 100%;
+        .markdown_viewer{
+            padding: 1rem;
+            border-radius: 1rem;
+            background-color: white;
+            border: 1px solid lightgray;
+            width: 100%;
+            min-height: 100px;
+        }
+        &.answer .markdown_viewer{
+            background-color: lightgray;
+        }
+    }
+}

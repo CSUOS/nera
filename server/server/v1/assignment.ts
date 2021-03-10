@@ -2,6 +2,9 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import Bodyparser from 'koa-bodyparser';
 import Cookie from 'koa-cookie';
+import { startSession } from 'mongoose';
+import assert from 'assert';
+import { logger } from '../../config';
 import { getCurrentDate, isNumber } from './models/meta';
 
 const { AssignmentModel } = require('./models/assignmentModel');
@@ -50,11 +53,10 @@ async function calState(assignment: typeof AssignmentModel, user: typeof userInf
   return 3; // 채점완료
 }
 
-router.post('/', async (ctx: Koa.Context) => {
+router.post('/', async (ctx: Koa.Context, next: Koa.Next) => {
   // 과제 생성 api
   const { body } = ctx.request;
   // 유저가 보낸 데이터
-  console.log(body);
   if (ctx.role !== '1') { ctx.throw(403, '권한 없음'); }
   // User가 교수가 아닌 경우
 
@@ -62,57 +64,74 @@ router.post('/', async (ctx: Koa.Context) => {
     || body.publishingTime === undefined || body.deadline === undefined
     || body.questions === undefined) { ctx.throw(400, '잘못된 요청'); }
   // 요청에 학생 목록, 과제이름, 발행시간, 마감기한, 문제가 없는 경우
-
-  if (body.assignmentId === -1) {
-    const newAssignment = new AssignmentModel();
-    // 새로운 과제 생성
-
+  const session = await startSession();
+  try {
+    logger.info('Transaction Start');
+    session.startTransaction();
     for (let i = 0; i < body.questions.length; i += 1) {
       body.questions[i].questionId = i;
       // body에서 questionId에 대한 정보가 오지 않기때문에 따로 번호를 지정해준다
       // 0부터 시작
     }
+    const {
+      students, assignmentName, assignmentInfo, publishingTime, deadline, questions,
+    } = body;
+    const newAssignment = await AssignmentModel.create([{
+      professorNumber: ctx.user.userNumber,
+      students,
+      assignmentName,
+      assignmentInfo,
+      publishingTime,
+      deadline,
+      questions,
+    }], { session });
+    const { professorNumber, assignmentId } = newAssignment[0];
+    const newAnswers = students.map((userNumber: number, idx: number) => ({
+      userNumber,
+      professorNumber,
+      assignmentId,
+      answers: questions.map((question: any) => ({
+        questionId: question.questionId,
+        answerContent: '',
+      })),
+    }));
+    await AnswerPaperModel.create(newAnswers, { session });
+    await session.commitTransaction();
+    session.endSession();
+    logger.info(`Transaction End ${newAssignment}`);
+    ctx.body = newAssignment;
+    
+  } catch (err) {
+    await session.abortTransaction();
+    session.endSession();
+    logger.error(`Transaction Error : ${err}`);
+    ctx.throw(500, 'Server Error');
+  }
+});
 
-    newAssignment.professorNumber = ctx.user.userNumber;
-    // 새로운 과제의 교수 번호는 교수 본인의 userNumber
+router.put('/', async (ctx: Koa.Context) => {
+// modify assignment
+  const { body } = ctx.request;
+  if (ctx.role !== '1') { ctx.throw(403, '권한 없음'); }
+  if (body.students === undefined || body.assignmentName === undefined
+    || body.publishingTime === undefined || body.deadline === undefined
+    || body.questions === undefined || !body.assignmentId) { ctx.throw(400, '잘못된 요청'); }
+  const session = await startSession();
 
-    newAssignment.students = body.students;
-    // 새로운 과제의 학생 목록
-
-    newAssignment.assignmentName = body.assignmentName;
-    // 새로운 과제의 과제 이름
-
-    newAssignment.assignmentInfo = body.assignmentInfo;
-    // 새로운 과제의 과제 정보
-
-    newAssignment.publishingTime = body.publishingTime;
-    // 새로운 과제의 발행 시간
-
-    newAssignment.deadline = body.deadline;
-    // 새로운 과제의 마감 기한
-
-    newAssignment.questions = body.questions;
-    // 새로운 과제의 문제
-
-    await newAssignment.save();
-    console.log('assignment create 완료');
-    // DB에 저장
-
-    ctx.body = newAssignment; // 확인용
-  } else {
-    // 수정 api
+  try {
+    logger.info('Transaction Start');
+    session.startTransaction();
     if (!isNumber(body.assignmentId)) { ctx.throw(400, '잘못된 요청'); }
-    const prevAssignment = await AssignmentModel
-      .findOne({ professorNumber: ctx.user.userNumber, assignmentId: body.assignmentId })
-      .exec();
-    // 이전에 생성한 과제가 있는지 교수 본인의 userNumber와 과제 이름으로 탐색
-
-    if (prevAssignment === null) { ctx.throw(404, '해당 과제 없음'); }
+    const prevAssignment = await AssignmentModel.findOne({
+      professorNumber: ctx.user.userNumber,
+      assignmentId: body.assignmentId,
+    }).session(session);
+    assert.ok(prevAssignment.$session());
+    if (!prevAssignment) {
+      ctx.throw(404, '해당 과제 없음');
+    }
     prevAssignment.assignmentName = body.assignmentName;
     // 과제 이름 변경
-
-    prevAssignment.students = body.students;
-    // 학생 목록 변경
 
     prevAssignment.assignmentInfo = body.assignmentInfo;
     // 과제 정보 변경
@@ -122,7 +141,6 @@ router.post('/', async (ctx: Koa.Context) => {
 
     prevAssignment.deadline = body.deadline;
     // 마감 기한 변경
-
     for (let i = 0; i < body.questions.length; i += 1) {
       body.questions[i].questionId = i;
       // body에서 questionId에 대한 정보가 오지 않기때문에 따로 번호를 지정해준다
@@ -135,11 +153,37 @@ router.post('/', async (ctx: Koa.Context) => {
     prevAssignment.meta.modifiedAt = getCurrentDate();
     // 수정 날짜 변경
 
-    await prevAssignment.save();
-    console.log('assignment update 완료');
-    // DB에 저장
+    // 0227 수정 : 학번에 따라 답안 재생성
 
-    ctx.body = prevAssignment; // 확인용
+    // 새로 추가된 학번 조회
+    const newStudents = body.students.filter((student : number) => !prevAssignment.students.includes(student));
+    const newAnswers = newStudents.map((userNumber: number) => ({
+      userNumber,
+      professorNumber: ctx.user.userNumber,
+      assignmentId: body.assignmentId,
+      answers: body.questions.map((question: any) => ({
+        questionId: question.questionId,
+        answerContent: '',
+      })),
+    }));
+    await AnswerPaperModel.create(newAnswers, { session });
+    // 삭제된 학번 조회
+    const deletedStudents = prevAssignment.students.filter((student : number) => !body.students.includes(student));
+    deletedStudents.forEach(async (student: number) => {
+      await AnswerPaperModel.deleteOne({ userNumber: student, assignmentId: body.assignmentId }).session(session);
+    })
+
+    prevAssignment.students = body.students;
+    await prevAssignment.save();
+    await session.commitTransaction();
+    session.endSession();
+    logger.info(`Transaction End ${prevAssignment}`);
+    ctx.body = prevAssignment;
+  } catch (err) {
+    await session.abortTransaction();
+    session.endSession();
+    logger.error(`Transaction Error : ${err}`);
+    ctx.throw(500, 'Server Error');
   }
 });
 
@@ -188,6 +232,16 @@ router.delete('/:assignmentId', async (ctx: Koa.Context) => {
   if (!isNumber(ctx.params.assignmentId)) { ctx.throw(400, '잘못된 요청'); }
   if (ctx.role !== '1') { ctx.throw(403, '권한 없음'); }
   // User가 교수가 아닌 경우
+
+  // 0227 추가 : assignment 삭제 시 answer paper도 모두 삭제
+  const deleteAssignment = await AssignmentModel
+    .findOne({ assignmentId: ctx.params.assignmentId, professorNumber: ctx.user.userNumber })
+    .exec();
+  deleteAssignment.students.forEach(async (student : number) => {
+    await AnswerPaperModel
+      .deleteOne({ assignmentId: ctx.params.assignmentId, userNumber: student });
+  });
+  console.log('answer paper 모두 삭제');
 
   await AssignmentModel
     .deleteOne({ assignmentId: ctx.params.assignmentId, professorNumber: ctx.user.userNumber });

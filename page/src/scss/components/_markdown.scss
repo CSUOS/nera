@@ -1,0 +1,116 @@
+
+/* markdown */
+
+.editor_root {
+    padding: 0.5rem;
+    display: flex;
+}
+  
+.editor_input_container {
+    display: flex;
+    flex-direction: column;
+    width: 48.5% !important;
+    height: 100%;
+    margin-right: 1% !important;
+}
+  
+.editor_input {
+    width: 100% !important;
+    * {
+        font-family: Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro, monospace !important;
+    }
+}
+  
+.editor_viewer_container {
+    display: flex;
+    flex-direction: column;
+    width: 48.5% !important;
+    height: 100%;
+    margin-left: 1% !important;
+}
+  
+.editor_viewer {
+    overflow: auto;
+}
+
+.markdown_viewer {
+    line-height: 1.5;
+    font-family: initial !important;
+}
+
+.markdown_ol {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
+.markdown_ul {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
+.markdown_paragraph {
+    margin-block-end: 1em;
+}
+
+.markdown_emphasis {
+    font-style: italic;
+}
+
+.markdown_strong {
+    font-weight: bold;
+}
+
+.markdown_link:link {
+    color: red;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.markdown_link:visited {
+    color: green;
+    text-decoration: underline;
+    font-weight: bold;
+}
+  
+.markdown_link:hover {
+    color: hotpink;
+    text-decoration: underline;
+    font-weight: bold;
+}
+  
+.markdown_link:active {
+    color: blue;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.markdown_blockquote {
+    padding: 0 1em;
+    color: #6a737d;
+    border-left: .25em solid #dfe2e5;
+}
+  
+.markdown_table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+  
+.markdown_pre {
+    background: #f6f8fa;
+    border-radius: 6px;
+    padding: 16px;
+}
+
+.markdown_inline_code {
+    background: #f6f8fa;
+    border-radius: 6px;
+    padding: 4px;
+}

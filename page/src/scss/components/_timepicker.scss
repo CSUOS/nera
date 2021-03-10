@@ -1,0 +1,14 @@
+.time-picker{
+    display: flex;
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px dashed lightgray;
+	&>div{
+		display: flex;
+		width: 300px;
+		flex-wrap: nowrap;
+		&:first-of-type{
+			margin-right: 3rem;
+		}
+	}
+}
