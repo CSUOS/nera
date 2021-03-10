@@ -6,36 +6,35 @@ const { collectionInfo } = require('./type');
 
 async function mongoConnect() { // mongoDB 연결 함수
   const secret = await config;
-  mongoose.connect(secret.mongoURI,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-      useCreateIndex: true,
-    })
-    .then(async () => {
-      const collections = await mongoose.connection.db.listCollections().toArray();
-      let check = collections.findIndex((coll: typeof collectionInfo) => coll.name === 'answerpapers');
-      if (check === -1) {
-        await mongoose.connection.db.createCollection('answerpapers');
-      }
-      check = collections.findIndex((coll: typeof collectionInfo) => coll.name === 'groups');
-      if (check === -1) {
-        await mongoose.connection.db.createCollection('groups');
-      }
-      check = collections.findIndex((coll: typeof collectionInfo) => coll.name === 'assignments');
-      if (check === -1) {
-        await mongoose.connection.db.createCollection('assignments');
-      }
-      check = collections.findIndex((coll: typeof collectionInfo) => coll.name === 'counters');
-      if (check === -1) {
-        await mongoose.connection.db.createCollection('counters');
-      }
-      console.log('DB와 연결되었습니다.');
-    })
-    .catch((e: Error) => {
-      throw (e);
-    });
+  await mongoose.connect(secret.mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  })
+  .then(async () => {
+    const collections = await mongoose.connection.db.listCollections().toArray();
+    let check = collections.findIndex((coll: typeof collectionInfo) => coll.name === 'answerpapers');
+    if (check === -1) {
+      await mongoose.connection.db.createCollection('answerpapers');
+    }
+    check = collections.findIndex((coll: typeof collectionInfo) => coll.name === 'groups');
+    if (check === -1) {
+      await mongoose.connection.db.createCollection('groups');
+    }
+    check = collections.findIndex((coll: typeof collectionInfo) => coll.name === 'assignments');
+    if (check === -1) {
+      await mongoose.connection.db.createCollection('assignments');
+    }
+    check = collections.findIndex((coll: typeof collectionInfo) => coll.name === 'counters');
+    if (check === -1) {
+      await mongoose.connection.db.createCollection('counters');
+    }
+    console.log('DB와 연결되었습니다.');
+  })
+  .catch((e: Error) => {
+    throw (e);
+  });
 }
 
 exports.db = async () => {
