@@ -1,0 +1,56 @@
+.set-assign-con {
+	display: flex;
+	flex-direction: column;
+	.box-container {
+		@include mobile {
+			margin-right: 0;
+		}
+		.box-button {
+			cursor: initial;
+			.box-name {
+				cursor: pointer;
+				line-height: 140%;
+			}
+		}
+	}
+}
+
+.set-assign-column {
+    & > * {
+        margin-bottom: 3rem !important;
+    }
+	.contents-title{
+		margin-bottom: 1.5rem;
+	}
+	.info-field{
+		display: flex;
+		flex-wrap: nowrap;
+		&>div{
+			&:first-of-type{
+				width: 30%;
+				margin-right: 3rem;
+			}
+			&:nth-of-type(2){
+				width: 70%;
+			}
+		}
+	}
+	.member-con{
+		.student-table{
+			display: flex;
+			flex-wrap: wrap;
+			margin-bottom: 1rem;
+			&>div{
+				border: 1px solid lightgray;
+				padding: 1rem;
+			}
+		}
+	}
+	.save-con{
+		position: fixed;
+		right: 1rem;
+		bottom: 1rem;
+		margin: 0!important;
+		padding: 1rem 1.3rem;
+	}
+}

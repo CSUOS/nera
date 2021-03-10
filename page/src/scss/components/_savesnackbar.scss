@@ -1,0 +1,18 @@
+.save_paper{
+    padding: 0.7rem 1rem 0;
+    border-radius: 1rem;
+	.save-paper-head{
+		p{
+			font-size: 0.9rem;
+		}
+	}
+	.save-paper-body{
+		p{
+			font-size: 1rem;
+			font-weight: 600;
+		}
+		display : flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+}

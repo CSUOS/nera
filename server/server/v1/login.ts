@@ -24,25 +24,31 @@ router.post('/', async (ctx: Koa.Context) => {
   const pw = body.userPw;
   const env = await config;
 
+  ctx.body = "success";
+/*
   const check = hashData(hashData(env.rabumsToken) + hashData(hashData('')));
 
   if (body.userId === '' || body.userPw === check) { ctx.throw(400); }
+  
   await axios.post(env.rabumsAddr, {
     token: env.rabumsToken,
     userId: id, // train96
     userPw: pw, // 변환된 비밀번호
   })
     .then((res) => {
+      
       const accessToken = jwt.sign(res.data, env.accessSecretKey, { expiresIn: '1h' });
       // jwt 토큰 생성
       ctx.cookies.set('access_token', accessToken, { httpOnly: false });
       // 토큰을 쿠키로 발급 1000ms * 60 * 60 = 1h
       ctx.body = res.data;
+      
     })
     .catch((e) => {
       ctx.status = e.response.status;
       ctx.body = e.response.data;
     });
+    */
 });
 
 /*

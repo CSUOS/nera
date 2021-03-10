@@ -1,0 +1,17 @@
+.question-popup-con{
+	.right-side{
+		display: flex;
+		.score-con{
+			display: flex;
+			align-items: center;
+			margin-right: 2rem;
+			.score-input{
+				margin-left: 0.5rem;
+				width: 50px!important;
+			}
+		}
+	}
+	form{
+		margin-top: 1rem;
+	}
+}

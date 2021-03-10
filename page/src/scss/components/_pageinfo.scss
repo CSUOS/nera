@@ -1,0 +1,67 @@
+.page-info {
+	margin: 1rem 0;
+    h3, h6{
+        word-break: keep-all;
+    }
+    @include mobile {
+        h3 {
+            font-size: 5vw !important;
+        }
+        h6 {
+            font-size: 4vw;
+        }
+    }
+    .icon {
+        margin-right: 0.8rem;
+    }
+    .page-info-con{
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+        &>div{
+            max-width: 100%;
+        }
+        @include mobile{
+            flex-direction: column;
+        }
+        .page-title-con{
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            @include mobile{
+                flex-direction: column;
+            }
+            h2{
+                @include mobile{
+                    margin-right: 0;
+                }
+            }
+            .title{
+                display: flex;
+                flex-direction: column;
+                @include mobile{
+                    text-align: center;
+                }
+            }
+        }
+        .right-side{
+            @include mobile{
+                margin-top: 1rem;
+            }
+        }
+    }
+    .page-information {
+        margin-top: 1rem;
+        border-radius: 7px;
+        background-color: lightgray;
+        p {
+            line-height: 150%;
+            padding: 10px;
+            @include mobile {
+                padding: 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+    }
+}

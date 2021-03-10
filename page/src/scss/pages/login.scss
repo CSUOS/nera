@@ -1,0 +1,98 @@
+
+.Login{
+    overflow: auto;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	background: linear-gradient(0.4turn, #F1B1B1, white, #AAB9D6);
+    .login-paper {
+        max-width: 400px;
+        margin: auto;
+        padding: 3rem;
+        @include mobile{
+            padding: 1.5rem;
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+        }
+    }
+    .login-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        &>div{
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+            &.row{
+                flex-direction: row;
+                justify-content: center;
+            }
+            &:last-of-type{
+                margin-bottom: 0;
+            }
+        }
+        .login-info{
+            img{
+                width: 300px;
+            }
+        }
+        .login-form-con{
+            p{
+                margin-bottom: 1rem;
+            }
+            .login-btn{
+                width: 100%;
+                padding: 10px 14px;
+                margin-top: 1rem;
+            }
+            .MuiTextField-root{
+                margin-bottom: 0.5rem;
+                width: 100%;
+            }
+            .form-sub-con{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                a{
+                    font-size: 0.8rem;
+                    color: gray;
+                    text-decoration: underline;
+                }
+            }
+        }
+        .rabums-con{
+            a{
+                color: $navy;
+                text-decoration: underline;
+            }
+            strong{
+                content: "👉";
+                margin-right: 0.5rem;
+                text-decoration: none!important;
+            }
+        }
+        .login-test-con{
+            border-top: 1px solid gray;
+            padding-top: 2rem;
+            .login-test{
+                &:first-of-type{
+                    margin-right: 1rem;
+                }
+            }
+            div{
+                margin-top: 1rem;
+            }
+        }
+        
+        h6{
+            font-size: 0.8rem;
+        }
+    }
+}

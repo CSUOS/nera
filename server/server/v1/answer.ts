@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import Koa from 'koa';
 import Router from 'koa-router';
 import Bodyparser from 'koa-bodyparser';
@@ -23,56 +24,39 @@ router.post('/:assignmentId', async (ctx: Koa.Context) => {
     if (element.questionId === undefined || element.answerContent === undefined) { ctx.throw(400, '잘못된 요청'); }
   });
   // 답안 배열 내 원소에 문제 번호, 답안이 없을 경우
+  if (ctx.role === '1') { // professor, 하나만 보냄
+    const userAnswer = body.answers[0];
+    const studentAnswerPaper = await AnswerPaperModel.find({ assignmentId: ctx.params.assignmentId, professorNumber: ctx.user.userNumber });
+    const selected = studentAnswerPaper.find((studentAnswer: any) => studentAnswer.answers.find((answer: any) => answer.id === userAnswer._id));
+    const _ = selected.answers.find((answer: any) => answer.id === userAnswer._id);
+    _.score = userAnswer.score;
+    await selected.save();
+    ctx.body = studentAnswerPaper; // make array
+  } else {
+    body.answers.forEach((element: typeof answerPostAnswersBody) => {
+      if (element.score !== undefined) { ctx.throw(403, '권한 없음'); }
+    });
+    // 유저가 보낸 데이터가 문제의 score 정보를 가지고 있을 경우 error
 
-  body.answers.forEach((element: typeof answerPostAnswersBody) => {
-    if (element.score !== undefined) { ctx.throw(403, '권한 없음'); }
-  });
-  // 유저가 보낸 데이터가 문제의 score 정보를 가지고 있을 경우 error
+    if (body.professorNumber !== undefined) { ctx.throw(403, '권한 없음'); }
+    // 유저가 답안의 교수 번호를 변경하려는 경우 error
 
-  if (body.professorNumber !== undefined) { ctx.throw(403, '권한 없음'); }
-  // 유저가 답안의 교수 번호를 변경하려는 경우 error
-
-  const assignment = await AssignmentModel
-    .findOne({ assignmentId: ctx.params.assignmentId }).exec();
+    const assignment = await AssignmentModel
+      .findOne({ assignmentId: ctx.params.assignmentId }).exec();
     // assignmentId로 과제 탐색
 
-  if (assignment === null) { ctx.throw(404, '해당 과제 없음'); }
-  // 과제가 없는 경우
+    if (assignment === null) { ctx.throw(404, '해당 과제 없음'); }
+    // 과제가 없는 경우
 
-  if (assignment.deadline - Date.now() < 0) { ctx.throw(403, '권한 없음'); }
-  // 마감 기한이 지난 경우
+    if (assignment.deadline - Date.now() < 0) { ctx.throw(403, '권한 없음'); }
+    // 마감 기한이 지난 경우
 
-  const prevAnswer = await AnswerPaperModel
-    .findOne({ assignmentId: ctx.params.assignmentId, userNumber: ctx.user.userNumber }).exec();
+    const prevAnswer = await AnswerPaperModel
+      .findOne({ assignmentId: ctx.params.assignmentId, userNumber: ctx.user.userNumber }).exec();
     // 이전에 작성한 답안이 있는지 탐색
-
-  if (prevAnswer === null) {
-    // 이전에 작성한 답안이 없을 경우
-
-    const newAnswer = new AnswerPaperModel();
-    // 새로운 답안 생성
-
-    newAnswer.userNumber = ctx.user.userNumber;
-    // 새 답안의 학번
-
-    newAnswer.professorNumber = assignment.professorNumber;
-    // 새 답안의 교수 번호
-
-    newAnswer.assignmentId = ctx.params.assignmentId;
-    // 새 답안의 과제 id
-
-    newAnswer.answers = body.answers;
-    // 새 답안의 답
-    // newAnswer.fullScore = assignment.fullScore;
-
-    await newAnswer.save();
-    console.log('답안 생성 완료');
-    // DB에 저장
-
-    ctx.body = newAnswer; // 확인용
-  } else {
-    // 이전에 작성한 답안이 있을 경우
-
+    if (!prevAnswer) {
+    // 0227 수정 ) 과제 생성시 답안까지 전부 생성. prevAnswer 없으면 오류
+    }
     prevAnswer.answers = body.answers;
     // 현재의 답으로 답안 변경
 
@@ -129,16 +113,31 @@ router.post('/:assignmentId/:userNumber', async (ctx: Koa.Context) => {
 router.get('/:assignmentId', async (ctx: Koa.Context) => {
   // 답안 조회
   if (!isNumber(ctx.params.assignmentId)) { ctx.throw(400, '잘못된 요청'); }
-  const answer = await AnswerPaperModel
-    .findOne({ userNumber: ctx.user.userNumber, assignmentId: ctx.params.assignmentId })
-    .exec();
+  if (ctx.role === '1') { // professor
+    const studentAnswerPaper = await AnswerPaperModel.find({
+      assignmentId: ctx.params.assignmentId,
+      professorNumber: ctx.user.userNumber,
+    });
+    ctx.body = studentAnswerPaper; // make array
+  } else { // student
+    const answer = await AnswerPaperModel
+      .findOne({ userNumber: ctx.user.userNumber, assignmentId: ctx.params.assignmentId })
+      .exec();
     // 쿠키의 userNumber와 매개변수로 넘어온 과제 id로 답안 조회
 
-  if (answer === null) { ctx.throw(404, '찾을 수 없음'); }
-  // 없을 경우 에러
-
-  ctx.body = answer;
+    if (answer === null) {
+      ctx.body = [{
+        userNumber: ctx.user.userNumber,
+        assignmentId: ctx.params.assignmentId,
+        answers: [],
+      }];
+    } else {
+      ctx.body = [answer];
+    }
+    // 없을 경우 에러
+  }
 });
+
 router.get('/:assignmentId/:userNumber', async (ctx: Koa.Context) => {
   // 학생의 답안 조회
   if (ctx.role !== '1') { ctx.throw(403, '권한 없음'); }

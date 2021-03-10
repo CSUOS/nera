@@ -1,0 +1,14 @@
+.setting-con {
+	.box-container {
+		@include mobile {
+			margin-right: 0;
+		}
+		.box-button {
+			cursor: initial;
+			.box-name {
+				cursor: pointer;
+				line-height: 140%;
+			}
+		}
+	}
+}

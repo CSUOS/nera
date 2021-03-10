@@ -1,0 +1,114 @@
+@keyframes slideIn{
+	0%{
+		margin-left: 0px;
+	}
+	100%{
+		margin-left: $sideBar * (-1);
+	}
+}
+@keyframes slideOut{
+	0%{
+		margin-left: $sideBar * (-1);
+	}
+	100%{
+		margin-left: 0px;
+	}
+}
+.sidebar{
+	width: #{$sideBar};
+	flex-shrink: 0;
+	background-color: $baby-pink;
+    z-index: 20;
+	margin-left: $sideBar * (-1);
+    border-right: 1px solid lightgray;
+	&.open-sidebar{
+		animation: slideOut 0.3s forwards ease-in;
+	}
+	&.close-sidebar{
+		animation: slideIn 0.3s forwards ease-in;
+	}
+	.sidebar-header{
+		padding: 0 1rem;
+		width: 100%;
+		height: $header;
+		display: flex;
+		justify-content: space-between !important;
+		align-items: center;
+		border-bottom: 1px solid lightgray;
+		.logo-con{ 
+			width: 50%;
+			height: 100%;
+			.NERA{
+				height: 100%;
+				display: flex;
+				align-items: center;
+				img{
+					height: 70%;
+				}
+			}
+		}
+		button{
+			width: 15%;
+		}
+	}
+	.MuiList-subheader{
+		padding: 0 1rem;
+	}
+	.contactTo{
+		padding: 1rem;
+		line-height: 150%;
+		background-color: white;
+		width: 90%;
+		margin: 1rem auto;
+		border-radius: 1rem;
+		text-align: center;
+		a{
+			font-weight: 600;
+			color: $navy;
+			font-size: 1.3rem;
+		}
+	}
+	.assignment-list{
+		margin-bottom: 1rem;
+	}
+	.side-assign{
+		&>div{
+			padding: 6px;
+		}
+		.color{
+			&.gray{
+				circle{
+					color : $c-gray;
+				}
+			}
+			&.green{
+				circle{
+					color : $c-green;
+				}
+			}
+			&.red{
+				circle{
+					color: $c-red;
+				}
+			}
+			&.orange{
+				circle{
+					color: $c-orange;
+				}
+			}
+		}
+		svg{
+			margin-right: 5px;
+		}
+	}
+	#subheader{
+		padding: 0px 0px 0px 20px;
+		background-color: $navy;
+		color: white;
+		line-height: 36px;
+		&.professor-menu{
+			background-color: $red-pink;
+			margin-top: 2rem;
+		}
+	}
+}

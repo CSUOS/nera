@@ -1,9 +1,0 @@
-export { default as Login } from './Login';
-export { default as Main } from './Main';
-export { default as Home } from './Home';
-export { default as Assignment } from './Assignment';
-export { default as Setting } from './Setting';
-export { default as Error } from './Error';
-export { default as SetAssignment } from './SetAssignment';
-export { default as Scoring } from './Scoring';
-export { default as SetStudentList } from './SetStudentList';

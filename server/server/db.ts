@@ -1,12 +1,10 @@
 import Koa from 'koa';
-
+import { logger } from '../config';
 const mongoose = require('mongoose');
-const { config } = require('../config');
 const { collectionInfo } = require('./type');
 
 async function mongoConnect() { // mongoDB 연결 함수
-  const secret = await config;
-  mongoose.connect(secret.mongoURI,
+  mongoose.connect('mongodb://127.0.0.1:27017/',
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -31,7 +29,7 @@ async function mongoConnect() { // mongoDB 연결 함수
       if (check === -1) {
         await mongoose.connection.db.createCollection('counters');
       }
-      console.log('DB와 연결되었습니다.');
+      logger.info('DB Connected');
     })
     .catch((e: Error) => {
       throw (e);

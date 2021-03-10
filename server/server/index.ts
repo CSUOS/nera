@@ -1,10 +1,12 @@
 import Koa from 'koa';
 import Router from 'koa-router';
 import Logger from 'koa-logger';
+import { logger } from '../config';
 import Login from './v1/login';
 import Test from './v1/cookieTest'; // 테스트용 쿠키 발급
 import TestB from './v1/cookieTestB';
 import Token from './v1/token';
+import Message from './v1/message';
 import AuthCheck from './v1/authCheck';
 
 const serve = require('koa-static');
@@ -17,9 +19,10 @@ const router = new Router();
 const login = new Router();
 
 const corsOption = {
-  origin: 'http://localhost:3001',
+  origin: 'http://localhost:3000',
   credentials: true,
 };
+
 app.use(cors(corsOption));
 app.context.user = { // 유저 정보 저장
   _id: Number, // 고유 id
@@ -34,10 +37,20 @@ login.use('/v1/login', Login.routes()); // 로그인 필요하지 않은 api
 login.use('/v1/cookieTest', Test.routes());
 login.use('/v1/cookieTestB', TestB.routes());
 login.use('/v1/token', Token.routes());
+login.use('/v1/message', Message.routes());
 
 // 로그인이 필요한 api
 router.use('/v1', AuthCheck.routes());
-app.use(Logger());
+app.use(Logger({
+  transporter: (str, args: any) => {
+    if (args[4]) {
+      logger.info(`RESPONSE : ${args[1]} ${args[2]} ${args[3]} ${args[4]}`);
+    }
+    else {
+      logger.info(`REQUEST : ${args[1]} ${args[2]}`);
+    }
+  }
+}));
 
 app.use(dbMiddleware);
 app.use(login.routes());

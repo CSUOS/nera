@@ -1,0 +1,123 @@
+@keyframes beWide {
+	0%{
+		width: calc(100% - #{$sideBar});
+	}
+	100%{
+		width: 100%;
+	}
+}
+@keyframes beSmall {
+	0%{
+		width: 100%;
+	}
+	100%{
+		width: calc(100% - #{$sideBar});
+	}
+}
+.header{
+	background-color: #fff;
+	height: $header;
+	z-index: 10;
+	position: fixed;
+	top:0;
+	right:0;
+    box-shadow: 0 0 5px gray;
+	width: calc(100% - #{$sideBar});
+	&.small-header{
+		animation: beSmall 0.3s forwards ease-in;
+	}
+	&.wide-header{
+		animation: beWide 0.3s forwards ease-in;
+	}
+	.tool-bar{
+		height: 100%;
+		padding-left: 1.5rem;
+		padding-right: 1.5rem;
+		display: flex;
+		position: relative;
+		align-items: center;
+		@include mobile{
+			padding-left: 1rem;
+			padding-right: 1rem;
+		}
+		.open-sidebar{
+			flex-shrink: 0;
+		}
+		.header-menu-con{
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			flex-grow: 1;
+			flex-shrink: 1;
+			&>div{
+				flex-shrink: 0;
+			}
+			.right-side{
+				display: flex;
+				align-items: center;
+				
+			}
+			.menu-field{
+				display: flex;
+				align-items: center;
+				cursor: pointer;
+				svg{
+					margin-right: 2px;
+				}
+				p{
+					@include mobile{
+						display: none;
+					}
+				}
+			}
+			.name-field{
+				display: flex;
+				align-items: center;
+				.name{
+					font-weight: 600;
+				}
+			}
+		}
+	}
+}
+.back-margin{
+	height: $header!important;
+	min-height: $header!important;
+}
+
+// alert
+#badge{
+	background-color: white;
+	margin-right: 2rem;
+	cursor: pointer;
+	z-index: 100;
+}
+#alert{
+    position: absolute;
+    top: 3rem;
+    right: 0;
+    z-index: 101;
+    width: 210px;
+	box-shadow: 0 0 5px gray;
+	svg{
+		cursor: pointer;
+	}
+	.title{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		svg{
+			margin-left: 1rem;
+		}
+	}
+	.info{
+		font-weight: 600;
+	}
+	.sub-info{
+		font-size: 0.8rem;
+		border-radius: 1rem;
+		padding: 5px 10px;
+		color: $navy;
+		background-color: white;
+	}
+}

@@ -1,0 +1,13 @@
+@mixin pad {
+  @media (max-width: #{$pad}) {
+    @content;
+  }
+}
+  
+@mixin mobile {
+  @media (max-width: #{$mobile}) {
+    @content;
+  }
+}
+
+  

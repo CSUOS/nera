@@ -1,0 +1,115 @@
+// common css
+
+.desktop {
+	@include mobile {
+		display: none;
+	}
+}
+
+.mobile {
+	display: none;
+	@include mobile {
+		display: inherit;
+	}
+}
+
+// contents
+.contents-container {
+	display: flex;
+	flex-direction: column;
+	margin: 10px 0 25px;
+	.contents-title {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 1rem;
+		& h6 {
+			font-weight: 600;
+			&::before {
+				content: "";
+				border-left: 3px solid rgb(54, 54, 54);
+				margin-right: 10px;
+			}
+		}
+	}
+	.helper-text-con{
+		display: flex;
+		align-items: center;
+		flex-wrap: nowrap;
+		margin-bottom: 1rem;
+		svg{
+			margin-right: 0.5rem;
+		}
+	}
+}
+
+
+// box
+.box-layout{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+	.box-container{
+		display: flex;
+		margin-right: 1rem;
+		margin-bottom: 1rem;
+		min-width: 200px;
+		cursor: pointer;
+		width: 23% !important;
+		height: 100px;
+		@include mobile {
+			width: 100%!important;
+			height: 100px;
+		}
+		.box-button{
+			width: 100%;
+			height: 100%;
+			&>span, .box-name{
+				width: 100%;
+				height:100%;
+			}
+			.box-name{
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				text-align: center;
+			}
+			.box-xbtn{
+				position: absolute;
+				top: 0;
+				right: 0;
+				display: block;
+				z-index: 1;
+			}
+			&:hover{
+				.box-xbtn{
+					display: block;
+				}
+			}
+		}
+	}
+}
+
+// modal
+.modal{
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+	.modal-con {
+		width: 50%;
+		margin-top: 15vh;
+		margin-bottom: auto;
+		padding: 2rem;
+		@include mobile{
+			width: 95%;
+			margin-top: 1vh;
+		}
+		&:focus{
+			outline:none;
+		}
+	}
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}

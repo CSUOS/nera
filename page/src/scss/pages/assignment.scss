@@ -1,0 +1,28 @@
+.info-btn-con{
+	width: 420px!important;
+	@include mobile{
+    	max-width: 100%;
+	}
+	button{
+		width : auto;
+		@include mobile{
+			margin-bottom: 1rem;
+		}
+		.MuiButton-label{
+			justify-content: flex-start;
+		}
+		a{
+			text-align: left;
+			color: white;
+		}
+	}
+}
+.page-additional-info{
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	margin-bottom: 1rem;
+	p{
+		margin-left: 5px;
+	}
+}
