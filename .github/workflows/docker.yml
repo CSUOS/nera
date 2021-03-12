@@ -32,6 +32,7 @@ jobs:
         # Docker repository to tag the image with
         repository: csuos/nera
         # Automatically tags the built image with the git reference as per the readme
+        build_args: REACT_APP_ADMIN_KEY=${{ secrets.REACT_APP_ADMIN_KEY }}
         tag_with_ref: true # optional
         tag_with_sha: true 
         tags: latest
