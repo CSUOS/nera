@@ -23,8 +23,6 @@ const getUserInfo = () => {
 		return undefined;
 	}
 
-	// 교수, 학생 type 저장
-	console.log(decoded.type);
 	decoded.type = String(decoded.userNumber)[0] === '1' ? 'professor' : 'student';
 
 	// major 저장
