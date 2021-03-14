@@ -13,14 +13,14 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useUserDispatch } from '../Main/Model/UserModel';
 import { useOnOffState, useMessageState } from '../Main/Model/MessageModel';
 
-type HeaderProps = {
+type Props = {
 	open: boolean;
 	useOpen: React.Dispatch<boolean>;
 	userName: string;
 	userType: string;
 }
 
-const Header = ({ open, useOpen, userName, userType }: HeaderProps) => {
+const Header = ({ open, useOpen, userName, userType }: Props) => {
 	const trigger = useScrollTrigger();
 	const setUser = useUserDispatch();
 	const history = useHistory();

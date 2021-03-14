@@ -14,7 +14,7 @@ type Props = {
 	rightSide?: ReactNode;
 }
 
-const PageInfo: React.FunctionComponent<Props> = ({className, icon, mainTitle, subTitle, information, rightSide}) => (
+const PageInfo = ({className, icon, mainTitle, subTitle, information, rightSide} : Props) => (
 	<Grid className={clsx("page-info", className)}>
 		<Grid className="page-info-con">
 			<Grid className="page-title-con">

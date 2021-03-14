@@ -11,7 +11,7 @@ type answerObj = {
 	score: number;
 }
 
-type questionProps = {
+type Props = {
 	answer : answerType;
 	setAnswer : Dispatch<answerType>;
 	setStatus : Dispatch<string>;
@@ -19,7 +19,7 @@ type questionProps = {
 	index : number;
 }
 
-const StudentQuestion = ({ answer, setAnswer, setStatus, question, index } : questionProps) => {
+const StudentQuestion = ({ answer, setAnswer, setStatus, question, index } : Props) => {
 	const [scoreText, setScoreText] = useState<string[]>(["",""]); // 배점, 실제 점수
 	const [eachAnswer, setEachAnswer] = useState<answerObj | undefined>();
 	const selectedAssign = useSelectedAssignState();

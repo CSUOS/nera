@@ -14,14 +14,14 @@ import { getColorState, getSortedAssign } from '../utils';
 type MatchParams = {
 	asId?: string;
 }
-type SideBarProps = RouteComponentProps<MatchParams> & {
+type Props = RouteComponentProps<MatchParams> & {
 	classes?: string
 	useOpen: React.Dispatch<boolean>
 	userType: string
 }
 
 
-const SideBar = ({ classes, useOpen, userType, match }: SideBarProps) => {
+const SideBar = ({ classes, useOpen, userType, match }: Props) => {
 	const assignments = useAssignmentState();
 	const selected = useSelectedState();
 	const [sortedAssign, setSortedAssign] = useState<SortedAssignObj>([[], [], [], []]);

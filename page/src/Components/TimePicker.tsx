@@ -8,7 +8,7 @@ import {
 } from '@material-ui/pickers';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
-interface TimePickerProps {
+interface Props {
 	startHelperText: string;
 	endHelperText: string;
     publishingTime: Date;
@@ -17,7 +17,7 @@ interface TimePickerProps {
     setDeadline: React.Dispatch<Date>;
 }
 
-const TimePicker: React.FC<TimePickerProps> = ({ startHelperText, endHelperText, publishingTime, deadline, setPublishingTime, setDeadline }: TimePickerProps) => {
+const TimePicker = ({ startHelperText, endHelperText, publishingTime, deadline, setPublishingTime, setDeadline }: Props) => {
 	const [startDate, setStartDate] = useState<Date>(new Date(publishingTime));
 	const [endDate, setEndDate] = useState<Date>(new Date(deadline));
 

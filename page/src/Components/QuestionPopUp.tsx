@@ -4,7 +4,7 @@ import { Modal, Paper, Grid, TextField, Button } from '@material-ui/core';
 import { MarkdownEditor } from '../Components';
 import { QuestionObj } from '../Main/Type';
 
-type QuestionProps = {
+type Props = {
 	open: boolean;
 	handleClose: () => void;
 	questionIdx?: number;
@@ -13,7 +13,7 @@ type QuestionProps = {
 	changeQuestion: (index: number, obj: QuestionObj) => void
 };
 
-const QuestionPopUp = ({ open, handleClose, question, questionIdx, addQuestion, changeQuestion }: QuestionProps) => {
+const QuestionPopUp = ({ open, handleClose, question, questionIdx, addQuestion, changeQuestion }: Props) => {
 	const [id, setId] = useState<number>(-1); // 생성 시 -1
 	const [idx, setIdx] = useState<number>(-1); // 생성 시 -1
 	const [contents, setContents] = useState<string>("");

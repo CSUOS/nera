@@ -11,7 +11,7 @@ import { useUserState } from '../Main/Model/UserModel';
 
 const typeString = ['add', 'update', 'use'];
 
-type MemberObject = {
+type Props = {
 	open: boolean;
 	typeProps: typeof typeString[number];
 	groupProps?: GroupObj;
@@ -19,7 +19,7 @@ type MemberObject = {
 	setStudents?: Dispatch<Array<number>>;
 }
 
-const StudentPopup = ({ open, typeProps, groupProps, handleClose, setStudents }: MemberObject) => {
+const StudentPopup = ({ open, typeProps, groupProps, handleClose, setStudents }: Props) => {
 	const groups = useGroupState(); // model에서 group 정보 받아오기
 	const user = useUserState();
 	const saveGroupFunc = useSaveGroup();
@@ -295,7 +295,7 @@ const StudentPopup = ({ open, typeProps, groupProps, handleClose, setStudents }:
 						<Grid container alignItems="center" wrap="wrap" className="member-con">
 							{
 								members.map((member: string, index: number) =>
-									<Grid key={index}>
+									<Grid key={member}>
 										<TextField
 											label={"학생" + (index + 1)}
 											variant="outlined"

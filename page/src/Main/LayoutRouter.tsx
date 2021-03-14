@@ -5,7 +5,7 @@ import { useUserState } from './Model/UserModel';
 import { Layout } from '../Components';
 
 
-const LayoutRouter: React.FC = () => {
+const LayoutRouter = () => {
 	const user = useUserState();
 	// layout을 써야하는 frame만 모아둠
 

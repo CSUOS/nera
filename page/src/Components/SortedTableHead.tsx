@@ -8,7 +8,7 @@ type Props = {
 	orderBy: any;
 }
 
-const SortedTableHead: React.FunctionComponent<Props> = ({headCells, onRequestSort, order, orderBy}) => {
+const SortedTableHead = ({headCells, onRequestSort, order, orderBy} : Props) => {
 	const getSortHandler = (id: any) => {
 		return (e: React.MouseEvent) => onRequestSort(e, id);
 	};

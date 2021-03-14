@@ -3,14 +3,14 @@ import React from 'react';
 import { Snackbar, Grid, Paper, IconButton } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 
-type SnackBarType = {
+type Props = {
 	onClickFun : () => void,
 	modifiedDateStr : string,
 	status : string
 }
 
 // 과제를 저장한 후 오른쪽 아래에 뜨는 저장 알림
-const SaveSnackbar = ({onClickFun, modifiedDateStr, status} : SnackBarType) => {
+const SaveSnackbar = ({onClickFun, modifiedDateStr, status} : Props) => {
 	const handleClick = () => {
 		onClickFun();
 	}

@@ -13,7 +13,7 @@ type Props = {
 	headCells: any[];
 }
 
-const EnhancedTableHead: React.FunctionComponent<Props> = ({ classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, headCells }) => {
+const EnhancedTableHead = ({ classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, headCells } : Props) => {
 	const createSortHandler = (property: string) => (event: React.MouseEvent) => {
 		onRequestSort(event, property);
 	};

@@ -55,7 +55,7 @@ type Props = {
 	assign: AssignmentObj;
 }
 
-const QuestionSelector: React.FunctionComponent<Props> = ({onChange, assign}) => {
+const QuestionSelector = ({onChange, assign} : Props) => {
 	const classes = useStyles();
 	const [selected, setSelected] = useState<any[]>([]);
 	const [rows, setRows] = useState<Row[]>([]);
