@@ -30,6 +30,7 @@ const Assignment: React.FC<RouteComponentProps<MatchParams>> = ({ match }) => {
 			setSelected(undefined);
 	}, [match.params.asId]);
 
+	/*
 	let mutex = 0;
 
 	// ctrl + s 버튼 구현
@@ -45,6 +46,7 @@ const Assignment: React.FC<RouteComponentProps<MatchParams>> = ({ match }) => {
 			mutex = await 0;
 		}
 	}, false);
+	*/
 
 	useEffect(() => {
 		// answer를 이용하기 좋은 형태로 변환

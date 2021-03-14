@@ -28,7 +28,6 @@ export const AnswerContextProvider = ({ children }: childrenObj) => {
 	}, [user, selectedAssign]);
 
 	const fetchAnswer = async () => {
-		console.log("fetchAnswer");
 
 		if(!(selectedAssign && user)){
 			setAnswer([]);
@@ -37,7 +36,6 @@ export const AnswerContextProvider = ({ children }: childrenObj) => {
 
 		axios.get(`/v1/answer/${selectedAssign.assignmentId}`, { withCredentials: true })
 			.then(res => {
-				console.log(res.data);
 				setAnswer(res.data);
 			})
 			.catch(err => {
@@ -64,10 +62,8 @@ export const AnswerContextProvider = ({ children }: childrenObj) => {
 	}
 
 	const saveAnswer = (ans : Array<AnswerObj>) => {
-		console.log("saveAnswer");
 
 		if(!(selectedAssign && user)){
-			console.log("set answer undefined in model");
 			setAnswer([]);
 			return;
 		}
@@ -76,7 +72,6 @@ export const AnswerContextProvider = ({ children }: childrenObj) => {
 				answers : ans
 			}, { withCredentials: true })
 				.then(res => {
-					console.log(res);
 					setAnswer([res.data]);
 				})
 				.catch(err => {
@@ -103,12 +98,10 @@ export const AnswerContextProvider = ({ children }: childrenObj) => {
 				});
 		}
 		else { // 채점
-			console.log(ans);
 			axios.post(`/v1/answer/${selectedAssign.assignmentId}`, {
 				answers : ans
 			}, { withCredentials: true })
 				.then((res) => {
-					console.log(res.data);
 					setAnswer(res.data);
 				})
 				.catch(err => {

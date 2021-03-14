@@ -30,13 +30,15 @@ const QuestionPopUp = ({ open, handleClose, question, questionIdx, addQuestion, 
 			setFullScoreString("0");
 			return;
 		}
-		console.log("here");
-		questionIdx && setIdx(questionIdx);
 		setId(question.questionId);
 		setContents(question.questionContent);
 		setFullScore(question.fullScore);
 		setFullScoreString(question.fullScore.toString());
 	}, [question]);
+
+	useEffect(() => {
+		questionIdx && setIdx(questionIdx); // 생성이면 questionIdx가 넘어오기 때문에 setting
+	}, [questionIdx])
 
 	useEffect(() => {
 		setFullScore(Number(fullScoreString));
@@ -74,6 +76,11 @@ const QuestionPopUp = ({ open, handleClose, question, questionIdx, addQuestion, 
 		await handleClose();
 	}
 
+	const handleScoreChange = (e : React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+		e.target &&
+		setFullScoreString(e.target.value);
+	}
+
 	return (
 		<Modal
 			open={open}
@@ -90,7 +97,7 @@ const QuestionPopUp = ({ open, handleClose, question, questionIdx, addQuestion, 
 								배점 :
 								<TextField
 									className="score-input"
-									onChange={(e) => setFullScoreString(e.target.value)}
+									onChange={handleScoreChange}
 									InputLabelProps={{ shrink: true }}
 									required
 									placeholder="배점"
@@ -101,11 +108,11 @@ const QuestionPopUp = ({ open, handleClose, question, questionIdx, addQuestion, 
 								// type : number 적용 시키기 => 안됨
 								/>
 							</Grid>
-							<Button className="save_button" variant="contained" color="primary" onClick={() => saveRenderQuestion()}>저장</Button>
+							<Button className="save_button" variant="contained" color="primary" onClick={saveRenderQuestion}>저장</Button>
 						</Grid>
 					</Grid>
 					<MarkdownEditor
-						onChange={(value) => setContents(value)}
+						onChange={setContents}
 						contents={question? question.questionContent : ""}
 						lines={20}
 					/>
