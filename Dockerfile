@@ -1,3 +1,6 @@
+ARG REACT_APP_ADMIN_KEY
+FROM ${REACT_APP_ADMIN_KEY}
+
 FROM node:12 as builder
 WORKDIR /usr/src/app
 COPY ./page/package.json ./
