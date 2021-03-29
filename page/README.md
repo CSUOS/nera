@@ -8,13 +8,19 @@
 
 # 목차
 
+- [기술 스택](#기술 스택)
 - [페이지 실행](#페이지-실행)
-- [디렉토리 구조](#디렉토리-구조)
 - [라우팅 구조](#라우팅-구조)
 
 
 
 ## 기술 스택
+
+* React hook
+* Typescript
+* Eslint
+* scss
+* Context API (Flux pattern)
 
 
 
@@ -28,35 +34,18 @@ yarn start (또는 npm start)
 
 
 
-## 디렉토리 구조
-
-> 다시 작성
-
-
-
-### 디렉토리 정보
-
-> 다시 작성
-
-
-
-### 파일 정보
-
-> 다시 작성
-
-
-
 ## 라우팅 구조
 
-| url            | 설명                    | 컴포넌트                                                |
-| -------------- | ----------------------- | ------------------------------------------------------- |
-| /              | 로그인페이지            | Login                                                   |
-| /main          | 메인페이지              | Main                                                    |
-| /error         | 에러페이지              | Error                                                   |
-| /as/:asId      | 과제 페이지             | Assignment.js<br />내부적으로 교수 / 학생 조건부 렌더링 |
-| /setting       | 과제 관리 페이지        | Setting.js<br />교수님만 접근 가능                      |
-| /setting/:asId | 과제 수정 페이지        | SetAssignment.js<br />교수님만 접근 가능                |
-| /member        | 수강생 목록 관리 페이지 | SetMember.js<br />교수님만 접근 가능                    |
+| url            | 설명                    | 컴포넌트                              |
+| -------------- | ----------------------- | ------------------------------------- |
+| /              | 로그인페이지            | Login                                 |
+| /admin         | 관리자페이지            | Admin                                 |
+| /main          | 메인페이지              | Main                                  |
+| /error         | 에러페이지              | Error                                 |
+| /as/:asId      | 과제 페이지             | Assignment<br />ProfAssignment        |
+| /setting       | 과제 관리 페이지        | Setting<br />교수님만 접근 가능       |
+| /setting/:asId | 과제 수정 페이지        | SetAssignment<br />교수님만 접근 가능 |
+| /member        | 수강생 목록 관리 페이지 | SetMember<br />교수님만 접근 가능     |
 
 
 

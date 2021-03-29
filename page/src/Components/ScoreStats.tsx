@@ -45,7 +45,7 @@ type Props = {
   assign?: AssignmentObj;
   answersDict?: any;
 }
-const ScoreStats: React.FunctionComponent<Props> = ({assign, answersDict}) => {
+const ScoreStats = ({assign, answersDict} : Props) => {
 	const [order, setOrder] = useState<string>("asc");
 	const [orderBy, setOrderBy] = useState<string>('userNumber');
 	const [page, setPage] = useState<number>(0);

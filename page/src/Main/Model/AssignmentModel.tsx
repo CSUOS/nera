@@ -151,7 +151,6 @@ export const AssignmentContextProvider = ({ children }: childrenObj) => {
 		if(selected && assignment){
 			assignment.forEach((as) => {
 				if(as.assignmentId === selected){
-					console.log("selected " + selected)
 					setSelectedAssign(as);
 					return;
 				}

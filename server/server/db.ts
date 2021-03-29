@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const { collectionInfo } = require('./type');
 
 async function mongoConnect() { // mongoDB 연결 함수
-  mongoose.connect(`${process.env.MONGO_URL}:27017/`,
+  mongoose.connect(`mongodb://localhost:27017/`,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,

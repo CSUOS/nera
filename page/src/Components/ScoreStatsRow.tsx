@@ -11,7 +11,7 @@ type Props = {
 	row: any;
 }
 
-const ScoreStatsRow: React.FunctionComponent<Props> = ({row}) => {
+const ScoreStatsRow = ({row} : Props) => {
 	const [open, setOpen] = useState<boolean>(false);
 	return (
 		<>

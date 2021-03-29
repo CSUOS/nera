@@ -11,7 +11,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { green } from '@material-ui/core/colors';
 
-const Setting: React.FC = () => {
+const Setting = () => {
 	const assignment = useAssignmentState();
 	const confirmDeletion = useDeleteAssignment();
 	const history = useHistory();

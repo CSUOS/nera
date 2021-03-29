@@ -18,7 +18,6 @@ const Admin = () => {
 
 	useEffect(() => {
 		const key = prompt("What is the key of admin?");
-		console.log(process.env.REACT_APP_ADMIN_KEY);
 		if (key !== process.env.REACT_APP_ADMIN_KEY) {
 			alert("You are not Admin, Sorry.");
 			history.push("/");

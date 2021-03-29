@@ -29,7 +29,7 @@ type Props = {
   type: "question" | "student";
 }
 
-const EnhancedTableToolbar: React.FunctionComponent<Props> = ({numSelected, type}) => {
+const EnhancedTableToolbar = ({numSelected, type} : Props) => {
 	const classes = useStyles();
 
 	return (

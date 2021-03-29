@@ -4,9 +4,23 @@
 
 서울시립대 컴퓨터과학부 실시간 과제 제출 및 관리 플랫폼
 
-[서비스 바로가기](https://nera.csuos.ml/)
+- [서비스 바로가기](https://nera.csuos.ml/)
 
-[WIKI](https://www.notion.so/WIKI-bc4777a260594cc6b17d9e46ede69c94)
+- [WIKI](https://www.notion.so/WIKI-bc4777a260594cc6b17d9e46ede69c94)
+- [Frontend ReadME](https://github.com/gmldms784/nera/blob/master/page/README.md)
+- [Backend ReadME](https://github.com/gmldms784/nera/blob/master/server/README.md)
+
+
+
+## 기술스택
+
+* docker
+* kubernetes
+* aws ec2
+* github action
+* 이외의 기술스택들은 각각 Frontend, Backend의 ReadME에 기재되어있음
+
+
 
 ## 룰
 

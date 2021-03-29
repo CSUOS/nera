@@ -51,14 +51,13 @@ class CustomMarkdownMode
 	}
 }
 
-interface MarkdownEditorProps {
+interface Props {
     contents: string;
     onChange: React.Dispatch<string>;
-	className?: string;
 	lines?: number;
 }
 
-const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ contents, onChange, lines }) => {
+const MarkdownEditor = ({ contents, onChange, lines } : Props) => {
 	const [source, setSource] = useState<string>("");
 	const [timer, setTimer] = useState<NodeJS.Timeout | undefined>(undefined);
 	const editorDivRef = useRef<HTMLDivElement>(null);

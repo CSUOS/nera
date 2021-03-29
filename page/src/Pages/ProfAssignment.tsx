@@ -35,11 +35,7 @@ type AnswersDict = {
 	[key: number]: DictElement;
 }
 
-type Props = RouteComponentProps<MatchParams> & {
-
-} 
-
-const PropAssignment: React.FunctionComponent<Props> = ({match}) => {
+const PropAssignment: React.FC<RouteComponentProps<MatchParams>> = ({match}) => {
 	const selectedAssign = useSelectedAssignState();
 	const answers = useAnswerState();
 	const setSelected = useSelectedDispatch();

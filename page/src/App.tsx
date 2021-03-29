@@ -4,7 +4,7 @@ import { Provider } from './Main';
 import './scss/main.scss';
 
 // import library and set to use
-const App : React.FC = () => 
+const App = () => 
 	<BrowserRouter>
 		<Provider />
 	</BrowserRouter>;

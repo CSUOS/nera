@@ -9,7 +9,7 @@ import { PageInfo, TimePicker, MarkdownEditor, StudentPopup, QuestionPopUp } fro
 import { useSelectedAssignState, useSelectedDispatch, useUpdateAssignment, useAddAssignment } from '../Main/Model/AssignmentModel';
 import { AssignmentObj, QuestionObj } from '../Main/Type';
 
-interface MatchParams {
+type MatchParams = {
 	asId?: string | undefined;
 }
 

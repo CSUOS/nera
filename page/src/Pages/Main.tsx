@@ -11,11 +11,7 @@ import { useAssignmentState } from '../Main/Model/AssignmentModel';
 import { SortedAssignObj } from '../Main/Type';
 import { getColorState, getSortedAssign } from '../utils';
 
-// Main 페이지
-type Props = {
-
-}
-const Main: React.FunctionComponent<Props> = () => {
+const Main = () => {
 	const user = useUserState();
 	const assignments = useAssignmentState();
 	const [sortedAssign, setSortedAssign] = useState<SortedAssignObj>([[],[],[],[]]);

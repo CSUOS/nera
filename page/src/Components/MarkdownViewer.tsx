@@ -6,11 +6,11 @@ import * as emoji from "emoji-dictionary";
 import remarkGfm from "remark-gfm";
 import 'katex/dist/katex.min.css';
 
-interface MarkdownViewerProps {
+interface Props {
     source: string;
 }
 
-const MarkdownViewer: React.FC<MarkdownViewerProps & React.HTMLAttributes<HTMLDivElement>> = (props: MarkdownViewerProps) => {
+const MarkdownViewer: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = (props: Props) => {
 	// 각 HTML 컴포넌트를 어떻게 렌더링할 것인지를 정의.
 	// react-markdown 라이브러리에서 매개변수에 대한 타입을 제공하지 않으므로,
 	// 매개변수의 타입을 any로 통일하였음.

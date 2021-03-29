@@ -75,7 +75,7 @@ type Props = {
 	assign: AssignmentObj;
 }
 
-const StudentSelector: React.FunctionComponent<Props> = ({onChange, assign, selectedQues, answersDict}) => {
+const StudentSelector = ({onChange, assign, selectedQues, answersDict} : Props) => {
 	const classes = useStyles();
 	const [selected, setSelected] = useState<number[]>([]); // state for all selected students
 	const [rows, setRows] = useState<Row[]>([]);

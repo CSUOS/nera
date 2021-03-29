@@ -8,7 +8,7 @@ import { GroupObj } from '../Main/Type';
 import { useGroupState, useDeleteGroup } from '../Main/Model/GroupModel';
 
 // SetMember 페이지
-const SetMember: React.FC = () => {
+const SetMember = () => {
 	const groups : Array<GroupObj> = useGroupState();
 	const deleteGroupFunc : (groupId : number) => void = useDeleteGroup();
 
@@ -18,7 +18,7 @@ const SetMember: React.FC = () => {
 
 	const setGroup = async (id : number) => {
 		// 클릭 시 selected에 group 세팅
-		await setSelected(undefined);
+		// await setSelected(undefined);
 		await groups.forEach((gr) => {
 			if(gr.groupId === id)
 				setSelected(gr);

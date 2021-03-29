@@ -11,7 +11,7 @@ import { useUserState } from '../Main/Model/UserModel';
 
 const typeString = ['add', 'update', 'use'];
 
-type MemberObject = {
+type Props = {
 	open: boolean;
 	typeProps: typeof typeString[number];
 	groupProps?: GroupObj;
@@ -19,13 +19,12 @@ type MemberObject = {
 	setStudents?: Dispatch<Array<number>>;
 }
 
-const StudentPopup = ({ open, typeProps, groupProps, handleClose, setStudents }: MemberObject) => {
+const StudentPopup = ({ open, typeProps, groupProps, handleClose, setStudents }: Props) => {
 	const groups = useGroupState(); // model에서 group 정보 받아오기
 	const user = useUserState();
 	const saveGroupFunc = useSaveGroup();
 	const nameRef = createRef<HTMLInputElement>();
 
-	const [update, forceUpdate] = useState<boolean>(true);
 	const [group, setGroup] = useState<GroupObj | undefined>(groupProps); // 그룹 이름으로 받아올 시에 저장되는 변수
 
 	const [name, setName] = useState<string>(""); // 현재 MODAL에 있는 리스트 이름
@@ -34,19 +33,23 @@ const StudentPopup = ({ open, typeProps, groupProps, handleClose, setStudents }:
 	const [openImg, setOpenImg] = useState<boolean>(false); // excel 설명 이미지
 
 	useEffect(() => {
+		setGroup(groupProps);
+	}, [groupProps]);
+
+	useEffect(() => {
 		// 그룹이 바뀌면 member도 다시 세팅
 		const setMembersByGroup = async () => {
-			setMembers([]); setName("");
 			if (group === undefined) {
+				setMembers([]); setName("");
 				return;
 			}
 
-			const tmp = members.slice(0);
+			const tmp : Array<string> = [];
 			await group.students.forEach((student) => {
 				tmp.push(student.toString());
 			});
-			await setMembers(tmp);
-			await setName(group.className);
+			setMembers(tmp);
+			setName(group.className);
 		}
 
 		setMembersByGroup();
@@ -54,10 +57,9 @@ const StudentPopup = ({ open, typeProps, groupProps, handleClose, setStudents }:
 
 	const changeMember = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
 		// textfield가 바뀔 때마다 members 갱신
-		const tmp = members; // 얕은 복사
+		const tmp = members.slice(0); // 얕은 복사
 		tmp[index] = e.target.value;
-		await setMembers(tmp);
-		forceUpdate(!update);
+		setMembers(tmp);
 	}
 
 	const addMember = () => {
@@ -68,12 +70,11 @@ const StudentPopup = ({ open, typeProps, groupProps, handleClose, setStudents }:
 		]);
 	}
 
-	const deleteMember = async (index: number) => {
+	const deleteMember = (index: number) => {
 		// member 삭제
-		await setMembers([]);
-		const tmp = members;
+		const tmp = members.slice(0);
 		tmp.splice(index, 1);
-		await setMembers(tmp);
+		setMembers(tmp);
 	}
 
 	const changeName = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -85,10 +86,9 @@ const StudentPopup = ({ open, typeProps, groupProps, handleClose, setStudents }:
 		setName(e.target.value);
 	}
 
-	const changeGroup = async (gr: GroupObj) => {
+	const changeGroup = (gr: GroupObj) => {
 		// 수강생 목록 불러오기에서 목록 클릭 시
-		await setGroup(undefined);
-		await setGroup(gr);
+		setGroup(gr);
 	}
 
 	const uploadXlsxFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,7 +116,7 @@ const StudentPopup = ({ open, typeProps, groupProps, handleClose, setStudents }:
 				/* Convert array of arrays */
 				const data = XLSX.utils.sheet_to_json<any>(ws);
 
-				/* Update state => 기존 멤버에 추가 */
+				/* Update state */
 				const tmp: Array<string> = [];
 				data.forEach(element => {
 					tmp.push(element['학번'].toString().trim());
@@ -295,7 +295,7 @@ const StudentPopup = ({ open, typeProps, groupProps, handleClose, setStudents }:
 						<Grid container alignItems="center" wrap="wrap" className="member-con">
 							{
 								members.map((member: string, index: number) =>
-									<Grid key={index}>
+									<Grid key={member + index}>
 										<TextField
 											label={"학생" + (index + 1)}
 											variant="outlined"

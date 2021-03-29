@@ -13,7 +13,7 @@ type Props = {
 		color: string
 	}
 }
-const AssignmentBox: React.FunctionComponent<Props> = ({type, asInfo, state}) => {
+const AssignmentBox = ({type, asInfo, state} : Props) => {
 	const date = new Date(asInfo.deadline);
 	const deadline = date.getFullYear() + "-"  + (date.getMonth()+1 <= 9 ? "0" : "") + (date.getMonth()+1) + "-" + (date.getDate() <= 9 ? "0" : "") + date.getDate() + " " + (date.getHours() <= 9 ? "0" : "") + date.getHours() + ":" + (date.getMinutes() <= 9 ? "0" : "") + date.getMinutes()
 

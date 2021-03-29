@@ -13,14 +13,14 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useUserDispatch } from '../Main/Model/UserModel';
 import { useOnOffState, useMessageState } from '../Main/Model/MessageModel';
 
-type HeaderProps = {
+type Props = {
 	open: boolean;
 	useOpen: React.Dispatch<boolean>;
 	userName: string;
 	userType: string;
 }
 
-const Header = ({ open, useOpen, userName, userType }: HeaderProps) => {
+const Header = ({ open, useOpen, userName, userType }: Props) => {
 	const trigger = useScrollTrigger();
 	const setUser = useUserDispatch();
 	const history = useHistory();
@@ -37,6 +37,10 @@ const Header = ({ open, useOpen, userName, userType }: HeaderProps) => {
 		await setClearTime(setTimeout(() => setAlertOpen(false), 3000));
 	};
 
+	const handleOpenAlert = () => {
+		useOpen(true)
+	}
+
 	const handleCloseAlert = async () => {
 		// 수동으로 껐을 때, timeOut도 해지
 		if (clearTime)
@@ -44,7 +48,6 @@ const Header = ({ open, useOpen, userName, userType }: HeaderProps) => {
 		await setAlertOpen(false);
 		await setClearTime(undefined);
 	}
-
 
 	const Logout = () => {
 		const confirm = window.confirm("정말로 로그아웃 하시겠습니까?");
@@ -71,7 +74,7 @@ const Header = ({ open, useOpen, userName, userType }: HeaderProps) => {
 						<IconButton
 							className="open-sidebar"
 							aria-label="open drawer"
-							onClick={() => useOpen(true)}
+							onClick={handleOpenAlert}
 							edge="start"
 						>
 							<MenuIcon />

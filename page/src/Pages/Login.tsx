@@ -15,7 +15,7 @@ import { useAssignmentDispatch } from '../Main/Model/AssignmentModel';
 type Props = {
 	cookies: Cookies;
 }
-const Login: React.FunctionComponent<Props> = (props) => {
+const Login = (props : Props) => {
 	const [cookies, setCookies] = useState<any>(props.cookies);
 	const [id, setId] = useState<string>("");
 	const [pw, setPw] = useState<string>("");
